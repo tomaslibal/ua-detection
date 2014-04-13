@@ -7,3 +7,4 @@
 
 # Ignore the binary output
 bin/*.*
+bin/detection
