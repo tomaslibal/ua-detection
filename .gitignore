@@ -1,0 +1,9 @@
+# Ignore emacs temp and bak files
+*.*~
+*~
+
+# Ignore the .DS_Store files from MAC OS
+.DS_Store
+
+# Ignore the binary output
+bin/
