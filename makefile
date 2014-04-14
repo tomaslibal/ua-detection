@@ -24,6 +24,8 @@ clean :
 TAGS : $(SRCS) $(HDRS)
 	etags -t $(SRCS) $(HDRS)
 
+#.c.o :
+#	$(CC)
 $(BIN)/detection.o : $(SRC)/detection.c
 	$(CC) $(CFLAGS) -c $(SRC)/detection.c -o $(BIN)/detection.o
 $(BIN)/ann.o : $(SRC)/ann.c
