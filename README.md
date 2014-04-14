@@ -26,7 +26,19 @@ It would be good to have a wrapper or access the program through API like a Java
 My goal is to critically discuss the topic, review the latest developments as
 we as things from the past and to make research on the matter.
 
+## Branching strategy
+
+  ** NOT IN PLACE NOW - MASTER IS EXPERIMENTAL **
+
+- master (stable) will be used for releases
+- develop (unstable) will have feature branches merged into it
+- feature/{feature-branch} will be used for developing new features
+- hotfix/{hotfix} hotfixes that may go directly into the master
+
 ## Disclaimers
+
+There is no warranty for this free software. All mentioned trademarks are property
+of their owners. I hope that this repository or its part will be of use to someone.
 
 ## Footnotes
 
@@ -35,8 +47,3 @@ we as things from the past and to make research on the matter.
 April 2014
 
 Tomas <tomas@libal.eu>
-=======
-ua-detection
-============
-
-Device detection for web by the device's User-Agent string as defined in the HTTP/1.1
