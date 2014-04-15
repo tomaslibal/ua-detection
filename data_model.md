@@ -14,7 +14,8 @@
     {
       "_id": <ObjectId2>,
       "phone_id": <ObjectId1>,
-      "ua": "Mozilla/5.0 (Linux; en-us; Android/4.4;) Firefox/28.0"
+      "ua": "Mozilla/5.0 (Linux; en-us; Android/4.4;) Firefox/28.0",
+      "confidence": 1.0
     }
 
 ## groups collection
@@ -40,13 +41,22 @@ or decrease the weight if the phone was not in the target group
 
 The learning algorithm will use this collection as its training set.
 
-{
-  "_id": <ObjectId4>,
-  "group_id": <ObjectId3>,
-  "keyword": "Mozilla/5.0",
-  "count": 3129,
-  "weight": 2.09
-}
+    keywords collection
+
+    {
+      "_id": <ObjectId4>,
+      "value": "Mozilla/5.0",
+      "count": 3129
+    }
+
+    weights collection
+
+    {
+        "_id": <ObjectId5>,
+        "keyword_id": <ObjectId4>,
+        "group_id": <ObjectId3>,
+        "value": -4.31
+    }
 
 If we then assume a group 'Android phones' the idea is that keywords that often
 appear in User-Agent strings from Android phones will have a positive weight
