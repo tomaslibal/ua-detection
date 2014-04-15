@@ -13,6 +13,35 @@ the theoretical part is a set of essays or notes on the topic.
 
 ## The program
 
+The `detection` program can be used for two things: for a given user-agent string
+it can give a result set of the closest matching devices that use that particular
+user-agent.
+
+Secondly, it can be used to return true or false estimate if the user-agent
+string belongs to a device from a particular group. This given group has to be
+predefined (examples of this can be 'Android devices', 'iPhones', 'Smart TVs'
+and many more groups could be thought of).
+
+### Example
+
+Give a list of devices that may use the supplied user-agent string
+
+    > ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android/4.4)'
+    > User-Agent: Mozilla/5.0 (Linux; U; en-us; Android/4.4)
+    > All devices with result > 0.00100
+    > Generic Android Device: 0.99998
+    > HTC One (M7): 0.00312
+    > Sony Xperia Z1: 0.00135
+
+Give an estimate if the device is from a particular group
+
+    > ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android/4.1.1)' --group android-devices
+    > User-Agent: Mozilla/5.0 (Linux; U; en-us; Android/4.1.1)
+    > Group: android-devices
+    > Group description: All devices with Android OS
+    > Resolution: 1
+    > Confidence: 0.99945
+
 The underlying code is written in C.
 
 ** Description of the program to be written here **
