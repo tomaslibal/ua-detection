@@ -1,34 +1,37 @@
-CC = clang
-CFLAGS = -g `pkg-config --cflags --libs libmongoc-1.0`
-LDFLAGS =
+#
+# Instructions
+# Run 'make'
+#
+
+# Some general and some specific settings for the compiler and the linker
+CC      = clang
+CFLAGS  = -g
+LDFLAGS = `pkg-config --cflags --libs libmongoc-1.0`
 
 # Folder structure:
 #   keep the binaries and the .o files in a separate directory
+#
+#   the binaries can then be easily excluded from the source code repository
 #
 BIN = ./bin
 SRC = ./src
 
 PROG = $(BIN)/detection
 HDRS = $(SRC)/ann.h $(SRC)/dbh.h
-SRCS = $(SRC)/detection.c $(SRC)/ann.c $(SRC)/dbh.c
-OBJS = $(BIN)/detection.o $(BIN)/ann.o $(BIN)/dbh.o
+SRCS = $(addprefix $(SRC)/, detection.c ann.c dbh.c)
+OBJS = $(SRCS:$(BIN)/.c=$(SRC)/.o)
 
-# LIST = $(addprefix $(BIN)/, $(PROG))
+
+all: $(SRCS) $(PROG)
 
 $(PROG) : $(OBJS)
-	$(CC) -o $(PROG) $(LDFLAGS) $(OBJS)
+	$(CC) $(LDFLAGS) $(OBJS) -o $@
 
 clean :
-	rm -f core $(PROG) $(OBJS)
+	-rm -f core $(PROG) $(BIN)/*.o
 
-TAGS : $(SRCS) $(HDRS)
-	etags -t $(SRCS) $(HDRS)
+#TAGS : $(SRCS) $(HDRS)
+#	etags -t $(SRCS) $(HDRS)
 
-#.c.o :
-#	$(CC)
-$(BIN)/detection.o : $(SRC)/detection.c
-	$(CC) $(CFLAGS) -c $(SRC)/detection.c -o $(BIN)/detection.o
-$(BIN)/ann.o : $(SRC)/ann.c
-	$(CC) $(CFLAGS) -c $(SRC)/ann.c -o $(BIN)/ann.o
-$(BIN)/dbh.o : $(SRC)/dbh.c
-	$(CC) $(CFLAGS) -c $(SRC)/dbh.c -o $(BIN)/dbh.o
+$(BIN)/.c$(SRC)/.o :
+	$(CC) $(CFLAGS) $< -o $@
