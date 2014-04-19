@@ -1,7 +1,27 @@
+//
+// This tool automatically imports a large number of User-Agent strings into
+// the mongodb.
+//
+// Data input: text file UTF-8 encoded with each User-Agent on a separate line.
+// First twenty columns in that file are reserved for future use. The first
+// character of the User-Agent string should start at column 20.
+//
+// Process:
+// Connect to the mongodb, open the file, and read it line by line
+//     Trim the first 20 characters from the line
+//     Insert into/Update the User-Agent strings document with the User-Agent string
+//     Split the User-Agent into individual keywords
+//         Insert into/update the keywords document with the current keyword
+//
+// @version 0.4.0
+//
+
 // include required packages
-var fs       = require('fs');
-var readline = require('readline');
-var stream   = require('stream');
+var fs          = require('fs');
+var readline    = require('readline');
+var stream      = require('stream');
+var querystring = require("querystring");
+var MongoClient = require('mongodb').MongoClient;
 
 // processing configuration
 var data_file   = '../data/user_agents.txt';
@@ -11,11 +31,8 @@ var current_row = 1;
 var instream    = fs.createReadStream(data_file);
 var outstream   = new stream;
 var rl          = readline.createInterface(instream, outstream);
-
-var querystring = require("querystring");
-
 var db_uri      = "mongodb://localhost/ua_detection";
-var MongoClient = require('mongodb').MongoClient;
+
 
 MongoClient.connect(db_uri, function(err, db) {
     if(err) console.log(err);
@@ -47,7 +64,13 @@ MongoClient.connect(db_uri, function(err, db) {
         function(err, doc){});
 
         // Decompose the UAS into keywords
-        // Product-name "/" product-version
+        // From the HTTP/1.1 definition the User-Agent string is a collection of
+        // 1) product names in the form of
+        //     Product-name ["/" product-version]
+        // 2) or the comment keywords closed in parenthesses whose content is
+        // any text
+        // The product names should be listed in the order of importance from the
+        // most important down to the least important.
         var re = /([\w.]+(|\/)[0-9.]+|[\w.]+)/ig;
 
         var keyw = clean.match(re);
