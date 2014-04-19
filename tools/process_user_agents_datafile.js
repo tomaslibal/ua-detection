@@ -13,7 +13,13 @@
 //     Split the User-Agent into individual keywords
 //         Insert into/update the keywords document with the current keyword
 //
-// @version 0.4.0
+// @version 0.4.0 changed from mongojs to the mongodb driver
+//
+// Invokation:
+//     > cd /path/to/ua_detection/tools/
+//     > node process_user_agents_datafile.js
+//
+// And wait until the program prints 'FINISHED!!!'
 //
 
 // include required packages
