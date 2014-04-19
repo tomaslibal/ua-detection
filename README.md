@@ -13,16 +13,32 @@ the theoretical part is a set of essays or notes on the topic.
 
 ## The program
 
-The `detection` program can be used for two things: for a given user-agent string
-it can give a result set of the closest matching devices that use that particular
-user-agent.
+The `detection` program has a goal to identify devices by their User-Agent strings that they send in HTTP requests. This software started to meet one specific need which was to identify and categorize the User-Agent strings of smartphone devices into separate groups like Android devices vs. Non Android devices and groups for particular manufacturers.
 
-Secondly, it can be used to return true or false estimate if the user-agent
-string belongs to a device from a particular group. This given group has to be
-predefined (examples of this can be 'Android devices', 'iPhones', 'Smart TVs'
-and many more groups could be thought of).
+And so if we assume that we have defined the groups, this program determines the confidence with which we can say that a given User-Agent string belongs to one of the devices of the group (for a demonstration see the `usage` column).
 
-### Example
+The main functionality for device detection relies on a perceptron implemented in the program and this has several implications:
+
+- machine learning must be possible
+- data must be available
+- training set is used to train the ANN*
+
+*Currently we have a single layer feed-forward neural network but in the future implementations this may change to a multilayer neural network with eventual back-propagation.
+
+### Usage
+
+This first example shows the only usage that is currently implemented. By querying the program with a User-Agent string and a group name it gives an estimate if the device is from the chosen group.
+
+    > ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android/4.1.1)' --group android-devices
+    > User-Agent: Mozilla/5.0 (Linux; U; en-us; Android/4.1.1)
+    > Group: android-devices
+    > Group description: All devices with Android OS
+    > Resolution: 1
+    > Confidence: 0.99945
+
+For this usage to work we assume that the program's ANN has been trained and the groups have been defined in the database.
+
+*Following usage examples are not yet implemented.*
 
 Give a list of devices that may use the supplied user-agent string
 
@@ -33,24 +49,19 @@ Give a list of devices that may use the supplied user-agent string
     > HTC One (M7): 0.00312
     > Sony Xperia Z1: 0.00135
 
-Give an estimate if the device is from a particular group
 
-    > ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android/4.1.1)' --group android-devices
-    > User-Agent: Mozilla/5.0 (Linux; U; en-us; Android/4.1.1)
-    > Group: android-devices
-    > Group description: All devices with Android OS
-    > Resolution: 1
-    > Confidence: 0.99945
+The underlying code is written in C. Depending on the intended usage this fact has some implications. If you would like to call this from a web application it will probably make most sense to run it as a service (daemon) so that the program is not 'started, loaded to memory, used and discarded' for each call.
 
-The underlying code is written in C.
+If the program runs as a daemon it would be good to have a wrapper API or API(s) in JavaScript or more languages that can query it.
 
-** Description of the program to be written here **
+### The database
 
-It would be good to have a wrapper or access the program through API like a JavaScript API.
+The raw data are stored in Mongo database and the program also uses a proprietary binary format for storing intermediate data.
 
 
+For more information about the data models and the part that mongodb has in this program package see `data_model.md`.
 
-## The notes
+## The notes on device detection on the WWW
 
 My goal is to critically discuss the topic, review the latest developments as
 we as things from the past and to make research on the matter.
@@ -71,6 +82,14 @@ of their owners. I hope that this repository or its part will be of use to someo
 
 ## Footnotes
 
+Dependencies
+
+- node.js (tested with v0.10.21)
+- mongodb (node.js module)
+- mongojs (node.js module)
+- node-simple-router (node.js module)
+- mongod  (mongodb daemon service)
+- C compiler
 
 ---
 April 2014
