@@ -1,24 +1,6 @@
 #ifndef ANN_HEADER
 #define ANN_HEADER
 
-// Module's variables
-bool training_set_inited   = false;
-
-unsigned int iter          = 0; // number of iterations in each epoch
-unsigned int epochs        = 0; // number of epochs
-unsigned int MAX_EPOCHS    = 999999;
-
-float t           = 0.5; // treshold
-double rate       = 0.1; // learnind rate;
-double weights[3] = { 0.0, 0.0, 0.0 }; // weights
-
-//trainingSetItem trainingSet[];
-
-// Once trained the output is saved to a data file so that the ANN doesn't
-// have to train every time but only when the training set is updated or when
-// the training is desired.
-char training_output_filename[] = "../data/to.dat";
-
 // Training Set's struct
 //
 // Has the signature of
@@ -35,7 +17,6 @@ char training_output_filename[] = "../data/to.dat";
 // Tentatively:
 // input_vector = { avg_weight, std_dev_weight, str_count }
 //
-// Memory footprint double(64 bits) * 3 + int(32 bits) = 224 bits
 //
 typedef struct
 {
@@ -82,8 +63,8 @@ double dot_product(double *values, double *weights, unsigned int len);
 double avg_weights(ParsedUserAgent *puas);
 double std_dev_weights(ParsedUserAgent *puas);
 
-int load_training_set_from_db(TrainingSetItem *ts, int *plen);
-int train(TrainingSetItem *ts, int len);
+TrainingSetItem *load_training_set_from_db(TrainingSetItem *ts, unsigned int *plen);
+int train(TrainingSetItem *ts, unsigned int len);
 int parse_user_agent(char *uas, ParsedUserAgent *result);
 int run(ParsedUserAgent *puas);
 
