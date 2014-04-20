@@ -1,5 +1,7 @@
 #include <string.h>
 #include <bool.h>
+#include <stdlib.h>
+
 #include "ann.h"
 
 //
@@ -18,15 +20,16 @@
 //     values: input vector (e.g. (1, 0, 0)),
 //     weights: current weights in an iteration (e.g. (0.9, 0.7, -0.1))
 //              must match the size of the input vector
+//     lenghts of values and weights must be exactly the same
 // Postcondition:
 //     k1*l1 + k2*l2 + ... + kn*ln
-double dot_product(double *values, double *weights)
+double dot_product(double *values, double *weights, unsigned int len)
 {
     int    i   = 0;
-    int    len = sizeof(values)/sizeof(values[0]);
     double sum = 0;
 
     // Where should the precondition checking be included, if at all?
+    // we can't make the assertion here because we only have the pointers
     // assert(sizeof(values) == sizeof(weights))
 
     for(i; i < len; i++) {
@@ -52,7 +55,7 @@ int load_training_set_from_db(TrainingSetItem *ts, int *plen)
     }
     // Initialize the training set
     // ...
-    
+
     // Done
     return 0;
 }
@@ -75,7 +78,7 @@ int train(TrainingSetItem *ts, int len)
             input_vector = trainingSet[i].input_vector;
             desired_output = trainingSet[i].expected_output;
 
-            result = dot_product(input_vector, weights) > t;
+            result = dot_product(input_vector, weights, sizeof(input_vector)/sizeof(input_vector[0])) > t;
             error  = desired_output - result;
 
             if (error != 0) {

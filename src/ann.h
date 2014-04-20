@@ -78,7 +78,7 @@ typedef struct
 
 // Functions' prototypes
 // UNSTABLE - WILL PROBABLY CHANGE
-double dot_product(double *values, double *weights);
+double dot_product(double *values, double *weights, unsigned int len);
 double avg_weights(ParsedUserAgent *puas);
 double std_dev_weights(ParsedUserAgent *puas);
 
