@@ -63,7 +63,7 @@ double dot_product(double *values, double *weights, unsigned int len);
 double avg_weights(ParsedUserAgent *puas);
 double std_dev_weights(ParsedUserAgent *puas);
 
-TrainingSetItem *load_training_set_from_db(TrainingSetItem *ts, unsigned int *plen);
+TrainingSetItem *load_training_set_from_db(unsigned int *plen);
 int train(TrainingSetItem *ts, unsigned int len);
 int parse_user_agent(char *uas, ParsedUserAgent *result);
 int run(ParsedUserAgent *puas);

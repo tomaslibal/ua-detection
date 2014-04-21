@@ -60,7 +60,7 @@ double dot_product(double *values, double *weights, unsigned int len)
 
 // This function loads the training set from the database
 // and keeps it in the memory
-TrainingSetItem *load_training_set_from_db(TrainingSetItem *ts, unsigned int *plen)
+TrainingSetItem *load_training_set_from_db(unsigned int *plen)
 {
     // Get the number of documents-trainingSetItems from the mongodb
     unsigned int cnt;
@@ -68,7 +68,8 @@ TrainingSetItem *load_training_set_from_db(TrainingSetItem *ts, unsigned int *pl
 
     *plen = cnt;
 
-    TrainingSetItem *p_internal;
+    static TrainingSetItem *p_internal;
+
     p_internal = malloc(sizeof(TrainingSetItem)*cnt);
     if(p_internal == NULL) {
         perror("Error allocating memory");
@@ -77,12 +78,12 @@ TrainingSetItem *load_training_set_from_db(TrainingSetItem *ts, unsigned int *pl
 
     // Initialize the training set
     // MOCK VALUES FOR A NAND OPERATION TO SEE IF THE PERCEPTRON CAN LEARN
-    ts[0] = (TrainingSetItem){ .input_vector = { 1.0, 0.0, 0.0 }, .expected_output = 1 };
-    ts[1] = (TrainingSetItem){ .input_vector = { 1.0, 0.0, 1.0 }, .expected_output = 1 };
-    ts[2] = (TrainingSetItem){ .input_vector = { 1.0, 1.0, 0.0 }, .expected_output = 1 };
-    ts[3] = (TrainingSetItem){ .input_vector = { 1.0, 1.0, 1.0 }, .expected_output = 0 };
+    p_internal[0] = (TrainingSetItem){ .input_vector = { 1.0, 0.0, 0.0 }, .expected_output = 1 };
+    p_internal[1] = (TrainingSetItem){ .input_vector = { 1.0, 0.0, 1.0 }, .expected_output = 1 };
+    p_internal[2] = (TrainingSetItem){ .input_vector = { 1.0, 1.0, 0.0 }, .expected_output = 1 };
+    p_internal[3] = (TrainingSetItem){ .input_vector = { 1.0, 1.0, 1.0 }, .expected_output = 0 };
     // ...
-    memcpy(p_internal, ts, sizeof(TrainingSetItem)*cnt);
+    //memcpy(p_internal, ts, sizeof(TrainingSetItem)*cnt);
     return p_internal;
     // Done
     return 0;
