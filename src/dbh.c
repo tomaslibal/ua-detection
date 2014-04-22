@@ -1,5 +1,6 @@
 #include "dbh.h"
 #include "mongo.h"
+#include <string.h>
 
 uint16_t          port;
 char              *host_and_port;
@@ -64,7 +65,10 @@ int dbh_test()
 
     //test_empty_query(conn);
     //test_query(conn);
-
+    // char *coll;
+    // coll = (char*) malloc(sizeof(char)*9);
+    // strcpy(coll, "weights");
+    // double a = get_doc_cnt(coll);
     mongo_destroy(conn);
     return 0;
 }
@@ -76,13 +80,25 @@ static mongo* dbh_get_conn()
 
     if (status != MONGO_OK) {
         switch ( conn->err ) {
-            case MONGO_CONN_NO_SOCKET:  printf("no socket\n"); return 1;
-            case MONGO_CONN_FAIL:       printf("connection failed\n"); return 1;
-            case MONGO_CONN_NOT_MASTER: printf("not master\n"); return 1;
+            case MONGO_CONN_NO_SOCKET:  printf("no socket\n"); exit(1);
+            case MONGO_CONN_FAIL:       printf("connection failed\n"); exit(1);
+            case MONGO_CONN_NOT_MASTER: printf("not master\n"); exit(1);
         }
     }
 
-    return mongo;
+    return conn;
+}
+
+extern double get_doc_cnt(const char* coll)
+{
+    mongo dbh = *dbh_get_conn();
+    double cnt = mongo_count( &dbh, "ua_detection", coll, NULL);
+    if (cnt == MONGO_ERROR) {
+        mongo_destroy(&dbh);
+        return -1;
+    }
+    mongo_destroy(&dbh);
+    return cnt;
 }
 
 int dbh_init(uint16_t *port)

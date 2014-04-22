@@ -7,6 +7,8 @@
 static void test_query( mongo *conn );
 static void test_empty_query(mongo *conn);
 
+extern double get_doc_cnt(const char* coll);
+
 int dbh_init(uint16_t *port);
 int dbh_test();
 
