@@ -2,10 +2,10 @@
 #include "mongo.h"
 #include <string.h>
 
-uint16_t          port;
+uint16_t          port = 27017;
 char              *host_and_port;
-char              *str;
-int               init = 0;
+char              *username;
+char              *password;
 
 static void test_empty_query( mongo *conn ) {
     mongo_cursor cursor[1];
@@ -52,31 +52,24 @@ static void test_query( mongo *conn ) {
 
 int dbh_test()
 {
-    mongo conn[1];
-    int status = mongo_client( conn, "127.0.01", 27017 );
-
-    if (status != MONGO_OK) {
-        switch ( conn->err ) {
-            case MONGO_CONN_NO_SOCKET:  printf("no socket\n"); return 1;
-            case MONGO_CONN_FAIL:       printf("connection failed\n"); return 1;
-            case MONGO_CONN_NOT_MASTER: printf("not master\n"); return 1;
-        }
-    }
-
+    mongo *conn = dbh_get_conn();
     //test_empty_query(conn);
     //test_query(conn);
     // char *coll;
     // coll = (char*) malloc(sizeof(char)*9);
     // strcpy(coll, "weights");
-    // double a = get_doc_cnt(coll);
+    // double cnt = get_doc_cnt(coll);
+    // free(coll);
     mongo_destroy(conn);
     return 0;
 }
 
+// Creates a new database handle pointer and returns it
+// Exits on any connection problem
 static mongo* dbh_get_conn()
 {
     static mongo conn[1];
-    int status = mongo_client( conn, "127.0.0.1", 27017 );
+    int status = mongo_client( conn, "127.0.0.1", port );
 
     if (status != MONGO_OK) {
         switch ( conn->err ) {
@@ -89,6 +82,8 @@ static mongo* dbh_get_conn()
     return conn;
 }
 
+// Counts the number of documents in a collection
+// @param const char * coll - the collection name
 extern double get_doc_cnt(const char* coll)
 {
     mongo dbh = *dbh_get_conn();
@@ -101,7 +96,7 @@ extern double get_doc_cnt(const char* coll)
     return cnt;
 }
 
-int dbh_init(uint16_t *port)
+int dbh_init_config(uint16_t *port)
 {
   char line[80];
   char *param;
