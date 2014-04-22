@@ -5,8 +5,8 @@
 
 # Some general and some specific settings for the compiler and the linker
 CC      = clang
-CFLAGS  = -g
-LDFLAGS = `pkg-config --cflags --libs libmongoc-1.0`
+CFLAGS  = -g --std=c99
+LDFLAGS = -L/usr/local/lib -I/usr/local/include -lmongoc
 
 # Folder structure:
 #   keep the binaries and the .o files in a separate directory
