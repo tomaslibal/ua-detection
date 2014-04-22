@@ -1,6 +1,8 @@
 #ifndef ANN_HEADER
 #define ANN_HEADER
 
+#include "dbh.h"
+
 // Training Set's struct
 //
 // Has the signature of
