@@ -53,14 +53,15 @@ static void test_query( mongo *conn ) {
 int dbh_test()
 {
     mongo *conn = dbh_get_conn();
-    //test_empty_query(conn);
-    //test_query(conn);
+    // test_empty_query(conn);
+    // test_query(conn);
     // char *coll;
     // coll = (char*) malloc(sizeof(char)*9);
     // strcpy(coll, "weights");
     // double cnt = get_doc_cnt(coll);
+    // printf("doc count = %f\n", cnt);
     // free(coll);
-    mongo_destroy(conn);
+    // mongo_destroy(conn);
     return 0;
 }
 
@@ -84,7 +85,7 @@ static mongo* dbh_get_conn()
 
 // Counts the number of documents in a collection
 // @param const char * coll - the collection name
-extern double get_doc_cnt(const char* coll)
+double get_doc_cnt(const char* coll)
 {
     mongo dbh = *dbh_get_conn();
     double cnt = mongo_count( &dbh, "ua_detection", coll, NULL);
@@ -92,7 +93,7 @@ extern double get_doc_cnt(const char* coll)
         mongo_destroy(&dbh);
         return -1;
     }
-    mongo_destroy(&dbh);
+    //mongo_destroy(&dbh);
     return cnt;
 }
 
