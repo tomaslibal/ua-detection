@@ -5,7 +5,7 @@
 This is an experimental repository about device detection for the World Wide
 Web. I am mostly interested in device detection for the user agents connecting to web servers through the HTTP requests.
 
-HTTP/1.1 specifies that a user agent should send its identifying string but the form of that string is left to the user agent. As a result the web server has no means to validate the correctness (user agent can send any string it likes) and secondly, the individual strings often varies one from each other so there is a vast number of different User-Agent strings being send in HTTP requests.
+HTTP/1.1 specifies that a user agent should send its identifying string in the header field of a request and despite clarifying that the content should be either product tokens or comments ([product tokens](http://tools.ietf.org/html/rfc2616#section-3.8), [comments](http://tools.ietf.org/html/rfc2616#page-17)) at the end the ultimate form of that string is left to the user agent. As a result the web server has no means to validate the correctness (user agent can send any information it likes) and secondly, the individual strings often varies one from each other so there is a vast number of different User-Agent strings being send in HTTP requests.
 
 The approach/content of this repository is two-fold: the practical part aims to provide a program that
 can successfully and to a known degree of reliability determine the device that sent the HTTP request and
