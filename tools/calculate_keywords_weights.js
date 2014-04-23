@@ -45,7 +45,7 @@ MongoClient.connect(db_uri, function(err, db) {
                 keywords.update(
                     { value: kw[n] },
                     { $inc: { count: 1 } },
-                    { upsert: true },
+                    { upsert: true, w: 1 },
                     function () {}
                 );
             }
@@ -62,7 +62,7 @@ MongoClient.connect(db_uri, function(err, db) {
         if(!g) return;
 
         g.forEach(function(eachG) {
-
+            var gid = eachG._id;
             ua_strings.find().toArray(function(err, uas) {
                 if(err) throw err;
                 if(!uas) return;
@@ -75,38 +75,41 @@ MongoClient.connect(db_uri, function(err, db) {
                         var kw = eachUas.ua.match(re);
 
                         if (kw) {
-                            for(var n = 0, max = kw.length; n < max; n += 1) {
-                                keywords.findOne({ "value": kw[n] }, function(err, k) {
-                                    if(err) console.log("Error: ", err.errmsg);
-                                    if(!k) return;
+                            keywords.find({value: {$in : kw} }).each(function(err, k) {
+                                if(err) console.log("Error: ", err.errmsg);
+                                if(!k) return;
+                                adj = (gid.equals(p.group_id)) ? parseFloat(rate) : parseFloat(-1 * rate);
+                                console.log("Adjusting " + adj);
+                                weights.count({group_id: p.group_id, keyword_id: k._id},function(err, count) {
+                                    if (count === 0) {
+                                        weights.insert({
+                                            group_id: p.group_id,
+                                            keyword_id: k._id,
+                                            value: adj
+                                        }, {w:1}, function(err, doc) {
 
-                                    adj = (eachG._id.equals(p.group_id)) ? parseFloat(rate) : parseFloat(-1 * rate);
-                                    console.log("Adjusting " + adj);
-                                    weights.update(
-                                        {
-                                            "keyword_id": k._id,
-                                            "group_id": p.group_id
-                                        },
-                                        {
-                                            // THIS SEEMS BROKEN !  !  !
-                                            $inc : { value : adj }
-                                        },
-                                        {
-                                            upsert: true
-                                        },
-                                        function (err, doc) {
-                                            if(err) console.log("Error: " + err.errmsg);
-                                            if(!doc) return;
-                                        }
-                                    );
-                                    weights.findOne({
-                                        "keyword_id": k._id,
-                                        "group_id": p.group_id
-                                    }, function (err, doc) {
-                                        console.log("New weights is " + doc.value + " ("+doc._id.toString()+")");
-                                    })
+                                        });
+                                    } else {
+                                        weights.update(
+                                            {
+                                                "keyword_id": k._id,
+                                                "group_id": p.group_id
+                                            },
+                                            {
+                                                $inc : { 'value' : adj }
+                                            },
+                                            {
+                                                upsert: true,
+                                                w: 1
+                                            },
+                                            function (err, doc) {
+                                                if(err) console.log("Error: " + err.errmsg);
+                                                if(!doc) return;
+                                            }
+                                        );
+                                    }
                                 });
-                            }
+                            });
                         }
                     });
                 });
