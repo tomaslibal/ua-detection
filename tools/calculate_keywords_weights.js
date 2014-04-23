@@ -1,11 +1,9 @@
-var mongojs     = require("mongojs");
+var MongoClient = require('mongodb').MongoClient;
 
 var db_uri      = "mongodb://localhost:27017/ua_detection";
-var collections = ["phones", "ua_strings", "groups", "keywords", "weights"];
-var db          = mongojs.connect(db_uri, collections);
 
-var rate = 0.01;
-var adj  = 0;
+var rate = 0.1;
+var adj;
 var re   = /[\w.]+/g;
 
 // First implementation - "naive" algorithms
@@ -17,74 +15,101 @@ var re   = /[\w.]+/g;
 //      decouple the keywords
 //         for each keyword
 //           insert it into database / update the cnt if keyword existed
-
-db.ua_strings.find().forEach(function(err, doc) {
-    if(err) console.log("Error: ", err.errmsg);
-    if(!doc) return;
-
-    var keywords = doc.ua.match(re);
-
-    if(keywords) {
-        for(var n = 0, max = keywords.length; n < max; n += 1) {
-            console.log("Updating keyword ", keywords[n]);
-            db.keywords.update({"value": keywords[n]}, {$inc: { "count": 1 } }, { upsert: true});
-        }
-    }
-});
-
 // Second run:
 // Go through all groups
 //   for each group
-//      lookup all user-agents
-//         look up user-agent's phone
-//            look up phone's group
-//              look up all keywords from the user-agent
+//      lookup all user-agents that
+//         look up user-agent's phone and group_id
+//              look up all keywords from the user-agent string
 //                if user-agent's group equals current group
 //                   increase the weights by the rate
 //                else
 //                   decrease the weights by the rate
 // Done.
 
-db.groups.find().forEach(function(err, groups) {
-    if(err) console.log("Error: ", err.errmsg);
-    if(!groups) return;
+MongoClient.connect(db_uri, function(err, db) {
+    if(err) console.log(err);
 
-    console.log("Group: ", groups.name);
-    console.log("Now looping through all user-agent strings");
+    var ua_strings = db.collection('ua_strings');
+    var keywords   = db.collection('keywords');
 
-    db.ua_strings.find().forEach(function(err, ua) {
-        if(err) console.log("Error: ", err.errmsg);
-        if(!ua) return;
+    ua_strings.find().each(function(err, ua_string) {
+        if(err) throw err;
+        if(!ua_string) return;
 
-        console.log("User-Agent: ", ua.ua);
+        var kw = ua_string.ua.match(re);
 
-        db.phones.findOne({"_id": ua.phone_id}, function(err, phone) {
-            if(err) console.log("Error: ", err.errmsg);
-            if(!phone) return;
+        if(kw) {
+            for(var n = 0, max = kw.length; n < max; n += 1) {
+                console.log("Updating keyword ", kw[n]);
+                keywords.update(
+                    { value: kw[n] },
+                    { $inc: { count: 1 } },
+                    { upsert: true },
+                    function () {}
+                );
+            }
+        }
 
-            console.log("Phone: ", phone.name);
+    });
 
-            db.groups.findOne({"_id": phone.group_id}, function(err, group) {
-                if(err) console.log("Error: ", err.errmsg);
-                if(!group) return;
+    var groups   = db.collection('groups');
+    var devices  = db.collection('devices');
+    var weights  = db.collection('weights');
 
-                console.log("Phone's group: ", group.name);
+    groups.find().toArray(function(err, g) {
+        if(err) throw err;
+        if(!g) return;
 
-                var keywords = ua.ua.match(re);
+        g.forEach(function(eachG) {
 
-                console.log("Keywords in the user-agent: ", keywords);
+            ua_strings.find().toArray(function(err, uas) {
+                if(err) throw err;
+                if(!uas) return;
 
-                if (keywords) {
-                    for(var n = 0, max = keywords.length; n < max; n += 1) {
-                        db.keywords.findOne({"value": keywords[n]}, function(err, k) {
-                            if(err) console.log("Error: ", err.errmsg);
-                            if(!k) return;
+                uas.forEach(function(eachUas) {
+                    devices.findOne({ _id: eachUas.device_id }, function(err, p) {
+                        if(err) throw err;
+                        if(!p) return;
 
-                            adj = (groups._id.equals(group._id)) ? rate : -1 * rate;
-                            db.weights.update({"keyword_id": k._id, "group_id": group._id}, {$inc : { value: adj } }, {upsert: true});
-                        });
-                    }
-                }
+                        var kw = eachUas.ua.match(re);
+
+                        if (kw) {
+                            for(var n = 0, max = kw.length; n < max; n += 1) {
+                                keywords.findOne({ "value": kw[n] }, function(err, k) {
+                                    if(err) console.log("Error: ", err.errmsg);
+                                    if(!k) return;
+
+                                    adj = (eachG._id.equals(p.group_id)) ? parseFloat(rate) : parseFloat(-1 * rate);
+                                    console.log("Adjusting " + adj);
+                                    weights.update(
+                                        {
+                                            "keyword_id": k._id,
+                                            "group_id": p.group_id
+                                        },
+                                        {
+                                            // THIS SEEMS BROKEN !  !  !
+                                            $inc : { value : adj }
+                                        },
+                                        {
+                                            upsert: true
+                                        },
+                                        function (err, doc) {
+                                            if(err) console.log("Error: " + err.errmsg);
+                                            if(!doc) return;
+                                        }
+                                    );
+                                    weights.findOne({
+                                        "keyword_id": k._id,
+                                        "group_id": p.group_id
+                                    }, function (err, doc) {
+                                        console.log("New weights is " + doc.value + " ("+doc._id.toString()+")");
+                                    })
+                                });
+                            }
+                        }
+                    });
+                });
             });
         });
     });
