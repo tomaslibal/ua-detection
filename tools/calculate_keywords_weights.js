@@ -85,6 +85,7 @@ MongoClient.connect(db_uri, function(err, db) {
                                         weights.insert({
                                             group_id: p.group_id,
                                             keyword_id: k._id,
+                                            keyword: k.value,
                                             value: adj
                                         }, {w:1}, function(err, doc) {
 
