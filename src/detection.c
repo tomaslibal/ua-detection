@@ -5,6 +5,7 @@
 #include <regex.h>
 
 #include "ann.h"
+#include "dbh.h"
 
 // User-Agent string to work with
 char *uas;
@@ -40,19 +41,11 @@ int main(int argc, char *argv[])
     if (argc > 1) {
         uas = malloc(strlen(argv[1]) + 1);
         strcpy(uas, argv[1]);
-        //add_argument("--ua", argv[1]);
     }
     if (argc > 2) {
         group_name= malloc(strlen(argv[2]) + 1);
         strcpy(group_name, argv[2]);
     }
-    // // multiple arguments -> process the arguments one by one
-    // if (argc > 2) {
-    //     for(i=1;i<argc;i++) {
-    //         add_argument("--ua", argv[i+1]);
-    //         i++; // expects the next argmuent be the value of the prev argument name
-    //     }
-    // }
 
     // Interactive mode by default if no arguments passed
     if (argc == 1) {
@@ -67,11 +60,14 @@ int main(int argc, char *argv[])
     if(v) printf("Working with user-agent string %s\n", uas);
     if(v) printf("Working with group %s\n", group_name);
 
+    if(v) printf("Testing the database handlers\n");
+    dbh_test();
+
     TrainingSetItem *p_ts;
     unsigned int len;
 
     p_ts = load_training_set_from_db(&len);
-
+    //return 0;
     train(p_ts, len);
 
     unsigned int uas_len = 0;
