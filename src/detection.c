@@ -135,7 +135,8 @@ int split_keywords(char *uas, unsigned int len)
     char msgbuf[100];
 
     // Compile the regular expression
-    // /([\w.]+(|\/)[0-9.]+|[\w.]+)/
+    // /([\w.]+(|\/)[0-9.]+|[\w.]+)/ -- PCRE regex used in node.js tools
+    // This package <regex.h> works with POSIX regex
     if (regcomp(&re, "[a-zA-Z0-9.]+/[0-9.]+|[a-zA-Z0-9.]+", REG_EXTENDED|REG_ICASE) != 0) {
         return 0;
     }
