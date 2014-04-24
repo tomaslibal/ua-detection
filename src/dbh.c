@@ -50,9 +50,11 @@ static void test_query( mongo *conn ) {
     mongo_cursor_destroy( cursor );
 }
 
+
+
 int dbh_test()
 {
-    mongo *conn = dbh_get_conn();
+    //mongo *conn = dbh_get_conn();
     // test_empty_query(conn);
     // test_query(conn);
     // char *coll;
@@ -67,7 +69,7 @@ int dbh_test()
 
 // Creates a new database handle pointer and returns it
 // Exits on any connection problem
-static mongo* dbh_get_conn()
+extern mongo* dbh_get_conn()
 {
     static mongo conn[1];
     int status = mongo_client( conn, "127.0.0.1", port );
@@ -85,15 +87,15 @@ static mongo* dbh_get_conn()
 
 // Counts the number of documents in a collection
 // @param const char * coll - the collection name
-double get_doc_cnt(const char* coll)
+unsigned int get_doc_cnt(const char* coll)
 {
     mongo dbh = *dbh_get_conn();
-    double cnt = mongo_count( &dbh, "ua_detection", coll, NULL);
+    unsigned int cnt = mongo_count( &dbh, "ua_detection", coll, NULL);
     if (cnt == MONGO_ERROR) {
         mongo_destroy(&dbh);
         return -1;
     }
-    //mongo_destroy(&dbh);
+    mongo_destroy(&dbh);
     return cnt;
 }
 
