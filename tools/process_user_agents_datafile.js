@@ -59,13 +59,14 @@ MongoClient.connect(db_uri, function(err, db) {
 
         uas.update({
             ua: clean,
-            phone_id: null,
+            device_id: null,
             confidence: 0,
         }, {
             $inc: { cnt: 1 }
         },
         {
-            upsert: true
+            upsert: true,
+            w: 1
         },
         function(err, doc){});
 
@@ -95,7 +96,8 @@ MongoClient.connect(db_uri, function(err, db) {
                     }
                 },
                 {
-                    upsert: true
+                    upsert: true,
+                    w: 1
                 },
                 function(err, doc) {});
             }
