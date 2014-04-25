@@ -1,19 +1,27 @@
 # Database Model
 
-## phones collection
+## devices collection
 
     {
       "_id": <ObjectId1>,
       "group_id": <ObjectId3>,
+      "type": "Smartphone",
       "name": "One",
       "brand": "HTC"
     }
 
 ## ua_strings collection
 
+Each document is one distinct user agent string. The `ua` property holds the
+full string. This property could have a 'text index' on it if you would like
+to use fulltext search (MongoDB 2.6+).
+
+Confidence should signify what is the confidence that the given user agent string
+belongs to the device.
+
     {
       "_id": <ObjectId2>,
-      "phone_id": <ObjectId1>,
+      "device_id": <ObjectId1>,
       "ua": "Mozilla/5.0 (Linux; en-us; Android/4.4;) Firefox/28.0",
       "confidence": 1.0
     }
@@ -27,21 +35,12 @@
       "description": "All phones with Android OS"
     }
 
-## keywords_weights
+## keywords collection
 
-This collection is populated by an algorithm that works like this:
+keywords collection
 
-- choose a 'group' for which we will calculate the weights
-- take each User-Agent and parse it into separate keywords
-- find the current weight of the keyword for the given group
-- if the keyword is new, assign it a weight of 0.0
-- for each keyword decrease or increase its weight by 0.01x depending if the
-User-Agent string was of a phone from the given group (then increase the weight)
-or decrease the weight if the phone was not in the target group
-
-The learning algorithm will use this collection as its training set.
-
-    keywords collection
+One of the JavaScript tools loops each user agent string and parses their individual
+keywords and stores them in this collection.
 
     {
       "_id": <ObjectId4>,
@@ -49,11 +48,31 @@ The learning algorithm will use this collection as its training set.
       "count": 3129
     }
 
+
+## weights collection
+
+This collection is populated by an algorithm that works like this:
+
+- one_group = <chosen_group_id>
+- foreach ua_string document
+- do
+-     keywords = ua_string.ua.match(/regex/)
+-     if [device.find({ua_string.device_id}).group_id -eq one_group ]
+-     then
+-         adj = 0.01
+-     else
+-         adj = -0.01
+-     weights.update({ keyword : { $in : keywords }, { $inc : { adj } })
+- done
+
+The learning algorithm uses this collection when preparing the training set.
+
     weights collection
 
     {
         "_id": <ObjectId5>,
         "keyword_id": <ObjectId4>,
+        "keyword": "Mozilla/5.0",
         "group_id": <ObjectId3>,
         "value": -4.31
     }
