@@ -67,7 +67,11 @@ int main(int argc, char *argv[])
     unsigned int len;
 
     p_ts = load_training_set_from_db(&len);
-    //return 0;
+    if (p_ts == NULL || len == 0) {
+        printf("Exiting here - empty training set\n");
+        return 1;
+    }
+    
     train(p_ts, len);
 
     unsigned int uas_len = 0;
