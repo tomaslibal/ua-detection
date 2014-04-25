@@ -45,7 +45,7 @@ keywords and stores them in this collection.
 
     {
       "_id": <ObjectId4>,
-      "value": "Mozilla/5.0",
+      "value": "Mozilla/5.0...",
       "count": 3129
     }
 
@@ -73,7 +73,7 @@ The learning algorithm uses this collection when preparing the training set.
     {
         "_id": <ObjectId5>,
         "keyword_id": <ObjectId4>,
-        "keyword": "Mozilla/5.0",
+        "keyword": "Mozilla/5.0...",
         "group_id": <ObjectId3>,
         "value": -4.31
     }
@@ -100,3 +100,15 @@ Mozilla/5.0: current weight 0.0, increase by 0.01 to 0.01
 ...
 
 Firefox/28.0: current weight 0.0, increase by 0.01 to 0.01
+
+## training_set collection
+
+    {
+        _id: <ObjectId6>,
+        group_id: <ObjectId3>,
+        ua_string: "Mozilla/5.0...",
+        ua_string_id: <ObjectId2>,
+        input_vector: [3],
+        expected_output: 0,
+        vector_calculated: 0
+    }
