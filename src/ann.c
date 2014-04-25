@@ -65,8 +65,12 @@ TrainingSetItem *load_training_set_from_db(unsigned int *plen)
     coll = malloc(13);
     strcpy(coll, "training_set");
     *plen = get_doc_cnt(coll);
-
     static TrainingSetItem *p_internal;
+
+    if (*plen == 0) {
+        printf("*WARNING* Training set empty!\n");
+        return p_internal;
+    }
 
     p_internal = malloc(sizeof(TrainingSetItem)*(*plen));
     if(p_internal == NULL) {
