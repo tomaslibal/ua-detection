@@ -1,6 +1,8 @@
 #ifndef ANN_HEADER
 #define ANN_HEADER
 
+#include <regex.h>
+
 #include "dbh.h"
 
 // Training Set's struct
@@ -56,7 +58,7 @@ typedef struct
     char *keywords;
     double *weights;
     int cnt; // length of the keywords and weights arrays
-    int char_count; // character count of all keywords together
+    int char_cnt; // character count of all keywords together
 } ParsedUserAgent;
 
 // Functions' prototypes
@@ -66,8 +68,12 @@ double avg_weights(ParsedUserAgent *puas);
 double std_dev_weights(ParsedUserAgent *puas);
 
 TrainingSetItem *load_training_set_from_db(unsigned int *plen);
+
 int train(TrainingSetItem *ts, unsigned int len);
 int parse_user_agent(char *uas, ParsedUserAgent *result);
+// Used to parse the User-Agent strings into individual keywords
+unsigned int match_regex(regex_t *re, const char *substr, char *ptr[]);
+int split_keywords(char *uas, char *arr[], unsigned int *len);
 int run(ParsedUserAgent *puas);
 
 // For later implementation:

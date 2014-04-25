@@ -195,6 +195,97 @@ int train(TrainingSetItem *ts, unsigned int len)
 
 int parse_user_agent(char *uas, ParsedUserAgent *result)
 {
+    char *kws;
+    double *w;
+    unsigned int len;
+    split_keywords(uas, &kws, &len);
+    result = malloc(sizeof(ParsedUserAgent));
+    *result = (ParsedUserAgent){ .keywords = &kws[0], .weights = w, .cnt = len, .char_cnt = strlen(uas) };
+    //free(kws);
+    return 0;
+}
+
+// Matches a regex against a string
+// regex_t *re pointer to a regex_t regular expression
+// const char *substr is the subject string
+// char *ptr[] array of pointers to the individual matches
+// returns unsigned int length of the ptr[] array
+unsigned int match_regex(regex_t *re, const char *substr, char *ptr[])
+{
+    const char *p       = substr;
+    const int n_matches = 20;
+    unsigned int j      = 0;
+
+    // Matches kept in this array
+    regmatch_t rm[n_matches];
+    // Clean results in an array of strings
+    char *results[n_matches];
+
+    while(1) {
+        int i = 0;
+        int no_match = regexec(re, p, n_matches, rm, 0);
+        if (no_match) {
+            memcpy(ptr, results, sizeof(results));
+            return j;
+        }
+
+        for(i = 0; i < n_matches; i++) {
+            int start;
+            int end;
+
+            if (rm[i].rm_so == -1)
+                break;
+
+            start = rm[i].rm_so + (p - substr);
+            end = rm[i].rm_eo + (p - substr);
+
+            char *tmp = malloc(sizeof(char)*strlen(substr));
+            strncpy ( tmp, substr + start, end - start);
+            results[j] = tmp;
+        }
+        j++;
+        p += rm[0].rm_eo;
+    }
+    return 0;
+}
+
+int split_keywords(char *uas, char *arr[], unsigned int *len)
+{
+    regex_t re;
+    regmatch_t rm;
+    int status;
+    char msgbuf[100];
+
+    // Compile the regular expression
+    // /([\w.]+(|\/)[0-9.]+|[\w.]+)/ -- PCRE regex used in node.js tools
+    // This package <regex.h> works with POSIX regex
+    if (regcomp(&re, "[a-zA-Z0-9.]+/[0-9.]+|[a-zA-Z0-9.]+", REG_EXTENDED|REG_ICASE) != 0) {
+        return 0;
+    }
+
+    // Results kept in this array
+    char *r[30];
+    // Number of found keywords
+    unsigned int no;
+
+    no = match_regex(
+        &re,
+        uas,
+        r
+    );
+
+    arr = malloc(no);
+    *len = no;
+
+    for(int i = 0; i < no; i++) {
+        if(r[i] != NULL) {
+            arr[i] = malloc(sizeof(*r[i]) + 1);
+            memcpy(arr[i], r[i], sizeof(*r[i]) + 1);
+            printf("Keyword[%d] = %s\n", i, r[i]);
+        }
+    }
+
+    regfree(&re);
     return 0;
 }
 
