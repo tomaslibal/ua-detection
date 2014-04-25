@@ -1,21 +1,20 @@
 var MongoClient = require('mongodb').MongoClient;
+var Server      = require('mongodb').Server;
 
 var db_uri      = "mongodb://localhost:27017/ua_detection";
+var db = {
+    host: 'localhost',
+    port: 27017,
+    name: 'ua_detection'
+};
 
 var rate = 0.1;
 var adj;
-var re   = /[\w.]+/g;
+var re = /([\w.]+(|\/)[0-9.]+|[\w.]+)/ig;
 
 // First implementation - "naive" algorithms
 // The following is a rough sketch how this will work
-
-// First run:
-// Go through all user-agent strings,
-//    For each user-agent
-//      decouple the keywords
-//         for each keyword
-//           insert it into database / update the cnt if keyword existed
-// Second run:
+//
 // Go through all groups
 //   for each group
 //      lookup all user-agents that
@@ -27,31 +26,16 @@ var re   = /[\w.]+/g;
 //                   decrease the weights by the rate
 // Done.
 
-MongoClient.connect(db_uri, function(err, db) {
-    if(err) console.log(err);
+var mongoClient = new MongoClient(new Server(db.host, db.port));
+mongoClient.open(function(err, mongoClient) {
+    if(err) {
+        console.dir(err);
+        return;
+    }
 
+    var db         = mongoClient.db('ua_detection');
     var ua_strings = db.collection('ua_strings');
     var keywords   = db.collection('keywords');
-
-    ua_strings.find().each(function(err, ua_string) {
-        if(err) throw err;
-        if(!ua_string) return;
-
-        var kw = ua_string.ua.match(re);
-
-        if(kw) {
-            for(var n = 0, max = kw.length; n < max; n += 1) {
-                console.log("Updating keyword ", kw[n]);
-                keywords.update(
-                    { value: kw[n] },
-                    { $inc: { count: 1 } },
-                    { upsert: true, w: 1 },
-                    function () {}
-                );
-            }
-        }
-
-    });
 
     var groups   = db.collection('groups');
     var devices  = db.collection('devices');
@@ -63,6 +47,7 @@ MongoClient.connect(db_uri, function(err, db) {
 
         g.forEach(function(eachG) {
             var gid = eachG._id;
+
             ua_strings.find().toArray(function(err, uas) {
                 if(err) throw err;
                 if(!uas) return;
@@ -94,6 +79,7 @@ MongoClient.connect(db_uri, function(err, db) {
                                         weights.update(
                                             {
                                                 "keyword_id": k._id,
+                                                "keyword": k.value,
                                                 "group_id": p.group_id
                                             },
                                             {
