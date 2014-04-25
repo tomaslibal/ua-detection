@@ -6,8 +6,9 @@
       "_id": <ObjectId1>,
       "group_id": <ObjectId3>,
       "type": "Smartphone",
-      "name": "One",
-      "brand": "HTC"
+      "name": "One (M7)",
+      "brand": "HTC",
+      "aka": ["One"]
     }
 
 ## ua_strings collection
