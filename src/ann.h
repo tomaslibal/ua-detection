@@ -74,6 +74,7 @@ int parse_user_agent(char *uas, ParsedUserAgent *result);
 // Used to parse the User-Agent strings into individual keywords
 unsigned int match_regex(regex_t *re, const char *substr, char *ptr[]);
 int split_keywords(char *uas, char *arr[], unsigned int *len);
+int get_weights(char **keywords, unsigned int cnt, double **w, char *group_id);
 int run(ParsedUserAgent *puas);
 
 // For later implementation:
