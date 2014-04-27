@@ -11,20 +11,15 @@
 char *uas;
 // E.g. android-devices
 char *group_name;
-
 // Verbose the output
 int v = 1;
-
 // Used to determine if ANN is trained or not
 bool ann_trained = false;
 
+// add_argument function will be used to handle the input arguments from the
+// command line so that they won't have to be specified in a given order by by
+// using a flag
 //int add_argument(char *arg_name, char *arg_val);
-int free_mem();
-
-// Reserved for future use. This function should take a variable number of
-// parameters or the message will have to be formated with the values in it
-// already like "value abc is set to %s", val ==> "value abc is set to xyz"
-int verbose(char *message);
 
 int main(int argc, char *argv[])
 {
@@ -50,47 +45,36 @@ int main(int argc, char *argv[])
     }
 
     if(v) printf("Started with arguments, executing in cli mode\n");
-
-    // Run it through the neural network
     if(v) printf("Working with user-agent string %s\n", uas);
     if(v) printf("Working with group %s\n", group_name);
 
     if(v) printf("Testing the database handlers\n");
     dbh_test();
 
+    // Load the training set and train the perceptron
     TrainingSetItem *p_ts;
     unsigned int len;
-
     p_ts = load_training_set_from_db(&len);
     if (p_ts == NULL || len == 0) {
         printf("Exiting here - empty training set\n");
         return 1;
     }
-
     train(p_ts, len);
 
-    //unsigned int uas_len = 0;
-    //split_keywords(uas, uas_len);
-    //
+    // Parse the User-Agent and save the result in the ParsedUserAgent struct
     static ParsedUserAgent uas_parsed;
     ParsedUserAgent *puas_parsed;
     puas_parsed = &uas_parsed;
     parse_user_agent(uas, puas_parsed);
-    //
-    // result = run(puas_parsed);
-    // if(v) printf("ANN Result: %d", result);
+
+    // Run the ParsedUserAgent through the perceptron
+    int result = run(puas_parsed);
+    if(v) printf("ANN Result: %d = %s\n", result,(result>0)?"UAS is in the GRUP":"UAS is not in the GROUP");
     free(p_ts);
 
     // Return results in JSON format to stdout
+    // ...
 
-    free_mem();
-    return 0;
-}
-
-
-
-int free_mem()
-{
     free(uas);
     free(group_name);
 
