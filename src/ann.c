@@ -195,12 +195,14 @@ int train(TrainingSetItem *ts, unsigned int len)
 
 int parse_user_agent(char *uas, ParsedUserAgent *result)
 {
-    char *kws;
-    double *w;
+    static char *kws;
+    static double *w;
     unsigned int len;
     split_keywords(uas, &kws, &len);
+    get_weights(&kws, len, &w, "535ab67328328433d64c3d7b");
+
     result = malloc(sizeof(ParsedUserAgent));
-    *result = (ParsedUserAgent){ .keywords = &kws[0], .weights = w, .cnt = len, .char_cnt = strlen(uas) };
+    *result = (ParsedUserAgent){ .keywords = &kws[0], .weights = &w[0], .cnt = len, .char_cnt = strlen(uas) };
     //free(kws);
     return 0;
 }
@@ -249,7 +251,7 @@ unsigned int match_regex(regex_t *re, const char *substr, char *ptr[])
     return 0;
 }
 
-int split_keywords(char *uas, char *arr[], unsigned int *len)
+int split_keywords(char *uas, char **arr, unsigned int *len)
 {
     regex_t re;
     regmatch_t rm;
@@ -274,14 +276,20 @@ int split_keywords(char *uas, char *arr[], unsigned int *len)
         r
     );
 
-    arr = malloc(no);
+    *arr = malloc(no);
     *len = no;
 
     for(int i = 0; i < no; i++) {
         if(r[i] != NULL) {
-            arr[i] = malloc(sizeof(*r[i]) + 1);
-            memcpy(arr[i], r[i], sizeof(*r[i]) + 1);
-            printf("Keyword[%d] = %s\n", i, r[i]);
+            arr[i] = (char*)malloc(strlen(r[i]) + 1);
+            if(arr[i] == NULL) {
+                printf("Memory allocation error. Exiting");
+                return 1;
+            }
+            //strcpy(arr[i], r[i]);
+            memcpy(arr[i], r[i], strlen(r[i]) + 1);
+            printf("Keyword[%d] addr = %p\n", i, &arr[i]);
+            printf("Keyword[%d] = %s\n", i, arr[i]);
         }
     }
 
@@ -289,9 +297,64 @@ int split_keywords(char *uas, char *arr[], unsigned int *len)
     return 0;
 }
 
+int get_weights(char **keywords, unsigned int cnt, double **w, char *group_id)
+{
+    short i = 0;
+
+    mongo *conn = dbh_get_conn();
+
+    for(i=0; i < cnt; i++) {
+        printf("Keyword[%d] addr = %p\n", i, &keywords[i]);
+        printf("Keyword[%d] = %s\n", i, keywords[i]);
+        bson query[1];
+        mongo_cursor cursor[1];
+        bson_oid_t gid[1];
+
+        //bson_oid_init_from_string(gid, group_id);
+        //bson_oid_init(gid, group_id);
+        bson_oid_from_string(gid, group_id);
+
+        bson_init(query);
+            bson_append_string( query, "keyword", keywords[i]);
+            bson_append_oid( query, "group_id", gid);
+            // bson_append_start_object( query, "keyword" );
+            //     bson_append_string( query, keywords[i]);
+            // bson_append_finish_object( query );
+        bson_finish(query);
+
+        mongo_cursor_init( cursor, conn, "ua_detection.weights" );
+        mongo_cursor_set_query( cursor, query );
+
+        while( mongo_cursor_next( cursor ) == MONGO_OK ) {
+            bson_iterator keyword[1];
+            bson_iterator value[1];
+            if ( bson_find(keyword, mongo_cursor_bson(cursor), "keyword") &&
+            bson_find(value, mongo_cursor_bson(cursor), "value") ) {
+                printf("Keyword %s, weight = %f\n", bson_iterator_string(keyword), bson_iterator_double(value));
+                *w[i] = bson_iterator_double(value);
+            }
+        }
+
+        bson_destroy( query );
+        mongo_cursor_destroy( cursor );
+    }
+
+    mongo_destroy(conn);
+    return 0;
+}
+
 int run(ParsedUserAgent *puas)
 {
-    return 0;
+    // calculate input vector
+    double const avg = avg_weights(puas);
+    double const std_dev = std_dev_weights(puas);
+    double const len = puas->char_cnt;
+
+    double vector[3] = { avg, std_dev, len };
+
+    double dp = dot_product(vector, weights, 3);
+
+    return (dp > t) ? 1 : 0;
 }
 
 double avg_weights(ParsedUserAgent *puas)
