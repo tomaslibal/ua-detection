@@ -54,7 +54,7 @@ static void test_query( mongo *conn ) {
 
 int dbh_test()
 {
-    //mongo *conn = dbh_get_conn();
+    mongo *conn = dbh_get_conn();
     // test_empty_query(conn);
     // test_query(conn);
     // char *coll;
@@ -63,7 +63,7 @@ int dbh_test()
     // double cnt = get_doc_cnt(coll);
     // printf("doc count = %f\n", cnt);
     // free(coll);
-    // mongo_destroy(conn);
+    mongo_destroy(conn);
     return 0;
 }
 
@@ -76,9 +76,9 @@ extern mongo* dbh_get_conn()
 
     if (status != MONGO_OK) {
         switch ( conn->err ) {
-            case MONGO_CONN_NO_SOCKET:  printf("no socket\n"); exit(1);
-            case MONGO_CONN_FAIL:       printf("connection failed\n"); exit(1);
-            case MONGO_CONN_NOT_MASTER: printf("not master\n"); exit(1);
+            case MONGO_CONN_NO_SOCKET:  printf("No socket\n"); exit(1);
+            case MONGO_CONN_FAIL:       printf("Connection failed\n"); exit(1);
+            case MONGO_CONN_NOT_MASTER: printf("Not master\n"); exit(1);
         }
     }
 
