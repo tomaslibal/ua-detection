@@ -56,10 +56,12 @@ double dot_product(double *values, double *weights, unsigned int len)
 TrainingSetItem *load_training_set_from_db(unsigned int *plen)
 {
     // Get the number of documents-trainingSetItems from the mongodb
-    char *coll;
-    coll = malloc(13);
+    char *coll = NULL;
+    coll       = (char*)malloc(13);
     strcpy(coll, "training_set");
-    *plen = get_doc_cnt(coll);
+    *plen      = get_doc_cnt(coll);
+
+    // If the training set collection is empty, return
     static TrainingSetItem *p_internal;
 
     if (*plen == 0) {
@@ -67,7 +69,7 @@ TrainingSetItem *load_training_set_from_db(unsigned int *plen)
         return p_internal;
     }
 
-    p_internal = malloc(sizeof(TrainingSetItem)*(*plen));
+    p_internal = calloc(*plen, sizeof(TrainingSetItem));
     if(p_internal == NULL) {
         perror("Error allocating memory");
         exit(1);
@@ -127,7 +129,7 @@ int train(TrainingSetItem *ts, unsigned int len)
     unsigned int i;
     unsigned int errCnt;
     unsigned int len_input_and_weights;
-    int error;
+    int          error;
     unsigned int j;
 
     int desired_output = 0;
@@ -190,10 +192,11 @@ int train(TrainingSetItem *ts, unsigned int len)
 
 int parse_user_agent(char *uas, ParsedUserAgent *result)
 {
-    static char *kws;
-    static double *w;
-    unsigned int len;
-    split_keywords(uas, &kws, &len);
+    static char   *kws = NULL;
+    static double *w   = NULL;
+    static int    len  = 0;
+    len = split_keywords(uas, &kws);
+    printf("Len Here = %d\n", len);
     get_weights(&kws, len, &w, "535ab67328328433d64c3d7b");
 
     result = malloc(sizeof(ParsedUserAgent));
@@ -236,7 +239,7 @@ unsigned int match_regex(regex_t *re, const char *substr, char *ptr[])
             start = rm[i].rm_so + (p - substr);
             end = rm[i].rm_eo + (p - substr);
 
-            char *tmp = malloc(sizeof(char)*strlen(substr));
+            char *tmp = (char*)malloc(sizeof(char)*strlen(substr) + 1);
             strncpy ( tmp, substr + start, end - start);
             results[j] = tmp;
         }
@@ -246,7 +249,7 @@ unsigned int match_regex(regex_t *re, const char *substr, char *ptr[])
     return 0;
 }
 
-int split_keywords(char *uas, char **arr, unsigned int *len)
+int split_keywords(char *uas, char **arr)
 {
     regex_t re;
     regmatch_t rm;
@@ -256,14 +259,14 @@ int split_keywords(char *uas, char **arr, unsigned int *len)
     // Compile the regular expression
     // /([\w.]+(|\/)[0-9.]+|[\w.]+)/ -- PCRE regex used in node.js tools
     // This package <regex.h> works with POSIX regex
-    if (regcomp(&re, "[a-zA-Z0-9.]+/[0-9.]+|[a-zA-Z0-9.]+", REG_EXTENDED|REG_ICASE) != 0) {
+    if (regcomp(&re, "[a-zA-Z0-9.;]+/[0-9.]+|[a-zA-Z0-9.;]+", REG_EXTENDED|REG_ICASE) != 0) {
         return 0;
     }
 
     // Results kept in this array
     char *r[30];
     // Number of found keywords
-    unsigned int no;
+    int no;
 
     no = match_regex(
         &re,
@@ -271,8 +274,7 @@ int split_keywords(char *uas, char **arr, unsigned int *len)
         r
     );
 
-    *arr = malloc(no);
-    *len = no;
+    *arr = calloc(no, sizeof(char *));
 
     for(int i = 0; i < no; i++) {
         if(r[i] != NULL) {
@@ -281,40 +283,52 @@ int split_keywords(char *uas, char **arr, unsigned int *len)
                 printf("Memory allocation error. Exiting");
                 return 1;
             }
-            //strcpy(arr[i], r[i]);
-            memcpy(arr[i], r[i], strlen(r[i]) + 1);
+            strcpy(arr[i], r[i]);
             printf("Keyword[%d] addr = %p\n", i, &arr[i]);
             printf("Keyword[%d] = %s\n", i, arr[i]);
         }
     }
 
     regfree(&re);
-    return 0;
+    return no;
 }
 
-int get_weights(char **keywords, unsigned int cnt, double **w, char *group_id)
+// Given an array of keywords e.g. ["Mozilla/5.0", "Linux", "U", ..., "Android"]
+// this function fetches the corresponding weight value from MongoDB for each
+// keyword and stores the weights in an array.
+//
+// char **keywords pointer to a mem location which is an array of pointers of
+// the individual keywords
+// int cnt is the number of keywords
+// double **w pointer to a mem location which is an array of pointers to the
+// individual weights
+// char *group_id is the ID of the group for which the program lookups up if the
+// user agent string belongs to that group or not
+// returns 0 on success
+int get_weights(char **keywords, int cnt, double **w, char *group_id)
 {
     short i = 0;
+    printf("Keywords cnt = %d\n", cnt);
 
     mongo *conn = dbh_get_conn();
 
-    for(i=0; i < cnt; i++) {
+    for(i = 0; i < cnt; i++) {
         printf("Keyword[%d] addr = %p\n", i, &keywords[i]);
         printf("Keyword[%d] = %s\n", i, keywords[i]);
-        bson query[1];
-        mongo_cursor cursor[1];
-        bson_oid_t gid[1];
 
-        //bson_oid_init_from_string(gid, group_id);
-        //bson_oid_init(gid, group_id);
+        if(keywords[i] == NULL) {
+            continue;
+        }
+
+        bson         query[1];
+        mongo_cursor cursor[1];
+        bson_oid_t   gid[1];
+
         bson_oid_from_string(gid, group_id);
 
         bson_init(query);
             bson_append_string( query, "keyword", keywords[i]);
             bson_append_oid( query, "group_id", gid);
-            // bson_append_start_object( query, "keyword" );
-            //     bson_append_string( query, keywords[i]);
-            // bson_append_finish_object( query );
         bson_finish(query);
 
         mongo_cursor_init( cursor, conn, "ua_detection.weights" );
@@ -327,6 +341,9 @@ int get_weights(char **keywords, unsigned int cnt, double **w, char *group_id)
             bson_find(value, mongo_cursor_bson(cursor), "value") ) {
                 printf("Keyword %s, weight = %f\n", bson_iterator_string(keyword), bson_iterator_double(value));
                 *w[i] = bson_iterator_double(value);
+            } else {
+                printf("not found\n");
+                *w[i] = 0.0;
             }
         }
 
@@ -340,7 +357,7 @@ int get_weights(char **keywords, unsigned int cnt, double **w, char *group_id)
 
 int run(ParsedUserAgent *puas)
 {
-    // calculate input vector
+    // calculate the input vector
     double const avg = avg_weights(puas);
     double const std_dev = std_dev_weights(puas);
     double const len = puas->char_cnt;
