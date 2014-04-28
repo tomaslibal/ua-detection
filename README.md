@@ -15,7 +15,9 @@ the theoretical part is a set of essays or notes on the topic.
 
 The `detection` program has a goal to identify devices by their User-Agent strings that they send in HTTP requests. This software started to meet one specific need which was to identify and categorize the User-Agent strings of smartphone devices into separate groups like Android devices vs. Non Android devices and groups for particular manufacturers.
 
-And so if we assume that we have defined the groups, this program determines the confidence with which we can say that a given User-Agent string belongs to one of the devices of the group (for a demonstration see the `usage` column).
+This is currently the only implemented lookup method, although, ultimately the goal is to match a specific device for a given User-Agent string.
+
+If we assume that we have defined the groups, this program determines the confidence with which we can say that a given User-Agent string belongs to one of the devices of the group (for a demonstration see the `usage` column).
 
 The main functionality for device detection relies on a perceptron implemented in the program and this has several implications:
 
@@ -23,7 +25,7 @@ The main functionality for device detection relies on a perceptron implemented i
 - data must be available
 - training set is used to train the ANN*
 
-*Currently we have a single layer feed-forward neural network but in the future implementations this may change to a multilayer neural network with eventual back-propagation.
+*Currently we have a single layer feed-forward neural network but in the future implementations this may change depending on the findings and evaluation.
 
 ### Usage
 
@@ -66,6 +68,8 @@ For more information about the data models and the part that mongodb has in this
 My goal is to critically discuss the topic, review the latest developments as
 we as things from the past and to make research on the matter.
 
+[Read more](http://github.com/tomaslibal/ua-detection/doc)
+
 ## Branching strategy
 
   ** NOT IN PLACE NOW - MASTER IS EXPERIMENTAL **
@@ -79,6 +83,8 @@ we as things from the past and to make research on the matter.
 
 There is no warranty for this free software. All mentioned trademarks are property
 of their owners. I hope that this repository or its part will be of use to someone.
+
+[Full license](https://github.com/tomaslibal/ua-detection/blob/master/LICENSE)
 
 ## Footnotes
 
