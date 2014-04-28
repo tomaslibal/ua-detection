@@ -12,25 +12,23 @@
 // Training Set's struct
 //
 // Has the signature of
-// {
-//   input_vector = { 0.0, 0.0, 0.0 }
-//   expected_output = 0
-// }
+//   {
+//     input_vector = { 0.0, 0.0, 0.0 }
+//     expected_output = 0
+//   }
 //
-// expected_output is expected to be values 0 or 1 only
-// Value 0 should be when the neuron is not expected to fire with the given
-// input_vector and value 1 for situations when the neuron is expected to
-// fire with the given input_vector.
+// Expected_output should be values 0 or 1: value 0 should be when the neuron is not expected to fire with the given
+// Input_vector and value 1 for situations when the neuron is expected to fire with the given input_vector.
 //
 // Tentatively:
-// input_vector = { avg_weight, std_dev_weight, str_count }
+//   input_vector = { avg_weight, std_dev_weight, char_count }
 //
 //
 typedef struct
 {
     double input_vector[3];
     int expected_output;
-} TrainingSetItem;
+} ann_training_set_t;
 
 // When in the production mode (i.e. trained) the user-agent strings
 // will be passed to the run() function.
@@ -53,36 +51,27 @@ typedef struct
 typedef struct
 {
     double input_vector[3];
-} QueryItem;
+} ann_query_item;
 
-// Parsed User-Agent String
-//
 typedef struct
 {
     char *keywords;
     double *weights;
-    int cnt; // length of the keywords and weights arrays
-    int char_cnt; // character count of all keywords together
-} ParsedUserAgent;
+    int cnt;         // length of the keywords and weights arrays
+    int char_cnt;    // character count of all keywords together
+} ann_parsed_user_agent;
 
-// Functions' prototypes
-// UNSTABLE - WILL PROBABLY CHANGE
+
+ann_training_set_t *load_training_set_from_db(unsigned int *plen);
 double dot_product(double *values, double *weights, unsigned int len);
-double avg_weights(ParsedUserAgent *puas);
-double std_dev_weights(ParsedUserAgent *puas);
-
-TrainingSetItem *load_training_set_from_db(unsigned int *plen);
-
-int train(TrainingSetItem *ts, unsigned int len);
-int parse_user_agent(char *uas, ParsedUserAgent *result);
-// Used to parse the User-Agent strings into individual keywords
-unsigned int match_regex(regex_t *re, const char *substr, char *ptr[]);
-int split_keywords(char *uas, char *arr[]);
+double avg_weights(ann_parsed_user_agent *puas);
+double std_dev_weights(ann_parsed_user_agent *puas);
+int train(ann_training_set_t *ts, unsigned int len);
+int parse_user_agent(char *uas, ann_parsed_user_agent *result);
+int ann_set_group(const char *name);
+int split_keywords(char *uas, char **arr);
 int get_weights(char **keywords, int cnt, double **w, char *group_id);
-int run(ParsedUserAgent *puas);
-
-// For later implementation:
-int save_training_output();
-int load_training_output();
+int run(ann_parsed_user_agent *puas);
+unsigned int match_regex(regex_t *re, char *substr, char **ptr);
 
 #endif
