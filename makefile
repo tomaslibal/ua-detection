@@ -5,7 +5,7 @@
 
 # Some general and some specific settings for the compiler and the linker
 CC      = clang
-CFLAGS  = -g --std=c99
+CFLAGS  = -g
 LDFLAGS = -L/usr/local/lib -I/usr/local/include -lmongoc
 
 # Folder structure:
