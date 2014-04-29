@@ -55,8 +55,8 @@ typedef struct
 
 typedef struct
 {
-    char *keywords;
-    double *weights;
+    char **keywords;
+    double **weights;
     int cnt;         // length of the keywords and weights arrays
     int char_cnt;    // character count of all keywords together
 } ann_parsed_user_agent;
