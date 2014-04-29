@@ -9,10 +9,8 @@
 //
 // ann.c
 
+#include "utils.h"
 #include "ann.h"
-
-// Module's variables
-bool training_set_inited   = false;
 
 unsigned int iter          = 0; // number of iterations in each epoch
 unsigned int epochs        = 0; // number of epochs
@@ -22,10 +20,9 @@ float t           = 0.5; // treshold
 double rate       = 0.1; // learnind rate;
 double weights[3] = { 0.0, 0.0, 0.0 }; // weights
 
-// Once trained the output is saved to a data file so that the ANN doesn't
-// have to train every time but only when the training set is updated or when
-// the training is desired.
-char training_output_filename[] = "../data/to.dat";
+// If the group name is specified during the query, this variable will be populated
+// with a 24 character ObjectId of that group, or NULL if unitialized or on error
+char *uas_device_group_id = NULL;
 
 // Calculates the dot product of two vectors
 // Precondition:
@@ -53,37 +50,36 @@ double dot_product(double *values, double *weights, unsigned int len)
 
 // This function loads the training set from the database
 // and keeps it in the memory
-TrainingSetItem *load_training_set_from_db(unsigned int *plen)
+ann_training_set_t *load_training_set_from_db(unsigned int *plen)
 {
-    // Get the number of documents-trainingSetItems from the mongodb
-    char *coll = NULL;
-    coll       = (char*)malloc(13);
+    char         *coll = NULL;
+    coll               = (char*)malloc(13);
+    if(coll == NULL){ DEBUGPRINT("Malloc error in load_training_set_from_db()\n"); exit(1); }
     strcpy(coll, "training_set");
-    *plen      = get_doc_cnt(coll);
+    *plen              = get_doc_cnt(coll);
+    unsigned int i     = 0;
+    mongo        *conn = dbh_get_conn();
+    bson         query[1];
+    mongo_cursor cursor[1];
+
+    static ann_training_set_t *p_internal = NULL;
 
     // If the training set collection is empty, return
-    static TrainingSetItem *p_internal;
-
+    DEBUGPRINT("Length of the training set = %d\n", *plen);
     if (*plen == 0) {
-        printf("*WARNING* Training set empty!\n");
+        printf("*** WARNING *** Training set empty!\n");
         return p_internal;
     }
 
-    p_internal = calloc(*plen, sizeof(TrainingSetItem));
+    p_internal = (ann_training_set_t*)calloc(*plen, sizeof(ann_training_set_t));
     if(p_internal == NULL) {
-        perror("Error allocating memory");
+        DEBUGPRINT("Error allocating memory\n");
         exit(1);
     }
 
-    unsigned int i = 0;
-
-    mongo *conn = dbh_get_conn();
-    // query is empty because we want every document from the collection
-    bson query[1];
-    mongo_cursor cursor[1];
-
     bson_init(query);
     // empty query -eq {}
+    // query is empty because we want every document from the collection
     bson_finish(query);
 
     mongo_cursor_init(cursor, conn, "ua_detection.training_set");
@@ -95,7 +91,6 @@ TrainingSetItem *load_training_set_from_db(unsigned int *plen)
 
         if (bson_find(input_vector, mongo_cursor_bson(cursor), "input_vector") &&
         bson_find(expected_output, mongo_cursor_bson(cursor), "expected_output")) {
-            printf("Expected output = %d\n", bson_iterator_int(expected_output));
 
             bson_iterator sub[1];
 
@@ -110,9 +105,9 @@ TrainingSetItem *load_training_set_from_db(unsigned int *plen)
                 }
             }
 
-            printf("Input Vector = %f, %f, %f\n", tmp[0], tmp[1], tmp[2] );
+            DEBUGPRINT("Input Vector = %f, %f, %f\n", tmp[0], tmp[1], tmp[2] );
 
-            p_internal[i] = (TrainingSetItem){ .input_vector = { tmp[0], tmp[1], tmp[2] }, .expected_output = bson_iterator_int(expected_output) };
+            p_internal[i] = (ann_training_set_t){ .input_vector = { tmp[0], tmp[1], tmp[2] }, .expected_output = bson_iterator_int(expected_output) };
         }
         i++;
     }
@@ -124,19 +119,17 @@ TrainingSetItem *load_training_set_from_db(unsigned int *plen)
     return p_internal;
 }
 
-int train(TrainingSetItem *ts, unsigned int len)
+int train(ann_training_set_t *ts, unsigned int len)
 {
     unsigned int i;
     unsigned int errCnt;
     unsigned int len_input_and_weights;
     int          error;
     unsigned int j;
-
-    int desired_output = 0;
-    int result;
-
-    double input_vector[3];
-    double product;
+    int          desired_output = 0;
+    int          result;
+    double       input_vector[3];
+    double       product;
 
     len_input_and_weights = sizeof(weights)/sizeof(weights[0]);
 
@@ -146,13 +139,13 @@ int train(TrainingSetItem *ts, unsigned int len)
             iter++;
 
             memcpy(input_vector, ts[i].input_vector, sizeof(ts[i].input_vector));
-            printf("ts[%d] is { %f, %f, %f }\n", i, ts[i].input_vector[0], ts[i].input_vector[1], ts[i].input_vector[2]);
+            DEBUGPRINT("ts[%d] is { %f, %f, %f }\n", i, ts[i].input_vector[0], ts[i].input_vector[1], ts[i].input_vector[2]);
 
-            printf("input_vector = {%f, %f, %f}\n", input_vector[0], input_vector[1], input_vector[2]);
+            DEBUGPRINT("input_vector = {%f, %f, %f}\n", input_vector[0], input_vector[1], input_vector[2]);
 
             memcpy(&desired_output, &ts[i].expected_output, sizeof(ts[i].expected_output));
 
-            printf("Expected outcome = %d\n", desired_output);
+            DEBUGPRINT("Expected outcome = %d\n", desired_output);
 
             product = dot_product(input_vector, weights, sizeof(input_vector)/sizeof(input_vector[0]));
             if (product > t) {
@@ -160,20 +153,20 @@ int train(TrainingSetItem *ts, unsigned int len)
             } else {
                 result = 0;
             }
-            printf("Result %d\n", result);
+            DEBUGPRINT("Result %d\n", result);
 
             error  = desired_output - result;
-            printf("Error %d\n", error);
+            DEBUGPRINT("Error %d\n", error);
 
             if (error != 0) {
                 errCnt++;
 
-                printf("Original weights {%f, %f, %f}\n", weights[0], weights[1], weights[2]);
+                DEBUGPRINT("Original weights {%f, %f, %f}\n", weights[0], weights[1], weights[2]);
                 for(j = 0; j < len_input_and_weights; j++) {
-                    printf("   w[j] = %f\n", rate * error * input_vector[j]);
+                    DEBUGPRINT("   updating w[%d] to %f\n", j, rate * error * input_vector[j]);
                     weights[j] += rate * error * input_vector[j];
                 }
-                printf("Updated weights {%f, %f, %f}\n", weights[0], weights[1], weights[2]);
+                DEBUGPRINT("Updated weights {%f, %f, %f}\n", weights[0], weights[1], weights[2]);
             }
         }
         if (errCnt == 0) {
@@ -190,42 +183,94 @@ int train(TrainingSetItem *ts, unsigned int len)
     return 0;
 }
 
-int parse_user_agent(char *uas, ParsedUserAgent *result)
+int ann_set_group(const char *name)
 {
-    static char   *kws = NULL;
-    static double *w   = NULL;
-    static int    len  = 0;
-    len = split_keywords(uas, &kws);
-    printf("Len Here = %d\n", len);
-    get_weights(&kws, len, &w, "535ab67328328433d64c3d7b");
+    mongo *conn         = dbh_get_conn();
+    uas_device_group_id = (char*)malloc(25);
+    if(uas_device_group_id == NULL){perror("Malloc error\n");exit(1);}
 
-    result = malloc(sizeof(ParsedUserAgent));
-    *result = (ParsedUserAgent){ .keywords = &kws[0], .weights = &w[0], .cnt = len, .char_cnt = strlen(uas) };
-    //free(kws);
+    if(name == NULL){ DEBUGPRINT("Group not set\n"); return 1;}
+    // Look Up Group ID
+    printf("Looking up group ID for group %s\n", name);
+    bson         query[1];
+    mongo_cursor cursor[1];
+
+    bson_init(query);
+        bson_append_string(query, "short_name", name);
+    bson_finish(query);
+
+    mongo_cursor_init(cursor, conn, "ua_detection.groups");
+    mongo_cursor_set_query(cursor, query);
+
+    while(mongo_cursor_next(cursor) == MONGO_OK) {
+        bson_iterator id[1];
+        bson_oid_t    oid[1];
+        char          *oid_str = NULL;
+
+        if (bson_find(id, mongo_cursor_bson(cursor), "_id")) {
+            oid_str = (char*)malloc(25);
+            if(oid_str == NULL){ perror("Malloc error");exit(1); }
+            bson_oid_to_string(bson_iterator_oid(id), oid_str);
+            if(strlen(oid_str)==0){
+                printf("Group not found!\n");
+                strcpy(uas_device_group_id, "535ab67328328433d64c3d7b");
+                continue;
+            }
+            DEBUGPRINT("Group's ID = %s\n", oid_str);
+            strcpy(uas_device_group_id, oid_str);
+            continue;
+        }
+
+    }
+
+    bson_destroy( query );
+    mongo_cursor_destroy( cursor );
+
+    mongo_destroy(conn);
+    return 0;
+}
+
+int parse_user_agent(char *uas, ann_parsed_user_agent *result)
+{
+    char   *kws = NULL;
+    double *w   = NULL;
+    int    len  = 0;
+
+    len = split_keywords(uas, &kws);
+    DEBUGPRINT("No. of keywords = %d\n", len);
+    w = (double*)calloc(len, sizeof(double));
+    if(w == NULL){ DEBUGPRINT("Calloc error\n"); exit(1); }
+    memset(w, 0, len);
+    get_weights(&kws, len, &w, uas_device_group_id);
+
+    result = malloc(sizeof(ann_parsed_user_agent));
+    if(result == NULL){ perror("Malloc error\n"); exit(1); }
+    *result = (ann_parsed_user_agent){ .keywords = &kws, .weights = &w, .cnt = len, .char_cnt = strlen(uas) };
+
+    free(uas_device_group_id);
+
     return 0;
 }
 
 // Matches a regex against a string
 // regex_t *re pointer to a regex_t regular expression
-// const char *substr is the subject string
+// char *substr is the subject string
 // char *ptr[] array of pointers to the individual matches
 // returns unsigned int length of the ptr[] array
-unsigned int match_regex(regex_t *re, const char *substr, char *ptr[])
+unsigned int match_regex(regex_t *re, char *substr, char *ptr[])
 {
-    const char *p       = substr;
-    const int n_matches = 20;
+    // Will point to the previous match
+    char *p             = substr;
+    const int n_matches = 30;
     unsigned int j      = 0;
 
     // Matches kept in this array
     regmatch_t rm[n_matches];
-    // Clean results in an array of strings
-    char *results[n_matches];
 
     while(1) {
         int i = 0;
         int no_match = regexec(re, p, n_matches, rm, 0);
         if (no_match) {
-            memcpy(ptr, results, sizeof(results));
             return j;
         }
 
@@ -239,11 +284,11 @@ unsigned int match_regex(regex_t *re, const char *substr, char *ptr[])
             start = rm[i].rm_so + (p - substr);
             end = rm[i].rm_eo + (p - substr);
 
-            char *tmp = (char*)malloc(sizeof(char)*strlen(substr) + 1);
-            strncpy ( tmp, substr + start, end - start);
-            results[j] = tmp;
+            ptr[j] = (char*)malloc(sizeof(char)*(end-start) + 1);
+            if(ptr[j] == NULL){ perror("Malloc error\n"); exit(1); }
+            sprintf(ptr[j], "'%.*s'", (end-start), substr + start);
+            j++;
         }
-        j++;
         p += rm[0].rm_eo;
     }
     return 0;
@@ -265,6 +310,7 @@ int split_keywords(char *uas, char **arr)
 
     // Results kept in this array
     char *r[30];
+    memset(r, 0, 30);
     // Number of found keywords
     int no;
 
@@ -274,7 +320,7 @@ int split_keywords(char *uas, char **arr)
         r
     );
 
-    *arr = calloc(no, sizeof(char *));
+    *arr = (char*)calloc(no, sizeof(char));
 
     for(int i = 0; i < no; i++) {
         if(r[i] != NULL) {
@@ -284,8 +330,8 @@ int split_keywords(char *uas, char **arr)
                 return 1;
             }
             strcpy(arr[i], r[i]);
-            printf("Keyword[%d] addr = %p\n", i, &arr[i]);
-            printf("Keyword[%d] = %s\n", i, arr[i]);
+            DEBUGPRINT("[split_keywords] Keyword[%d] addr = %p\n", i, &arr[i]);
+            DEBUGPRINT("[split_keywords] Keyword[%d] = %s\n", i, arr[i]);
         }
     }
 
@@ -308,13 +354,15 @@ int split_keywords(char *uas, char **arr)
 int get_weights(char **keywords, int cnt, double **w, char *group_id)
 {
     short i = 0;
-    printf("Keywords cnt = %d\n", cnt);
-
     mongo *conn = dbh_get_conn();
 
     for(i = 0; i < cnt; i++) {
-        printf("Keyword[%d] addr = %p\n", i, &keywords[i]);
-        printf("Keyword[%d] = %s\n", i, keywords[i]);
+        DEBUGPRINT("[get_weights] Keyword[%d] addr = %p\n", i, &keywords[i]);
+        DEBUGPRINT("[get_weights] Keyword[%d] = %s\n", i, keywords[i]);
+
+        w[i] = (double*)malloc(sizeof(double));
+        if(w[i] == NULL){ perror("Malloc error");exit(1); }
+        *w[i] = 0.0;
 
         if(keywords[i] == NULL) {
             continue;
@@ -323,7 +371,7 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
         bson         query[1];
         mongo_cursor cursor[1];
         bson_oid_t   gid[1];
-
+        DEBUGPRINT("[get_weights] group_id = %s\n", group_id);
         bson_oid_from_string(gid, group_id);
 
         bson_init(query);
@@ -335,15 +383,11 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
         mongo_cursor_set_query( cursor, query );
 
         while( mongo_cursor_next( cursor ) == MONGO_OK ) {
-            bson_iterator keyword[1];
             bson_iterator value[1];
-            if ( bson_find(keyword, mongo_cursor_bson(cursor), "keyword") &&
-            bson_find(value, mongo_cursor_bson(cursor), "value") ) {
-                printf("Keyword %s, weight = %f\n", bson_iterator_string(keyword), bson_iterator_double(value));
+
+            if ( bson_find(value, mongo_cursor_bson(cursor), "value") ) {
+                printf("Keyword %s, weight = %f\n", keywords[i], bson_iterator_double(value));
                 *w[i] = bson_iterator_double(value);
-            } else {
-                printf("not found\n");
-                *w[i] = 0.0;
             }
         }
 
@@ -355,12 +399,14 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
     return 0;
 }
 
-int run(ParsedUserAgent *puas)
+int run(ann_parsed_user_agent *puas)
 {
+    if(puas == NULL) { printf("No Parsed User-Agent. Exiting.\n"); exit(1); }
+
     // calculate the input vector
     double const avg = avg_weights(puas);
     double const std_dev = std_dev_weights(puas);
-    double const len = puas->char_cnt;
+    double const len = (double)puas->char_cnt;
 
     double vector[3] = { avg, std_dev, len };
 
@@ -369,33 +415,11 @@ int run(ParsedUserAgent *puas)
     return (dp > t) ? 1 : 0;
 }
 
-double avg_weights(ParsedUserAgent *puas)
+double avg_weights(ann_parsed_user_agent *puas)
 {
     return 0.0;
 }
-double std_dev_weights(ParsedUserAgent *puas)
+double std_dev_weights(ann_parsed_user_agent *puas)
 {
     return 0.0;
 }
-
-// Not yet implemented
-// int save_training_output()
-// {
-//     handle = fopen(training_output_filename, "w");
-//     if(handle == NULL) {
-//         return 1;
-//     }
-//     fclose(handle);
-//     return 0;
-// }
-
-// Not yet implemented
-// int load_training_output()
-// {
-//     handle = fopen(training_output_filename, "r");
-//     if(handle == NULL) {
-//         return 1;
-//     }
-//     fclose(handle);
-//     return 0;
-// }
