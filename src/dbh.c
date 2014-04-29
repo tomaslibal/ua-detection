@@ -42,7 +42,7 @@ static void test_query( mongo *conn ) {
         bson_iterator cnt[1];
         if ( bson_find(keyword, mongo_cursor_bson(cursor), "value") &&
         bson_find(cnt, mongo_cursor_bson(cursor), "count") ) {
-            printf("User-Agent: %s, count: %d\n", bson_iterator_string(keyword), bson_iterator_int(cnt));
+            printf("Keyword: %s, count: %d\n", bson_iterator_string(keyword), bson_iterator_int(cnt));
         }
     }
 
