@@ -4,19 +4,10 @@
 #include <stdlib.h>
 #include <regex.h>
 
+#include "utils.h"
 #include "ann.h"
 #include "dbh.h"
 
-#define APP_DEBUG 1
-
-#ifdef APP_DEBUG
-#define DEBUGPRINT(...) fprintf(stdout, __VA_ARGS__)
-#define PRNTSTR(val,name) \
-    printf("%s = %s\n", name, val);
-#else /* !APP_DEBUG */
-#define DEBUGPRINT(...)
-#define PRNTSTR(...)
-#endif /* !APP_DEBUG */
 
 /* User-Agent string to work with */
 char *uas;
@@ -38,11 +29,11 @@ int main(int argc, char *argv[])
     // If the program is started with 1 parameter only, consider that parameter
     // the user-agent string passed to the program
     if (argc > 1) {
-        uas = malloc(strlen(argv[1]) + 1);
+        uas = (char*)malloc(strlen(argv[1]) + 1);
         strcpy(uas, argv[1]);
     }
     if (argc > 2) {
-        group_name= malloc(strlen(argv[2]) + 1);
+        group_name= (char*)malloc(strlen(argv[2]) + 1);
         strcpy(group_name, argv[2]);
     }
 
@@ -68,7 +59,7 @@ int main(int argc, char *argv[])
     unsigned int       len;
     p_ts = load_training_set_from_db(&len);
     if (p_ts == NULL || len == 0) {
-        printf("Exiting here - empty training set\n");
+        if(v) printf("Exiting here - empty training set\n");
         return 1;
     }
     train(p_ts, len);
