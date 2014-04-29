@@ -10,9 +10,9 @@
 
 
 /* User-Agent string to work with */
-char *uas;
+char *uas        = NULL;
 /* E.g. android-devices */
-char *group_name;
+char *group_name = NULL;
 /* Verbose the output */
 short v = 1;
 
@@ -37,10 +37,8 @@ int main(int argc, char *argv[])
         strcpy(group_name, argv[2]);
     }
 
-    // Interactive mode by default if no arguments passed
     if (argc == 1) {
-        printf("Started without arguments, executing in an interactive mode\n");
-        printf("Interactive mode not yet implemented. Exiting now!\n");
+        printf("usage: %s 'User-Agent string' 'group-id'\n", argv[0]);
         exit(1);
     }
 
