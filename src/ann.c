@@ -232,20 +232,22 @@ int ann_set_group(const char *name)
 
 int parse_user_agent(char *uas, ann_parsed_user_agent *result)
 {
-    char   *kws = NULL;
-    double *w   = NULL;
+    char   **kws = NULL;
+    kws = malloc(sizeof(char)*1);
+    double **w   = NULL;
+    w = malloc(sizeof(double)*1);
     int    len  = 0;
 
-    len = split_keywords(uas, &kws);
+    len = split_keywords(uas, kws);
     DEBUGPRINT("No. of keywords = %d\n", len);
-    w = (double*)calloc(len, sizeof(double));
+    w = realloc(w, len*sizeof(double));
     if(w == NULL){ DEBUGPRINT("Calloc error\n"); exit(1); }
-    memset(w, 0, len);
-    get_weights(&kws, len, &w, uas_device_group_id);
+    memset(w, 0.0, len);
+    get_weights(kws, len, w, uas_device_group_id);
 
-    result = malloc(sizeof(ann_parsed_user_agent));
-    if(result == NULL){ perror("Malloc error\n"); exit(1); }
-    *result = (ann_parsed_user_agent){ .keywords = &kws, .weights = &w, .cnt = len, .char_cnt = strlen(uas) };
+    //result = malloc(sizeof(ann_parsed_user_agent));
+    //if(result == NULL){ perror("Malloc error\n"); exit(1); }
+    *result = (ann_parsed_user_agent){ .keywords = kws, .weights = w, .cnt = len, .char_cnt = strlen(uas) };
 
     free(uas_device_group_id);
 
@@ -320,7 +322,7 @@ int split_keywords(char *uas, char **arr)
         r
     );
 
-    *arr = (char*)calloc(no, sizeof(char));
+    arr = realloc(arr, no*sizeof(char));
 
     for(int i = 0; i < no; i++) {
         if(r[i] != NULL) {
