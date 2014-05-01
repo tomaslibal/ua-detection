@@ -425,9 +425,15 @@ double avg_weights(ann_parsed_user_agent *puas)
         double *tmp = *puas->weights;
         sum += tmp[i];
     }
-    return sum/(i);
+    return (sum/i);
 }
-double std_dev_weights(ann_parsed_user_agent *puas)
+double std_dev_weights(ann_parsed_user_agent *puas, double avg)
 {
-    return 0.0;
+    int i = 0;
+    double sum = 0;
+    for(i;i<puas->cnt;i++){
+        double *tmp = *puas->weights;
+        sum += pow((tmp[i] - avg), 2);
+    }
+    return sqrt(sum/(i-1));
 }

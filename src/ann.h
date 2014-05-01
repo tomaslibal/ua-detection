@@ -65,7 +65,7 @@ typedef struct
 ann_training_set_t *load_training_set_from_db(unsigned int *plen);
 double dot_product(double *values, double *weights, unsigned int len);
 double avg_weights(ann_parsed_user_agent *puas);
-double std_dev_weights(ann_parsed_user_agent *puas);
+double std_dev_weights(ann_parsed_user_agent *puas, double avg);
 int train(ann_training_set_t *ts, unsigned int len);
 int parse_user_agent(char *uas, ann_parsed_user_agent *result);
 int ann_set_group(const char *name);
