@@ -94,7 +94,7 @@ mongoClient.open(function(err, mongoClient) {
                         P += Math.pow((weight.value - ar_mean), 2);
                         //i++;
                     });
-                    std_dev = Math.sqrt(P/i);
+                    std_dev = Math.sqrt(P/(i-1));
 
                     db.collection('ua_strings').findOne({_id: row.ua_string_id }, function(err, ua) {
                         if(err) throw err;
