@@ -24,6 +24,8 @@ double weights[3] = { 0.0, 0.0, 0.0 }; // weights
 // with a 24 character ObjectId of that group, or NULL if unitialized or on error
 char *uas_device_group_id = NULL;
 
+char *uas_device_group_name;
+
 // Calculates the dot product of two vectors
 // Precondition:
 //     values: input vector (e.g. (1, 0, 0)),
@@ -185,9 +187,18 @@ int train(ann_training_set_t *ts, unsigned int len)
 
 int ann_set_group(const char *name)
 {
+    if(name == NULL) {
+        uas_device_group_name = malloc(2);
+        strcpy(uas_device_group_name, "");
+        return 1;
+    }
+
     mongo *conn         = dbh_get_conn();
     uas_device_group_id = (char*)malloc(25);
     if(uas_device_group_id == NULL){perror("Malloc error\n");exit(1);}
+
+    uas_device_group_name = malloc(sizeof(char)*strlen(name) + 1);
+    strcpy(uas_device_group_name, name);
 
     if(name == NULL){ DEBUGPRINT("Group not set\n"); return 1;}
     // Look Up Group ID
@@ -201,26 +212,30 @@ int ann_set_group(const char *name)
 
     mongo_cursor_init(cursor, conn, "ua_detection.groups");
     mongo_cursor_set_query(cursor, query);
-
+    int j = 0;
     while(mongo_cursor_next(cursor) == MONGO_OK) {
         bson_iterator id[1];
         bson_oid_t    oid[1];
         char          *oid_str = NULL;
-
+        DEBUGPRINT("mongo_ok\n");
         if (bson_find(id, mongo_cursor_bson(cursor), "_id")) {
             oid_str = (char*)malloc(25);
             if(oid_str == NULL){ perror("Malloc error");exit(1); }
             bson_oid_to_string(bson_iterator_oid(id), oid_str);
-            if(strlen(oid_str)==0){
-                printf("Group not found!\n");
-                strcpy(uas_device_group_id, "535ab67328328433d64c3d7b");
-                continue;
-            }
             DEBUGPRINT("Group's ID = %s\n", oid_str);
             strcpy(uas_device_group_id, oid_str);
             continue;
+        }else {
+            DEBUGPRINT("Group ID not found\n");
         }
+        j++;
+    }
 
+    if(j==0) {
+        DEBUGPRINT("Error while retrieving the cursor\n");
+        strcpy(uas_device_group_id, "535ab67328328433d64c3d7b");
+        uas_device_group_name = realloc(uas_device_group_name, sizeof(char)*8);
+        strcpy(uas_device_group_name, "Default");
     }
 
     bson_destroy( query );
@@ -306,7 +321,7 @@ int split_keywords(char *uas, char **arr)
     // Compile the regular expression
     // /([\w.]+(|\/)[0-9.]+|[\w.]+)/ -- PCRE regex used in node.js tools
     // This package <regex.h> works with POSIX regex
-    if (regcomp(&re, "[a-zA-Z0-9.;]+/[0-9.]+|[a-zA-Z0-9.;]+", REG_EXTENDED|REG_ICASE) != 0) {
+    if (regcomp(&re, "[a-zA-Z0-9.]+/[0-9.]+|[a-zA-Z0-9.]+", REG_EXTENDED|REG_ICASE) != 0) {
         return 0;
     }
 
@@ -326,12 +341,17 @@ int split_keywords(char *uas, char **arr)
 
     for(int i = 0; i < no; i++) {
         if(r[i] != NULL) {
-            arr[i] = (char*)malloc(strlen(r[i]) + 1);
+            // minus the two quotes sign, one extra for null byte
+            // -2 + 1 = -1
+            //arr[i] = (char*)malloc(strlen(r[i]) - 1);
+            arr[i] = (char*)malloc(strlen(r[i])+1);
             if(arr[i] == NULL) {
                 printf("Memory allocation error. Exiting");
                 return 1;
             }
             strcpy(arr[i], r[i]);
+            remove_quotes(arr[i]);
+            
             DEBUGPRINT("[split_keywords] Keyword[%d] addr = %p\n", i, &arr[i]);
             DEBUGPRINT("[split_keywords] Keyword[%d] = %s\n", i, arr[i]);
         }
@@ -359,8 +379,10 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
     mongo *conn = dbh_get_conn();
 
     for(i = 0; i < cnt; i++) {
+        remove_quotes(keywords[i]);
         DEBUGPRINT("[get_weights] Keyword[%d] addr = %p\n", i, &keywords[i]);
         DEBUGPRINT("[get_weights] Keyword[%d] = %s\n", i, keywords[i]);
+        DEBUGPRINT("[get_weights] strlen(keyword[%d]) = %lu\n", i, strlen(keywords[i]));
 
         w[i] = (double*)malloc(sizeof(double));
         if(w[i] == NULL){ perror("Malloc error");exit(1); }
@@ -370,20 +392,21 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
             continue;
         }
 
-        bson         query[1];
+        bson query[1];
         mongo_cursor cursor[1];
-        bson_oid_t   gid[1];
+
         DEBUGPRINT("[get_weights] group_id = %s\n", group_id);
-        bson_oid_from_string(gid, group_id);
+        DEBUGPRINT("[get_weights] uas_device_group_name = %s\n", uas_device_group_name);
 
         bson_init(query);
             bson_append_string( query, "keyword", keywords[i]);
-            bson_append_oid( query, "group_id", gid);
+            bson_append_string( query, "group", uas_device_group_name);
         bson_finish(query);
 
         mongo_cursor_init( cursor, conn, "ua_detection.weights" );
         mongo_cursor_set_query( cursor, query );
 
+        int j = 0;
         while( mongo_cursor_next( cursor ) == MONGO_OK ) {
             bson_iterator value[1];
 
@@ -391,6 +414,10 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
                 printf("Keyword %s, weight = %f\n", keywords[i], bson_iterator_double(value));
                 *w[i] = bson_iterator_double(value);
             }
+            j++;
+        }
+        if(j==0) {
+            DEBUGPRINT("[get_weights] Nothing found!\n");
         }
 
         bson_destroy( query );
@@ -407,7 +434,7 @@ int run(ann_parsed_user_agent *puas)
 
     // calculate the input vector
     double const avg = avg_weights(puas);
-    double const std_dev = std_dev_weights(puas);
+    double const std_dev = std_dev_weights(puas, avg);
     double const len = (double)puas->char_cnt;
 
     double vector[3] = { avg, std_dev, len };
@@ -436,4 +463,18 @@ double std_dev_weights(ann_parsed_user_agent *puas, double avg)
         sum += pow((tmp[i] - avg), 2);
     }
     return sqrt(sum/(i-1));
+}
+
+void remove_quotes(char* str)
+{
+    char *dst = str;
+    char *src = str;
+    char c;
+
+    while ((c = *src++) != '\0')
+    {
+        if (c != '\'')
+            *dst++ = c;
+    }
+    *dst = '\0';
 }
