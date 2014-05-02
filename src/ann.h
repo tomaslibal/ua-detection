@@ -63,13 +63,17 @@ typedef struct
 
 
 ann_training_set_t *load_training_set_from_db(unsigned int *plen);
+/* calculates a vector dot product of two given vectors */
 double dot_product(double *values, double *weights, unsigned int len);
+/* calculates sample mean of the weights of a parsed user-agent */
 double avg_weights(ann_parsed_user_agent *puas);
+/* calculates sample standard deviation of the weights of a parsed user-agent */
 double std_dev_weights(ann_parsed_user_agent *puas, double avg);
 int train(ann_training_set_t *ts, unsigned int len);
 int parse_user_agent(char *uas, ann_parsed_user_agent *result);
 int ann_set_group(const char *name);
 int split_keywords(char *uas, char **arr);
+/* get weights for corresponding keywords from the database */
 int get_weights(char **keywords, int cnt, double **w, char *group_id);
 int run(ann_parsed_user_agent *puas);
 unsigned int match_regex(regex_t *re, char *substr, char **ptr);
