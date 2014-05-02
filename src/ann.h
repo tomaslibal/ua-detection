@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <regex.h>
+#include <math.h>
 
 #include "dbh.h"
 
@@ -77,5 +78,6 @@ int split_keywords(char *uas, char **arr);
 int get_weights(char **keywords, int cnt, double **w, char *group_id);
 int run(ann_parsed_user_agent *puas);
 unsigned int match_regex(regex_t *re, char *substr, char **ptr);
+void remove_quotes(char* str);
 
 #endif
