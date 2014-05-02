@@ -69,7 +69,7 @@ int dbh_test()
 
 // Creates a new database handle pointer and returns it
 // Exits on any connection problem
-extern mongo* dbh_get_conn()
+mongo* dbh_get_conn()
 {
     static mongo conn[1];
     int status = mongo_client( conn, "127.0.0.1", port );
@@ -79,6 +79,7 @@ extern mongo* dbh_get_conn()
             case MONGO_CONN_NO_SOCKET:  printf("No socket\n"); exit(1);
             case MONGO_CONN_FAIL:       printf("Connection failed\n"); exit(1);
             case MONGO_CONN_NOT_MASTER: printf("Not master\n"); exit(1);
+            default: printf("Error connecting to MongoDB\n"); exit(1);
         }
     }
 
