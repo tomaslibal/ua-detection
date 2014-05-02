@@ -15,10 +15,11 @@ LDFLAGS = -L/usr/local/lib -I/usr/local/include -lmongoc
 #
 BIN = ./bin
 SRC = ./src
+TST = ./test
 
 PROG = $(BIN)/detection
 HDRS = $(SRC)/ann.h $(SRC)/dbh.h
-SRCS = $(addprefix $(SRC)/, detection.c ann.c dbh.c)
+SRCS = $(addprefix $(SRC)/, detection.c ann.c dbh.c utils.c)
 OBJS = $(SRCS:$(BIN)/.c=$(SRC)/.o)
 
 
