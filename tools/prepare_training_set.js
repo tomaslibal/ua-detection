@@ -13,7 +13,7 @@ var db = {
 //     init _id, ua_string_id, group_id, vector_calculated, input_vector, expected_output
 //     if vector_calculated = 1 -> continue
 //     // decouple keywords of the user_string
-//     ar_mean = 0
+//     sample_mean = 0
 //     i       = 0
 //     sum     = 0
 //     weights = []
@@ -24,18 +24,18 @@ var db = {
 //         sum += weights[i]
 //         i++
 //     end
-//     ar_mean = sum / i
+//     sample_mean = sum / i
 //     for each weights[]
 //     i = 0
 //     do
-//         P += (weights[i] - ar_mean)^2
+//         P += (weights[i] - sample_mean)^2
 //         i++
 //     end
 //     std_dev = sqrt(P/i)
 //     ua_str_len = strlen(ua_string)
 //     if (ua_string_id->device->group_id == group_id) exp = 1 else exp = 0
 //     db.training_set.update({_id: <id>},
-//                     { input_vector: [ar_mean, std_dev, ua_str_len],
+//                     { input_vector: [sample_mean, std_dev, ua_str_len],
 //                       expected_output: exp,
 //                       vector_calculated: 1 }, {w:1}, writeconcerncallback );
 // end
@@ -54,7 +54,7 @@ mongoClient.open(function(err, mongoClient) {
             if(!row) return;
             if (1 === row.vector_calculated) return;
 
-            var ar_mean = 0;
+            var sample_mean = 0;
             var std_dev = 0;
             var strlen  = 0;
             var exp     = 0;
@@ -85,13 +85,13 @@ mongoClient.open(function(err, mongoClient) {
                         i++;
                     });
 
-                    ar_mean = sum / i;
+                    sample_mean = sum / i;
 
                     var P = 0;
                     //i = 0;
 
                     w.forEach(function(weight) {
-                        P += Math.pow((weight.value - ar_mean), 2);
+                        P += Math.pow((weight.value - sample_mean), 2);
                         //i++;
                     });
                     std_dev = Math.sqrt(P/(i-1));
@@ -107,7 +107,7 @@ mongoClient.open(function(err, mongoClient) {
                             else
                                 exp = 0;
 
-                            row.input_vector = [ ar_mean, std_dev, strlen];
+                            row.input_vector = [ sample_mean, std_dev, strlen];
                             row.expected_output = exp;
                             row.vector_calculated = 1;
                             db.collection('training_set').update({
