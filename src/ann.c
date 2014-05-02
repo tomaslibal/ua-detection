@@ -224,7 +224,6 @@ int ann_set_group(const char *name)
             bson_oid_to_string(bson_iterator_oid(id), oid_str);
             DEBUGPRINT("Group's ID = %s\n", oid_str);
             strcpy(uas_device_group_id, oid_str);
-            continue;
         }else {
             DEBUGPRINT("Group ID not found\n");
         }
@@ -351,7 +350,7 @@ int split_keywords(char *uas, char **arr)
             }
             strcpy(arr[i], r[i]);
             remove_quotes(arr[i]);
-            
+
             DEBUGPRINT("[split_keywords] Keyword[%d] addr = %p\n", i, &arr[i]);
             DEBUGPRINT("[split_keywords] Keyword[%d] = %s\n", i, arr[i]);
         }
@@ -398,14 +397,22 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
         DEBUGPRINT("[get_weights] group_id = %s\n", group_id);
         DEBUGPRINT("[get_weights] uas_device_group_name = %s\n", uas_device_group_name);
 
-        bson_init(query);
+        // bson_init(query);
+        //     bson_append_string( query, "keyword", keywords[i]);
+        //     bson_append_string( query, "group", uas_device_group_name);
+        // bson_finish(query);
+
+        remove_quotes(uas_device_group_name);
+
+        bson_init( query );
             bson_append_string( query, "keyword", keywords[i]);
             bson_append_string( query, "group", uas_device_group_name);
-        bson_finish(query);
+        bson_finish( query );
 
         mongo_cursor_init( cursor, conn, "ua_detection.weights" );
         mongo_cursor_set_query( cursor, query );
-
+        //int r = mongo_cursor_next( cursor );
+        //printf("!!! r = %d\n", r); exit(1);
         int j = 0;
         while( mongo_cursor_next( cursor ) == MONGO_OK ) {
             bson_iterator value[1];
