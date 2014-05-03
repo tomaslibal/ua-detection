@@ -1,6 +1,6 @@
-# Device detection
+## Device detection
 
-## Introduction
+### Introduction
 
 This is an experimental repository about device detection for the World Wide
 Web. I am mostly interested in device detection for the user agents connecting to web servers through the HTTP requests.
@@ -8,6 +8,7 @@ Web. I am mostly interested in device detection for the user agents connecting t
 | Document                       | Description                  |
 |:------------------------------ |:---------------------------- |
 | [Case study](https://github.com/tomaslibal/ua-detection/blob/master/doc/case_study.md) | The method for device detection / user-agent detection |
+| [Data models](https://github.com/tomaslibal/ua-detection/blob/master/doc/data_model.md) | MongoDB data models with which `ua_detection` works |
 
 HTTP/1.1 specifies that a user agent should send its identifying string in the header field of a request and despite clarifying that the content should be either product tokens or comments ([product tokens](http://tools.ietf.org/html/rfc2616#section-3.8), [comments](http://tools.ietf.org/html/rfc2616#page-17)) at the end the ultimate form of that string is left to the user agent. As a result the web server has no means to validate the correctness (user agent can send any information it likes) and secondly, the individual strings often varies one from each other so there is a vast number of different User-Agent strings being send in HTTP requests.
 
@@ -15,7 +16,7 @@ The approach/content of this repository is two-fold: the practical part aims to 
 can successfully and to a known degree of reliability determine the device that sent the HTTP request and
 the theoretical part is a set of essays or notes on the topic.
 
-## The program
+### The program
 
 The `detection` program has a goal to identify devices by their User-Agent strings that they send in HTTP requests. This software started to meet one specific need which was to identify and categorize the User-Agent strings of smartphone devices into separate groups like Android devices vs. Non Android devices and groups for particular manufacturers.
 
@@ -31,7 +32,7 @@ The main functionality for device detection relies on a perceptron implemented i
 
 *Currently we have a single layer feed-forward neural network but in the future implementations this may change depending on the findings and evaluation.
 
-### Usage
+#### Usage
 
 This first example shows the only usage that is currently implemented. By querying the program with a User-Agent string and a group name it gives an estimate if the device is from the chosen group.
 
@@ -60,21 +61,21 @@ The underlying code is written in C. Depending on the intended usage this fact h
 
 If the program runs as a daemon it would be good to have a wrapper API or API(s) in JavaScript or more languages that can query it.
 
-### The database
+#### The database
 
 The raw data are stored in Mongo database and the program also uses a proprietary binary format for storing intermediate data.
 
 
 For more information about the data models and the part that mongodb has in this program package see `data_model.md`.
 
-## The notes on device detection on the WWW
+### The notes on device detection on the WWW
 
 My goal is to critically discuss the topic, review the latest developments as
 we as things from the past and to make research on the matter.
 
 [Read more](http://github.com/tomaslibal/ua-detection/doc)
 
-## Branching strategy
+### Branching strategy
 
   ** NOT IN PLACE NOW - MASTER IS EXPERIMENTAL **
 
@@ -83,25 +84,24 @@ we as things from the past and to make research on the matter.
 - feature/{feature-branch} will be used for developing new features
 - hotfix/{hotfix} hotfixes that may go directly into the master
 
-## Disclaimers
+### Disclaimers
 
 There is no warranty for this free software. All mentioned trademarks are property
 of their owners. I hope that this repository or its part will be of use to someone.
 
 [Full license](https://github.com/tomaslibal/ua-detection/blob/master/LICENSE)
 
-## Footnotes
+### Footnotes
 
 Dependencies
 
 - node.js (tested with v0.10.21)
 - mongodb (node.js module)
-- mongojs (node.js module)
 - node-simple-router (node.js module)
 - mongod  (mongodb daemon service)
 - C compiler
 
 ---
-April 2014
+April-May 2014
 
 Tomas <tomas@libal.eu>
