@@ -11,4 +11,8 @@
 #define DEBUGPRINT(...)
 #define PRNTSTR(...)
 #endif /* !APP_DEBUG */
+
+double sample_mean(double *vals, int n);
+double sample_std_dev(double *vals, int n, double sample_mean);
+
 #endif /* !DETECTION_UTILS */
