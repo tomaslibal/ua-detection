@@ -23,8 +23,10 @@ belongs to the device.
     {
       "_id": <ObjectId2>,
       "device_id": <ObjectId1>,
+      "group_id": <ObjectId3>,
       "ua": "Mozilla/5.0 (Linux; en-us; Android/4.4;) Firefox/28.0",
-      "confidence": 1.0
+      "confidence": 1.0 // confidence weight for matching ua:device_id
+      "confidence_group: 1.0 // confidence weight for matching ua:group_id
     }
 
 ## groups collection
