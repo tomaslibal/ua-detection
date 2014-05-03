@@ -46,6 +46,10 @@ var mongoClient = new MongoClient(new Server('localhost', 27017));
 mongoClient.open(function(err, mongoClient) {
     var db = mongoClient.db("ua_detection");
 
+    // populate training_set from ua_strings which have assigned a device_id or a group_id
+    //
+    //
+
     db.collection('training_set').find().toArray(function(err, rows) {
         if(err) throw err;
 
@@ -60,64 +64,95 @@ mongoClient.open(function(err, mongoClient) {
             var exp     = 0;
 
             var group_id = row.group_id;
+            var device_id = row.device_id;
 
             strlen = row.ua_string.length;
 
             var re = /([\w.]+(|\/)[0-9.]+|[\w.]+)/ig;
             var keywords = row.ua_string.match(re);
-            db.collection('keywords').find({ value: { $in : keywords } }, { _id: 1 }).toArray(function(err, kws) {
+            db.collection('keywords').find({ value: { $in : keywords } }).toArray(function(err, kws) {
                 if(err) throw err;
 
                 var kws_ids = [];
+                var i       = 0;
+                var sum     = 0;
+                var P       = 0;
 
                 kws.forEach(function(k) {
                     kws_ids.push(k._id);
+
+                    sum += k.devices_weights[device_id];
+                    i   += 1;
                 });
 
-                var i = 0;
-                var sum = 0;
+                sample_mean = sum / i;
 
-                db.collection('weights').find({ group_id: row.group_id, keyword_id: { $in : kws_ids }}).toArray(function(err, w) {
+                kws.forEach(function(k) {
+                    P += Math.pow((k.devices_weights[device_id] - sample_mean), 2);
+                });
+
+                std_dev = Math.sqrt(P/(i-1));
+
+                db.collection('ua_strings').findOne({_id: row.ua_string_id }, function(err, ua) {
                     if(err) throw err;
 
-                    w.forEach(function(weight) {
-                        sum += weight.value;
-                        i++;
-                    });
+                    if(ua.device_id.equals(device_id))
+                        exp = 1;
+                    else
+                        exp = 0;
 
-                    sample_mean = sum / i;
+                    row.input_vector = [ sample_mean, std_dev, strlen];
+                    row.expected_output = exp;
+                    row.vector_calculated = 1;
+                    db.collection('training_set').update({
+                        _id: row._id
+                    },row, {
+                        w: 1
+                    }, function(err, d){});
 
-                    var P = 0;
-                    //i = 0;
-
-                    w.forEach(function(weight) {
-                        P += Math.pow((weight.value - sample_mean), 2);
-                        //i++;
-                    });
-                    std_dev = Math.sqrt(P/(i-1));
-
-                    db.collection('ua_strings').findOne({_id: row.ua_string_id }, function(err, ua) {
-                        if(err) throw err;
-
-                        db.collection('devices').findOne({ _id : ua.device_id }, function(err, device) {
-                            if(err) throw err;
-
-                            if(device.group_id.equals(group_id))
-                                exp = 1;
-                            else
-                                exp = 0;
-
-                            row.input_vector = [ sample_mean, std_dev, strlen];
-                            row.expected_output = exp;
-                            row.vector_calculated = 1;
-                            db.collection('training_set').update({
-                                _id: row._id
-                            },row, {
-                                w: 1
-                            }, function(err, d){});
-                        });
-                    });
                 });
+
+                // db.collection('weights').find({ group_id: row.group_id, keyword_id: { $in : kws_ids }}).toArray(function(err, w) {
+                //     if(err) throw err;
+                //
+                //     w.forEach(function(weight) {
+                //         sum += weight.value;
+                //         i++;
+                //     });
+                //
+                //     sample_mean = sum / i;
+                //
+                //     var P = 0;
+                //     //i = 0;
+                //
+                //     w.forEach(function(weight) {
+                //         P += Math.pow((weight.value - sample_mean), 2);
+                //         //i++;
+                //     });
+                //     std_dev = Math.sqrt(P/(i-1));
+                //
+                //     db.collection('ua_strings').findOne({_id: row.ua_string_id }, function(err, ua) {
+                //         if(err) throw err;
+                //
+                //         db.collection('devices').findOne({ _id : ua.device_id }, function(err, device) {
+                //             if(err) throw err;
+                //
+                //             if(device.group_id.equals(group_id))
+                //                 exp = 1;
+                //             else
+                //                 exp = 0;
+                //
+                //             row.input_vector = [ sample_mean, std_dev, strlen];
+                //             row.expected_output = exp;
+                //             row.vector_calculated = 1;
+                //             db.collection('training_set').update({
+                //                 _id: row._id
+                //             },row, {
+                //                 w: 1
+                //             }, function(err, d){});
+                //         });
+                //     });
+                // });
             });
 
         });
