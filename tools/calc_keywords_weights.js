@@ -39,10 +39,11 @@ mongoClient.open(function(err, mongoClient) {
     var ua_strings = db.collection('ua_strings');
     var keywords   = db.collection('keywords');
 
-    //var groups   = db.collection('groups');
+    var groups   = db.collection('groups');
     var devices  = db.collection('devices');
     //var weights  = db.collection('weights');
 
+    // WEIGHTS - DEVICES
     devices.find().toArray(function(err, entries) {
         if(err) {}
 
@@ -64,6 +65,41 @@ mongoClient.open(function(err, mongoClient) {
                         //var token = "devices_weights." + item_id.toString() + "";
                         var inc = { $inc : {} };
                         inc.$inc['devices_weights.' + item_id.toString()] = adj;
+                        keywords.update(
+                            { value:kws[i] },
+                            inc,
+                            {w:1},
+                            function(err, result){}
+                        );
+                    }
+
+                });
+            });
+        });
+    });
+
+    // WEIGHTS - GROUPS
+    groups.find().toArray(function(err, entries) {
+        if(err) {}
+
+        entries.forEach(function(group_item) {
+            var item_id = group_item._id;
+
+            ua_strings.find().toArray(function(err, uas) {
+                if(err) {}
+
+                uas.forEach(function(ua) {
+                    var group_id = ua.group_id;
+                    var kws = ua.ua.match(re);
+
+                    if(!group_id) { return; }
+
+                    adj = (group_id.equals(item_id)) ? rate : (-1*rate);
+
+                    for(var i = 0; i < kws.length; i += 1) {
+                        //var token = "devices_weights." + item_id.toString() + "";
+                        var inc = { $inc : {} };
+                        inc.$inc['groups_weights.' + item_id.toString()] = adj;
                         keywords.update(
                             { value:kws[i] },
                             inc,
