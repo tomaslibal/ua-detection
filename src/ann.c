@@ -429,14 +429,22 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
         int j = 0;
         while( mongo_cursor_next( cursor ) == MONGO_OK ) {
             bson_iterator devices_weights[1];
-
+            bson_iterator sub[1];
+            
             if ( bson_find(devices_weights, mongo_cursor_bson(cursor), "devices_weights") ) {
-
-                //printf("Keyword %s, weight = %f\n", keywords[i], bson_iterator_double(value));
-                //*w[i] = bson_iterator_double(value);
+                bson_iterator_subiterator(devices_weights, sub);
+                while(bson_iterator_more(sub)) {
+                    if (bson_iterator_next(sub) != BSON_EOO) {
+                        if(strcmp(bson_iterator_key(sub), uas_device_id) == 0) {
+                            *w[i] = bson_iterator_double(sub);
+                            j++;
+                            printf("Keyword %s: weight = %f\n", keywords[i], *w[i]);
+                        }
+                    }
+                }
             }
-            j++;
         }
+
         if(j==0) {
             DEBUGPRINT("[get_weights] Nothing found!\n");
         }
