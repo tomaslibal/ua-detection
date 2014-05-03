@@ -8,6 +8,7 @@
 #include <regex.h>
 #include <math.h>
 
+#include "utils.h"
 #include "dbh.h"
 
 // Training Set's struct
@@ -73,6 +74,7 @@ double std_dev_weights(ann_parsed_user_agent *puas, double avg);
 int train(ann_training_set_t *ts, unsigned int len);
 int parse_user_agent(char *uas, ann_parsed_user_agent *result);
 int ann_set_group(const char *name);
+int ann_set_device(const char *model);
 int split_keywords(char *uas, char **arr);
 /* get weights for corresponding keywords from the database */
 int get_weights(char **keywords, int cnt, double **w, char *group_id);

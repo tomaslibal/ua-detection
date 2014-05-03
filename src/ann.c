@@ -9,12 +9,11 @@
 //
 // ann.c
 
-#include "utils.h"
 #include "ann.h"
 
 unsigned int iter          = 0; // number of iterations in each epoch
 unsigned int epochs        = 0; // number of epochs
-unsigned int MAX_EPOCHS    = 10;
+unsigned int MAX_EPOCHS    = 100;
 
 float t           = 0.5; // treshold
 double rate       = 0.1; // learnind rate;
@@ -25,6 +24,9 @@ double weights[3] = { 0.0, 0.0, 0.0 }; // weights
 char *uas_device_group_id = NULL;
 
 char *uas_device_group_name;
+
+char *uas_device_id;
+char *uas_device_model;
 
 // Calculates the dot product of two vectors
 // Precondition:
@@ -182,6 +184,17 @@ int train(ann_training_set_t *ts, unsigned int len)
     }
     printf("Training done. Weights %f %f %f\n", weights[0], weights[1], weights[2]);
 
+    return 0;
+}
+
+int ann_set_device(const char *model)
+{
+    //
+    uas_device_id = (char*)malloc(25);
+    // hardcoded Device ID for testing now...
+    strcpy(uas_device_id, "535ab70328328433d64c3d7d");
+    uas_device_model = (char*)malloc(strlen(model)+1);
+    strcpy(uas_device_model, model);
     return 0;
 }
 
@@ -394,32 +407,33 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
         bson query[1];
         mongo_cursor cursor[1];
 
-        DEBUGPRINT("[get_weights] group_id = %s\n", group_id);
-        DEBUGPRINT("[get_weights] uas_device_group_name = %s\n", uas_device_group_name);
+        DEBUGPRINT("[get_weights] device_id = %s\n", uas_device_id);
+        DEBUGPRINT("[get_weights] device_model = %s\n", uas_device_model);
+        //DEBUGPRINT("[get_weights] group_id = %s\n", group_id);
+        //DEBUGPRINT("[get_weights] uas_device_group_name = %s\n", uas_device_group_name);
 
         // bson_init(query);
         //     bson_append_string( query, "keyword", keywords[i]);
         //     bson_append_string( query, "group", uas_device_group_name);
         // bson_finish(query);
 
-        remove_quotes(uas_device_group_name);
+        remove_quotes(uas_device_model);
 
         bson_init( query );
-            bson_append_string( query, "keyword", keywords[i]);
-            bson_append_string( query, "group", uas_device_group_name);
+            bson_append_string( query, "value", keywords[i]);
         bson_finish( query );
 
-        mongo_cursor_init( cursor, conn, "ua_detection.weights" );
+        mongo_cursor_init( cursor, conn, "ua_detection.keywords" );
         mongo_cursor_set_query( cursor, query );
-        //int r = mongo_cursor_next( cursor );
-        //printf("!!! r = %d\n", r); exit(1);
+
         int j = 0;
         while( mongo_cursor_next( cursor ) == MONGO_OK ) {
-            bson_iterator value[1];
+            bson_iterator devices_weights[1];
 
-            if ( bson_find(value, mongo_cursor_bson(cursor), "value") ) {
-                printf("Keyword %s, weight = %f\n", keywords[i], bson_iterator_double(value));
-                *w[i] = bson_iterator_double(value);
+            if ( bson_find(devices_weights, mongo_cursor_bson(cursor), "devices_weights") ) {
+
+                //printf("Keyword %s, weight = %f\n", keywords[i], bson_iterator_double(value));
+                //*w[i] = bson_iterator_double(value);
             }
             j++;
         }
@@ -440,7 +454,8 @@ int run(ann_parsed_user_agent *puas)
     if(puas == NULL) { printf("No Parsed User-Agent. Exiting.\n"); exit(1); }
 
     // calculate the input vector
-    double const avg = avg_weights(puas);
+    double const avg = sample_mean(*puas->weights, puas->cnt);
+    //double const avg = avg_weights(puas);
     double const std_dev = std_dev_weights(puas, avg);
     double const len = (double)puas->char_cnt;
 
@@ -455,7 +470,7 @@ double avg_weights(ann_parsed_user_agent *puas)
 {
     int i = 0;
     double sum = 0;
-    for(i;i<puas->cnt;i++){
+    for(;i<puas->cnt;i++){
         double *tmp = *puas->weights;
         sum += tmp[i];
     }
@@ -465,7 +480,7 @@ double std_dev_weights(ann_parsed_user_agent *puas, double avg)
 {
     int i = 0;
     double sum = 0;
-    for(i;i<puas->cnt;i++){
+    for(;i<puas->cnt;i++){
         double *tmp = *puas->weights;
         sum += pow((tmp[i] - avg), 2);
     }

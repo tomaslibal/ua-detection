@@ -10,9 +10,11 @@
 
 
 /* User-Agent string to work with */
-char *uas        = NULL;
+char *uas          = NULL;
 /* E.g. android-devices */
-char *group_name = NULL;
+char *group_name   = NULL;
+/* Device Model */
+char *device_model = NULL;
 /* Verbose the output */
 short v = 1;
 
@@ -33,24 +35,28 @@ int main(int argc, char *argv[])
         strcpy(uas, argv[1]);
     }
     if (argc > 2) {
-        group_name= (char*)malloc(strlen(argv[2]) + 1);
-        strcpy(group_name, argv[2]);
+        device_model = (char*)malloc(strlen(argv[2]) + 1);
+        strcpy(device_model, argv[2]);
     }
 
     if (argc == 1) {
-        printf("usage: %s 'User-Agent string' 'group-id'\n", argv[0]);
+        printf("usage: %s 'User_agent_string' 'device_model'\n", argv[0]);
         exit(1);
     }
 
-    if(v) printf("Started with arguments, executing in cli mode\n");
+    if(v) printf("Executing...\n");
     if(v) printf("Working with user-agent string %s\n", uas);
-    if(v) printf("Working with group %s\n", group_name);
+    if(v) printf("Working with device model %s\n", device_model);
+    //if(v) printf("Working with group %s\n", group_name);
 
     if(v) printf("Testing the database handlers\n");
     dbh_test();
 
     // Set the group-name
-    ann_set_group(group_name);
+    //ann_set_group(group_name);
+
+    // Set the device
+    ann_set_device(device_model);
 
     // Load the training set and train the perceptron
     ann_training_set_t *p_ts;
@@ -77,7 +83,8 @@ int main(int argc, char *argv[])
     // ...
 
     free(uas);
-    free(group_name);
+    //free(group_name);
+    free(device_model);
 
     return 0;
 }
