@@ -29,6 +29,8 @@ belongs to the device.
       "confidence_group: 1.0 // confidence weight for matching ua:group_id
     }
 
+*The confidence numbers might get normalized into "confidence": {...}*
+
 ## groups collection
 
     {
@@ -108,9 +110,16 @@ Firefox/28.0: current weight 0.0, increase by 0.01 to 0.01
     {
         _id: <ObjectId6>,
         group_id: <ObjectId3>,
+        device_id: <ObjectId1>,
         ua_string: "Mozilla/5.0...",
         ua_string_id: <ObjectId2>,
         input_vector: [3],
         expected_output: 0,
-        vector_calculated: 0
+        vector_calculated: 0,
+
+        g_input_vector: [3],    // group_id related input_vector
+        g_expected_output: 0,   // group_id related expected_output
+        g_vector_calculated: 0  // group_id vector calculated
     }
+
+*This collection might be normalized in the future - relating to the two input_vectors and expected_outputs*
