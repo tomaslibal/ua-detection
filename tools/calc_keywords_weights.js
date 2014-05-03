@@ -62,7 +62,7 @@ mongoClient.open(function(err, mongoClient) {
                     adj = (device_id.equals(item_id)) ? rate : (-1*rate);
 
                     for(var i = 0; i < kws.length; i += 1) {
-                        //var token = "devices_weights." + item_id.toString() + "";
+
                         var inc = { $inc : {} };
                         inc.$inc['devices_weights.' + item_id.toString()] = adj;
                         keywords.update(
@@ -97,7 +97,7 @@ mongoClient.open(function(err, mongoClient) {
                     adj = (group_id.equals(item_id)) ? rate : (-1*rate);
 
                     for(var i = 0; i < kws.length; i += 1) {
-                        //var token = "devices_weights." + item_id.toString() + "";
+
                         var inc = { $inc : {} };
                         inc.$inc['groups_weights.' + item_id.toString()] = adj;
                         keywords.update(
