@@ -57,8 +57,8 @@ typedef struct
 
 typedef struct
 {
-    char **keywords;
-    double **weights;
+    char *keywords[50];
+    double weights[50];
     int cnt;         // length of the keywords and weights arrays
     int char_cnt;    // character count of all keywords together
 } ann_parsed_user_agent;
@@ -77,7 +77,7 @@ int ann_set_group(const char *name);
 int ann_set_device(const char *model);
 int split_keywords(char *uas, char **arr);
 /* get weights for corresponding keywords from the database */
-int get_weights(char **keywords, int cnt, double **w, char *group_id);
+int get_weights(char **keywords, int cnt, double *w);
 int run(ann_parsed_user_agent *puas);
 unsigned int match_regex(regex_t *re, char *substr, char **ptr);
 void remove_quotes(char* str);

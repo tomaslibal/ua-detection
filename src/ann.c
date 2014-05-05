@@ -22,9 +22,7 @@ double weights[3] = { 0.0, 0.0, 0.0 }; // weights
 // If the group name is specified during the query, this variable will be populated
 // with a 24 character ObjectId of that group, or NULL if unitialized or on error
 char *uas_device_group_id = NULL;
-
 char *uas_device_group_name;
-
 char *uas_device_id;
 char *uas_device_model;
 
@@ -259,24 +257,21 @@ int ann_set_group(const char *name)
 
 int parse_user_agent(char *uas, ann_parsed_user_agent *result)
 {
-    char   **kws = NULL;
-    kws = malloc(sizeof(char)*1);
-    double **w   = NULL;
-    w = malloc(sizeof(double)*1);
+    char   *kws[50];
+    double w[50];
+    memset(w, 0.0, 50);
     int    len  = 0;
 
     len = split_keywords(uas, kws);
     DEBUGPRINT("No. of keywords = %d\n", len);
-    w = realloc(w, len*sizeof(double));
-    if(w == NULL){ DEBUGPRINT("Calloc error\n"); exit(1); }
-    memset(w, 0.0, len);
-    get_weights(kws, len, w, uas_device_group_id);
+    get_weights(kws, len, w);
 
-    //result = malloc(sizeof(ann_parsed_user_agent));
-    //if(result == NULL){ perror("Malloc error\n"); exit(1); }
-    *result = (ann_parsed_user_agent){ .keywords = kws, .weights = w, .cnt = len, .char_cnt = strlen(uas) };
+    memcpy(result->keywords, kws, sizeof(*kws)*len);
+    memcpy(result->weights, w, sizeof(*w)*len);
+    result->cnt = len;
+    result->char_cnt = strlen(uas);
 
-    free(uas_device_group_id);
+    //free(uas_device_group_id);
 
     return 0;
 }
@@ -339,7 +334,7 @@ int split_keywords(char *uas, char **arr)
 
     // Results kept in this array
     char *r[30];
-    memset(r, 0, 30);
+    //memset(r, 0, 30);
     // Number of found keywords
     int no;
 
@@ -349,15 +344,11 @@ int split_keywords(char *uas, char **arr)
         r
     );
 
-    arr = realloc(arr, no*sizeof(char));
+    printf("size of arr = %lu\n", sizeof(arr));
 
     for(int i = 0; i < no; i++) {
         if(r[i] != NULL) {
-            // minus the two quotes sign, one extra for null byte
-            // -2 + 1 = -1
-            //arr[i] = (char*)malloc(strlen(r[i]) - 1);
-            arr[i] = (char*)malloc(strlen(r[i])+1);
-            if(arr[i] == NULL) {
+            if (NULL == (arr[i] = malloc(strlen(r[i])+1))) {
                 printf("Memory allocation error. Exiting");
                 return 1;
             }
@@ -385,37 +376,21 @@ int split_keywords(char *uas, char **arr)
 // char *group_id is the ID of the group for which the program lookups up if the
 // user agent string belongs to that group or not
 // returns 0 on success
-int get_weights(char **keywords, int cnt, double **w, char *group_id)
+int get_weights(char **keywords, int cnt, double *w)
 {
     short i = 0;
     mongo *conn = dbh_get_conn();
 
     for(i = 0; i < cnt; i++) {
-        remove_quotes(keywords[i]);
         DEBUGPRINT("[get_weights] Keyword[%d] addr = %p\n", i, &keywords[i]);
         DEBUGPRINT("[get_weights] Keyword[%d] = %s\n", i, keywords[i]);
         DEBUGPRINT("[get_weights] strlen(keyword[%d]) = %lu\n", i, strlen(keywords[i]));
-
-        w[i] = (double*)malloc(sizeof(double));
-        if(w[i] == NULL){ perror("Malloc error");exit(1); }
-        *w[i] = 0.0;
-
-        if(keywords[i] == NULL) {
-            continue;
-        }
 
         bson query[1];
         mongo_cursor cursor[1];
 
         DEBUGPRINT("[get_weights] device_id = %s\n", uas_device_id);
         DEBUGPRINT("[get_weights] device_model = %s\n", uas_device_model);
-        //DEBUGPRINT("[get_weights] group_id = %s\n", group_id);
-        //DEBUGPRINT("[get_weights] uas_device_group_name = %s\n", uas_device_group_name);
-
-        // bson_init(query);
-        //     bson_append_string( query, "keyword", keywords[i]);
-        //     bson_append_string( query, "group", uas_device_group_name);
-        // bson_finish(query);
 
         remove_quotes(uas_device_model);
 
@@ -430,15 +405,15 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
         while( mongo_cursor_next( cursor ) == MONGO_OK ) {
             bson_iterator devices_weights[1];
             bson_iterator sub[1];
-            
+
             if ( bson_find(devices_weights, mongo_cursor_bson(cursor), "devices_weights") ) {
                 bson_iterator_subiterator(devices_weights, sub);
                 while(bson_iterator_more(sub)) {
                     if (bson_iterator_next(sub) != BSON_EOO) {
                         if(strcmp(bson_iterator_key(sub), uas_device_id) == 0) {
-                            *w[i] = bson_iterator_double(sub);
+                            w[i] = bson_iterator_double(sub);
                             j++;
-                            printf("Keyword %s: weight = %f\n", keywords[i], *w[i]);
+                            printf("Keyword %s: weight = %f\n", keywords[i], w[i]);
                         }
                     }
                 }
@@ -459,38 +434,29 @@ int get_weights(char **keywords, int cnt, double **w, char *group_id)
 
 int run(ann_parsed_user_agent *puas)
 {
-    if(puas == NULL) { printf("No Parsed User-Agent. Exiting.\n"); exit(1); }
+    if(puas == NULL) {
+        printf("No Parsed User-Agent. Exiting.\n"); exit(1);
+    }
 
     // calculate the input vector
-    double const avg = sample_mean(*puas->weights, puas->cnt);
-    //double const avg = avg_weights(puas);
+    double const avg = sample_mean(puas->weights, puas->cnt);
     double const std_dev = std_dev_weights(puas, avg);
     double const len = (double)puas->char_cnt;
 
-    double vector[3] = { avg, std_dev, len };
+    double vector[3] = { avg, std_dev, 1.0 };
 
     double dp = dot_product(vector, weights, 3);
-
+    DEBUGPRINT("resulting dot product = %f\n", dp);
+    DEBUGPRINT("avg = %f; std_dev = %f, len = %f\n", avg, std_dev, len);
     return (dp > t) ? 1 : 0;
 }
 
-double avg_weights(ann_parsed_user_agent *puas)
-{
-    int i = 0;
-    double sum = 0;
-    for(;i<puas->cnt;i++){
-        double *tmp = *puas->weights;
-        sum += tmp[i];
-    }
-    return (sum/i);
-}
 double std_dev_weights(ann_parsed_user_agent *puas, double avg)
 {
     int i = 0;
     double sum = 0;
     for(;i<puas->cnt;i++){
-        double *tmp = *puas->weights;
-        sum += pow((tmp[i] - avg), 2);
+        sum += pow((puas->weights[i] - avg), 2);
     }
     return sqrt(sum/(i-1));
 }
