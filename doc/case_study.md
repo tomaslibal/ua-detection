@@ -257,29 +257,42 @@ Resulting training set:
 
 <pre>
 {
-	_id: <ObjectId>,
-	device_id: <ObjectId>,
+	_id: &lt;ObjectId&gt;,
+	device_id: &lt;ObjectId&gt; (One (M7)),
 	ua_string: "Mozilla/5.0 (Linux; U; Android 4.1; en-us; HTC_PN071 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
-	ua_string_id: <ObjectId>,
+	ua_string_id: &lt;ObjectId&gt;,
 	input_vector: [ 0.072222, 0.057451, 138 ],
 	expected_output: 1,
 	vector_calculated: 1
 },
 {
-	_id: <ObjectId>,
-	device_id: <ObjectId>,
+	_id: &lt;ObjectId&gt;,
+	device_id: &lt;ObjectId&gt; (iPhone 5),
 	ua_string: "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3",
-	ua_string_id: <ObjectId>,
+	ua_string_id: &lt;ObjectId&gt;,
 	input_vector: [ 0.093333, 0.059362, 134 ],
 	expected_output: 1,
 	vector_calculated: 1
+},
+{
+    _id : &lt;ObjectId&gt;,
+    device_id : &lt;ObjectId&gt; (One (M7)),
+    ua_string : "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3",
+    ua_string_id : &lt;ObjectId&gt;,
+    input_vector : [ -0.09333333333333334, 0.05936168397046637, 134 ],
+    expected_output : 0,
+    vector_calculated : 1
 }
 </pre>
 
 
 ##### 5) train a perceptron
 
-...
+`MAX_EPOCHS = 100`
+
+Output:
+`Weights 1.667000 -0.036721 -0.600000`
+
 
 ##### 6) run a touple (user_agent_string, device) through the trained perceptron
 
