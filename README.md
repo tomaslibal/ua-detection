@@ -38,9 +38,11 @@ The `ua_detection` program has 2 goals:
 
 By executing the program with a user-agent string and a group name, it gives an estimate if the device is from the chosen group.
 
-```json
+
     > admin:~ $ ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android 4.1.1)' --group android-devices
-    > { "status": 0,
+
+```json
+    { "status": 0,
         "query": {
             "ua": "Mozilla/5.0 (Linux; U; en-us; Android 4.1.1)",
             "group": "android-devices"
@@ -55,9 +57,11 @@ By executing the program with a user-agent string and a group name, it gives an 
 
 Give a list of devices that may have sent the supplied user-agent string
 
-```json
+
     > admin:~ $ ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android 4.4)'
-    > { "status": 0,
+
+```json
+    { "status": 0,
         "query": {
             "ua": "Mozilla/5.0 (Linux; U; en-us; Android 4.4)"
         },
