@@ -38,6 +38,7 @@ The `ua_detection` program has 2 goals:
 
 By executing the program with a user-agent string and a group name, it gives an estimate if the device is from the chosen group.
 
+```json
     > admin:~ $ ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android 4.1.1)' --group android-devices
     > { "status": 0,
         "query": {
@@ -50,9 +51,11 @@ By executing the program with a user-agent string and a group name, it gives an 
             "confidence": 0.00045
         }
     }
+```
 
 Give a list of devices that may have sent the supplied user-agent string
 
+```json
     > admin:~ $ ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android 4.4)'
     > { "status": 0,
         "query": {
@@ -71,6 +74,7 @@ Give a list of devices that may have sent the supplied user-agent string
             ]
         }
     }
+```
 
 The underlying code is written in C. Depending on the intended usage this has some implications. If you would like to call this from a web application it will probably make most sense to run it as a service (daemon) so that the program is not 'started, loaded to memory, used and discarded' for each call.
 

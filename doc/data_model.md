@@ -2,6 +2,7 @@
 
 ## devices collection
 
+```json
     {
       "_id": <ObjectId1>,
       "group_id": <ObjectId3>,
@@ -10,6 +11,7 @@
       "brand": "HTC",
       "aka": ["One"]
     }
+```
 
 ## ua_strings collection
 
@@ -20,25 +22,29 @@ to use fulltext search (MongoDB 2.6+).
 Confidence should signify what is the confidence that the given user agent string
 belongs to the device.
 
+```json
     {
       "_id": <ObjectId2>,
       "device_id": <ObjectId1>,
       "group_id": <ObjectId3>,
       "ua": "Mozilla/5.0 (Linux; en-us; Android/4.4;) Firefox/28.0",
       "confidence": 1.0 // confidence weight for matching ua:device_id
-      "confidence_group: 1.0 // confidence weight for matching ua:group_id
+      "confidence_group": 1.0 // confidence weight for matching ua:group_id
     }
+```
 
 *The confidence numbers might get normalized into "confidence": {...}*
 
 ## groups collection
 
+```json
     {
       "_id": <ObjectId3>,
       "short_name": "android-phones",
       "name": "Android phones",
       "description": "All phones with Android OS"
     }
+```
 
 ## keywords collection
 
@@ -47,17 +53,20 @@ keywords collection
 One of the JavaScript tools loops each user agent string and parses their individual
 keywords and stores them in this collection.
 
+```json
     {
       "_id": <ObjectId4>,
       "value": "Mozilla/5.0...",
       "count": 3129
     }
+```
 
 
 ## weights collection
 
 This collection is populated by an algorithm that works like this:
 
+```
 - one_group = <chosen_group_id>
 - foreach ua_string document
 - do
@@ -69,11 +78,12 @@ This collection is populated by an algorithm that works like this:
 -         adj = -0.01
 -     weights.update({ keyword : { $in : keywords }, { $inc : { adj } })
 - done
+```
 
 The learning algorithm uses this collection when preparing the training set.
 
-    weights collection
-
+    
+```json     
     {
         "_id": <ObjectId5>,
         "keyword_id": <ObjectId4>,
@@ -81,6 +91,7 @@ The learning algorithm uses this collection when preparing the training set.
         "group_id": <ObjectId3>,
         "value": -4.31
     }
+```
 
 If we then assume a group 'Android phones' the idea is that keywords that often
 appear in User-Agent strings from Android phones will have a positive weight
@@ -93,20 +104,18 @@ have negative weights.
 
 Group: Android phones
 
-User-Agent 1 of n: "Mozilla/5.0 (Linux; en-us; Android/4.4;) Firefox/28.0"
-
-Is this User-Agent from a phone that belongs to the group: TRUE
-
-Keywords: Mozilla/5.0, Linux, en-us, Android/4.4, Firefox/28.0
-
-Mozilla/5.0: current weight 0.0, increase by 0.01 to 0.01
-
-...
-
-Firefox/28.0: current weight 0.0, increase by 0.01 to 0.01
+- User-Agent = "Mozilla/5.0 (Linux; en-us; Android/4.4;) Firefox/28.0"
+- Is this User-Agent from a phone that belongs to the group = TRUE
+- Keywords: [Mozilla/5.0, Linux, en-us, Android/4.4, Firefox/28.0]
+- Keywords[0] = Mozilla/5.0: 
+  current weight 0.0, increase by 0.01 to 0.01
+  ...
+- Keyowrds[4] = Firefox/28.0: 
+  current weight 0.0, increase by 0.01 to 0.01
 
 ## training_set collection
 
+```json
     {
         _id: <ObjectId6>,
         group_id: <ObjectId3>,
@@ -116,10 +125,11 @@ Firefox/28.0: current weight 0.0, increase by 0.01 to 0.01
         input_vector: [3],
         expected_output: 0,
         vector_calculated: 0,
-
+        
         g_input_vector: [3],    // group_id related input_vector
         g_expected_output: 0,   // group_id related expected_output
         g_vector_calculated: 0  // group_id vector calculated
     }
+```
 
 *This collection might be normalized in the future - relating to the two input_vectors and expected_outputs*
