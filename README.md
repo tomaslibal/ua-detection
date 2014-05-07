@@ -5,9 +5,19 @@
 This is an experimental repository about device detection for the World Wide
 Web. I am mostly interested in device detection for the user agents connecting to web servers through the HTTP requests.
 
+1. Does the device belong to a group
+
+   Say, you define a group 'Smart TVs' and you get a user-agent string, this detection tells if the string comes possibly from a device that belongs to the group or not.
+
+2. Lookup a device for a given user-agent string
+
+   This detection tells what device(s) likely belong to the supplied user-agent string
+
 | Document                       | Description                  |
 |:------------------------------ |:---------------------------- |
-| [Case study](https://github.com/tomaslibal/ua-detection/blob/master/doc/case_study.md) | The method for device detection / user-agent detection |
+| Product keyword lookup         | A method to determine which keyword in the user-agent string is the product keyword |
+| Group inclusivity: a case study | Overview of a method to determine if a given user-agent string belongs to a group or not |
+| Device detection from user-agent | Overview of a method to determine a device from a given user-agent string |
 | [Data models](https://github.com/tomaslibal/ua-detection/blob/master/doc/data_model.md) | MongoDB data models with which `ua_detection` works |
 
 HTTP/1.1 specifies that a user agent should send its identifying string in the header field of a request and despite clarifying that the content should be either product tokens or comments ([product tokens](http://tools.ietf.org/html/rfc2616#section-3.8), [comments](http://tools.ietf.org/html/rfc2616#page-17)) at the end the ultimate form of that string is left to the user agent. As a result the web server has no means to validate the correctness (user agent can send any information it likes) and secondly, the individual strings often varies one from each other so there is a vast number of different User-Agent strings being send in HTTP requests.
