@@ -16,6 +16,7 @@ Web. I am mostly interested in device detection for the user agents connecting t
 | Document                       | Description                  |
 |:------------------------------ |:---------------------------- |
 | Product keyword lookup         | A method to determine which keyword in the user-agent string is the product keyword |
+| [User-agent header and tokenizing it](https://github.com/tomaslibal/ua-detection/blob/master/doc/user_agent.md) | Describes the HTTP User-Agent header field and also talks a little about tokenizing the header |
 | Group inclusivity: a case study | Overview of a method to determine if a given user-agent string belongs to a group or not |
 | Device detection from user-agent | Overview of a method to determine a device from a given user-agent string |
 | [Data models](https://github.com/tomaslibal/ua-detection/blob/master/doc/data_model.md) | MongoDB data models with which `ua_detection` works |
