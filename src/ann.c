@@ -59,13 +59,13 @@ double dot_product(double *values, double *weights, unsigned int len)
 
 // This function loads the training set from the database
 // and keeps it in the memory
-ann_training_set_t *load_training_set_from_db(unsigned int *plen)
+ann_training_set_t *load_training_set_from_db(unsigned int *plen, const char *collection)
 {
-    char         *coll = NULL;
-    coll               = (char*)malloc(13);
-    if(coll == NULL){ DEBUGPRINT("Malloc error in load_training_set_from_db()\n"); exit(1); }
-    strcpy(coll, "training_set");
-    *plen              = get_doc_cnt(coll);
+    //char         *coll = NULL;
+    //coll               = (char*)malloc(13);
+    //if(coll == NULL){ DEBUGPRINT("Malloc error in load_training_set_from_db()\n"); exit(1); }
+    //strcpy(coll, "training_set");
+    *plen              = get_doc_cnt(collection);
     unsigned int i     = 0;
     mongo        *conn = dbh_get_conn();
     bson         query[1];
@@ -91,7 +91,12 @@ ann_training_set_t *load_training_set_from_db(unsigned int *plen)
     // query is empty because we want every document from the collection
     bson_finish(query);
 
-    mongo_cursor_init(cursor, conn, "ua_detection.training_set");
+    char *db_and_coll = malloc(100);
+    strcpy(db_and_coll, "ua_detection.");
+    strcpy(db_and_coll+13, collection);
+
+    mongo_cursor_init(cursor, conn, db_and_coll);
+    free(db_and_coll);
     mongo_cursor_set_query(cursor, query);
 
     while(mongo_cursor_next(cursor) == MONGO_OK) {

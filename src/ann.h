@@ -57,7 +57,7 @@ typedef struct
 } ann_parsed_user_agent;
 
 
-ann_training_set_t *load_training_set_from_db(unsigned int *plen);
+ann_training_set_t *load_training_set_from_db(unsigned int *plen, const char *collection);
 /* calculates a vector dot product of two given vectors */
 double dot_product(double *values, double *weights, unsigned int len);
 /* calculates sample mean of the weights of a parsed user-agent */
