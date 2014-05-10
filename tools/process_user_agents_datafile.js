@@ -43,6 +43,15 @@ var db = {
 
 console.log("Starting...");
 
+function helper_avg_pos(coll, keyword, i)
+{
+    coll.findOne({value:keyword}, function(err,doc){
+        if(err) return;
+        var avg = ((doc.avg_position*doc.count)+i)/++doc.count;
+        coll.update({value:keyword},{$set:{avg_position:avg}},{w:1}, function(err,res) {});
+    });
+}
+
 var mongoClient = new MongoClient(new Server(db.host, db.port));
 mongoClient.open(function(err, mongoClient) {
     if(err) {
@@ -77,6 +86,7 @@ mongoClient.open(function(err, mongoClient) {
         uas_array.push({
             ua: clean,
             device_id: null,
+            group_id: null,
             confidence: 0
         });
 
@@ -95,6 +105,7 @@ mongoClient.open(function(err, mongoClient) {
         if (keyw) {
             console.log("Processing the keywords now");
             for (var i = 0, max = keyw.length; i < max; i += 1) {
+                var tmpk = keyw[i];
                 keywords.update(
                 {
                     value: keyw[i]
@@ -102,13 +113,18 @@ mongoClient.open(function(err, mongoClient) {
                 {
                     $inc: {
                         count: 1
+                    },
+                    $setOnInsert: {
+                        "avg_position": i
                     }
                 },
                 {
                     upsert: true,
                     w: 1
                 },
-                function(err, doc) {});
+                function(err, doc) {
+                });
+                helper_avg_pos(keywords, tmpk, i);
             }
         }
 
@@ -118,12 +134,12 @@ mongoClient.open(function(err, mongoClient) {
 
     rl.on('close', function() {
         uas.insert(uas_array, {w:1}, function(err, result) {
-            mongoClient.close();
+            //mongoClient.close();
             console.log("ALL DONE!");
-            process.exit(0);
+            //process.exit(0);
         });
 
-        console.log("User-agent Strings Loaded");
+        console.log("User-Agent Strings Loaded");
     });
 
 });
