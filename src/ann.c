@@ -267,6 +267,26 @@ int ann_set_group(const char *name)
     return 0;
 }
 
+int init_keyword(ann_keyword *pk, const char *keyword)
+{
+    unsigned int cnt = get_doc_cnt("keywords");
+
+    mongo *conn = dbh_get_conn();
+
+    double occ = 0.0;
+    double count = dbh_get_double(conn, "ua_detection.keywords", "value", keyword, "count");
+    occ = count/cnt;
+
+    pk->keyword = malloc(strlen(keyword) + 1);
+    strcpy(pk->keyword, keyword);
+    pk->cst = 1.0;
+    pk->occ = occ;
+    pk->pos = dbh_get_double(conn, "ua_detection.keywords", "value", keyword, "avg_position");
+
+    mongo_destroy(conn);
+    return 0;
+}
+
 int parse_user_agent(char *uas, ann_parsed_user_agent *result)
 {
     char   *kws[50];
@@ -449,9 +469,9 @@ int run_keyword(ann_keyword *pk)
     // calculate the input vector (constant, occurence, position)
     double vector[3] = { pk->cst, pk->occ, pk->pos };
 
-    double db = dot_product(vector, weights, 3);
+    double dp = dot_product(vector, weights, 3);
 
-    DEBUGPRINT("result for %s = %f", pk->keyword, dp);
+    DEBUGPRINT("result for %s = %f\n", pk->keyword, dp);
     return (dp > t) ? 1 : 0;
 }
 
