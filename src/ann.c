@@ -444,6 +444,17 @@ int get_weights(char **keywords, int cnt, double *w)
     return 0;
 }
 
+int run_keyword(ann_keyword *pk)
+{
+    // calculate the input vector (constant, occurence, position)
+    double vector[3] = { pk->cst, pk->occ, pk->pos };
+
+    double db = dot_product(vector, weights, 3);
+
+    DEBUGPRINT("result for %s = %f", pk->keyword, dp);
+    return (dp > t) ? 1 : 0;
+}
+
 int run(ann_parsed_user_agent *puas)
 {
     if(puas == NULL) {

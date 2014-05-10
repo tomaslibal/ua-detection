@@ -56,6 +56,14 @@ typedef struct
     int char_cnt;    // character count of all keywords together
 } ann_parsed_user_agent;
 
+typedef struct
+{
+    char *keyword;
+    double cst; // constant
+    double occ; // occurence
+    double pos; // position
+} ann_keyword;
+
 
 ann_training_set_t *load_training_set_from_db(unsigned int *plen, const char *collection);
 /* calculates a vector dot product of two given vectors */
@@ -72,6 +80,7 @@ int split_keywords(char *uas, char **arr);
 /* get weights for corresponding keywords from the database */
 int get_weights(char **keywords, int cnt, double *w);
 int run(ann_parsed_user_agent *puas);
+int run_keyword(ann_keyword *pk);
 unsigned int match_regex(regex_t *re, char *substr, char **ptr);
 void remove_quotes(char* str);
 
