@@ -11,3 +11,4 @@ test_uas:
 test: tests
 	./test_utils
 	./test_uas
+	rm ./test_utils ./test_uas
