@@ -18,11 +18,6 @@ char *device_model = NULL;
 /* Verbose the output */
 short v = 1;
 
-// add_argument function will be used to handle the input arguments from the
-// command line so that they won't have to be specified in a given order by by
-// using a flag
-//int add_argument(char *arg_name, char *arg_val);
-
 int main(int argc, char *argv[])
 {
     int i;
