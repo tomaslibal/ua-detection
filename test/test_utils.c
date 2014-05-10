@@ -7,7 +7,7 @@ int p = 0;
 
 #include "../src/utils.h"
 
-/* clang ../src/utils.c suite.c test_ann.c */
+/* clang ../src/utils.c suite.c test_utils.c */
 
 int main()
 {
