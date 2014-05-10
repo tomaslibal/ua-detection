@@ -50,6 +50,40 @@ static void test_query( mongo *conn ) {
     mongo_cursor_destroy( cursor );
 }
 
+// dbh_get_double(conn, "ua_detection.keywords", "value", "Mozilla/5.0", "count")
+// dbh_get_double(conn, "ua_detection.keywords", "value", "Mozilla/5.0", "avg_position")
+double dbh_get_double(
+mongo *conn,
+const char *db_and_coll,
+const char *fkey,
+const char *fval,
+const char *s)
+{
+    double val = 0.0;
+    bson query[1];
+    mongo_cursor cursor[1];
+
+    bson_init( query );
+        bson_append_string( query, fkey, fval);
+    bson_append_finish_object( query );
+
+    bson_finish( query );
+
+    mongo_cursor_init( cursor, conn, db_and_coll );
+    mongo_cursor_set_query( cursor, query );
+
+    while( mongo_cursor_next( cursor ) == MONGO_OK ) {
+        bson_iterator value[1];
+        if ( bson_find(value, mongo_cursor_bson(cursor), s) ) {
+            printf("Found %f\n", bson_iterator_double(value));
+            val = bson_iterator_double(value);
+        }
+    }
+
+    bson_destroy( query );
+    mongo_cursor_destroy( cursor );
+    return val;
+}
 
 
 int dbh_test()
