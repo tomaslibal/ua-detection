@@ -7,6 +7,7 @@
 #include "utils.h"
 #include "ann.h"
 #include "dbh.h"
+#include "uas.h"
 
 
 /* User-Agent string to work with */
@@ -39,13 +40,55 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    if(v) printf("Executing...\n");
     if(v) printf("Working with user-agent string %s\n", uas);
-    if(v) printf("Working with device model %s\n", device_model);
+    //if(v) printf("Working with device model %s\n", device_model);
     //if(v) printf("Working with group %s\n", group_name);
 
     if(v) printf("Testing the database handlers\n");
     dbh_test();
+
+    // Give a list of devices that may have sent the supplied user-agent string
+    // > admin:~ $ ./detection --ua 'Mozilla/5.0 (Linux; U; en-us; Android 4.4)'
+    //
+    // Process:
+    // - Tokenize the user agent
+    // - Train perceptron
+    // - Test each keyword to find out if it's a product keyword
+    // - Order the results
+    // - Print the results
+    //
+    // Perceptron:
+    // (input, expected) => (input: relative # of occurence, position in uas, expected: 0 or 1)
+
+    // Load the training set and train the perceptron
+    ann_training_set_t *p_ts;
+    unsigned int       len;
+    p_ts = load_training_set_from_db(&len, "keywords_training_set");
+    if (p_ts == NULL || len == 0) {
+        if(v) printf("Exiting here - empty training set\n");
+        return 1;
+    }
+    train(p_ts, len);
+    free(p_ts);
+
+    char** k = NULL;
+    int cnt = tokenize(&k, uas);
+    DEBUGPRINT("Num. keywords: %d\n", cnt);
+
+    for(int j=0;j<=cnt;j++) {
+        printf(" -- Keyword[%d] = %s\n", j, k[j]);
+        // init keyword vector from db
+        ann_keyword ak;
+        ann_keyword *pk = &ak;
+        init_keyword(pk, k[j]);
+        // run through the ann
+        int res = run_keyword(pk);
+        printf("Is product keyword = %d\n", res);
+    }
+    while (cnt--) free(k[cnt]);
+    free(k);
+
+    return 0;
 
     // Set the group-name
     //ann_set_group(group_name);
@@ -53,16 +96,7 @@ int main(int argc, char *argv[])
     // Set the device
     ann_set_device(device_model);
 
-    // Load the training set and train the perceptron
-    ann_training_set_t *p_ts;
-    unsigned int       len;
-    p_ts = load_training_set_from_db(&len);
-    if (p_ts == NULL || len == 0) {
-        if(v) printf("Exiting here - empty training set\n");
-        return 1;
-    }
-    train(p_ts, len);
-    free(p_ts);
+
 
     // Parse the User-Agent and save the result in the ann_parsed_user_agent struct
     ann_parsed_user_agent parsed;
