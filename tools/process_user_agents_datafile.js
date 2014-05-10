@@ -99,7 +99,7 @@ mongoClient.open(function(err, mongoClient) {
         // The product names should be listed in the order of importance from the
         // most important down to the least important.
 
-        var re = /([\w.]+(|\/)[0-9.]+|[\w.]+)/ig;
+        var re = /([\w-_.]+(|\/)[0-9.]+|[\w-_.]+)/ig;
 
         var keyw = clean.match(re);
         if (keyw) {
