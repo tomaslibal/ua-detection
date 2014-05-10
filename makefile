@@ -19,7 +19,7 @@ TST = ./test
 
 PROG = $(BIN)/detection
 HDRS = $(SRC)/ann.h $(SRC)/dbh.h
-SRCS = $(addprefix $(SRC)/, detection.c ann.c dbh.c utils.c)
+SRCS = $(addprefix $(SRC)/, detection.c ann.c dbh.c utils.c uas.c)
 OBJS = $(SRCS:$(BIN)/.c=$(SRC)/.o)
 
 
