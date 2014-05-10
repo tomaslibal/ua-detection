@@ -1,13 +1,6 @@
 #ifndef ANN_HEADER
 #define ANN_HEADER
 
-#include <string.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <regex.h>
-#include <math.h>
-
 #include "utils.h"
 #include "dbh.h"
 

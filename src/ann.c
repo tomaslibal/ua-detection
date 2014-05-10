@@ -9,6 +9,13 @@
 //
 // ann.c
 
+#include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <regex.h>
+#include <math.h>
+
 #include "ann.h"
 
 unsigned int iter          = 0; // number of iterations in each epoch
