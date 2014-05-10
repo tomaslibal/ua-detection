@@ -20,7 +20,7 @@
 
 unsigned int iter          = 0; // number of iterations in each epoch
 unsigned int epochs        = 0; // number of epochs
-unsigned int MAX_EPOCHS    = 100;
+unsigned int MAX_EPOCHS    = 500;
 
 float t           = 0.5; // treshold
 double rate       = 0.1; // learnind rate;
@@ -177,7 +177,7 @@ int train(ann_training_set_t *ts, unsigned int len)
 
                 DEBUGPRINT("Original weights {%f, %f, %f}\n", weights[0], weights[1], weights[2]);
                 for(j = 0; j < len_input_and_weights; j++) {
-                    DEBUGPRINT("   updating w[%d] to %f\n", j, rate * error * input_vector[j]);
+                    DEBUGPRINT("   updating w[%d] by %f\n", j, rate * error * input_vector[j]);
                     weights[j] += rate * error * input_vector[j];
                 }
                 DEBUGPRINT("Updated weights {%f, %f, %f}\n", weights[0], weights[1], weights[2]);
