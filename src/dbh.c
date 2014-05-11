@@ -1,6 +1,6 @@
 #include "dbh.h"
-#include "mongo.h"
 #include <string.h>
+#include <stdio.h>
 
 uint16_t          port = 27017;
 char              *host_and_port;
@@ -83,6 +83,25 @@ const char *s)
     bson_destroy( query );
     mongo_cursor_destroy( cursor );
     return val;
+}
+
+int dbh_insert(mongo *conn, const char *ns, bson *doc)
+{
+    short destroy = 0;
+    if (conn==NULL) {
+        conn = dbh_get_conn();
+        destroy = 1;
+    }
+
+    // From doc.
+    // { "BSON" : [ "awesome", 5.05, 1986 ] }
+    // bcon awesome[] = { "BSON", "[", "awesome", BF(5.05), BI(1986), "]", BEND };
+    mongo_insert( conn, ns, doc, NULL );
+    bson_destroy(doc);
+
+    if (destroy>0) mongo_destroy(conn);
+
+    return 0;
 }
 
 
