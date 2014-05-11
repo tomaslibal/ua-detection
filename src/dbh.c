@@ -60,18 +60,7 @@ const char *fval,
 const char *s)
 {
     double val = 0.0;
-    bson query[1];
-    mongo_cursor cursor[1];
-
-    bson_init( query );
-        bson_append_string( query, fkey, fval);
-    bson_append_finish_object( query );
-
-    bson_finish( query );
-
-    mongo_cursor_init( cursor, conn, ns );
-    mongo_cursor_set_query( cursor, query );
-
+    mongo_cursor *cursor = dbh_search_by_string(conn, ns, fkey, fval);
     while( mongo_cursor_next( cursor ) == MONGO_OK ) {
         bson_iterator value[1];
         if ( bson_find(value, mongo_cursor_bson(cursor), s) ) {
@@ -79,9 +68,51 @@ const char *s)
         }
     }
 
-    bson_destroy( query );
     mongo_cursor_destroy( cursor );
     return val;
+}
+
+char *dbh_get_string(
+mongo *conn,
+const char *ns, // namespace
+const char *fkey,
+const char *fval,
+const char *s
+)
+{
+    char *val;
+    mongo_cursor *cursor = dbh_search_by_string(conn, ns, fkey, fval);
+
+    while( mongo_cursor_next( cursor ) == MONGO_OK ) {
+        bson_iterator value[1];
+        if ( bson_find(value, mongo_cursor_bson(cursor), s) ) {
+            int len = strlen(bson_iterator_string(value));
+            val = malloc(len+1);
+            strcpy(val, bson_iterator_string(value));
+        }
+    }
+
+    mongo_cursor_destroy( cursor );
+    return val;
+}
+
+mongo_cursor *dbh_search_by_string(
+mongo *conn,
+const char *ns, // namespace
+const char *fkey,
+const char *fval)
+{
+    bson query[1];
+    static mongo_cursor cursor[1];
+
+    bson_init( query );
+        bson_append_string( query, fkey, fval);
+    bson_finish( query );
+
+    mongo_cursor_init( cursor, conn, ns );
+    mongo_cursor_set_query( cursor, query );
+    bson_destroy( query );
+    return &cursor[0];
 }
 
 int dbh_insert(mongo *conn, const char *ns, bson *doc)
@@ -143,7 +174,7 @@ mongo* dbh_get_conn()
 unsigned int get_doc_cnt(const char* coll)
 {
     mongo dbh = *dbh_get_conn();
-    unsigned int cnt = mongo_count( &dbh, "ua_detection", coll, NULL);
+    unsigned int cnt = (int)mongo_count( &dbh, "ua_detection", coll, NULL);
     if (cnt == MONGO_ERROR) {
         mongo_destroy(&dbh);
         return -1;
