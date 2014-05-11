@@ -21,6 +21,5 @@ int main()
 
     ASSERT("Expect k[0] = 'Mozilla/5.0'", 0==strcmp(k[0],"Mozilla/5.0"));
 
-    done(num_tests, p);
-    return 0;
+    return done(num_tests, p);
 }

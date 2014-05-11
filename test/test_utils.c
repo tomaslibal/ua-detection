@@ -21,6 +21,5 @@ int main()
     double r = sample_mean(w, 3);
     ASSERT("Expect the sample_mean = 2", r==2.0);
 
-    done(num_tests, p);
-    return 0;
+    return done(num_tests, p);
 }
