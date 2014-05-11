@@ -54,7 +54,7 @@ static void test_query( mongo *conn ) {
 // dbh_get_double(conn, "ua_detection.keywords", "value", "Mozilla/5.0", "avg_position")
 double dbh_get_double(
 mongo *conn,
-const char *db_and_coll,
+const char *ns, // namespace
 const char *fkey,
 const char *fval,
 const char *s)
@@ -69,13 +69,12 @@ const char *s)
 
     bson_finish( query );
 
-    mongo_cursor_init( cursor, conn, db_and_coll );
+    mongo_cursor_init( cursor, conn, ns );
     mongo_cursor_set_query( cursor, query );
 
     while( mongo_cursor_next( cursor ) == MONGO_OK ) {
         bson_iterator value[1];
         if ( bson_find(value, mongo_cursor_bson(cursor), s) ) {
-            printf("Found %f\n", bson_iterator_double(value));
             val = bson_iterator_double(value);
         }
     }
@@ -96,12 +95,12 @@ int dbh_insert(mongo *conn, const char *ns, bson *doc)
     // From doc.
     // { "BSON" : [ "awesome", 5.05, 1986 ] }
     // bcon awesome[] = { "BSON", "[", "awesome", BF(5.05), BI(1986), "]", BEND };
-    mongo_insert( conn, ns, doc, NULL );
+    int ret = mongo_insert( conn, ns, doc, NULL );
     bson_destroy(doc);
 
     if (destroy>0) mongo_destroy(conn);
 
-    return 0;
+    return ret;
 }
 
 
