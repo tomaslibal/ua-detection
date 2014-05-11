@@ -118,10 +118,11 @@ of their owners. I hope that this repository or its part will be of use to someo
 
 Dependencies
 
-- node.js (tested with v0.10.21)
-- mongodb (node.js module)
-- node-simple-router (node.js module)
+- node.js (tested with v0.10.21) for aux. tools
+- mongodb (node.js module) for aux. tools
+- node-simple-router (node.js module) for data API
 - mongod  (mongodb daemon service)
+- [MongoDB C driver 0.7](http://api.mongodb.org/c/0.7)
 - C compiler
 
 ---
