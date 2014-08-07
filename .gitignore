@@ -11,3 +11,6 @@ bin/detection
 
 # Ignore the mongodb dumps for the moment
 dump/
+
+# ignore intellij idea folder
+.idea
