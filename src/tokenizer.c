@@ -17,6 +17,10 @@
 */
 char separators[] = { '(', ')', '<', '>', '@', ',', ';', ':', '"', '[', ']', '?', '=', '{', '}', ' ' };
 
+/**
+ * Checks if the char ch is in the array of characters separators.
+ * @returns 1 if found 0 otherwise
+ */
 int in_array(char* separators, char ch)
 {
     int i = 0;
@@ -28,6 +32,17 @@ int in_array(char* separators, char ch)
     return 0;
 }
 
+/**
+ * tokenizes the user_agent string using own implementation. strtok() didn't
+ * somehow work which might be my bad usage of the function or data...This
+ * function reads the user_agent string char by char and builds a token until
+ * it reads a separator character - then it copies the token string into p_buffer
+ * array, increases *p_length by one and clears out the token string and starts
+ * anew, and repeats this process until it reaches the end of the user_agent
+ * string.
+ *
+ * @returns 0
+ */
 int tok(char* user_agent, char** p_buffer, int* p_length)
 {
     *p_length      = 0;
@@ -38,8 +53,11 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
     int tmp        = 0;
 
     while(i<len) {
+        // (user_agent + 1) moves to the i-th character of the string, esentially
+        // skipping those characters that have already been visited.
         strncpy(&c, (user_agent + i), 1);
 
+        // a separator found
         if(in_array(separators, c) == 1) {
             if(strlen(token)==0) { i++; continue; }
             p_buffer[*p_length] = (char*)malloc(strlen(token)+1);
@@ -48,11 +66,14 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
             // Clear the token
             memset(token, '\0', 64);
         } else {
+            // char wasn't a separator, add the character to the end of
+            // the token string
             tmp = strlen(token);
             strncpy((token+tmp), &c, 1);
         }
         i++;
     }
+    // If the last character wasn't a separator, there might be one more token
     if(strlen(token)>0) {
         p_buffer[*p_length] = (char*)malloc(strlen(token)+1);
         strcpy(p_buffer[*p_length], token);
