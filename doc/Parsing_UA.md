@@ -17,10 +17,10 @@ Sigma:
     E = { a, b }
 
 1. a (token) = 1*<any CHAR except CTLs or separators>
-2. b (separators) = { ( ) < > @ , ; : \ " / [ ] ? = "{" "}" SP H }
+2. b (separators) = { ( ) < > @ , ; : \ " / [ ] ? = "{" "}" SP HT }
 
 * That `1*` in the tokens probably means one or more
-* CTLs probably means control characters, SP probably space, H = ?
+* CTLs probably means control characters, SP probably space, HT = ?
 * I remove "/" from the separators for now
 
 Pseudo-code to tokenize the string
