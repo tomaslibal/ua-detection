@@ -15,7 +15,7 @@
  a list of separators as defined in the section 2.2 of the HTTP/1.1 standard
  that has been slightly edited - removed "\", "/", HT characters
 */
-char separators[] = { '(', ')', '<', '>', '@', ',', ';', ':', '"', '[', ']', '?', '=', '{', '}', ' ' };
+char separators[] = { ' ', '(', ')', '<', '>', '@', ',', ';', ':', '"', '[', ']', '?', '=', '{', '}' };
 
 /**
  * Checks if the char ch is in the array of characters separators.
@@ -27,7 +27,6 @@ int in_array(char* separators, char ch)
     int len = strlen(separators);
     for(;i < len;i++) {
         if(separators[i] == ch) return 1;
-        if(strcmp(&separators[i], &ch) == 0) return 1;
     }
     return 0;
 }
