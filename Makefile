@@ -12,4 +12,5 @@ OBJ=$(addprefix $(SRCDIR)/,$(_OBJ))
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 ua_program: $(OBJ)
-	$(CC) -o $@ $< $(CFLAGS)
+	$(CC) -o $(BINDIR)/$@ $< $(CFLAGS)
+	rm $(SRCDIR)/*.o
