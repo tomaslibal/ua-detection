@@ -14,3 +14,7 @@ OBJ=$(addprefix $(SRCDIR)/,$(_OBJ))
 ua_program: $(OBJ)
 	$(CC) -o $(BINDIR)/$@ $< $(CFLAGS)
 	rm $(SRCDIR)/*.o
+
+test:
+
+.PHONY: test
