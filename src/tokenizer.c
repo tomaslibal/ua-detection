@@ -31,6 +31,21 @@ int in_array(char* separators, char ch)
     return 0;
 }
 
+/*
+ * 
+ *
+ *
+ */
+void push_tok(char** p_buffer, int* p_length, char* token)
+{ 
+    p_buffer[*p_length] = (char*)malloc(strlen(token)+1);
+    strcpy(p_buffer[*p_length], token);
+    *p_length = *p_length+1;
+    
+    // Clear the token
+    memset(token, '\0', 64);
+}
+
 /**
  * tokenizes the user_agent string using own implementation. strtok() didn't
  * somehow work which might be my bad usage of the function or data...This
@@ -59,11 +74,7 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
         // a separator found
         if(in_array(separators, c) == 1) {
             if(strlen(token)==0) { i++; continue; }
-            p_buffer[*p_length] = (char*)malloc(strlen(token)+1);
-            strcpy(p_buffer[*p_length], token);
-            *p_length = *p_length+1;
-            // Clear the token
-            memset(token, '\0', 64);
+            push_tok(p_buffer, p_length, token);
         } else {
             // char wasn't a separator, add the character to the end of
             // the token string
