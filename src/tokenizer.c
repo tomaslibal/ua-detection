@@ -85,9 +85,7 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
     }
     // If the last character wasn't a separator, there might be one more token
     if(strlen(token)>0) {
-        p_buffer[*p_length] = (char*)malloc(strlen(token)+1);
-        strcpy(p_buffer[*p_length], token);
-        *p_length = *p_length+1;
+        push_tok(p_buffer, p_length, token);
     }
 
     return 0;
@@ -95,14 +93,27 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
 
 int main(int argc, char** argv)
 {
-    char* user_agent = "Mozilla/5.0 (Linux; en-us; Android 4.4) Firefox/28.0\0";
+    char* uas;
     char* tokens[32];
     int number;
     int* p_number = &number;
 
-    printf("user_agent = '%s'\n", user_agent);
+    if (argc == 2) {
+        uas = malloc(sizeof(char) * strlen(argv[1]));
+        if (uas == NULL) {
+            printf("Error allocating memory for the user-agent string\n");
+            return 1;
+        }
+        strcpy(uas, argv[1]);
+    } else {
+        printf("UA Parser\n");
+        printf("Usage: uap \"Mozilla/5.0 (Linux; PC) Firefox/28.0\"\n");
+        return 1;
+    }
 
-    if(tok(user_agent, tokens, p_number) != 0) {
+    printf("user_agent = '%s'\n", uas);
+
+    if(tok(uas, tokens, p_number) != 0) {
         printf("Error executing 'tok'\n");
         return 1;
     }
