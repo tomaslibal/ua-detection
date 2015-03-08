@@ -17,3 +17,7 @@ dump/
 
 # ignore the archived files
 archive
+
+# ignore eclipse project folders/files
+.cproject
+.project
