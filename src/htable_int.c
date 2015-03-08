@@ -5,7 +5,7 @@
 
 struct htable_int *htable_int_create()
 {
-	struct htable_int *table;
+	struct htable_int *table = NULL;
 	table = (struct htable_int *) malloc (sizeof(struct htable_int));
 	if (table == NULL) {
 		return NULL;
