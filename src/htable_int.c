@@ -16,3 +16,18 @@ struct htable_int *htable_int_create()
 
 	return table;
 }
+
+void htable_int_set(struct htable_int *table, char *name, int val)
+{
+	if (table->name != NULL) {
+		free(table->name);
+	}
+	if (table->name == NULL) {
+		table->name = malloc(sizeof(char) * strlen(name));
+	}
+
+	strcpy(table->name, name);
+
+	table->val = val;
+}
+
