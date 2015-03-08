@@ -8,6 +8,7 @@
 # Ignore the binary output
 bin/*.*
 bin/detection
+test/test
 
 # Ignore the mongodb dumps for the moment
 dump/
