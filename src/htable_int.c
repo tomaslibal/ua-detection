@@ -37,7 +37,8 @@ void htable_int_free(struct htable_int *table)
 		return;
 	}
 
-	struct htable_int *tmp, *tmp_prev;
+	struct htable_int *tmp = NULL;
+	struct htable_int *tmp_prev = NULL;
 
 	tmp = table;
 
@@ -54,7 +55,7 @@ void htable_int_free(struct htable_int *table)
 
 int htable_int_get(struct htable_int *table, char *name)
 {
-	struct htable_int *tmp;
+	struct htable_int *tmp = NULL;
 
 	if (table == NULL) {
 		return 0;
