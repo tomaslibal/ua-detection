@@ -91,6 +91,7 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
     return 0;
 }
 
+/* EXAMPLE USAGE 
 int main(int argc, char** argv)
 {
     char* uas;
@@ -127,3 +128,4 @@ int main(int argc, char** argv)
 
     return 0;
 }
+*/
