@@ -23,8 +23,37 @@ void test_htable_set()
 	assert(table->val == 10);
 }
 
+void test_htable_free_one()
+{
+	struct htable_int *table;
+
+	table = htable_int_create();
+
+	htable_int_set(table, "Some_name", 10);
+
+	htable_int_free(table);
+}
+
+void test_htable_free_linked()
+{
+	struct htable_int *table, *second;
+
+	table = htable_int_create();
+	second = htable_int_create();
+
+	table->next = second;
+
+	htable_int_set(table, "Some_name", 10);
+	htable_int_set(second, "Second_table", 20);
+
+	htable_int_free(table);
+}
+
+
 void run_test_htable_int()
 {
     test_htable_create();
     test_htable_set();
+    //test_htable_free_one();
+    //test_htable_free_linked();
 }

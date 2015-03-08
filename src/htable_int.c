@@ -31,3 +31,27 @@ void htable_int_set(struct htable_int *table, char *name, int val)
 	table->val = val;
 }
 
+void htable_int_free(struct htable_int *table)
+{
+	if (table == NULL) {
+		return;
+	}
+
+	struct htable_int *tmp, *tmp_prev;
+
+	tmp = table;
+
+	while(tmp != NULL) {
+		if (tmp->name != NULL) {
+			free(tmp->name);
+		}
+		tmp_prev = tmp;
+		tmp = tmp->next;
+
+		free(tmp_prev);
+	}
+}
+
+// int htable_int_get(struct htable_int *table, char *name);
+
+
