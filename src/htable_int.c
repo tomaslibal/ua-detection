@@ -53,7 +53,7 @@ void htable_int_free(struct htable_int *table)
 	}
 }
 
-int htable_int_get(struct htable_int *table, char *name)
+int htable_int_get_val(struct htable_int *table, char *name)
 {
 	struct htable_int *tmp = NULL;
 

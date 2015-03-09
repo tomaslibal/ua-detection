@@ -61,7 +61,7 @@ void test_htable_get_one()
 
 	htable_int_set(table, "Some_name", 10);
 
-	assert(htable_int_get(table, "Some_name") == 10);
+	assert(htable_int_get_val(table, "Some_name") == 10);
 
 	htable_int_free(table);
 }
@@ -78,7 +78,7 @@ void test_htable_get_linked()
 	htable_int_set(table, "Some_name", 10);
 	htable_int_set(second, "Second_table", 20);
 
-	assert(htable_int_get(table, "Second_table") == 20);
+	assert(htable_int_get_val(table, "Second_table") == 20);
 
 	htable_int_free(table);
 }
@@ -91,7 +91,7 @@ void test_htable_get_not_present()
 
 	htable_int_set(table, "Some_name", 10);
 
-	assert(htable_int_get(table, "NotPresent") == 0);
+	assert(htable_int_get_val(table, "NotPresent") == 0);
 
 	htable_int_free(table);
 }
