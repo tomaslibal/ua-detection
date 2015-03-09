@@ -53,23 +53,23 @@ void htable_int_free(struct htable_int *table)
 	}
 }
 
-struct htable_int *htable_int_get(struct htable_int *table, char *name)
+struct htable_int *htable_int_get(struct htable_int *root, char *name)
 {
 	struct htable_int *tmp = NULL;
 
-	if (table == NULL) {
+	if (root == NULL) {
 		return NULL;
 	}
 
-	if (table->name != NULL && strcmp(table->name, name) == 0) {
-		return table;
+	if (root->name != NULL && strcmp(root->name, name) == 0) {
+		return root;
 	}
 
-	if (table->next == NULL) {
+	if (root->next == NULL) {
 		return NULL;
 	}
 
-	tmp = table->next;
+	tmp = root->next;
 
 	while(tmp) {
 		if (tmp->name != NULL && strcmp(tmp->name, name) == 0) {
@@ -109,4 +109,16 @@ int htable_int_get_val(struct htable_int *table, char *name)
 	return 0;
 }
 
+struct htable_int *htable_int_get_last(struct htable_int *root)
+{
+	struct htable_int *last = NULL;
+
+	last = root->next;
+
+	while(last->next) {
+		last = last->next;
+	}
+
+	return last;
+}
 
