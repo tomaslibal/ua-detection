@@ -113,6 +113,14 @@ struct htable_int *htable_int_get_last(struct htable_int *root)
 {
 	struct htable_int *last = NULL;
 
+	if (root == NULL) {
+		return NULL;
+	}
+
+	if (root->next == NULL) {
+		return root;
+	}
+
 	last = root->next;
 
 	while(last->next) {
