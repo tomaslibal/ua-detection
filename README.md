@@ -18,6 +18,13 @@ Two end goals that I would like achieve:
 
    This detection tells what device(s) likely belong to the supplied user-agent
    string.
+
+### Data
+
+More in the [data section](data/)
+
+> You can contribute by adding more user-agent strings data  
+> All content must be publicly available and compatible with the [GNU License](LICENSE)
    
 ### Test
 
