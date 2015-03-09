@@ -83,6 +83,19 @@ void test_htable_get_linked()
 	htable_int_free(table);
 }
 
+void test_htable_get_not_present()
+{
+	struct htable_int *table;
+
+	table = htable_int_create();
+
+	htable_int_set(table, "Some_name", 10);
+
+	assert(htable_int_get(table, "NotPresent") == 0);
+
+	htable_int_free(table);
+}
+
 
 void run_test_htable_int()
 {
