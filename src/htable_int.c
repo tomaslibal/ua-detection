@@ -53,6 +53,34 @@ void htable_int_free(struct htable_int *table)
 	}
 }
 
+struct htable_int *htable_int_get(struct htable_int *table, char *name)
+{
+	struct htable_int *tmp = NULL;
+
+	if (table == NULL) {
+		return NULL;
+	}
+
+	if (table->name != NULL && strcmp(table->name, name) == 0) {
+		return table;
+	}
+
+	if (table->next == NULL) {
+		return NULL;
+	}
+
+	tmp = table->next;
+
+	while(tmp) {
+		if (tmp->name != NULL && strcmp(tmp->name, name) == 0) {
+			return tmp;
+		}
+		tmp = tmp->next;
+	}
+
+	return NULL;
+}
+
 int htable_int_get_val(struct htable_int *table, char *name)
 {
 	struct htable_int *tmp = NULL;
