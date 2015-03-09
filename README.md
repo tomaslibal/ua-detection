@@ -18,6 +18,13 @@ Two end goals that I would like achieve:
 
    This detection tells what device(s) likely belong to the supplied user-agent
    string.
+   
+### Test
+
+`make test` compiles the test suite and runs it. If stdout prints "ALL TESTS
+PASSED" the suite returned with no errors. Otherwise, it will stop on the first
+error printing the test file and corresponding line number where the error
+occured.
 
 ### Disclaimers
 
