@@ -96,6 +96,23 @@ void test_htable_get_not_present()
 	htable_int_free(table);
 }
 
+void test_htable_get_table()
+{
+	struct htable_int *root, *second, *result;
+	root = htable_int_create();
+	second = htable_int_create();
+
+	root->next = second;
+
+	htable_int_set(root, "First", 10);
+	htable_int_set(second, "Second", 20);
+
+	result = htable_int_get(root, "Second");
+
+	assert(result != NULL);
+	assert(result->val == 20);
+}
+
 
 void run_test_htable_int()
 {
@@ -105,4 +122,5 @@ void run_test_htable_int()
     //test_htable_free_linked();
     test_htable_get_one();
     test_htable_get_linked();
+    test_htable_get_table();
 }
