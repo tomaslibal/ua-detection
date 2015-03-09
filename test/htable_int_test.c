@@ -113,6 +113,27 @@ void test_htable_get_table()
 	assert(result->val == 20);
 }
 
+void test_htable_get_last()
+{
+	struct htable_int *root, *second, *last, *result;
+	root = htable_int_create();
+	second = htable_int_create();
+	last = htable_int_create();
+
+	root->next = second;
+	second->next = last;
+
+	htable_int_set(root, "First", 10);
+	htable_int_set(second, "Second", 20);
+	htable_int_set(last, "Last", 30);
+
+	result = htable_int_get_last(root);
+
+	assert(result != NULL);
+	assert(result->val == 30);
+}
+
+
 
 void run_test_htable_int()
 {
@@ -123,4 +144,5 @@ void run_test_htable_int()
     test_htable_get_one();
     test_htable_get_linked();
     test_htable_get_table();
+    test_htable_get_last();
 }
