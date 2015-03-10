@@ -9,20 +9,20 @@ SRCDIR=src
 BINDIR=bin
 TESTDIR=test
 
-_DEPS=
-_OBJ=program.o
-OBJ=$(addprefix $(SRCDIR)/,$(_OBJ))
-
-%.o : %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
 #
 # Main target ua_program
 #
-ua_program: $(OBJ)
-	$(CC) -o $(BINDIR)/$@ $< $(CFLAGS)
+$(SRCDIR)/%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+SRCFILES=$(wildcard $(SRCDIR)/*.c)
+
+ua_program: $(addprefix $(SRCDIR)/, $(notdir $(SRCFILES:.c=.o)))
+	$(CC) -o $(BINDIR)/$@ $^
 	rm $(SRCDIR)/*.o
 
+clean:
+	rm -f $(SRCDIR)/*.o
 
 # 
 # U N I T    T E S T I N G
