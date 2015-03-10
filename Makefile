@@ -48,3 +48,10 @@ test: $(addprefix $(TESTDIR)/, $(notdir $(TESTFILES:.c=.o)))
 	fi
 
 .PHONY: test
+
+#
+#
+#
+
+bashex:
+	@chmod u+x data/download-data.sh
