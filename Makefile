@@ -21,6 +21,8 @@ ua_program: $(addprefix $(SRCDIR)/, $(notdir $(SRCFILES:.c=.o)))
 	$(CC) -o $(BINDIR)/$@ $^
 	rm $(SRCDIR)/*.o
 
+.PHONY: test clean
+
 clean:
 	rm -f $(SRCDIR)/*.o
 
@@ -47,7 +49,7 @@ test: $(addprefix $(TESTDIR)/, $(notdir $(TESTFILES:.c=.o)))
 	  echo "ALL TESTS PASSED"; \
 	fi
 
-.PHONY: test
+
 
 #
 #
