@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int read_uas_with_class(const char *path, struct uas_record *root)
 {
