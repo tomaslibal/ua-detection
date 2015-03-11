@@ -10,6 +10,9 @@ bin/*.*
 bin/detection
 test/test
 
+# ignore object files
+*.o
+
 # Ignore the mongodb dumps for the moment
 dump/
 
