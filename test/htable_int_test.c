@@ -111,6 +111,8 @@ void test_htable_get_table()
 
 	assert(result != NULL);
 	assert(result->val == 20);
+
+	htable_int_free(root);
 }
 
 void test_htable_get_last()
@@ -131,6 +133,8 @@ void test_htable_get_last()
 
 	assert(result != NULL);
 	assert(result->val == 30);
+
+	htable_int_free(root);
 }
 
 void test_htable_get_last_when_no_next()
@@ -145,6 +149,8 @@ void test_htable_get_last_when_no_next()
 
 	assert(result != NULL);
 	assert(result->val == 10);
+
+	htable_int_free(root);
 }
 
 
