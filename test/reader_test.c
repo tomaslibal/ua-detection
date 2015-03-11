@@ -21,6 +21,8 @@ void test_reader_file_with_class()
 	print_uas_records(root);
 
 	assert(lc == 2);
+
+	uas_record_free(root);
 }
 
 void run_test_reader()
