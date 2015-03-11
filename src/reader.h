@@ -1,6 +1,22 @@
 #ifndef READER
 #define READER
 
+/*
+ * uas_record represents a link a linked list of user-agent strings.
+ *
+ * {
+ *     String uas
+ *     String class
+ *     uas_record next
+ * }
+ *
+ * `uas` is the stored user-agent string
+ * `class` is the ID of the class associated with the user-agent string
+ *     This is because it is assumed that the stored data are labeled.
+ *     In case the data are unlabeled it is fine to leave this value null.
+ * `next` points to the next link in the list
+ *
+ */
 struct uas_record {
 	char *uas;
 	char *class;
