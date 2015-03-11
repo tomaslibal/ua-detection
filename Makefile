@@ -39,17 +39,15 @@ clean:
 TESTFILES=$(wildcard $(TESTDIR)/*.c)
 
 $(TESTDIR)/.o : $(TESTDIR)/.c
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -g -c -o $@ $< $(CFLAGS)
 
 test: $(addprefix $(TESTDIR)/, $(notdir $(TESTFILES:.c=.o)))
-	$(CC) -o $(TESTDIR)/$@ $^
+	$(CC) -g -o $(TESTDIR)/$@ $^
 	rm $(TESTDIR)/*.o
 	test/test
 	@if [ $$? -eq 0 ]; then \
 	  echo "ALL TESTS PASSED"; \
 	fi
-
-
 
 #
 #
