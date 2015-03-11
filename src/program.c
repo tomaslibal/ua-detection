@@ -39,21 +39,23 @@ int main(int argc, char** argv) {
 	 *    in a linked list structure
 	 *        uas_record(*p, class_name, uas, next)
 	 *
-	 * ;; 4. Let corpusDict = new htable_int struct
-	 * ;;
-	 * ;; Let classDict = new classesDictionaries
+	 * 4. Let corpusDict = new htable_int struct
+	 *
+	 *    Let classDict = new classesDictionaries
+	 * ;; array of arrays not yet implemented:
 	 * ;; (classDict['mobile'][...vocab...]
 	 * ;;  classDict['desktop'][...vocab...]
 	 * ;;  ...)
 	 *
-	 * ;; 5.
-	 * ;;   5a. For each uas_record, tokenize the user agent string
-	 * ;;
-	 * ;;   5b. For each word in the user agent string
-	 * ;;    	    add word to the corpusDict
-	 * ;;           add word to the classDict of the current class
+	 * 5.
+	 *    5a. For each uas_record, tokenize the user agent string
 	 *
-	 * 6. free the linked list beginning with root
+	 *    5b. For each word in the user agent string
+	 *     	    5b I. add word to the corpusDict
+	 * ;;           ;; 5b II. add word to the classDict of the current class
+	 *
+	 * 6. free the linked list of user-agent strings
+	 * 	  free the linked list corpusDict
 	 *
 	 * 7. close the file
 	 */
@@ -63,6 +65,7 @@ int main(int argc, char** argv) {
 	fp = fopen("../data/uas_with_class.txt", "r");
 
 	struct uas_record *root = NULL;
+	struct uas_record *record = NULL;
 	root = uas_record_create();
 	if (root == NULL) {
 		exit(1);
@@ -76,7 +79,37 @@ int main(int argc, char** argv) {
 
 	print_uas_records(root);
 
+	/*
+	 * 4.
+	 */
+	struct htable_int *corpusDict = NULL;
+
+	corpusDict = htable_int_create();
+
+	record = root;
+
+	/*
+	 * 5.
+	 */
+	while(record->next) {
+		/*
+		 * 5a I.
+		 */
+		count_words(record, corpusDict);
+		record = record->next;
+	}
+
+	struct htable_int *iterator = NULL;
+
+	iterator = corpusDict;
+
+	while(iterator->next) {
+		printf("corpusDict[%s] %dx\n", iterator->name, iterator->val);
+		iterator = iterator->next;
+	}
+
 	uas_record_free(root);
+	htable_int_free(corpusDict);
 
 	fclose(fp);
 
