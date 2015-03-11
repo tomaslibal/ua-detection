@@ -63,8 +63,14 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
     int i          = 0;
     char token[64] = {0};
     char c         = '\0';
-    int len        = strlen(user_agent);
+    int len;
     int tmp        = 0;
+
+    if (user_agent == NULL) {
+    	return 0;
+    }
+
+    len = strlen(user_agent);
 
     while(i<len) {
         // (user_agent + 1) moves to the i-th character of the string, esentially
