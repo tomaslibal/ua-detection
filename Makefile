@@ -3,7 +3,7 @@
 #
 
 CC=clang
-CFLAGS=
+CFLAGS=-g
 
 SRCDIR=src
 BINDIR=bin
@@ -18,8 +18,7 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 SRCFILES=$(wildcard $(SRCDIR)/*.c)
 
 ua_program: $(addprefix $(SRCDIR)/, $(notdir $(SRCFILES:.c=.o)))
-	$(CC) -o $(BINDIR)/$@ $^
-	rm $(SRCDIR)/*.o
+	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
 
 .PHONY: test clean
 
