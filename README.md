@@ -23,8 +23,13 @@ Two end goals that I would like achieve:
 
 More in the [data section](data/)
 
-> You can contribute by adding more user-agent strings data  
+> You can contribute by sending additional user-agent string data either 
+> labelled or unlabelled. 
+>  
 > All content must be publicly available and compatible with the [GNU License](LICENSE)
+
+Only sample and test data are part of this repository. The main datasets are
+available online and can be downloaded using [the download script](data/download-data.sh).
    
 ### Test
 
