@@ -102,17 +102,17 @@ void uas_record_set(struct uas_record *uas_record, char *class, char *uas, struc
 	if (uas_record->class != NULL) {
 		free(uas_record->class);
 	}
-	if (uas_record->class == NULL) {
-		uas_record->class = malloc(sizeof(char) * strlen(class));
-	}
+	
+	uas_record->class = malloc(sizeof(char) * strlen(class) + 1);
+	
 	strcpy(uas_record->class, class);
 
 	if (uas_record->uas != NULL) {
 		free(uas_record->uas);
 	}
-	if (uas_record->uas == NULL) {
-		uas_record->uas = malloc(sizeof(char) * strlen(uas));
-	}
+	
+	uas_record->uas = malloc(sizeof(char) * strlen(uas) + 1);
+	
 	strcpy(uas_record->uas, uas);
 
 	uas_record->next = next;
