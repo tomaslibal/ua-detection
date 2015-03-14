@@ -5,6 +5,7 @@
 #include "htable_int.h"
 #include "tokenizer.h"
 #include "probab.h"
+#include "dictionary.h"
 
 int main(int argc, char** argv) {
 
@@ -165,12 +166,59 @@ int main(int argc, char** argv) {
      *     htable_int_free(log_prob)
      */
 
+    struct htable_int *corpusDict = NULL;
+    struct dict_htable_int *classDict = NULL;
+
+    struct htable_int *prior = NULL;
+    struct htable_int *p_prior = NULL;
+
+    /*
+     * used in while loops to be assigned from find() functions
+     */
+    struct htable_int *tmp = NULL;
+    struct htable_int *aux = NULL;
+
+    struct dict_htable_int *thisClassDict = NULL;
+    struct dict_htable_int *tmpDict = NULL;
+    struct dict_htable_int *auxDict = NULL;
+
+    corpusDict = htable_int_create();
+
+    if (corpusDict == NULL) {
+        printf("Unable to create the corpus level dictionary!\n");
+        exit(1);
+    }
+
+    classDict = dict_htable_int_create();
+
+    if (classDict == NULL) {
+        printf("Unable to create the class dictionary!\n");
+        exit(1);
+    }
+
+    prior = htable_int_create();
+
+    if (prior == NULL) {
+        printf("Unable to create an array of prior classes\n");
+        exit(1);
+    }
+
+    p_prior = htable_int_create();
+
+    if (p_prior == NULL) {
+        printf("Unable to create an array for P(class) probabilities\n");
+        exit(1);
+    }
+
+    // READ UAS DATA:
+
     struct uas_record *root = NULL;
     struct uas_record *record = NULL;
 
     root = uas_record_create();
 
     if (root == NULL) {
+        printf("Unable to create the UAS records array\n");
         exit(1);
     }
 
@@ -183,23 +231,54 @@ int main(int argc, char** argv) {
 
     print_uas_records(root);
 
-    /*
-     * 4.
-     */
-    struct htable_int *corpusDict = NULL;
-
-    corpusDict = htable_int_create();
-
     record = root;
 
     /*
-     * 5.
+     * (This assumes that there are at least 2 records, else the test
+     * in the while loop will evaluate to false in the first pass already).
      */
     while (record->next) {
         /*
-         * 5a I.
+         * record the number of record->class that have been read:
+         *
+         * lookup the struct for the record->class and +1 its val
+         * field. If not found, it's the first time this class has been
+         * read so create a new struct and append it to the end link...
+         */
+        tmp = htable_int_get(prior, record->class);
+
+        if (tmp) {
+            tmp->val++;
+        } else {
+            tmp = htable_int_get_last(prior);
+            aux = htable_int_create();
+            htable_int_set(aux, record->class, 1);
+            tmp->next = aux;
+        }
+
+        /*
+         * Increment the counters for each unique word # of occurrences
          */
         count_words(record, corpusDict);
+
+        /*
+         * Do the same for the class dictionary. If the class dictionary not
+         * found, create a new one as we have a new class
+         */
+        thisClassDict = dict_htable_int_find(classDict, record->class);
+
+        if (thisClassDict) {
+            count_words(record, thisClassDict->root);
+        } else {
+            tmpDict = dict_htable_int_create();
+            aux = htable_int_create();
+            tmpDict->root = aux;
+            count_words(record, tmpDict->root);
+
+            auxDict = dict_htable_int_find_last(classDict);
+            auxDict->next = tmpDict;
+        }
+
         record = record->next;
     }
 
@@ -214,6 +293,9 @@ int main(int argc, char** argv) {
 
     uas_record_free(root);
     htable_int_free(corpusDict);
+    dict_htable_int_free(classDict);
+    htable_int_free(prior);
+    htable_int_free(p_prior);
 
     return 0;
 }
