@@ -153,7 +153,33 @@ void test_htable_get_last_when_no_next()
 	htable_int_free(root);
 }
 
+void test_sum_val_rec()
+{
+    int res = 0;
 
+    struct htable_int *root = NULL;
+    struct htable_int *second = NULL;
+    struct htable_int *third = NULL;
+
+    root = htable_int_create();
+    second = htable_int_create();
+    third = htable_int_create();
+
+    htable_int_set(root, "a", 10);
+    htable_int_set(root, "b", 20);
+    htable_int_set(root, "c", 30);
+
+    root->next = second;
+    second->next = third;
+
+    res = sum_val_rec(root);
+
+    printf("sum_val_rec = %d\n", res);
+
+    assert(res == 60);
+
+    htable_int_free(root);
+}
 
 void run_test_htable_int()
 {
@@ -166,4 +192,5 @@ void run_test_htable_int()
     test_htable_get_table();
     test_htable_get_last();
     test_htable_get_last_when_no_next();
+    test_sum_val_rec();
 }
