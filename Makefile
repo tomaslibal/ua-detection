@@ -8,7 +8,7 @@ if hash clang 2>/dev/null; then \
 	$(CC)=clang; \
 fi
 
-CFLAGS=-g
+CFLAGS=-g -std=c99
 
 SRCDIR=src
 BINDIR=bin
@@ -46,7 +46,7 @@ $(TESTDIR)/.o : $(TESTDIR)/.c
 	$(CC) -g -c -o $@ $< $(CFLAGS)
 
 test: $(addprefix $(TESTDIR)/, $(notdir $(TESTFILES:.c=.o)))
-	$(CC) -g -o $(TESTDIR)/$@ $^
+	$(CC) $(CFLAGS) -o $(TESTDIR)/$@ $^
 	rm $(TESTDIR)/*.o
 	test/test
 	@if [ $$? -eq 0 ]; then \
