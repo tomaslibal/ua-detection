@@ -185,8 +185,6 @@ void run_test_htable_int()
 {
     test_htable_create();
     test_htable_set();
-    //test_htable_free_one();
-    //test_htable_free_linked();
     test_htable_get_one();
     test_htable_get_linked();
     test_htable_get_table();
