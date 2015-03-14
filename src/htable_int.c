@@ -130,3 +130,29 @@ struct htable_int *htable_int_get_last(struct htable_int *root)
 	return last;
 }
 
+int sum_val_rec(struct htable_int *node)
+{
+    int sum = 0;
+    struct htable_int *iterator = NULL;
+    struct htable_int *aux = NULL;
+
+    if (node == NULL) {
+        return sum;
+    }
+
+    iterator = node;
+
+    sum = node->val;
+
+    while (iterator) {
+        aux = iterator;
+        sum += iterator->val;
+
+        iterator = iterator->next;
+
+        if (!aux->next)
+            sum += aux->val;
+    }
+
+    return sum;
+}
