@@ -166,8 +166,8 @@ void test_sum_val_rec()
     third = htable_int_create();
 
     htable_int_set(root, "a", 10);
-    htable_int_set(root, "b", 20);
-    htable_int_set(root, "c", 30);
+    htable_int_set(second, "b", 20);
+    htable_int_set(third, "c", 30);
 
     root->next = second;
     second->next = third;

@@ -142,16 +142,9 @@ int sum_val_rec(struct htable_int *node)
 
     iterator = node;
 
-    sum = node->val;
-
-    while (iterator) {
-        aux = iterator;
+    while(iterator) {
         sum += iterator->val;
-
         iterator = iterator->next;
-
-        if (!aux->next)
-            sum += aux->val;
     }
 
     return sum;
