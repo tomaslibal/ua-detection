@@ -3,20 +3,20 @@
 ### Introduction
 
 This is an experimental repository about device detection for the World Wide
-Web. I am mostly interested in device detection for the user agents connecting
+Web. I'm mostly interested in device detection for the user agents connecting
 to web servers through the HTTP requests.
 
-Two end goals that I would like achieve:
+There are two end goals that I would like achieve:
 
-1. Determine if the device belong to a given group
+1. Determine if a device belongs to a given group
 
    Say, you define a group 'Smart TVs' and you get a user-agent string, this
-   detection tells if the string comes possibly from a device that belongs to
+   detection should tell if the string comes possibly from a device that belongs to
    the group or not.
 
 2. Uniquely determine a device for a given user-agent string
 
-   This detection tells what device(s) likely belong to the supplied user-agent
+   This detection should tell what device(s) likely belong to the supplied user-agent
    string.
 
 ### Data
