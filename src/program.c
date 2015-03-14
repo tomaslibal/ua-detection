@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
      *
      *     For each prior as (class, cnt):
      *
-     *         p_prior[class]->val = prior[class]->val / sum(all other priors->val)
+     *         p_prior[class]->val = prior[class]->val / sum(all priors->val)
      *
      *     This will evaluate P(class) probabilities.
      *
