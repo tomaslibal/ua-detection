@@ -22,11 +22,9 @@ void htable_int_set(struct htable_int *table, char *name, int val)
 {
 	if (table->name != NULL) {
 		free(table->name);
-		table->name = NULL;
 	}
-	if (table->name == NULL) {
-		table->name = malloc(sizeof(char) * strlen(name));
-	}
+
+	table->name = malloc(sizeof(char) * strlen(name) + 1);
 
 	strcpy(table->name, name);
 
