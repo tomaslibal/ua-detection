@@ -25,3 +25,4 @@ archive
 # ignore eclipse project folders/files
 .cproject
 .project
+.settings
