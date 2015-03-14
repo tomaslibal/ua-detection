@@ -2,7 +2,12 @@
 # For instruction on how to build the project see INSTALL
 #
 
-CC=clang
+CC=gcc
+
+if hash clang 2>/dev/null; then \
+	$(CC)=clang; \
+fi
+
 CFLAGS=-g
 
 SRCDIR=src
