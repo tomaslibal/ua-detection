@@ -60,10 +60,6 @@ int main(int argc, char** argv) {
 	 * 7. close the file
 	 */
 
-	FILE *fp = NULL;
-
-	fp = fopen("../data/uas_with_class.txt", "r");
-
 	struct uas_record *root = NULL;
 	struct uas_record *record = NULL;
 	root = uas_record_create();
@@ -110,8 +106,6 @@ int main(int argc, char** argv) {
 
 	uas_record_free(root);
 	htable_int_free(corpusDict);
-
-	fclose(fp);
 
     return 0;
 }
