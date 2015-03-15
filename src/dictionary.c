@@ -45,11 +45,7 @@ struct dict_htable_int *dict_htable_int_find(struct dict_htable_int *node, char 
         return NULL;
     }
 
-    if (node->class_name != NULL && strcmp(node->class_name, class_name) == 0) {
-        return node;
-    }
-
-    iterator = node->next;
+    iterator = node;
 
     while(iterator) {
         if (iterator->class_name != NULL && strcmp(iterator->class_name, class_name) == 0) {
