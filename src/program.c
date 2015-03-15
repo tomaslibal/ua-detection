@@ -3,9 +3,16 @@
 
 #include "reader.h"
 #include "htable_int.h"
+#include "dictionary.h"
+
 #include "tokenizer.h"
 #include "probab.h"
-#include "dictionary.h"
+
+#undef HTABLE_MODULE
+#undef HTABLE_TYPE
+#define HTABLE_TYPE float
+#include "htable_int.h"
+#include "htable_int.c"
 
 int main(int argc, char** argv) {
 
@@ -136,7 +143,7 @@ int main(int argc, char** argv) {
      *         P(word|class) = classDict[class][word] / sum(classDict[class] all words in class #)
      *
      *         if (P(word|class) > 0:
-     *             log_prob[class] += log(count * P(word|category) / P(word))
+     *             log_prob[class] += log(count * P(word|class) / P(word))
      *
      * VII. Print results
      *
@@ -170,7 +177,7 @@ int main(int argc, char** argv) {
     struct dict_htable_int *classDict = NULL;
 
     struct htable_int *prior = NULL;
-    struct htable_int *p_prior = NULL;
+    struct htable_float *p_prior = NULL;
 
     /*
      * used in while loops to be assigned from find() functions
@@ -203,7 +210,7 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    p_prior = htable_int_create();
+    p_prior = htable_float_create();
 
     if (p_prior == NULL) {
         printf("Unable to create an array for P(class) probabilities\n");
@@ -233,6 +240,8 @@ int main(int argc, char** argv) {
 
     record = root;
 
+    printf("lines of data read = %d\n", lc);
+
     /*
      * (This assumes that there are at least 2 records, else the test
      * in the while loop will evaluate to false in the first pass already).
@@ -249,6 +258,8 @@ int main(int argc, char** argv) {
 
         if (tmp) {
             tmp->val++;
+        } else if (prior->name == NULL) {
+            htable_int_set(prior, record->class, 1);
         } else {
             tmp = htable_int_get_last(prior);
             aux = htable_int_create();
@@ -282,11 +293,35 @@ int main(int argc, char** argv) {
         record = record->next;
     }
 
+    /*
+     * p_prior[class] probabilities from prior[class]
+     */
     struct htable_int *iterator = NULL;
+    struct htable_float *p_iterator = p_prior;
+
+    iterator = prior;
+
+    int sum_prior_vals = htable_int_sum_val_rec(prior);
+    float val;
+
+    printf("sum_prior_vals = %d\n", sum_prior_vals);
+
+    while(iterator) {
+        printf("prior: class %s, cnt %d\n", iterator->name, iterator->val);
+        val = (float)iterator->val / (float)sum_prior_vals;
+
+        htable_float_set(p_iterator, iterator->name, val);
+        p_iterator->next = htable_float_create();
+        printf("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
+
+        p_iterator = p_iterator->next;
+        iterator = iterator->next;
+    }
+    //
 
     iterator = corpusDict;
 
-    while (iterator->next) {
+    while (iterator) {
         printf("corpusDict[%s] %dx\n", iterator->name, iterator->val);
         iterator = iterator->next;
     }
@@ -295,7 +330,7 @@ int main(int argc, char** argv) {
     htable_int_free(corpusDict);
     dict_htable_int_free(classDict);
     htable_int_free(prior);
-    htable_int_free(p_prior);
+    htable_float_free(p_prior);
 
     return 0;
 }
