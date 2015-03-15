@@ -172,7 +172,7 @@ void test_sum_val_rec()
     root->next = second;
     second->next = third;
 
-    res = sum_val_rec(root);
+    res = htable_int_sum_val_rec(root);
 
     printf("sum_val_rec = %d\n", res);
 
