@@ -57,7 +57,7 @@ struct HTABLE_NAME *AUX(HTABLE_NAME, _get)(struct HTABLE_NAME *root, char *name)
 {
 	struct HTABLE_NAME *tmp = NULL;
 
-	if (root == NULL) {
+	if (root == NULL || name == NULL) {
 		return NULL;
 	}
 
