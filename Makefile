@@ -8,7 +8,7 @@ if hash clang 2>/dev/null; then \
 	$(CC)=clang; \
 fi
 
-CFLAGS=-g -std=c99
+CFLAGS=-g -std=c99 -lm
 
 SRCDIR=src
 BINDIR=bin
