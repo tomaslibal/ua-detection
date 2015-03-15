@@ -4,10 +4,10 @@
 
 #include "htable_int.h"
 
-struct htable_int *htable_int_create()
+struct HTABLE_NAME *AUX(HTABLE_NAME, _create)()
 {
-	struct htable_int *table = NULL;
-	table = (struct htable_int *) malloc (sizeof(struct htable_int));
+	struct HTABLE_NAME *table = NULL;
+	table = (struct HTABLE_NAME *) malloc (sizeof(struct HTABLE_NAME));
 	if (table == NULL) {
 		return NULL;
 	}
@@ -18,7 +18,7 @@ struct htable_int *htable_int_create()
 	return table;
 }
 
-void htable_int_set(struct htable_int *table, char *name, int val)
+void AUX(HTABLE_NAME, _set)(struct HTABLE_NAME *table, char *name, HTABLE_TYPE val)
 {
 	if (table->name != NULL) {
 		free(table->name);
@@ -31,14 +31,14 @@ void htable_int_set(struct htable_int *table, char *name, int val)
 	table->val = val;
 }
 
-void htable_int_free(struct htable_int *table)
+void AUX(HTABLE_NAME, _free)(struct HTABLE_NAME *table)
 {
 	if (table == NULL) {
 		return;
 	}
 
-	struct htable_int *tmp = NULL;
-	struct htable_int *tmp_prev = NULL;
+	struct HTABLE_NAME *tmp = NULL;
+	struct HTABLE_NAME *tmp_prev = NULL;
 
 	tmp = table;
 
@@ -53,9 +53,9 @@ void htable_int_free(struct htable_int *table)
 	}
 }
 
-struct htable_int *htable_int_get(struct htable_int *root, char *name)
+struct HTABLE_NAME *AUX(HTABLE_NAME, _get)(struct HTABLE_NAME *root, char *name)
 {
-	struct htable_int *tmp = NULL;
+	struct HTABLE_NAME *tmp = NULL;
 
 	if (root == NULL) {
 		return NULL;
@@ -81,9 +81,9 @@ struct htable_int *htable_int_get(struct htable_int *root, char *name)
 	return NULL;
 }
 
-int htable_int_get_val(struct htable_int *table, char *name)
+HTABLE_TYPE AUX(HTABLE_NAME, _get_val)(struct HTABLE_NAME *table, char *name)
 {
-	struct htable_int *tmp = NULL;
+	struct HTABLE_NAME *tmp = NULL;
 
 	if (table == NULL) {
 		return 0;
@@ -109,9 +109,9 @@ int htable_int_get_val(struct htable_int *table, char *name)
 	return 0;
 }
 
-struct htable_int *htable_int_get_last(struct htable_int *root)
+struct HTABLE_NAME *AUX(HTABLE_NAME, _get_last)(struct HTABLE_NAME *root)
 {
-	struct htable_int *last = NULL;
+	struct HTABLE_NAME *last = NULL;
 
 	if (root == NULL) {
 		return NULL;
@@ -130,11 +130,11 @@ struct htable_int *htable_int_get_last(struct htable_int *root)
 	return last;
 }
 
-int sum_val_rec(struct htable_int *node)
+HTABLE_TYPE AUX(HTABLE_NAME, _sum_val_rec)(struct HTABLE_NAME *node)
 {
-    int sum = 0;
-    struct htable_int *iterator = NULL;
-    struct htable_int *aux = NULL;
+    HTABLE_TYPE sum = 0;
+    struct HTABLE_NAME *iterator = NULL;
+    struct HTABLE_NAME *aux = NULL;
 
     if (node == NULL) {
         return sum;

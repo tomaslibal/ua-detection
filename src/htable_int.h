@@ -1,19 +1,26 @@
-#ifndef HTABLE_INT
-#define HTABLE_INT
+#ifndef HTABLE_MODULE
+#define HTABLE_MODULE
 
-struct htable_int {
+#ifndef HTABLE_TYPE
+#define HTABLE_TYPE int
+#endif
+
+#define CONCAT(x, y) x ## y
+#define AUX(A, B) CONCAT(A, B)
+#define HTABLE_NAME AUX(htable_, HTABLE_TYPE)
+
+struct HTABLE_NAME {
     char *name;
-    int val;
-    struct htable_int *next;
+    HTABLE_TYPE val;
+    struct HTABLE_NAME *next;
 };
 
-struct htable_int *htable_int_create();
-void htable_int_set(struct htable_int *table, char *name, int val);
-int htable_int_get_val(struct htable_int *table, char *name);
-struct htable_int *htable_int_get(struct htable_int *root, char *name);
-struct htable_int *htable_int_get_last(struct htable_int *root);
-void htable_int_free(struct htable_int *table);
-
-int sum_val_rec(struct htable_int *node);
+struct HTABLE_NAME *AUX(HTABLE_NAME, _create) ();
+void AUX(HTABLE_NAME, _set)(struct HTABLE_NAME *table, char *name, HTABLE_TYPE val);
+HTABLE_TYPE AUX(HTABLE_NAME, _get_val)(struct HTABLE_NAME *table, char *name);
+struct HTABLE_NAME *AUX(HTABLE_NAME, _get)(struct HTABLE_NAME *root, char *name);
+struct HTABLE_NAME *AUX(HTABLE_NAME, _get_last)(struct HTABLE_NAME *root);
+void AUX(HTABLE_NAME, _free)(struct HTABLE_NAME *table);
+HTABLE_TYPE AUX(HTABLE_NAME, _sum_val_rec)(struct HTABLE_NAME *node);
 
 #endif
