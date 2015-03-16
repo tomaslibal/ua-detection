@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "reader.h"
 #include "htable_int.h"
@@ -43,42 +44,16 @@ int main(int argc, char** argv) {
      * LEARNING PHASE
      * ==============
      *
-     * 0. Some administrivia
-     *
-     *    set struct htable_int corpusDict = NULL
-     *    set struct dict_htable_int classDict = NULL
-     *
-     *    set struct htable_int p_prior = NULL
-     *
-     *    corpusDict = htable_int_create();
-     *    classDict = dict_htable_int_create();
-     *
-     *    p_prior = htable_int_create();
-     *
-     *
      * I. Open data file with pairs (class, user-agent string)
      *
-     *    set struct uas_record current = NULL
-     *    set struct uas_record previous = NULL
+     *    set struct uas_record *current = NULL
+     *    set struct uas_record *previous = NULL
      *
-     * 	  For each line = (class, user-agent string) do:
+     * 	  For each line as current (class, user-agent string) do:
      *        set prior[class] += 1
      *
      *    This increments the counter that checks how many UA strings from
      *    each class we have encountered
-     *
-     *        if (current == NULL)
-     *            current = uas_record_create()
-     *
-     *        uas_record_set(current, class, user-agent string, NULL)
-     *
-     *        if (previous != NULL)
-     *            previous->next = current
-     *        else
-     *            previous = current
-     *
-     *    This will create a new uas_record from each line of data file
-     *    and link them together in the order in which they have been read.
      *
      *        count_words(current, corpusDict)
      *
@@ -128,7 +103,7 @@ int main(int argc, char** argv) {
      *     strcpy(uas_input, argv)
      *
      *
-     * V. Analyze the input
+     * V. Process the input
      *
      *     set struct htable_int words = NULL
      *     words = htable_int_create()
@@ -166,22 +141,33 @@ int main(int argc, char** argv) {
      *
      * VIII. CLEAN UP
      *
-     *     htable_int_free(corpusDict)
-     *     dict_htable_int_free(classDict)
-     *     fclose(fp) if using file as an input
-     *     htable_int_free(p_prior)
-     *     htable_int_free(log_prob)
+     *     Free up the resources
      */
-
-    struct htable_int *corpusDict = NULL;
-    struct dict_htable_int *classDict = NULL;
-
-    struct htable_int *prior = NULL;
-    struct htable_float *p_prior = NULL;
 
     /*
-     * used in while loops to be assigned from find() functions
+     * Corpus Dictionary keeps reference of each 'word' from the user agent
+     * strings that have been read and keeps a counter for how many times
+     * each word has been seen in the input.
      */
+    struct htable_int *corpusDict = NULL;
+    /*
+     * Class Dictionary works similarly to Corpus Dictionary, it just keeps
+     * the counts for each class separately.
+     */
+    struct dict_htable_int *classDict = NULL;
+
+    /*
+     * Prior keeps the count of how many times each label (class) has been
+     * read in the input data
+     */
+    struct htable_int *prior = NULL;
+
+    /*
+     * P_prior - probability of each label (class) is computed as
+     * P(class) = # class / # all classes
+     */
+    struct htable_float *p_prior = NULL;
+
     struct htable_int *tmp = NULL;
     struct htable_int *aux = NULL;
 
@@ -217,7 +203,9 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    // READ UAS DATA:
+    /*
+     * READ UAS DATA
+     */
 
     struct uas_record *root = NULL;
     struct uas_record *record = NULL;
@@ -234,7 +222,7 @@ int main(int argc, char** argv) {
      */
     int lc = 0;
 
-    lc = read_uas_with_class("test/resources/uas_with_class.txt", root);
+    lc = read_uas_with_class("data/uas_with_class.txt", root);
 
     print_uas_records(root);
 
@@ -280,10 +268,14 @@ int main(int argc, char** argv) {
 
         if (thisClassDict) {
             count_words(record, thisClassDict->root);
+        } else if (classDict->root == NULL) {
+            aux = htable_int_create();
+            dict_htable_int_set(classDict, record->class, aux, NULL);
+            count_words(record, classDict->root);
         } else {
             tmpDict = dict_htable_int_create();
             aux = htable_int_create();
-            tmpDict->root = aux;
+            dict_htable_int_set(tmpDict, record->class, aux, NULL);
             count_words(record, tmpDict->root);
 
             auxDict = dict_htable_int_find_last(classDict);
@@ -319,6 +311,40 @@ int main(int argc, char** argv) {
     }
     //
 
+    char *uas = NULL;
+    char *class = NULL;
+    struct uas_record *uas_input = NULL;
+
+    // if argc == 5, assume argv[2] is the user agent string and argv[4] the class
+    if (argc == 5) {
+        uas = malloc(sizeof(char) * strlen(argv[2]) + 1);
+        strcpy(uas, argv[2]);
+        class = malloc(sizeof(char) * strlen(argv[4]) + 1);
+        strcpy(class, argv[4]);
+    } else {
+        printf("wrong usage\n");
+        exit(1);
+    }
+
+    printf("using input = %s\n", uas);
+
+    // V.
+    struct htable_int *words = NULL;
+    words = htable_int_create();
+
+    uas_input = uas_record_create();
+    if (uas_input == NULL) {
+        printf("Error creating uas_record for the input\n");
+        exit(1);
+    }
+
+    uas_record_set(uas_input, class, uas, NULL);
+
+    free(class);
+
+    count_words(uas_input, words);
+
+    //
     iterator = corpusDict;
 
     while (iterator) {
@@ -326,11 +352,72 @@ int main(int argc, char** argv) {
         iterator = iterator->next;
     }
 
+    // VI.
+    float p_word = 0;
+    float p_word_class = 0;
+
+    float log_prob_word_class = 0;
+
+    int corpusDict_word_val = 0;
+
+    iterator = words;
+
+    while(iterator) {
+        aux = htable_int_get(corpusDict, iterator->name);
+        // word not in the dictionary
+        if (aux == NULL) {
+            iterator = iterator->next;
+            continue;
+        }
+
+        p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
+
+        printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
+
+        thisClassDict = dict_htable_int_find(classDict, uas_input->class);
+
+        if (thisClassDict == NULL) {
+            printf("class dictionary not found for %s\n", uas_input->class);
+            iterator = iterator->next;
+            continue;
+        }
+
+        // word must be in the class dict as it was in the corpus dict
+        aux = htable_int_get(thisClassDict->root, iterator->name);
+        if (aux == NULL) {
+            iterator = iterator->next;
+            continue;
+        }
+        p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
+
+        printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
+
+        //
+        //if (P(word|class) > 0:
+        //     *             log_prob[class] += log(count * P(word|class) / P(word))
+        if (p_word_class > 0) {
+            log_prob_word_class += logf((float)iterator->val * p_word_class / p_word);
+        }
+
+        iterator = iterator->next;
+    }
+
+    // result
+    float prior_class_val = 0;
+    struct htable_float *aux_float = htable_float_get(p_prior, uas_input->class);
+    prior_class_val = aux_float->val;
+    printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
+
     uas_record_free(root);
     htable_int_free(corpusDict);
     dict_htable_int_free(classDict);
     htable_int_free(prior);
     htable_float_free(p_prior);
+
+    htable_int_free(words);
+    if (uas != NULL)
+        free(uas);
+    uas_record_free(uas_input);
 
     return 0;
 }
