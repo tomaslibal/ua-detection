@@ -55,7 +55,8 @@ of their owners. I hope that this repository or its part will be of use to someo
 
 ---
 
-- April-May 2014
-- August 2014
+- March 2015: wrote the probability based algorithm
+- August 2014: added a user-agent string tokenizer
+- April-May 2014: first attempt to create a model for predicting the class of an UA input
 
 Tomas <tomas@libal.eu>
