@@ -31,6 +31,14 @@ More in the [data section](data/)
 Only sample and test data are part of this repository. The main datasets are
 available online and can be downloaded using [the download script](data/download-data.sh).
    
+### Build
+
+TL;DR; `make`
+
+Requires 
+
+- GCC or CLANG
+   
 ### Test
 
 `make test` compiles the test suite and runs it. If stdout prints "ALL TESTS
