@@ -24,6 +24,10 @@ void AUX(HTABLE_NAME, _set)(struct HTABLE_NAME *table, char *name, HTABLE_TYPE v
 		free(table->name);
 	}
 
+	if (name == NULL) {
+	    return;
+	}
+
 	table->name = malloc(sizeof(char) * strlen(name) + 1);
 
 	strcpy(table->name, name);
