@@ -15,6 +15,8 @@
 #include "htable_int.h"
 #include "htable_int.c"
 
+void chck_malloc(void *ptr, char *desc);
+
 int main(int argc, char** argv) {
 
     /*
@@ -176,32 +178,16 @@ int main(int argc, char** argv) {
     struct dict_htable_int *auxDict = NULL;
 
     corpusDict = htable_int_create();
-
-    if (corpusDict == NULL) {
-        printf("Unable to create the corpus level dictionary!\n");
-        exit(1);
-    }
+    chck_malloc((void *) corpusDict, "Corpus Level Dictionary");
 
     classDict = dict_htable_int_create();
-
-    if (classDict == NULL) {
-        printf("Unable to create the class dictionary!\n");
-        exit(1);
-    }
+    chck_malloc((void *) classDict, "Collection of Class Dictionaries");
 
     prior = htable_int_create();
-
-    if (prior == NULL) {
-        printf("Unable to create an array of prior classes\n");
-        exit(1);
-    }
+    chck_malloc((void *) prior, "Array of Prior Classes");
 
     p_prior = htable_float_create();
-
-    if (p_prior == NULL) {
-        printf("Unable to create an array for P(class) probabilities\n");
-        exit(1);
-    }
+    chck_malloc((void *) p_prior, "Array of P(class) probabilities");
 
     /*
      * READ UAS DATA
@@ -211,11 +197,7 @@ int main(int argc, char** argv) {
     struct uas_record *record = NULL;
 
     root = uas_record_create();
-
-    if (root == NULL) {
-        printf("Unable to create the UAS records array\n");
-        exit(1);
-    }
+    chck_malloc((void *) root, "Array of UAS Records");
 
     /*
      * line count of the txt file read
@@ -318,11 +300,21 @@ int main(int argc, char** argv) {
     // if argc == 5, assume argv[2] is the user agent string and argv[4] the class
     if (argc == 5) {
         uas = malloc(sizeof(char) * strlen(argv[2]) + 1);
+        chck_malloc((void *) uas, "User-agent String");
+
         strcpy(uas, argv[2]);
+
         class = malloc(sizeof(char) * strlen(argv[4]) + 1);
+        chck_malloc((void *) class, "Class String");
+
         strcpy(class, argv[4]);
     } else {
         printf("wrong usage\n");
+        uas_record_free(root);
+        htable_int_free(corpusDict);
+        dict_htable_int_free(classDict);
+        htable_int_free(prior);
+        htable_float_free(p_prior);
         exit(1);
     }
 
@@ -408,6 +400,7 @@ int main(int argc, char** argv) {
     prior_class_val = aux_float->val;
     printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
 
+    // Free up remaining resources
     uas_record_free(root);
     htable_int_free(corpusDict);
     dict_htable_int_free(classDict);
@@ -420,4 +413,12 @@ int main(int argc, char** argv) {
     uas_record_free(uas_input);
 
     return 0;
+}
+
+void chck_malloc(void *ptr, char *desc)
+{
+    if (ptr == NULL) {
+        printf("Error malloc'ing for %s\n", desc);
+        exit(1);
+    }
 }
