@@ -17,7 +17,44 @@
 
 void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
+void save_data_bin();
+void load_data_bin();
+void train();
+void evaluate();
 
+/*
+ * Corpus Dictionary keeps reference of each 'word' from the user agent
+ * strings that have been read and keeps a counter for how many times
+ * each word has been seen in the input.
+ */
+struct htable_int *corpusDict = NULL;
+/*
+ * Class Dictionary works similarly to Corpus Dictionary, it just keeps
+ * the counts for each class separately.
+ */
+struct dict_htable_int *classDict = NULL;
+
+/*
+ * Prior keeps the count of how many times each label (class) has been
+ * read in the input data
+ */
+struct htable_int *prior = NULL;
+
+/*
+ * P_prior - probability of each label (class) is computed as
+ * P(class) = # class / # all classes
+ */
+struct htable_float *p_prior = NULL;
+
+struct htable_int *tmp = NULL;
+struct htable_int *aux = NULL;
+
+struct dict_htable_int *thisClassDict = NULL;
+struct dict_htable_int *tmpDict = NULL;
+struct dict_htable_int *auxDict = NULL;
+
+struct htable_int *iterator = NULL;
+struct htable_float *p_iterator = NULL;
 
 int main(int argc, char** argv) {
 
@@ -148,36 +185,7 @@ int main(int argc, char** argv) {
      *     Free up the resources
      */
 
-    /*
-     * Corpus Dictionary keeps reference of each 'word' from the user agent
-     * strings that have been read and keeps a counter for how many times
-     * each word has been seen in the input.
-     */
-    struct htable_int *corpusDict = NULL;
-    /*
-     * Class Dictionary works similarly to Corpus Dictionary, it just keeps
-     * the counts for each class separately.
-     */
-    struct dict_htable_int *classDict = NULL;
 
-    /*
-     * Prior keeps the count of how many times each label (class) has been
-     * read in the input data
-     */
-    struct htable_int *prior = NULL;
-
-    /*
-     * P_prior - probability of each label (class) is computed as
-     * P(class) = # class / # all classes
-     */
-    struct htable_float *p_prior = NULL;
-
-    struct htable_int *tmp = NULL;
-    struct htable_int *aux = NULL;
-
-    struct dict_htable_int *thisClassDict = NULL;
-    struct dict_htable_int *tmpDict = NULL;
-    struct dict_htable_int *auxDict = NULL;
 
     corpusDict = htable_int_create();
     chck_malloc((void *) corpusDict, "Corpus Level Dictionary");
@@ -194,90 +202,16 @@ int main(int argc, char** argv) {
     /*
      * READ UAS DATA
      */
+    struct uas_record *root;
+    int lc;
+
     read_data_with_class("data/uas_with_class.txt", root, &lc);
 
     printf("lines of data read = %d\n", lc);
 
-    record = root;
-    /*
-     * (This assumes that there are at least 2 records, else the test
-     * in the while loop will evaluate to false in the first pass already).
-     */
-    while (record->next) {
-        /*
-         * record the number of record->class that have been read:
-         *
-         * lookup the struct for the record->class and +1 its val
-         * field. If not found, it's the first time this class has been
-         * read so create a new struct and append it to the end link...
-         */
-        tmp = htable_int_get(prior, record->class);
+    train();
 
-        if (tmp) {
-            tmp->val++;
-        } else if (prior->name == NULL) {
-            htable_int_set(prior, record->class, 1);
-        } else {
-            tmp = htable_int_get_last(prior);
-            aux = htable_int_create();
-            htable_int_set(aux, record->class, 1);
-            tmp->next = aux;
-        }
 
-        /*
-         * Increment the counters for each unique word # of occurrences
-         */
-        count_words(record, corpusDict);
-
-        /*
-         * Do the same for the class dictionary. If the class dictionary not
-         * found, create a new one as we have a new class
-         */
-        thisClassDict = dict_htable_int_find(classDict, record->class);
-
-        if (thisClassDict) {
-            count_words(record, thisClassDict->root);
-        } else if (classDict->root == NULL) {
-            aux = htable_int_create();
-            dict_htable_int_set(classDict, record->class, aux, NULL);
-            count_words(record, classDict->root);
-        } else {
-            tmpDict = dict_htable_int_create();
-            aux = htable_int_create();
-            dict_htable_int_set(tmpDict, record->class, aux, NULL);
-            count_words(record, tmpDict->root);
-
-            auxDict = dict_htable_int_find_last(classDict);
-            auxDict->next = tmpDict;
-        }
-
-        record = record->next;
-    }
-
-    /*
-     * p_prior[class] probabilities from prior[class]
-     */
-    struct htable_int *iterator = NULL;
-    struct htable_float *p_iterator = p_prior;
-
-    iterator = prior;
-
-    int sum_prior_vals = htable_int_sum_val_rec(prior);
-    float val;
-
-    printf("sum_prior_vals = %d\n", sum_prior_vals);
-
-    while(iterator) {
-        printf("prior: class %s, cnt %d\n", iterator->name, iterator->val);
-        val = (float)iterator->val / (float)sum_prior_vals;
-
-        htable_float_set(p_iterator, iterator->name, val);
-        p_iterator->next = htable_float_create();
-        printf("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
-
-        p_iterator = p_iterator->next;
-        iterator = iterator->next;
-    }
     //
 
     char *uas = NULL;
@@ -424,4 +358,90 @@ void read_data_with_class(char *path, struct uas_record *root, int *lc)
     *lc = read_uas_with_class(path, root);
 
     print_uas_records(root);
+}
+
+// root = root node of the uas_record linked list containing UA strings
+void train(struct uas_record *root)
+{
+    struct uas_record *record = root;
+
+    /*
+     * (This assumes that there are at least 2 records, else the test
+     * in the while loop will evaluate to false in the first pass already).
+     */
+    while (record->next) {
+        /*
+         * record the number of record->class that have been read:
+         *
+         * lookup the struct for the record->class and +1 its val
+         * field. If not found, it's the first time this class has been
+         * read so create a new struct and append it to the end link...
+         */
+        tmp = htable_int_get(prior, record->class);
+
+        if (tmp) {
+            tmp->val++;
+        } else if (prior->name == NULL) {
+            htable_int_set(prior, record->class, 1);
+        } else {
+            tmp = htable_int_get_last(prior);
+            aux = htable_int_create();
+            htable_int_set(aux, record->class, 1);
+            tmp->next = aux;
+        }
+
+        /*
+         * Increment the counters for each unique word # of occurrences
+         */
+        count_words(record, corpusDict);
+
+        /*
+         * Do the same for the class dictionary. If the class dictionary not
+         * found, create a new one as we have a new class
+         */
+        thisClassDict = dict_htable_int_find(classDict, record->class);
+
+        if (thisClassDict) {
+            count_words(record, thisClassDict->root);
+        } else if (classDict->root == NULL) {
+            aux = htable_int_create();
+            dict_htable_int_set(classDict, record->class, aux, NULL);
+            count_words(record, classDict->root);
+        } else {
+            tmpDict = dict_htable_int_create();
+            aux = htable_int_create();
+            dict_htable_int_set(tmpDict, record->class, aux, NULL);
+            count_words(record, tmpDict->root);
+
+            auxDict = dict_htable_int_find_last(classDict);
+            auxDict->next = tmpDict;
+        }
+
+        record = record->next;
+    }
+
+    /*
+     * p_prior[class] probabilities from prior[class]
+     */
+
+
+    iterator = prior;
+    p_iterator = p_prior;
+
+    int sum_prior_vals = htable_int_sum_val_rec(prior);
+    float val;
+
+    printf("sum_prior_vals = %d\n", sum_prior_vals);
+
+    while(iterator) {
+        printf("prior: class %s, cnt %d\n", iterator->name, iterator->val);
+        val = (float)iterator->val / (float)sum_prior_vals;
+
+        htable_float_set(p_iterator, iterator->name, val);
+        p_iterator->next = htable_float_create();
+        printf("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
+
+        p_iterator = p_iterator->next;
+        iterator = iterator->next;
+    }
 }
