@@ -19,7 +19,7 @@ void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
 void save_data_bin();
 void load_data_bin();
-void train();
+void train(struct uas_record *root);
 void evaluate();
 
 /*
@@ -202,14 +202,14 @@ int main(int argc, char** argv) {
     /*
      * READ UAS DATA
      */
-    struct uas_record *root;
+    struct uas_record *root = NULL;
     int lc;
 
     read_data_with_class("data/uas_with_class.txt", root, &lc);
 
     printf("lines of data read = %d\n", lc);
 
-    train();
+    train(root);
 
 
     //
@@ -336,6 +336,12 @@ int main(int argc, char** argv) {
     return 0;
 }
 
+/*
+ * malloc can return a NULL pointer if the allocation fails
+ *
+ * If *ptr is a pointer that has just been malloc'd, this function will
+ * print an error and exit if *ptr is a NULL pointer.
+ */
 void chck_malloc(void *ptr, char *desc)
 {
     if (ptr == NULL) {
