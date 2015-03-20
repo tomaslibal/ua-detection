@@ -16,6 +16,8 @@
 #include "htable_int.c"
 
 void chck_malloc(void *ptr, char *desc);
+void read_data_with_class(char *path, struct uas_record *root, int *lc);
+
 
 int main(int argc, char** argv) {
 
@@ -192,26 +194,11 @@ int main(int argc, char** argv) {
     /*
      * READ UAS DATA
      */
-
-    struct uas_record *root = NULL;
-    struct uas_record *record = NULL;
-
-    root = uas_record_create();
-    chck_malloc((void *) root, "Array of UAS Records");
-
-    /*
-     * line count of the txt file read
-     */
-    int lc = 0;
-
-    lc = read_uas_with_class("data/uas_with_class.txt", root);
-
-    print_uas_records(root);
-
-    record = root;
+    read_data_with_class("data/uas_with_class.txt", root, &lc);
 
     printf("lines of data read = %d\n", lc);
 
+    record = root;
     /*
      * (This assumes that there are at least 2 records, else the test
      * in the while loop will evaluate to false in the first pass already).
@@ -421,4 +408,20 @@ void chck_malloc(void *ptr, char *desc)
         printf("Error malloc'ing for %s\n", desc);
         exit(1);
     }
+}
+
+void read_data_with_class(char *path, struct uas_record *root, int *lc)
+{
+    if (root != NULL) {
+        return;
+    }
+
+    root = uas_record_create();
+    chck_malloc((void *) root, "Array of UAS Records");
+
+    *lc = 0;
+
+    *lc = read_uas_with_class(path, root);
+
+    print_uas_records(root);
 }
