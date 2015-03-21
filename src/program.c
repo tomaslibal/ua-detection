@@ -233,7 +233,7 @@ int main(int argc, char** argv) {
     train(root, prior);
 
     /*
-     * READ USER INPUT
+     * IV. READ USER INPUT
      */
     uas_input = uas_record_create();
     chck_malloc((void *) uas_input, "UAS Struct for the User Input of Data");
@@ -241,7 +241,7 @@ int main(int argc, char** argv) {
     read_user_input(argc, argv, uas_input);
 
     /*
-     * Compute the features of the user input
+     * V. Compute the features of the user input
      */
     words = htable_int_create();
     chck_malloc((void *) words, "Words Table of the User Input");
@@ -358,11 +358,6 @@ void train(struct uas_record *root, struct htable_int *prior)
         record = record->next;
     }
 
-    /*
-     * p_prior[class] probabilities from prior[class]
-     */
-
-
     iterator = prior;
     p_iterator = p_prior;
 
@@ -422,29 +417,50 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
     free(uas);
 }
 
+/*
+ * Evaluates user input:
+ *
+ *     *words: tokenized keywords of the user-agent string
+ *     *uas_input: the user-agent string and the class
+ */
 void evaluate(struct htable_int *words, struct uas_record *uas_input)
 {
     float p_word = 0;
     float p_word_class = 0;
 
-
-
     int corpusDict_word_val = 0;
 
     iterator = words;
 
+    /*
+     * Loop through each words of the input user-agent string
+     */
     while(iterator) {
+        /*
+         * Look up the frequency of the word in the corpusDict.
+         */
         aux = htable_int_get(corpusDict, iterator->name);
-        // word not in the dictionary
+
+        /*
+         * If the word is not in the dictionary there is no data on its prior
+         * probability so the program skips the loop
+         */
         if (aux == NULL) {
             iterator = iterator->next;
             continue;
         }
 
+        /*
+         * Calculate the probability that the word appears at all (in all
+         * known user-agent strings).
+         */
         p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
 
         printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
 
+        /*
+         * Now look up the dictionary of the given class
+         */
         thisClassDict = dict_htable_int_find(classDict, uas_input->class);
 
         if (thisClassDict == NULL) {
@@ -453,12 +469,18 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
             continue;
         }
 
-        // word must be in the class dict as it was in the corpus dict
+        /*
+         * Look up the frequency of the word in the class' dictionary
+         */
         aux = htable_int_get(thisClassDict->root, iterator->name);
         if (aux == NULL) {
             iterator = iterator->next;
             continue;
         }
+        /*
+         * Calculate the probability that the word appears in the given
+         * class.
+         */
         p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
 
         printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
