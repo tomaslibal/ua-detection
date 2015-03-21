@@ -34,6 +34,8 @@ void test_tokenizing()
 
 int run_test_tokenizer()
 {
+    printf("testing the tokenizer: ");
+
 	test_tokenizing();
 
 	printf("\n");

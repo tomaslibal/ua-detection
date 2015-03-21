@@ -36,6 +36,8 @@ void test_count_words()
 
 int run_test_probab()
 {
+    printf("testing the probab: ");
+
 	test_count_words();
 
 	printf("\n");

@@ -210,6 +210,8 @@ void test_sum_val_rec()
 
 int run_test_htable_int()
 {
+    printf("testing the htable: ");
+
     test_htable_create();
     test_htable_set();
     test_htable_get_one();

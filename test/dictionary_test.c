@@ -77,7 +77,7 @@ void test_dictionary_find()
 
 int run_test_dictionary()
 {
-    printf("testing the dictionary...\n");
+    printf("testing the dictionary: ");
     test_dictionary_create();
     test_dictionary_set();
     test_dictionary_find();

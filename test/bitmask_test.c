@@ -88,6 +88,8 @@ void test_mask_is_set_bool()
 
 int run_test_bitmask()
 {
+    printf("testing the bitmask: ");
+
     test_mask_set();
     test_mask_unset();
     test_mask_is_set();

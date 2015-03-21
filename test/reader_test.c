@@ -31,6 +31,8 @@ void test_reader_file_with_class()
 
 int run_test_reader()
 {
+    printf("testing the reader: ");
+
 	test_reader_file_with_class();
 
 	return i_reader;
