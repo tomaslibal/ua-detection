@@ -7,8 +7,13 @@
 
 #include "bitmask_test.h"
 #include <assert.h>
+#include <stdio.h>
+
+#include "test_suite.h"
 
 #include "../src/bitmask.c"
+
+int i_mask = 0;
 
 void test_mask_set()
 {
@@ -23,6 +28,8 @@ void test_mask_set()
     mask_set(&mask, &FLAG_2);
 
     assert(mask == (FLAG_1 + FLAG_2));
+
+    success(i_mask);
 }
 
 void test_mask_unset()
@@ -41,6 +48,8 @@ void test_mask_unset()
     mask_unset(&mask, &FLAG_1);
 
     assert(mask == 0);
+
+    success(i_mask);
 }
 
 void test_mask_is_set()
@@ -56,6 +65,8 @@ void test_mask_is_set()
     assert(mask_is_set(&mask, &FLAG_1) > 0);
 
     assert(mask_is_set(&mask, &FLAG_3) == 0);
+
+    success(i_mask);
 }
 
 void test_mask_is_set_bool()
@@ -71,12 +82,17 @@ void test_mask_is_set_bool()
     assert(mask_is_set_bool(&mask, &FLAG_1) == 1);
 
     assert(mask_is_set_bool(&mask, &FLAG_3) == 0);
+
+    success(i_mask);
 }
 
-void run_test_bitmask()
+int run_test_bitmask()
 {
     test_mask_set();
     test_mask_unset();
     test_mask_is_set();
     test_mask_is_set_bool();
+
+    printf("\n");
+    return i_mask;
 }

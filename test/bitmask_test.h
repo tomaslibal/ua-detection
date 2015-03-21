@@ -8,6 +8,6 @@
 #ifndef TEST_BITMASK_TEST_H_
 #define TEST_BITMASK_TEST_H_
 
-void run_test_bitmask();
+int run_test_bitmask();
 
 #endif /* TEST_BITMASK_TEST_H_ */
