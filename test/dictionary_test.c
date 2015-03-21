@@ -4,7 +4,11 @@
 
 #include "dictionary_test.h"
 
+#include "test_suite.h"
+
 #include "../src/dictionary.c"
+
+int i_dict = 0;
 
 void test_dictionary_create()
 {
@@ -14,6 +18,8 @@ void test_dictionary_create()
     assert(dict != NULL);
 
     dict_htable_int_free(dict);
+
+    success(i_dict);
 }
 
 void test_dictionary_set()
@@ -35,6 +41,8 @@ void test_dictionary_set()
     assert(dict->root = root);
 
     dict_htable_int_free(dict);
+
+    success(i_dict);
 }
 
 void test_dictionary_find()
@@ -64,12 +72,16 @@ void test_dictionary_find()
 
     dict_htable_int_free(dict);
 
+    success(i_dict);
 }
 
-void run_test_dictionary()
+int run_test_dictionary()
 {
     printf("testing the dictionary...\n");
     test_dictionary_create();
     test_dictionary_set();
     test_dictionary_find();
+
+    printf("\n");
+    return i_dict;
 }
