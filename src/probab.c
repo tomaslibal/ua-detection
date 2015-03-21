@@ -28,8 +28,6 @@ void count_words(struct uas_record *datapoint, struct htable_int *store)
 
 	if(tok(datapoint->uas, tokens, p_number) != 0) {
 		printf("Error executing 'tok'\n");
-	} else {
-		printf("UAS read\n");
 	}
 
 	/*
