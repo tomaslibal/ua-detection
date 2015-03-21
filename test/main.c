@@ -19,8 +19,8 @@ int main()
 
     ts += run_test_htable_int();
     ts += run_test_tokenizer();
-    run_test_reader();
-    run_test_probab();
+    ts += run_test_reader();
+    ts += run_test_probab();
     run_test_dictionary();
     run_test_bitmask();
 

@@ -2,11 +2,17 @@
 
 #include "../src/probab.c"
 
+#include "test_suite.h"
+
+int i_probab = 0;
+
 void test_count_words()
 {
 	struct uas_record *record1 = NULL;
 	struct htable_int *dict = NULL;
 	struct htable_int *iterator = NULL;
+
+	int count = 0;
 
 	record1 = uas_record_create();
 
@@ -18,14 +24,18 @@ void test_count_words()
 
 	iterator = dict;
 	while(iterator != NULL) {
-		printf("word: %s, count: %d\n", iterator->name, iterator->val);
+	    count++;
 		iterator = iterator->next;
 	}
 
-	assert(1 == 1);
+	assert(count == 8);
+
+	success(i_probab);
 }
 
-void run_test_probab()
+int run_test_probab()
 {
 	test_count_words();
+
+	return i_probab;
 }
