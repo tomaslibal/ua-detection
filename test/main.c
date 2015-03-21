@@ -10,6 +10,8 @@
 
 int main()
 {
+    printf("Running the test suites\n");
+
     run_test_htable_int();
     run_test_tokenizer();
     run_test_reader();

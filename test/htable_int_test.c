@@ -3,6 +3,10 @@
 
 #include "../src/htable_int.c"
 
+#define success(); test_counter++; printf(".");
+
+int test_counter = 0;
+
 void test_htable_create()
 {
 	struct htable_int *table;
@@ -12,6 +16,8 @@ void test_htable_create()
 	assert(table != NULL);
 
 	htable_int_free(table);
+
+	success();
 }
 
 void test_htable_set()
@@ -25,6 +31,8 @@ void test_htable_set()
 	assert(table->val == 10);
 
 	htable_int_free(table);
+
+	success();
 }
 
 void test_htable_free_one()
@@ -36,6 +44,8 @@ void test_htable_free_one()
 	htable_int_set(table, "Some_name", 10);
 
 	htable_int_free(table);
+
+	success();
 }
 
 void test_htable_free_linked()
@@ -51,6 +61,8 @@ void test_htable_free_linked()
 	htable_int_set(second, "Second_table", 20);
 
 	htable_int_free(table);
+
+	success();
 }
 
 void test_htable_get_one()
@@ -64,6 +76,8 @@ void test_htable_get_one()
 	assert(htable_int_get_val(table, "Some_name") == 10);
 
 	htable_int_free(table);
+
+	success();
 }
 
 void test_htable_get_linked()
@@ -81,6 +95,8 @@ void test_htable_get_linked()
 	assert(htable_int_get_val(table, "Second_table") == 20);
 
 	htable_int_free(table);
+
+	success();
 }
 
 void test_htable_get_not_present()
@@ -94,6 +110,8 @@ void test_htable_get_not_present()
 	assert(htable_int_get_val(table, "NotPresent") == 0);
 
 	htable_int_free(table);
+
+	success();
 }
 
 void test_htable_get_table()
@@ -113,6 +131,8 @@ void test_htable_get_table()
 	assert(result->val == 20);
 
 	htable_int_free(root);
+
+	success();
 }
 
 void test_htable_get_last()
@@ -135,6 +155,8 @@ void test_htable_get_last()
 	assert(result->val == 30);
 
 	htable_int_free(root);
+
+	success();
 }
 
 void test_htable_get_last_when_no_next()
@@ -151,6 +173,8 @@ void test_htable_get_last_when_no_next()
 	assert(result->val == 10);
 
 	htable_int_free(root);
+
+	success();
 }
 
 void test_sum_val_rec()
@@ -174,14 +198,14 @@ void test_sum_val_rec()
 
     res = htable_int_sum_val_rec(root);
 
-    printf("sum_val_rec = %d\n", res);
-
     assert(res == 60);
 
     htable_int_free(root);
+
+    success();
 }
 
-void run_test_htable_int()
+int run_test_htable_int()
 {
     test_htable_create();
     test_htable_set();
@@ -191,4 +215,7 @@ void run_test_htable_int()
     test_htable_get_last();
     test_htable_get_last_when_no_next();
     test_sum_val_rec();
+
+    printf("\n");
+    return test_counter;
 }
