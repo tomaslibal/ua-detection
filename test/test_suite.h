@@ -8,6 +8,6 @@
 #ifndef TEST_TEST_SUITE_H_
 #define TEST_TEST_SUITE_H_
 
-#define success(); test_counter++; printf(".");
+#define success(var); var++; printf(".");
 
 #endif /* TEST_TEST_SUITE_H_ */

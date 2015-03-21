@@ -2,8 +2,12 @@
 
 #include "../src/tokenizer.c"
 
+#include "test_suite.h"
+
 #define true 1
 #define false 0
+
+int i_tok = 0;
 
 void test_tokenizing()
 {
@@ -22,12 +26,16 @@ void test_tokenizing()
 	assert(strcmp(tokens[3], "stuff") == 0);
 
 	for(int i = 0; i < number; i++) {
-		printf("token %d = %s\n", i, tokens[i]);
 	    free(tokens[i]);
 	}
+
+	success(i_tok);
 }
 
-void run_test_tokenizer()
+int run_test_tokenizer()
 {
 	test_tokenizing();
+
+	printf("\n");
+	return i_tok;
 }

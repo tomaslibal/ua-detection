@@ -5,7 +5,10 @@
 
 #include "test_suite.h"
 
-int test_counter = 0;
+/*
+ * Success tests counter
+ */
+int i_htable = 0;
 
 void test_htable_create()
 {
@@ -17,7 +20,7 @@ void test_htable_create()
 
 	htable_int_free(table);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_set()
@@ -32,7 +35,7 @@ void test_htable_set()
 
 	htable_int_free(table);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_free_one()
@@ -45,7 +48,7 @@ void test_htable_free_one()
 
 	htable_int_free(table);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_free_linked()
@@ -62,7 +65,7 @@ void test_htable_free_linked()
 
 	htable_int_free(table);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_get_one()
@@ -77,7 +80,7 @@ void test_htable_get_one()
 
 	htable_int_free(table);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_get_linked()
@@ -96,7 +99,7 @@ void test_htable_get_linked()
 
 	htable_int_free(table);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_get_not_present()
@@ -111,7 +114,7 @@ void test_htable_get_not_present()
 
 	htable_int_free(table);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_get_table()
@@ -132,7 +135,7 @@ void test_htable_get_table()
 
 	htable_int_free(root);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_get_last()
@@ -156,7 +159,7 @@ void test_htable_get_last()
 
 	htable_int_free(root);
 
-	success();
+	success(i_htable);
 }
 
 void test_htable_get_last_when_no_next()
@@ -174,7 +177,7 @@ void test_htable_get_last_when_no_next()
 
 	htable_int_free(root);
 
-	success();
+	success(i_htable);
 }
 
 void test_sum_val_rec()
@@ -202,7 +205,7 @@ void test_sum_val_rec()
 
     htable_int_free(root);
 
-    success();
+    success(i_htable);
 }
 
 int run_test_htable_int()
@@ -217,5 +220,5 @@ int run_test_htable_int()
     test_sum_val_rec();
 
     printf("\n");
-    return test_counter;
+    return i_htable;
 }
