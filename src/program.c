@@ -19,8 +19,9 @@ void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
 void save_data_bin();
 void load_data_bin();
-void train(struct uas_record *root);
+void train(struct uas_record *root, struct htable_int *prior);
 void evaluate();
+void read_user_input(int argc, char **argv, struct uas_record *uas_input);
 
 /*
  * Corpus Dictionary keeps reference of each 'word' from the user agent
@@ -55,6 +56,12 @@ struct dict_htable_int *auxDict = NULL;
 
 struct htable_int *iterator = NULL;
 struct htable_float *p_iterator = NULL;
+
+struct uas_record *root = NULL;
+
+struct htable_int *words = NULL;
+
+struct uas_record *uas_input = NULL;
 
 int main(int argc, char** argv) {
 
@@ -202,58 +209,24 @@ int main(int argc, char** argv) {
     /*
      * READ UAS DATA
      */
-    struct uas_record *root = NULL;
+
     int lc;
+
+    root = uas_record_create();
+    chck_malloc((void *) root, "Array of UAS Records");
 
     read_data_with_class("data/uas_with_class.txt", root, &lc);
 
-    printf("lines of data read = %d\n", lc);
-
-    train(root);
-
+    //
+    train(root, prior);
 
     //
-
-    char *uas = NULL;
-    char *class = NULL;
-    struct uas_record *uas_input = NULL;
-
-    // if argc == 5, assume argv[2] is the user agent string and argv[4] the class
-    if (argc == 5) {
-        uas = malloc(sizeof(char) * strlen(argv[2]) + 1);
-        chck_malloc((void *) uas, "User-agent String");
-
-        strcpy(uas, argv[2]);
-
-        class = malloc(sizeof(char) * strlen(argv[4]) + 1);
-        chck_malloc((void *) class, "Class String");
-
-        strcpy(class, argv[4]);
-    } else {
-        printf("wrong usage\n");
-        uas_record_free(root);
-        htable_int_free(corpusDict);
-        dict_htable_int_free(classDict);
-        htable_int_free(prior);
-        htable_float_free(p_prior);
-        exit(1);
-    }
-
-    printf("using input = %s\n", uas);
-
-    // V.
-    struct htable_int *words = NULL;
-    words = htable_int_create();
-
     uas_input = uas_record_create();
-    if (uas_input == NULL) {
-        printf("Error creating uas_record for the input\n");
-        exit(1);
-    }
+    chck_malloc((void *) uas_input, "UAS Struct for the User Input of Data");
 
-    uas_record_set(uas_input, class, uas, NULL);
+    read_user_input(argc, argv, uas_input);
 
-    free(class);
+    //
 
     count_words(uas_input, words);
 
@@ -329,8 +302,6 @@ int main(int argc, char** argv) {
     htable_float_free(p_prior);
 
     htable_int_free(words);
-    if (uas != NULL)
-        free(uas);
     uas_record_free(uas_input);
 
     return 0;
@@ -339,8 +310,8 @@ int main(int argc, char** argv) {
 /*
  * malloc can return a NULL pointer if the allocation fails
  *
- * If *ptr is a pointer that has just been malloc'd, this function will
- * print an error and exit if *ptr is a NULL pointer.
+ * If *ptr is a pointer that has just been malloc'd and passed to this function
+ * it will print an error and exit if *ptr is a NULL pointer.
  */
 void chck_malloc(void *ptr, char *desc)
 {
@@ -352,22 +323,16 @@ void chck_malloc(void *ptr, char *desc)
 
 void read_data_with_class(char *path, struct uas_record *root, int *lc)
 {
-    if (root != NULL) {
-        return;
-    }
-
-    root = uas_record_create();
-    chck_malloc((void *) root, "Array of UAS Records");
-
     *lc = 0;
 
     *lc = read_uas_with_class(path, root);
 
     print_uas_records(root);
+    printf("lines of data read = %d\n", *lc);
 }
 
 // root = root node of the uas_record linked list containing UA strings
-void train(struct uas_record *root)
+void train(struct uas_record *root, struct htable_int *prior)
 {
     struct uas_record *record = root;
 
@@ -450,4 +415,42 @@ void train(struct uas_record *root)
         p_iterator = p_iterator->next;
         iterator = iterator->next;
     }
+}
+
+void read_user_input(int argc, char **argv, struct uas_record *uas_input)
+{
+    char *uas = NULL;
+    char *class = NULL;
+
+    // if argc == 5, assume argv[2] is the user agent string and argv[4] the class
+    if (argc == 5) {
+        uas = malloc(sizeof(char) * strlen(argv[2]) + 1);
+        chck_malloc((void *) uas, "User-agent String");
+
+        strcpy(uas, argv[2]);
+
+        class = malloc(sizeof(char) * strlen(argv[4]) + 1);
+        chck_malloc((void *) class, "Class String");
+
+        strcpy(class, argv[4]);
+    } else {
+        printf("wrong usage\n");
+        uas_record_free(root);
+        htable_int_free(corpusDict);
+        dict_htable_int_free(classDict);
+        htable_int_free(prior);
+        htable_float_free(p_prior);
+        exit(1);
+    }
+
+    printf("using input = %s\n", uas);
+
+    // V.
+
+    words = htable_int_create();
+
+    uas_record_set(uas_input, class, uas, NULL);
+
+    free(class);
+    free(uas);
 }
