@@ -17,8 +17,8 @@
 
 void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
-//void save_data_bin();
-//void load_data_bin();
+void save_data_bin();
+void load_data_bin();
 void train(struct uas_record *root, struct htable_int *prior);
 void evaluate(struct htable_int *words, struct uas_record *uas_input);
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
