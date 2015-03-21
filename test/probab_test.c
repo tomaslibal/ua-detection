@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "../src/probab.c"
 
@@ -37,5 +38,6 @@ int run_test_probab()
 {
 	test_count_words();
 
+	printf("\n");
 	return i_probab;
 }
