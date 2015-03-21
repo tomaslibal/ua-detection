@@ -21,8 +21,8 @@ int main()
     ts += run_test_tokenizer();
     ts += run_test_reader();
     ts += run_test_probab();
-    run_test_dictionary();
-    run_test_bitmask();
+    ts += run_test_dictionary();
+    ts += run_test_bitmask();
 
     printf("\n%d tests successfully passed\n", ts);
     return 0;
