@@ -218,9 +218,9 @@ int main(int argc, char** argv) {
 
 
     /*
-     * READ UAS DATA
+     * READ  THE UAS DATA
      */
-    int lc;
+    int lc = 0;
 
     root = uas_record_create();
     chck_malloc((void *) root, "Array of UAS Records");
@@ -240,29 +240,36 @@ int main(int argc, char** argv) {
 
     read_user_input(argc, argv, uas_input);
 
-    // count features of the user input:
+    /*
+     * Compute the features of the user input
+     */
     words = htable_int_create();
     chck_malloc((void *) words, "Words Table of the User Input");
 
     count_words(uas_input, words);
 
-    // VI. Evaluate the input
+    /*
+     * VI. Evaluate the user input
+     */
     evaluate(words, uas_input);
 
-    // Print the result:
+    /*
+     * Print the result:
+     */
     float prior_class_val = 0;
     struct htable_float *aux_float = htable_float_get(p_prior, uas_input->class);
     prior_class_val = aux_float->val;
+
     printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
 
     // Free up remaining resources:
-    uas_record_free(root);
     htable_int_free(corpusDict);
-    dict_htable_int_free(classDict);
     htable_int_free(prior);
-    htable_float_free(p_prior);
     htable_int_free(words);
+    htable_float_free(p_prior);
+    uas_record_free(root);
     uas_record_free(uas_input);
+    dict_htable_int_free(classDict);
 
     return 0;
 }
