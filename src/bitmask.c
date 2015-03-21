@@ -12,7 +12,7 @@ TYPE mask_is_set(TYPE *mask, TYPE *flag)
     return *mask & *flag;
 }
 
-TYPE mask_is_set_bool(TYPE mask, TYPE flag)
+TYPE mask_is_set_bool(TYPE *mask, TYPE *flag)
 {
     TYPE result;
 
