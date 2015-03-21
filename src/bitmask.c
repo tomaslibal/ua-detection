@@ -30,8 +30,8 @@ void mask_set(TYPE *mask, TYPE *flag)
     *mask |= *flag;
 }
 
-void mask_unset(TYPE mask, TYPE flag)
+void mask_unset(TYPE *mask, TYPE *flag)
 {
-
+    *mask &= ~(*flag);
 }
 
