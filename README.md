@@ -28,8 +28,17 @@ More in the [data section](data/)
 >  
 > All content must be publicly available and compatible with the [GNU License](LICENSE)
 
-Only sample and test data are part of this repository. The main datasets are
+Only sample and test data are part of this repository. Some datasets are
 available online and can be downloaded using [the download script](data/download-data.sh).
+
+#### Data format
+
+The program can work with ascii/utf-8 encoded data of the following format:
+
+1. one entry per line terminated by a new line character
+2. each entry has a one word label separated by a space character from the user-agent string following the label
+
+See the [example](data/uas_with_class.txt) 
    
 ### Build
 
