@@ -25,7 +25,26 @@ void test_mask_set()
     assert(mask == (FLAG_1 + FLAG_2));
 }
 
+void test_mask_unset()
+{
+    unsigned short mask = 0;
+    const unsigned short FLAG_1 = 1;
+    const unsigned short FLAG_2 = 1 << 1;
+
+    mask_set(&mask, &FLAG_1);
+    mask_set(&mask, &FLAG_2);
+
+    mask_unset(&mask, &FLAG_2);
+
+    assert(mask == FLAG_1);
+
+    mask_unset(&mask, &FLAG_1);
+
+    assert(mask == 0);
+}
+
 void run_test_bitmask()
 {
     test_mask_set();
+    test_mask_unset();
 }
