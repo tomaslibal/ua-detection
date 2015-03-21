@@ -6,6 +6,7 @@
 #include "reader_test.h"
 #include "probab_test.h"
 #include "dictionary_test.h"
+#include "bitmask_test.h"
 
 int main()
 {
@@ -14,5 +15,6 @@ int main()
     run_test_reader();
     run_test_probab();
     run_test_dictionary();
+    run_test_bitmask();
     return 0;
 }
