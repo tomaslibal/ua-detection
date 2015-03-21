@@ -3,7 +3,7 @@
 
 #include "../src/htable_int.c"
 
-#define success(); test_counter++; printf(".");
+#include "test_suite.h"
 
 int test_counter = 0;
 
