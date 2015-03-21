@@ -17,10 +17,10 @@
 
 void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
-void save_data_bin();
-void load_data_bin();
+//void save_data_bin();
+//void load_data_bin();
 void train(struct uas_record *root, struct htable_int *prior);
-void evaluate();
+void evaluate(struct htable_int *words, struct uas_record *uas_input);
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
 
 /*
@@ -62,6 +62,10 @@ struct uas_record *root = NULL;
 struct htable_int *words = NULL;
 
 struct uas_record *uas_input = NULL;
+
+
+float log_prob_word_class = 0;
+
 
 int main(int argc, char** argv) {
 
@@ -226,67 +230,15 @@ int main(int argc, char** argv) {
 
     read_user_input(argc, argv, uas_input);
 
-    //
+    // count features of the user input
+
+    words = htable_int_create();
+    chck_malloc((void *) words, "Words Table of the User Input");
 
     count_words(uas_input, words);
 
-    //
-    iterator = corpusDict;
-
-    while (iterator) {
-        printf("corpusDict[%s] %dx\n", iterator->name, iterator->val);
-        iterator = iterator->next;
-    }
-
     // VI.
-    float p_word = 0;
-    float p_word_class = 0;
-
-    float log_prob_word_class = 0;
-
-    int corpusDict_word_val = 0;
-
-    iterator = words;
-
-    while(iterator) {
-        aux = htable_int_get(corpusDict, iterator->name);
-        // word not in the dictionary
-        if (aux == NULL) {
-            iterator = iterator->next;
-            continue;
-        }
-
-        p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
-
-        printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
-
-        thisClassDict = dict_htable_int_find(classDict, uas_input->class);
-
-        if (thisClassDict == NULL) {
-            printf("class dictionary not found for %s\n", uas_input->class);
-            iterator = iterator->next;
-            continue;
-        }
-
-        // word must be in the class dict as it was in the corpus dict
-        aux = htable_int_get(thisClassDict->root, iterator->name);
-        if (aux == NULL) {
-            iterator = iterator->next;
-            continue;
-        }
-        p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
-
-        printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
-
-        //
-        //if (P(word|class) > 0:
-        //     *             log_prob[class] += log(count * P(word|class) / P(word))
-        if (p_word_class > 0) {
-            log_prob_word_class += logf((float)iterator->val * p_word_class / p_word);
-        }
-
-        iterator = iterator->next;
-    }
+    evaluate(words, uas_input);
 
     // result
     float prior_class_val = 0;
@@ -447,10 +399,62 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
 
     // V.
 
-    words = htable_int_create();
+
 
     uas_record_set(uas_input, class, uas, NULL);
 
     free(class);
     free(uas);
+}
+
+void evaluate(struct htable_int *words, struct uas_record *uas_input)
+{
+    float p_word = 0;
+    float p_word_class = 0;
+
+
+
+    int corpusDict_word_val = 0;
+
+    iterator = words;
+
+    while(iterator) {
+        aux = htable_int_get(corpusDict, iterator->name);
+        // word not in the dictionary
+        if (aux == NULL) {
+            iterator = iterator->next;
+            continue;
+        }
+
+        p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
+
+        printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
+
+        thisClassDict = dict_htable_int_find(classDict, uas_input->class);
+
+        if (thisClassDict == NULL) {
+            printf("class dictionary not found for %s\n", uas_input->class);
+            iterator = iterator->next;
+            continue;
+        }
+
+        // word must be in the class dict as it was in the corpus dict
+        aux = htable_int_get(thisClassDict->root, iterator->name);
+        if (aux == NULL) {
+            iterator = iterator->next;
+            continue;
+        }
+        p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
+
+        printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
+
+        //
+        //if (P(word|class) > 0:
+        //     *             log_prob[class] += log(count * P(word|class) / P(word))
+        if (p_word_class > 0) {
+            log_prob_word_class += logf((float)iterator->val * p_word_class / p_word);
+        }
+
+        iterator = iterator->next;
+    }
 }
