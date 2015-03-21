@@ -47,9 +47,17 @@ struct htable_int *prior = NULL;
  */
 struct htable_float *p_prior = NULL;
 
+/*
+ * Two auxiliary pointers that are used to iterate/dynamically create
+ * new pointers to htable_int structs.
+ */
 struct htable_int *tmp = NULL;
 struct htable_int *aux = NULL;
 
+/*
+ * Auxiliary pointers that are used to iterate/dynamically create new
+ * pointers to dict_htable_int structs.
+ */
 struct dict_htable_int *thisClassDict = NULL;
 struct dict_htable_int *tmpDict = NULL;
 struct dict_htable_int *auxDict = NULL;
@@ -70,27 +78,39 @@ float log_prob_word_class = 0;
 int main(int argc, char** argv) {
 
     /*
-     This program acts as an interface to the problems defined in the README.md:
-
-     1. What are the probabilities that the given user-agent string belongs
-     to a pre-defined class (group)?
-
-     For this problem, you'd call this program with two parameters:
-     ./program -ua <some user-agent string> -group <some group> [-treshold=0.8]
-
-     This will print "probably yes" or "probably no" given the P(ua|class) and
-     the treshold.
-
-     It can also print the probabilities for each learned class, e.g.:
-
-         class1=0.909032
-         class2=0.870211
-         ...
-
-     Optionally, you can specify which format of the output you want:
-     ./program ... -output application/json
-
+     * This program acts as an interface to the problems defined in the README.md:
+     *
+     *     1. What are the probabilities that the given user-agent string belongs
+     *     to a pre-defined class (group)?
+     *
+     *     For this problem, you'd call this program with two parameters:
+     *         ./program -ua <some user-agent string> -group <some group> [-treshold=0.8]
+     *
+     *     This will print "probably yes" or "probably no" given the P(ua|class) and
+     *     the treshold.
+     *
+     *     It can also print the probabilities for each learned class, e.g.:
+     *
+     *     class1=0.909032
+     *     class2=0.870211
+     *     ...
+     *
+     *     Optionally, you can specify which format of the output you want:
+     *     ./program ... -output application/json
+     *
      */
+
+    corpusDict = htable_int_create();
+    chck_malloc((void *) corpusDict, "Corpus Level Dictionary");
+
+    classDict = dict_htable_int_create();
+    chck_malloc((void *) classDict, "Collection of Class Dictionaries");
+
+    prior = htable_int_create();
+    chck_malloc((void *) prior, "Array of Prior Classes");
+
+    p_prior = htable_float_create();
+    chck_malloc((void *) p_prior, "Array of P(class) probabilities");
 
     /*
      * LEARNING PHASE
@@ -197,23 +217,9 @@ int main(int argc, char** argv) {
      */
 
 
-
-    corpusDict = htable_int_create();
-    chck_malloc((void *) corpusDict, "Corpus Level Dictionary");
-
-    classDict = dict_htable_int_create();
-    chck_malloc((void *) classDict, "Collection of Class Dictionaries");
-
-    prior = htable_int_create();
-    chck_malloc((void *) prior, "Array of Prior Classes");
-
-    p_prior = htable_float_create();
-    chck_malloc((void *) p_prior, "Array of P(class) probabilities");
-
     /*
      * READ UAS DATA
      */
-
     int lc;
 
     root = uas_record_create();
@@ -221,38 +227,40 @@ int main(int argc, char** argv) {
 
     read_data_with_class("data/uas_with_class.txt", root, &lc);
 
-    //
+    /*
+     * TRAIN FROM THE DATA
+     */
     train(root, prior);
 
-    //
+    /*
+     * READ USER INPUT
+     */
     uas_input = uas_record_create();
     chck_malloc((void *) uas_input, "UAS Struct for the User Input of Data");
 
     read_user_input(argc, argv, uas_input);
 
-    // count features of the user input
-
+    // count features of the user input:
     words = htable_int_create();
     chck_malloc((void *) words, "Words Table of the User Input");
 
     count_words(uas_input, words);
 
-    // VI.
+    // VI. Evaluate the input
     evaluate(words, uas_input);
 
-    // result
+    // Print the result:
     float prior_class_val = 0;
     struct htable_float *aux_float = htable_float_get(p_prior, uas_input->class);
     prior_class_val = aux_float->val;
     printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
 
-    // Free up remaining resources
+    // Free up remaining resources:
     uas_record_free(root);
     htable_int_free(corpusDict);
     dict_htable_int_free(classDict);
     htable_int_free(prior);
     htable_float_free(p_prior);
-
     htable_int_free(words);
     uas_record_free(uas_input);
 
