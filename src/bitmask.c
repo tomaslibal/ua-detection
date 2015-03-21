@@ -7,12 +7,12 @@
 
 #include "bitmask.h"
 
-TYPE mask_is_set(TYPE *mask, TYPE *flag)
+TYPE mask_is_set(TYPE *mask, CONST_TYPE *flag)
 {
     return *mask & *flag;
 }
 
-TYPE mask_is_set_bool(TYPE *mask, TYPE *flag)
+TYPE mask_is_set_bool(TYPE *mask, CONST_TYPE *flag)
 {
     TYPE result;
 
@@ -25,12 +25,12 @@ TYPE mask_is_set_bool(TYPE *mask, TYPE *flag)
     }
 }
 
-void mask_set(TYPE *mask, TYPE *flag)
+void mask_set(TYPE *mask, CONST_TYPE *flag)
 {
     *mask |= *flag;
 }
 
-void mask_unset(TYPE *mask, TYPE *flag)
+void mask_unset(TYPE *mask, CONST_TYPE *flag)
 {
     *mask &= ~(*flag);
 }
