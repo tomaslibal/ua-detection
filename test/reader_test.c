@@ -3,6 +3,10 @@
 
 #include "../src/reader.c"
 
+#include "test_suite.h"
+
+int i_reader = 0;
+
 void test_reader_file_with_class()
 {
 	struct uas_record *root = NULL;
@@ -18,14 +22,16 @@ void test_reader_file_with_class()
 	// getcwd(cwd, sizeof(cwd));
 	lc = read_uas_with_class("test/resources/uas_with_class.txt", root);
 
-	print_uas_records(root);
-
 	assert(lc == 2);
 
 	uas_record_free(root);
+
+	success(i_reader);
 }
 
-void run_test_reader()
+int run_test_reader()
 {
 	test_reader_file_with_class();
+
+	return i_reader;
 }
