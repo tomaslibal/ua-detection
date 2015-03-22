@@ -306,28 +306,31 @@ int main(int argc, char** argv) {
 
                 log_prob = evaluate_cls(words, uas_input, cls_iterator->name);
 
-                printf("%s in %s = %f\n", uas_input->uas, cls_iterator->name, expf(log_prob + logf(prior_class_val)));
+                printf("[cls:output %s] = %f\n", cls_iterator->name, expf(log_prob + logf(prior_class_val)));
 
                 cls_iterator = cls_iterator->next;
             }
+        /*
+         * Or compare against the one given class
+         */
+        } else {
+            /*
+             * VI. Evaluate the user input
+             */
+            evaluate(words, uas_input);
+
+            /*
+             * Print the result:
+             */
+
+            aux_float = htable_float_get(p_prior, uas_input->class);
+
+            // if found
+            if (aux_float != NULL)
+                prior_class_val = aux_float->val;
+
+            printf("[cls:output %s] = %f\n", uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
         }
-
-        /*
-         * VI. Evaluate the user input
-         */
-        evaluate(words, uas_input);
-
-        /*
-         * Print the result:
-         */
-
-        aux_float = htable_float_get(p_prior, uas_input->class);
-
-        // if found
-        if (aux_float != NULL)
-            prior_class_val = aux_float->val;
-
-        printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
     }
 
     // Free up remaining resources:
@@ -363,7 +366,7 @@ void read_data_with_class(char *path, struct uas_record *root, int *lc)
 
     *lc = read_uas_with_class(path, root);
 
-    print_uas_records(root);
+    //print_uas_records(root);
     printf("lines of data read = %d\n", *lc);
 }
 
@@ -435,15 +438,15 @@ void train(struct uas_record *root, struct htable_int *prior)
     int sum_prior_vals = htable_int_sum_val_rec(prior);
     float val;
 
-    printf("sum_prior_vals = %d\n", sum_prior_vals);
+    //printf("sum_prior_vals = %d\n", sum_prior_vals);
 
     while(iterator) {
-        printf("prior: class %s, cnt %d\n", iterator->name, iterator->val);
+        //printf("prior: class %s, cnt %d\n", iterator->name, iterator->val);
         val = (float)iterator->val / (float)sum_prior_vals;
 
         htable_float_set(p_iterator, iterator->name, val);
         p_iterator->next = htable_float_create();
-        printf("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
+        //printf("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
 
         p_iterator = p_iterator->next;
         iterator = iterator->next;
@@ -578,7 +581,7 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
          */
         p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
 
-        printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
+        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
 
         /*
          * Now look up the dictionary of the given class
@@ -605,7 +608,7 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
          */
         p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
 
-        printf("P(%s|%s) = %d / %d = %f\n", iterator->name, class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
+        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
 
         //
         //if (P(word|class) > 0:
@@ -659,7 +662,7 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
          */
         p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
 
-        printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
+        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
 
         /*
          * Now look up the dictionary of the given class
@@ -686,7 +689,7 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
          */
         p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
 
-        printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
+        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
 
         //
         //if (P(word|class) > 0:
@@ -704,6 +707,7 @@ void print_usage()
     printf("\nua-detection usage:\n\n");
     printf("\t--uas <user-agent string> to specify user-agent string\n");
     printf("\t--group <group> to specify the group classifier\n");
+    printf("\t--cmp_all to compare the user-agent against all classifiers\n");
     printf("\t--help prints this help\n");
     printf("\n");
 }
