@@ -454,6 +454,15 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
         }
     }
 
+    /*
+     * If the DO_EVALUATE_FLAG is set the program will attempt to classify
+     * the given user-agent string and therefore it might need to know which
+     * classifier the user wants to use.
+     *
+     * There is another flag CMP_ALL_CLS_FLAG which, if set, will evalute
+     * the user-agent string againts all classifiers. In this case we do not
+     * need to fallback to a default class.
+     */
     if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG) && class == NULL) {
         printf("WARNING: No class set! Using 'desktop' as default\n");
         class = malloc(sizeof(char) * 8);
@@ -461,9 +470,14 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
         strcpy(class, "default");
     }
 
+    /*
+     * If the DO_EVALUATE_FLAG is the program will attemp to classify the given
+     * user-agent string and therefore the user-agent input is required.
+     */
     if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG) && uas == NULL) {
         printf("wrong usage - must specify a user-agent string or disable the evaluation phase\n");
         print_usage();
+
         uas_record_free(root);
         uas_record_free(uas_input);
         htable_int_free(prior);
