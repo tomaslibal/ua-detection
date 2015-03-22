@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <getopt.h>
 
 #include "reader.h"
 #include "htable_int.h"
@@ -130,6 +131,14 @@ int main(int argc, char** argv) {
     mask_set(&settings, &DO_EVALUATE_FLAG);
 
     /*
+     * Read user input - configuration
+     */
+    uas_input = uas_record_create();
+    chck_malloc((void *) uas_input, "UAS Struct for the User Input of Data");
+
+    read_user_input(argc, argv, uas_input);
+
+    /*
      * LEARNING PHASE
      * ==============
      *
@@ -254,12 +263,7 @@ int main(int argc, char** argv) {
     /*
      * IV. READ USER INPUT
      */
-    uas_input = uas_record_create();
-    chck_malloc((void *) uas_input, "UAS Struct for the User Input of Data");
-
     if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG)) {
-        read_user_input(argc, argv, uas_input);
-
         /*
          * V. Compute the features of the user input
          */
@@ -278,7 +282,10 @@ int main(int argc, char** argv) {
          */
         float prior_class_val = 0;
         struct htable_float *aux_float = htable_float_get(p_prior, uas_input->class);
-        prior_class_val = aux_float->val;
+
+        // if found
+        if (aux_float != NULL)
+            prior_class_val = aux_float->val;
 
         printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
     }
@@ -405,19 +412,49 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
     char *uas = NULL;
     char *class = NULL;
 
-    // if argc == 5, assume argv[2] is the user agent string and argv[4] the class
-    if (argc == 5) {
-        uas = malloc(sizeof(char) * strlen(argv[2]) + 1);
-        chck_malloc((void *) uas, "User-agent String");
+    /*
+     * Read user-settings from the arguments
+     */
+    static struct option long_options[] = {
+            { "group", required_argument, 0, 'a' },
+            { "uas", required_argument, 0, 'b' }
+    };
+    int c;
+    while (1) {
+        int option_index = 0;
 
-        strcpy(uas, argv[2]);
+        c = getopt_long(argc, argv, "a:", long_options, &option_index);
 
-        class = malloc(sizeof(char) * strlen(argv[4]) + 1);
-        chck_malloc((void *) class, "Class String");
+        if (c == -1)
+            break;
 
-        strcpy(class, argv[4]);
-    } else {
-        printf("wrong usage\n");
+        switch (c){
+            case 0:
+                break;
+            case 'a':
+                class = malloc(sizeof(char) * strlen(optarg) + 1);
+                chck_malloc((void *) class, "Class String");
+                strcpy(class, optarg);
+                break;
+            case 'b':
+                uas = malloc(sizeof(char) * strlen(optarg) + 1);
+                chck_malloc((void *) uas, "User-agent String");
+                strcpy(uas, optarg);
+                break;
+            default:
+                printf("unrecognized option\n");
+        }
+    }
+
+    if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG) && class == NULL) {
+        printf("WARNING: No class set! Using 'desktop' as default\n");
+        class = malloc(sizeof(char) * 8);
+        chck_malloc((void *) class, "Class string");
+        strcpy(class, "default");
+    }
+
+    if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG) && uas == NULL) {
+        printf("wrong usage - must specify a user-agent string or disable the evaluation phase\n");
         uas_record_free(root);
         htable_int_free(corpusDict);
         dict_htable_int_free(classDict);
@@ -427,15 +464,10 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
     }
 
     printf("using input = %s\n", uas);
-
-    // V.
-
-
-
     uas_record_set(uas_input, class, uas, NULL);
 
-    free(class);
-    free(uas);
+    if (class != NULL) free(class);
+    if (uas != NULL) free(uas);
 }
 
 /*
