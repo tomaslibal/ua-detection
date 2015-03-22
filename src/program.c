@@ -24,6 +24,7 @@ void train(struct uas_record *root, struct htable_int *prior);
 void evaluate(struct htable_int *words, struct uas_record *uas_input);
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
+short add_class(struct htable_int *root, char *class);
 
 /*
  * Corpus Dictionary keeps reference of each 'word' from the user agent
@@ -369,6 +370,8 @@ void train(struct uas_record *root, struct htable_int *prior)
             tmp->next = aux;
         }
 
+        add_class(classes, record->class);
+
         /*
          * Increment the counters for each unique word # of occurrences
          */
@@ -595,4 +598,30 @@ void print_usage()
     printf("\t--group <group> to specify the group classifier\n");
     printf("\t--help prints this help\n");
     printf("\n");
+}
+
+short add_class(struct htable_int *root, char *class)
+{
+    struct htable_int *p;
+
+    p = htable_int_get(root, class);
+
+    /*
+     * If class not found in classes that means that this is a new class
+     * so a new htable_int struct is created for it and linked as the last
+     * link in the list.
+     */
+    if (p == NULL) {
+        tmp = htable_int_create();
+        chck_malloc((void *) tmp, "Class struct");
+        htable_int_set(tmp, class, 0);
+        p = htable_int_get_last(root);
+        p->next = tmp;
+    }
+
+    /*
+     * Otherwise we just return as the class has already been added to
+     * the linked list.
+     */
+    return 0;
 }
