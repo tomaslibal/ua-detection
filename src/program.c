@@ -23,6 +23,7 @@ void load_data_bin();
 void train(struct uas_record *root, struct htable_int *prior);
 void evaluate(struct htable_int *words, struct uas_record *uas_input);
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
+void print_usage();
 
 /*
  * Corpus Dictionary keeps reference of each 'word' from the user agent
@@ -412,14 +413,17 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
     char *uas = NULL;
     char *class = NULL;
 
+    int c;
+
     /*
      * Read user-settings from the arguments
      */
     static struct option long_options[] = {
             { "group", required_argument, 0, 'a' },
-            { "uas", required_argument, 0, 'b' }
+            { "uas", required_argument, 0, 'b' },
+            { "help", no_argument, 0, 'h' }
     };
-    int c;
+
     while (1) {
         int option_index = 0;
 
@@ -430,6 +434,10 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
 
         switch (c){
             case 0:
+                break;
+            case 'h':
+                print_usage();
+                exit(0);
                 break;
             case 'a':
                 class = malloc(sizeof(char) * strlen(optarg) + 1);
@@ -547,4 +555,13 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
 
         iterator = iterator->next;
     }
+}
+
+void print_usage()
+{
+    printf("\nua-detection usage:\n\n");
+    printf("\t--uas <user-agent string> to specify user-agent string\n");
+    printf("\t--group <group> to specify the group classifier\n");
+    printf("\t--help prints this help\n");
+    printf("\n");
 }
