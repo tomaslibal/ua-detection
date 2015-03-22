@@ -408,6 +408,9 @@ void train(struct uas_record *root, struct htable_int *prior)
     }
 }
 
+/*
+ * Config via command line arguments
+ */
 void read_user_input(int argc, char **argv, struct uas_record *uas_input)
 {
     char *uas = NULL;
@@ -415,9 +418,6 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
 
     int c;
 
-    /*
-     * Read user-settings from the arguments
-     */
     static struct option long_options[] = {
             { "group", required_argument, 0, 'a' },
             { "uas", required_argument, 0, 'b' },
@@ -427,7 +427,7 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
     while (1) {
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "a:", long_options, &option_index);
+        c = getopt_long(argc, argv, "a:b:h", long_options, &option_index);
 
         if (c == -1)
             break;
