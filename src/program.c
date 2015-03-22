@@ -297,18 +297,18 @@ int main(int argc, char** argv) {
          * Compare the user-agent against all classifiers
          */
         if (mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG)) {
-            iterator = classes;
-            while(iterator) {
+            struct htable_int *cls_iterator = classes;
+            while(cls_iterator) {
                 prior_class_val = 0;
-                aux_float = htable_float_get(p_prior, iterator->name);
+                aux_float = htable_float_get(p_prior, cls_iterator->name);
                 if (aux_float != NULL)
                     prior_class_val = aux_float->val;
 
-                log_prob = evaluate_cls(words, uas_input, iterator->name);
+                log_prob = evaluate_cls(words, uas_input, cls_iterator->name);
 
-                printf("%s in %s = %f\n", uas_input->uas, iterator->name, expf(log_prob + logf(prior_class_val)));
+                printf("%s in %s = %f\n", uas_input->uas, cls_iterator->name, expf(log_prob + logf(prior_class_val)));
 
-                iterator = iterator->next;
+                cls_iterator = cls_iterator->next;
             }
         }
 
@@ -463,7 +463,8 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
     static struct option long_options[] = {
             { "group", required_argument, 0, 'a' },
             { "uas", required_argument, 0, 'b' },
-            { "help", no_argument, 0, 'h' }
+            { "help", no_argument, 0, 'h' },
+            { "cmp_all", no_argument, 0, 'c' }
     };
 
     while (1) {
@@ -490,6 +491,9 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
                 uas = malloc(sizeof(char) * strlen(optarg) + 1);
                 chck_malloc((void *) uas, "User-agent String");
                 strcpy(uas, optarg);
+                break;
+            case 'c':
+                mask_set(&settings, &CMP_ALL_CLS_FLAG);
                 break;
             default:
                 printf("unrecognized option\n");
@@ -715,7 +719,9 @@ short add_class(struct htable_int *root, char *class)
      * so a new htable_int struct is created for it and linked as the last
      * link in the list.
      */
-    if (p == NULL) {
+    if (p == NULL && root->name == NULL) {
+        htable_int_set(root, class, 0);
+    } else if (p == NULL) {
         tmp = htable_int_create();
         chck_malloc((void *) tmp, "Class struct");
         htable_int_set(tmp, class, 0);
