@@ -463,6 +463,7 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
 
     if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG) && uas == NULL) {
         printf("wrong usage - must specify a user-agent string or disable the evaluation phase\n");
+        print_usage();
         uas_record_free(root);
         htable_int_free(corpusDict);
         dict_htable_int_free(classDict);
