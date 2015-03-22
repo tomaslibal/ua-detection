@@ -5,7 +5,7 @@
 #include "reader.h"
 #include "htable_int.h"
 #include "dictionary.h"
-
+#include "bitmask.h"
 #include "tokenizer.h"
 #include "probab.h"
 
@@ -74,6 +74,15 @@ struct uas_record *uas_input = NULL;
 
 float log_prob_word_class = 0;
 
+/*
+ * Bit mask setting given operations on/off
+ */
+unsigned short settings = 0;
+
+const unsigned short LOAD_DATA_FILE_FLAG = 1;
+const unsigned short LOAD_BIN_DATA_FLAG = 1 << 1;
+const unsigned short TRAIN_ON_DATA_FLAG = 1 << 2;
+const unsigned short DO_EVALUATE_FLAG = 1 << 3;
 
 int main(int argc, char** argv) {
 
@@ -111,6 +120,14 @@ int main(int argc, char** argv) {
 
     p_prior = htable_float_create();
     chck_malloc((void *) p_prior, "Array of P(class) probabilities");
+
+    /*
+     * Apply default settings
+     *
+     */
+    mask_set(&settings, &LOAD_DATA_FILE_FLAG);
+    mask_set(&settings, &TRAIN_ON_DATA_FLAG);
+    mask_set(&settings, &DO_EVALUATE_FLAG);
 
     /*
      * LEARNING PHASE
@@ -225,12 +242,14 @@ int main(int argc, char** argv) {
     root = uas_record_create();
     chck_malloc((void *) root, "Array of UAS Records");
 
-    read_data_with_class("data/uas_with_class.txt", root, &lc);
+    if (mask_is_set_bool(&settings, &LOAD_DATA_FILE_FLAG))
+        read_data_with_class("data/uas_with_class.txt", root, &lc);
 
     /*
      * TRAIN FROM THE DATA
      */
-    train(root, prior);
+    if (mask_is_set_bool(&settings, &TRAIN_ON_DATA_FLAG))
+        train(root, prior);
 
     /*
      * IV. READ USER INPUT
@@ -238,29 +257,31 @@ int main(int argc, char** argv) {
     uas_input = uas_record_create();
     chck_malloc((void *) uas_input, "UAS Struct for the User Input of Data");
 
-    read_user_input(argc, argv, uas_input);
+    if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG)) {
+        read_user_input(argc, argv, uas_input);
 
-    /*
-     * V. Compute the features of the user input
-     */
-    words = htable_int_create();
-    chck_malloc((void *) words, "Words Table of the User Input");
+        /*
+         * V. Compute the features of the user input
+         */
+        words = htable_int_create();
+        chck_malloc((void *) words, "Words Table of the User Input");
 
-    count_words(uas_input, words);
+        count_words(uas_input, words);
 
-    /*
-     * VI. Evaluate the user input
-     */
-    evaluate(words, uas_input);
+        /*
+         * VI. Evaluate the user input
+         */
+        evaluate(words, uas_input);
 
-    /*
-     * Print the result:
-     */
-    float prior_class_val = 0;
-    struct htable_float *aux_float = htable_float_get(p_prior, uas_input->class);
-    prior_class_val = aux_float->val;
+        /*
+         * Print the result:
+         */
+        float prior_class_val = 0;
+        struct htable_float *aux_float = htable_float_get(p_prior, uas_input->class);
+        prior_class_val = aux_float->val;
 
-    printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
+        printf("%s in %s = %f\n", uas_input->uas, uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
+    }
 
     // Free up remaining resources:
     htable_int_free(corpusDict);
