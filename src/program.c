@@ -22,6 +22,7 @@ void save_data_bin();
 void load_data_bin();
 void train(struct uas_record *root, struct htable_int *prior);
 void evaluate(struct htable_int *words, struct uas_record *uas_input);
+float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char *class);
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 short add_class(struct htable_int *root, char *class);
@@ -94,6 +95,7 @@ const unsigned short LOAD_DATA_FILE_FLAG = 1;
 const unsigned short LOAD_BIN_DATA_FLAG = 1 << 1;
 const unsigned short TRAIN_ON_DATA_FLAG = 1 << 2;
 const unsigned short DO_EVALUATE_FLAG = 1 << 3;
+const unsigned short CMP_ALL_CLS_FLAG = 1 << 4;
 
 int main(int argc, char** argv) {
 
@@ -285,6 +287,31 @@ int main(int argc, char** argv) {
 
         count_words(uas_input, words);
 
+        //
+        float prior_class_val = 0;
+        float log_prob = 0;
+        struct htable_float *aux_float = NULL;
+
+        /*
+         * CMP_ALL_CLS_FLAG
+         * Compare the user-agent against all classifiers
+         */
+        if (mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG)) {
+            iterator = classes;
+            while(iterator) {
+                prior_class_val = 0;
+                aux_float = htable_float_get(p_prior, iterator->name);
+                if (aux_float != NULL)
+                    prior_class_val = aux_float->val;
+
+                log_prob = evaluate_cls(words, uas_input, iterator->name);
+
+                printf("%s in %s = %f\n", uas_input->uas, iterator->name, expf(log_prob + logf(prior_class_val)));
+
+                iterator = iterator->next;
+            }
+        }
+
         /*
          * VI. Evaluate the user input
          */
@@ -293,8 +320,8 @@ int main(int argc, char** argv) {
         /*
          * Print the result:
          */
-        float prior_class_val = 0;
-        struct htable_float *aux_float = htable_float_get(p_prior, uas_input->class);
+
+        aux_float = htable_float_get(p_prior, uas_input->class);
 
         // if found
         if (aux_float != NULL)
@@ -510,6 +537,83 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
 
     if (class != NULL) free(class);
     if (uas != NULL) free(uas);
+}
+
+float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char *class)
+{
+    float p_word = 0;
+    float p_word_class = 0;
+
+    float log_prob = 0;
+
+    int corpusDict_word_val = 0;
+
+    iterator = words;
+
+    /*
+     * Loop through each words of the input user-agent string
+     */
+    while(iterator) {
+        /*
+         * Look up the frequency of the word in the corpusDict.
+         */
+        aux = htable_int_get(corpusDict, iterator->name);
+
+        /*
+         * If the word is not in the dictionary there is no data on its prior
+         * probability so the program skips the loop
+         */
+        if (aux == NULL) {
+            iterator = iterator->next;
+            continue;
+        }
+
+        /*
+         * Calculate the probability that the word appears at all (in all
+         * known user-agent strings).
+         */
+        p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
+
+        printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
+
+        /*
+         * Now look up the dictionary of the given class
+         */
+        thisClassDict = dict_htable_int_find(classDict, class);
+
+        if (thisClassDict == NULL) {
+            printf("class dictionary not found for %s\n", class);
+            iterator = iterator->next;
+            continue;
+        }
+
+        /*
+         * Look up the frequency of the word in the class' dictionary
+         */
+        aux = htable_int_get(thisClassDict->root, iterator->name);
+        if (aux == NULL) {
+            iterator = iterator->next;
+            continue;
+        }
+        /*
+         * Calculate the probability that the word appears in the given
+         * class.
+         */
+        p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
+
+        printf("P(%s|%s) = %d / %d = %f\n", iterator->name, class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
+
+        //
+        //if (P(word|class) > 0:
+        //     *             log_prob[class] += log(count * P(word|class) / P(word))
+        if (p_word_class > 0) {
+            log_prob += logf((float)iterator->val * p_word_class / p_word);
+        }
+
+        iterator = iterator->next;
+    }
+
+    return log_prob;
 }
 
 /*
