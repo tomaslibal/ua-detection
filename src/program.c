@@ -465,10 +465,13 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
         printf("wrong usage - must specify a user-agent string or disable the evaluation phase\n");
         print_usage();
         uas_record_free(root);
-        htable_int_free(corpusDict);
-        dict_htable_int_free(classDict);
+        uas_record_free(uas_input);
         htable_int_free(prior);
+        htable_int_free(corpusDict);
         htable_float_free(p_prior);
+        dict_htable_int_free(classDict);
+        if (class != NULL) free(class);
+        if (uas != NULL) free(uas);
         exit(1);
     }
 
