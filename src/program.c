@@ -77,6 +77,14 @@ struct uas_record *uas_input = NULL;
 float log_prob_word_class = 0;
 
 /*
+ * Collects all read class names together in this linked list.
+ *
+ * Data are touples of (class, user-agent-string) and this linked list
+ * stores the classes that have been seen.
+ */
+struct htable_int *classes = NULL;
+
+/*
  * Bit mask setting given operations on/off
  */
 unsigned short settings = 0;
@@ -122,6 +130,9 @@ int main(int argc, char** argv) {
 
     p_prior = htable_float_create();
     chck_malloc((void *) p_prior, "Array of P(class) probabilities");
+
+    classes = htable_int_create();
+    chck_malloc((void *) classes, "Array of seen classes");
 
     /*
      * Apply default settings
@@ -295,6 +306,7 @@ int main(int argc, char** argv) {
     htable_int_free(corpusDict);
     htable_int_free(prior);
     htable_int_free(words);
+    htable_int_free(classes);
     htable_float_free(p_prior);
     uas_record_free(root);
     uas_record_free(uas_input);
@@ -482,6 +494,7 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
         uas_record_free(uas_input);
         htable_int_free(prior);
         htable_int_free(corpusDict);
+        htable_int_free(classes);
         htable_float_free(p_prior);
         dict_htable_int_free(classDict);
         if (class != NULL) free(class);
