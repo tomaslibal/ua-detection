@@ -25,7 +25,6 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input);
 float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char *class);
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
-short add_class(struct htable_int *root, char *class);
 void free_shared_res();
 
 /*
@@ -85,7 +84,6 @@ float log_prob_word_class = 0;
  * Data are touples of (class, user-agent-string) and this linked list
  * stores the classes that have been seen.
  */
-struct htable_int *classes = NULL;
 
 /*
  * Bit mask setting given operations on/off
@@ -134,9 +132,6 @@ int main(int argc, char** argv) {
 
     p_prior = htable_float_create();
     chck_malloc((void *) p_prior, "Array of P(class) probabilities");
-
-    classes = htable_int_create();
-    chck_malloc((void *) classes, "Array of seen classes");
 
     /*
      * Apply default settings
@@ -298,7 +293,7 @@ int main(int argc, char** argv) {
          * Compare the user-agent against all classifiers
          */
         if (mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG)) {
-            struct htable_int *cls_iterator = classes;
+            struct htable_int *cls_iterator = prior;
             while(cls_iterator) {
                 prior_class_val = 0;
                 aux_float = htable_float_get(p_prior, cls_iterator->name);
@@ -392,8 +387,6 @@ void train(struct uas_record *root, struct htable_int *prior)
             htable_int_set(aux, record->class, 1);
             tmp->next = aux;
         }
-
-        add_class(classes, record->class);
 
         /*
          * Increment the counters for each unique word # of occurrences
@@ -699,41 +692,12 @@ void print_usage()
     printf("\n");
 }
 
-short add_class(struct htable_int *root, char *class)
-{
-    struct htable_int *p;
-
-    p = htable_int_get(root, class);
-
-    /*
-     * If class not found in classes that means that this is a new class
-     * so a new htable_int struct is created for it and linked as the last
-     * link in the list.
-     */
-    if (p == NULL && root->name == NULL) {
-        htable_int_set(root, class, 0);
-    } else if (p == NULL) {
-        tmp = htable_int_create();
-        chck_malloc((void *) tmp, "Class struct");
-        htable_int_set(tmp, class, 0);
-        p = htable_int_get_last(root);
-        p->next = tmp;
-    }
-
-    /*
-     * Otherwise we just return as the class has already been added to
-     * the linked list.
-     */
-    return 0;
-}
-
 void free_shared_res()
 {
     if (root != NULL)       uas_record_free(root);
     if (uas_input != NULL)  uas_record_free(uas_input);
     if (prior != NULL)      htable_int_free(prior);
     if (corpusDict != NULL) htable_int_free(corpusDict);
-    if (classes != NULL)    htable_int_free(classes);
     if (p_prior != NULL)    htable_float_free(p_prior);
     if (classDict != NULL)  dict_htable_int_free(classDict);
     if(words != NULL) htable_int_free(words);
