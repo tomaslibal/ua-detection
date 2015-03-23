@@ -18,6 +18,18 @@ There are two end goals that I would like achieve:
 
    This detection should tell what device(s) likely belong to the supplied user-agent
    string.
+   
+### ua-detection
+
+default usage:
+
+    bin/ua_detection --uas "Mozilla/5.0 ..." --group mobile
+    
+Prints to stdout the output of the `mobile` classifier.
+
+run a user-agent string against all classifiers (that have been seen in the training data):
+
+    bin/ua_detection --uas "Mozilla/5.0 ..." --cmp_all
 
 ### Data
 
