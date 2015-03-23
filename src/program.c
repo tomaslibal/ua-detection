@@ -23,6 +23,9 @@
 #include "htable_int.h"
 #include "htable_int.c"
 
+/*
+ * Helper functions for ua_detection
+ */
 void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
 void save_data_bin();
@@ -40,6 +43,7 @@ void free_shared_res();
  * each word has been seen in the input.
  */
 struct htable_int *corpusDict = NULL;
+
 /*
  * Class Dictionary works similarly to Corpus Dictionary, it just keeps
  * the counts for each class separately.
@@ -73,24 +77,38 @@ struct dict_htable_int *thisClassDict = NULL;
 struct dict_htable_int *tmpDict = NULL;
 struct dict_htable_int *auxDict = NULL;
 
+/*
+ * Auxiliary pointers to iterate over htable_int and htable_float structs
+ */
 struct htable_int *iterator = NULL;
 struct htable_float *p_iterator = NULL;
 
+/*
+ * As each line of the data file is read (which is a touple of <class, user
+ * agent string>) it is stored in this linked list of structs.
+ */
 struct uas_record *root = NULL;
 
+/*
+ * *words is a linked list of <word, count> touples where word is each token
+ * of a user-agent string and count is the number of how many times the given
+ * word appears in the string.
+ */
 struct htable_int *words = NULL;
 
+/*
+ * The touple <class, user-agent string> of the user input is stored in this
+ * struct.
+ *
+ * The class in the user input is not required if the user does not wish to
+ * get a prediction for a given class but rather for all classes.
+ */
 struct uas_record *uas_input = NULL;
 
-
-float log_prob_word_class = 0;
-
 /*
- * Collects all read class names together in this linked list.
- *
- * Data are touples of (class, user-agent-string) and this linked list
- * stores the classes that have been seen.
+ * Keeps the score (result of the classification) for the user input
  */
+float log_prob_word_class = 0;
 
 /*
  * Bit mask setting given operations on/off
