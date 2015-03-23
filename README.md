@@ -21,7 +21,7 @@ There are two end goals that I would like achieve:
    
 ### ua-detection
 
-make:
+build:
 
     make
 
@@ -56,11 +56,9 @@ The program can work with ascii/utf-8 encoded data of the following format:
 
 See the [example](data/uas_with_class.txt) 
    
-### Build
+### Dependencies
 
-TL;DR; `make`
-
-Requires 
+Needed to build the binaries:
 
 - make utility
 - GCC or CLANG (c99)
