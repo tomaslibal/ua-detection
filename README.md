@@ -21,7 +21,11 @@ There are two end goals that I would like achieve:
    
 ### ua-detection
 
-default usage:
+make:
+
+    make
+
+*default usage:*
 
     bin/ua_detection --uas "Mozilla/5.0 ..." --group mobile
     
@@ -58,7 +62,8 @@ TL;DR; `make`
 
 Requires 
 
-- GCC or CLANG
+- make utility
+- GCC or CLANG (c99)
    
 ### Test
 
