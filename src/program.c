@@ -26,6 +26,7 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 short add_class(struct htable_int *root, char *class);
+void free_shared_res();
 
 /*
  * Corpus Dictionary keeps reference of each 'word' from the user agent
@@ -333,15 +334,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    // Free up remaining resources:
-    htable_int_free(corpusDict);
-    htable_int_free(prior);
-    htable_int_free(words);
-    htable_int_free(classes);
-    htable_float_free(p_prior);
-    uas_record_free(root);
-    uas_record_free(uas_input);
-    dict_htable_int_free(classDict);
+    free_shared_res();
 
     return 0;
 }
@@ -527,13 +520,7 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
         printf("wrong usage - must specify a user-agent string or disable the evaluation phase\n");
         print_usage();
 
-        uas_record_free(root);
-        uas_record_free(uas_input);
-        htable_int_free(prior);
-        htable_int_free(corpusDict);
-        htable_int_free(classes);
-        htable_float_free(p_prior);
-        dict_htable_int_free(classDict);
+        free_shared_res();
         if (class != NULL) free(class);
         if (uas != NULL) free(uas);
         exit(1);
@@ -738,4 +725,16 @@ short add_class(struct htable_int *root, char *class)
      * the linked list.
      */
     return 0;
+}
+
+void free_shared_res()
+{
+    if (root != NULL)       uas_record_free(root);
+    if (uas_input != NULL)  uas_record_free(uas_input);
+    if (prior != NULL)      htable_int_free(prior);
+    if (corpusDict != NULL) htable_int_free(corpusDict);
+    if (classes != NULL)    htable_int_free(classes);
+    if (p_prior != NULL)    htable_float_free(p_prior);
+    if (classDict != NULL)  dict_htable_int_free(classDict);
+    if(words != NULL) htable_int_free(words);
 }
