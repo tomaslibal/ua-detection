@@ -10,6 +10,13 @@
 #include "tokenizer.h"
 #include "probab.h"
 
+/*
+ * Undefine HTABLE_MODULE so that it can define "htable_float" which by
+ * default defines "htable_int".
+ *
+ * The difference is that htable_float is a struct that holds "name" and
+ * (float) "val" fields as well as a pointer to the next link.
+ */
 #undef HTABLE_MODULE
 #undef HTABLE_TYPE
 #define HTABLE_TYPE float
