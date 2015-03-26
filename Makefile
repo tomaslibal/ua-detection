@@ -21,8 +21,13 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 SRCFILES=$(wildcard $(SRCDIR)/*.c)
+UAPROGRAMSRC=$(addprefix $(SRCDIR)/, bitmask.c dictionary.c fileutil.c link_node.c probab.c program.c reader.c tokenizer.c)
+UADBSRC=$(addprefix $(SRCDIR)/, ua_db.c)
+# $(addprefix $(SRCDIR)/, $(notdir $(SRCFILES:.c=.o)))
+ua_program: $(UAPROGRAMSRC)
+	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
 
-ua_program: $(addprefix $(SRCDIR)/, $(notdir $(SRCFILES:.c=.o)))
+ua_db: $(UADBSRC)
 	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
 
 .PHONY: test clean
