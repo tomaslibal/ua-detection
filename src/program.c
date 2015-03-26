@@ -4,9 +4,9 @@
 #include <getopt.h>
 
 #include "reader.h"
-#include "htable_int.h"
 #include "dictionary.h"
 #include "bitmask.h"
+#include "link_node.h"
 #include "tokenizer.h"
 #include "probab.h"
 
@@ -20,8 +20,8 @@
 #undef HTABLE_MODULE
 #undef HTABLE_TYPE
 #define HTABLE_TYPE float
-#include "htable_int.h"
-#include "htable_int.c"
+#include "link_node.h"
+#include "link_node.c"
 
 /*
  * Helper functions for ua_detection

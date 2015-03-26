@@ -1,9 +1,8 @@
 #include "dictionary.h"
-#include "htable_int.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "link_node.h"
 
 struct dict_htable_int *dict_htable_int_create()
 {

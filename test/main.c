@@ -1,12 +1,12 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "htable_int_test.h"
 #include "tokenizer_test.h"
 #include "reader_test.h"
 #include "probab_test.h"
 #include "dictionary_test.h"
 #include "bitmask_test.h"
+#include "link_node_test.h"
 
 /*
  * Total Successful # of tests
@@ -17,7 +17,7 @@ int main()
 {
     printf("Running the test suites\n");
 
-    ts += run_test_htable_int();
+    ts += run_test_link_node();
     ts += run_test_tokenizer();
     ts += run_test_reader();
     ts += run_test_probab();

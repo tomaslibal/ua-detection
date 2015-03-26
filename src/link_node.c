@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "htable_int.h"
+#include "link_node.h"
 
 struct HTABLE_NAME *AUX(HTABLE_NAME, _create)()
 {

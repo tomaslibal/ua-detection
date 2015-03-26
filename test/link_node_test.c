@@ -1,8 +1,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "../src/htable_int.c"
-
+#include "../src/link_node.c"
 #include "test_suite.h"
 
 /*
@@ -208,9 +207,9 @@ void test_sum_val_rec()
     success(i_htable);
 }
 
-int run_test_htable_int()
+int run_test_link_node()
 {
-    printf("testing the htable: ");
+    printf("testing the linked nodes list: ");
 
     test_htable_create();
     test_htable_set();
