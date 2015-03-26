@@ -4,6 +4,8 @@
 
 CC=gcc
 
+#
+# If clang is available on the system, switch to that compiler
 if hash clang 2>/dev/null; then \
 	$(CC)=clang; \
 fi
@@ -21,15 +23,22 @@ DEPS=
 $(SRCDIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-SRCFILES=$(wildcard $(SRCDIR)/*.c)
+#
+# Binary targets
+# 
+
 UAPROGRAMSRC=$(addprefix $(SRCDIR)/, bitmask.c dictionary.c fileutil.c link_node.c probab.c program.c reader.c tokenizer.c)
-UADBSRC=$(addprefix $(SRCDIR)/, ua_db.c)
-# $(addprefix $(SRCDIR)/, $(notdir $(SRCFILES:.c=.o)))
+
 ua_program: $(UAPROGRAMSRC)
 	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
 
+
+UADBSRC=$(addprefix $(SRCDIR)/, ua_db.c)
+
 ua_db: $(UADBSRC)
 	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
+
+#
 
 .PHONY: test clean
 
@@ -60,7 +69,7 @@ test: $(addprefix $(TESTDIR)/, $(notdir $(TESTFILES:.c=.o)))
 	fi
 
 #
-#
+# Make download-data an executable file by the user group
 #
 
 bashex:
