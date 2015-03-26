@@ -1,22 +1,22 @@
 #ifndef DICTIONARY
 #define DICTIONARY
 
-struct dict_htable_int {
+struct dict_link_node_int {
     char *class_name;
-    struct htable_int *root;
-    struct dict_htable_int *next;
+    struct link_node_int *root;
+    struct dict_link_node_int *next;
 };
 
-struct dict_htable_int *dict_htable_int_create();
+struct dict_link_node_int *dict_link_node_int_create();
 
-void dict_htable_int_set(
-        struct dict_htable_int *node,
+void dict_link_node_int_set(
+        struct dict_link_node_int *node,
         char *class_name,
-        struct htable_int *root,
-        struct dict_htable_int *next);
+        struct link_node_int *root,
+        struct dict_link_node_int *next);
 
-struct dict_htable_int *dict_htable_int_find(struct dict_htable_int *node, char *class_name);
-struct dict_htable_int *dict_htable_int_find_last(struct dict_htable_int *node);
-void dict_htable_int_free(struct dict_htable_int *node);
+struct dict_link_node_int *dict_link_node_int_find(struct dict_link_node_int *node, char *class_name);
+struct dict_link_node_int *dict_link_node_int_find_last(struct dict_link_node_int *node);
+void dict_link_node_int_free(struct dict_link_node_int *node);
 
 #endif

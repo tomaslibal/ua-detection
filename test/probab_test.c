@@ -10,8 +10,8 @@ int i_probab = 0;
 void test_count_words()
 {
 	struct uas_record *record1 = NULL;
-	struct htable_int *dict = NULL;
-	struct htable_int *iterator = NULL;
+	struct link_node_int *dict = NULL;
+	struct link_node_int *iterator = NULL;
 
 	int count = 0;
 
@@ -19,7 +19,7 @@ void test_count_words()
 
 	uas_record_set(record1, "sample_class", "Three baz and three minky and winky minky and the sun", NULL);
 
-	dict = htable_int_create();
+	dict = link_node_int_create();
 
 	count_words(record1, dict);
 

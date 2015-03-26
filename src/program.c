@@ -11,15 +11,15 @@
 #include "probab.h"
 
 /*
- * Undefine HTABLE_MODULE so that it can define "htable_float" which by
- * default defines "htable_int".
+ * Undefine LINK_NODE_H so that it can define "link_node_float" as the header
+ * file link_node.h by default defines "link_node_int".
  *
- * The difference is that htable_float is a struct that holds "name" and
- * (float) "val" fields as well as a pointer to the next link.
+ * The difference is that link_node_float is a struct that holds float values
+ * in node->(float)val
  */
-#undef HTABLE_MODULE
-#undef HTABLE_TYPE
-#define HTABLE_TYPE float
+#undef LINK_NODE_H
+#undef NODE_TYPE
+#define NODE_TYPE float
 #include "link_node.h"
 #include "link_node.c"
 
@@ -30,9 +30,9 @@ void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
 void save_data_bin();
 void load_data_bin();
-void train(struct uas_record *root, struct htable_int *prior);
-void evaluate(struct htable_int *words, struct uas_record *uas_input);
-float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char *class);
+void train(struct uas_record *root, struct link_node_int *prior);
+void evaluate(struct link_node_int *words, struct uas_record *uas_input);
+float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class);
 void read_user_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 void free_shared_res();
@@ -42,46 +42,46 @@ void free_shared_res();
  * strings that have been read and keeps a counter for how many times
  * each word has been seen in the input.
  */
-struct htable_int *corpusDict = NULL;
+struct link_node_int *corpusDict = NULL;
 
 /*
  * Class Dictionary works similarly to Corpus Dictionary, it just keeps
  * the counts for each class separately.
  */
-struct dict_htable_int *classDict = NULL;
+struct dict_link_node_int *classDict = NULL;
 
 /*
  * Prior keeps the count of how many times each label (class) has been
  * read in the input data
  */
-struct htable_int *prior = NULL;
+struct link_node_int *prior = NULL;
 
 /*
  * P_prior - probability of each label (class) is computed as
  * P(class) = # class / # all classes
  */
-struct htable_float *p_prior = NULL;
+struct link_node_float *p_prior = NULL;
 
 /*
  * Two auxiliary pointers that are used to iterate/dynamically create
- * new pointers to htable_int structs.
+ * new pointers to link_node_int structs.
  */
-struct htable_int *tmp = NULL;
-struct htable_int *aux = NULL;
+struct link_node_int *tmp = NULL;
+struct link_node_int *aux = NULL;
 
 /*
  * Auxiliary pointers that are used to iterate/dynamically create new
- * pointers to dict_htable_int structs.
+ * pointers to dict_link_node_int structs.
  */
-struct dict_htable_int *thisClassDict = NULL;
-struct dict_htable_int *tmpDict = NULL;
-struct dict_htable_int *auxDict = NULL;
+struct dict_link_node_int *thisClassDict = NULL;
+struct dict_link_node_int *tmpDict = NULL;
+struct dict_link_node_int *auxDict = NULL;
 
 /*
- * Auxiliary pointers to iterate over htable_int and htable_float structs
+ * Auxiliary pointers to iterate over link_node_int and link_node_float structs
  */
-struct htable_int *iterator = NULL;
-struct htable_float *p_iterator = NULL;
+struct link_node_int *iterator = NULL;
+struct link_node_float *p_iterator = NULL;
 
 /*
  * As each line of the data file is read (which is a touple of <class, user
@@ -94,7 +94,7 @@ struct uas_record *root = NULL;
  * of a user-agent string and count is the number of how many times the given
  * word appears in the string.
  */
-struct htable_int *words = NULL;
+struct link_node_int *words = NULL;
 
 /*
  * The touple <class, user-agent string> of the user input is stored in this
@@ -146,16 +146,16 @@ int main(int argc, char** argv) {
      *
      */
 
-    corpusDict = htable_int_create();
+    corpusDict = link_node_int_create();
     chck_malloc((void *) corpusDict, "Corpus Level Dictionary");
 
-    classDict = dict_htable_int_create();
+    classDict = dict_link_node_int_create();
     chck_malloc((void *) classDict, "Collection of Class Dictionaries");
 
-    prior = htable_int_create();
+    prior = link_node_int_create();
     chck_malloc((void *) prior, "Array of Prior Classes");
 
-    p_prior = htable_float_create();
+    p_prior = link_node_float_create();
     chck_malloc((void *) p_prior, "Array of P(class) probabilities");
 
     /*
@@ -194,15 +194,15 @@ int main(int argc, char** argv) {
      *    This will tokenize current->uas and add count for each unique word
      *    from that user-agent string to corpusDict
      *
-     *        set struct htable_int thisClassDict = NULL
+     *        set struct link_node_int thisClassDict = NULL
      *
-     *        thisClassDict = dict_htable_int_find(classDict, class)
+     *        thisClassDict = dict_link_node_int_find(classDict, class)
      *
      *    This will lookup the dictionary of words for the given class. If
      *    the class' dictionary does not exists yet, create it
      *
      *        if (thisClassDict == NULL)
-     *            thisClassDict = htable_int_create()
+     *            thisClassDict = link_node_int_create()
      *
      *        count_words(current, thisClassDict)
      *
@@ -239,8 +239,8 @@ int main(int argc, char** argv) {
      *
      * V. Process the input
      *
-     *     set struct htable_int words = NULL
-     *     words = htable_int_create()
+     *     set struct link_node_int words = NULL
+     *     words = link_node_int_create()
      *
      *     count_words(uas_input, words)
      *
@@ -303,7 +303,7 @@ int main(int argc, char** argv) {
         /*
          * V. Compute the features of the user input
          */
-        words = htable_int_create();
+        words = link_node_int_create();
         chck_malloc((void *) words, "Words Table of the User Input");
 
         count_words(uas_input, words);
@@ -311,17 +311,17 @@ int main(int argc, char** argv) {
         //
         float prior_class_val = 0;
         float log_prob = 0;
-        struct htable_float *aux_float = NULL;
+        struct link_node_float *aux_float = NULL;
 
         /*
          * CMP_ALL_CLS_FLAG
          * Compare the user-agent against all classifiers
          */
         if (mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG)) {
-            struct htable_int *cls_iterator = prior;
+            struct link_node_int *cls_iterator = prior;
             while(cls_iterator) {
                 prior_class_val = 0;
-                aux_float = htable_float_get(p_prior, cls_iterator->name);
+                aux_float = link_node_float_get(p_prior, cls_iterator->name);
                 if (aux_float != NULL)
                     prior_class_val = aux_float->val;
 
@@ -344,7 +344,7 @@ int main(int argc, char** argv) {
              * Print the result:
              */
 
-            aux_float = htable_float_get(p_prior, uas_input->class);
+            aux_float = link_node_float_get(p_prior, uas_input->class);
 
             // if found
             if (aux_float != NULL)
@@ -384,7 +384,7 @@ void read_data_with_class(char *path, struct uas_record *root, int *lc)
 }
 
 // root = root node of the uas_record linked list containing UA strings
-void train(struct uas_record *root, struct htable_int *prior)
+void train(struct uas_record *root, struct link_node_int *prior)
 {
     struct uas_record *record = root;
 
@@ -400,16 +400,16 @@ void train(struct uas_record *root, struct htable_int *prior)
          * field. If not found, it's the first time this class has been
          * read so create a new struct and append it to the end link...
          */
-        tmp = htable_int_get(prior, record->class);
+        tmp = link_node_int_get(prior, record->class);
 
         if (tmp) {
             tmp->val++;
         } else if (prior->name == NULL) {
-            htable_int_set(prior, record->class, 1);
+            link_node_int_set(prior, record->class, 1);
         } else {
-            tmp = htable_int_get_last(prior);
-            aux = htable_int_create();
-            htable_int_set(aux, record->class, 1);
+            tmp = link_node_int_get_last(prior);
+            aux = link_node_int_create();
+            link_node_int_set(aux, record->class, 1);
             tmp->next = aux;
         }
 
@@ -422,21 +422,21 @@ void train(struct uas_record *root, struct htable_int *prior)
          * Do the same for the class dictionary. If the class dictionary not
          * found, create a new one as we have a new class
          */
-        thisClassDict = dict_htable_int_find(classDict, record->class);
+        thisClassDict = dict_link_node_int_find(classDict, record->class);
 
         if (thisClassDict) {
             count_words(record, thisClassDict->root);
         } else if (classDict->root == NULL) {
-            aux = htable_int_create();
-            dict_htable_int_set(classDict, record->class, aux, NULL);
+            aux = link_node_int_create();
+            dict_link_node_int_set(classDict, record->class, aux, NULL);
             count_words(record, classDict->root);
         } else {
-            tmpDict = dict_htable_int_create();
-            aux = htable_int_create();
-            dict_htable_int_set(tmpDict, record->class, aux, NULL);
+            tmpDict = dict_link_node_int_create();
+            aux = link_node_int_create();
+            dict_link_node_int_set(tmpDict, record->class, aux, NULL);
             count_words(record, tmpDict->root);
 
-            auxDict = dict_htable_int_find_last(classDict);
+            auxDict = dict_link_node_int_find_last(classDict);
             auxDict->next = tmpDict;
         }
 
@@ -446,7 +446,7 @@ void train(struct uas_record *root, struct htable_int *prior)
     iterator = prior;
     p_iterator = p_prior;
 
-    int sum_prior_vals = htable_int_sum_val_rec(prior);
+    int sum_prior_vals = link_node_int_sum_val_rec(prior);
     float val;
 
     //printf("sum_prior_vals = %d\n", sum_prior_vals);
@@ -455,8 +455,8 @@ void train(struct uas_record *root, struct htable_int *prior)
         //printf("prior: class %s, cnt %d\n", iterator->name, iterator->val);
         val = (float)iterator->val / (float)sum_prior_vals;
 
-        htable_float_set(p_iterator, iterator->name, val);
-        p_iterator->next = htable_float_create();
+        link_node_float_set(p_iterator, iterator->name, val);
+        p_iterator->next = link_node_float_create();
         //printf("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
 
         p_iterator = p_iterator->next;
@@ -551,7 +551,7 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
     if (uas != NULL) free(uas);
 }
 
-float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char *class)
+float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class)
 {
     float p_word = 0;
     float p_word_class = 0;
@@ -569,7 +569,7 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
         /*
          * Look up the frequency of the word in the corpusDict.
          */
-        aux = htable_int_get(corpusDict, iterator->name);
+        aux = link_node_int_get(corpusDict, iterator->name);
 
         /*
          * If the word is not in the dictionary there is no data on its prior
@@ -584,14 +584,14 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
          * Calculate the probability that the word appears at all (in all
          * known user-agent strings).
          */
-        p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
+        p_word = (float)aux->val / (float)link_node_int_sum_val_rec(corpusDict);
 
-        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
+        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, link_node_int_sum_val_rec(corpusDict), p_word);
 
         /*
          * Now look up the dictionary of the given class
          */
-        thisClassDict = dict_htable_int_find(classDict, class);
+        thisClassDict = dict_link_node_int_find(classDict, class);
 
         if (thisClassDict == NULL) {
             printf("class dictionary not found for %s\n", class);
@@ -602,7 +602,7 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
         /*
          * Look up the frequency of the word in the class' dictionary
          */
-        aux = htable_int_get(thisClassDict->root, iterator->name);
+        aux = link_node_int_get(thisClassDict->root, iterator->name);
         if (aux == NULL) {
             iterator = iterator->next;
             continue;
@@ -611,9 +611,9 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
          * Calculate the probability that the word appears in the given
          * class.
          */
-        p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
+        p_word_class = (float)aux->val / (float)link_node_int_sum_val_rec(thisClassDict->root);
 
-        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
+        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, class, aux->val, link_node_int_sum_val_rec(thisClassDict->root), p_word_class);
 
         //
         //if (P(word|class) > 0:
@@ -634,7 +634,7 @@ float evaluate_cls(struct htable_int *words, struct uas_record *uas_input, char 
  *     *words: tokenized keywords of the user-agent string
  *     *uas_input: the user-agent string and the class
  */
-void evaluate(struct htable_int *words, struct uas_record *uas_input)
+void evaluate(struct link_node_int *words, struct uas_record *uas_input)
 {
     float p_word = 0;
     float p_word_class = 0;
@@ -650,7 +650,7 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
         /*
          * Look up the frequency of the word in the corpusDict.
          */
-        aux = htable_int_get(corpusDict, iterator->name);
+        aux = link_node_int_get(corpusDict, iterator->name);
 
         /*
          * If the word is not in the dictionary there is no data on its prior
@@ -665,14 +665,14 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
          * Calculate the probability that the word appears at all (in all
          * known user-agent strings).
          */
-        p_word = (float)aux->val / (float)htable_int_sum_val_rec(corpusDict);
+        p_word = (float)aux->val / (float)link_node_int_sum_val_rec(corpusDict);
 
-        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, htable_int_sum_val_rec(corpusDict), p_word);
+        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, link_node_int_sum_val_rec(corpusDict), p_word);
 
         /*
          * Now look up the dictionary of the given class
          */
-        thisClassDict = dict_htable_int_find(classDict, uas_input->class);
+        thisClassDict = dict_link_node_int_find(classDict, uas_input->class);
 
         if (thisClassDict == NULL) {
             printf("class dictionary not found for %s\n", uas_input->class);
@@ -683,7 +683,7 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
         /*
          * Look up the frequency of the word in the class' dictionary
          */
-        aux = htable_int_get(thisClassDict->root, iterator->name);
+        aux = link_node_int_get(thisClassDict->root, iterator->name);
         if (aux == NULL) {
             iterator = iterator->next;
             continue;
@@ -692,9 +692,9 @@ void evaluate(struct htable_int *words, struct uas_record *uas_input)
          * Calculate the probability that the word appears in the given
          * class.
          */
-        p_word_class = (float)aux->val / (float)htable_int_sum_val_rec(thisClassDict->root);
+        p_word_class = (float)aux->val / (float)link_node_int_sum_val_rec(thisClassDict->root);
 
-        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, htable_int_sum_val_rec(thisClassDict->root), p_word_class);
+        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, link_node_int_sum_val_rec(thisClassDict->root), p_word_class);
 
         //
         //if (P(word|class) > 0:
@@ -721,9 +721,9 @@ void free_shared_res()
 {
     if (root != NULL)       uas_record_free(root);
     if (uas_input != NULL)  uas_record_free(uas_input);
-    if (prior != NULL)      htable_int_free(prior);
-    if (corpusDict != NULL) htable_int_free(corpusDict);
-    if (p_prior != NULL)    htable_float_free(p_prior);
-    if (classDict != NULL)  dict_htable_int_free(classDict);
-    if(words != NULL) htable_int_free(words);
+    if (prior != NULL)      link_node_int_free(prior);
+    if (corpusDict != NULL) link_node_int_free(corpusDict);
+    if (p_prior != NULL)    link_node_float_free(p_prior);
+    if (classDict != NULL)  dict_link_node_int_free(classDict);
+    if(words != NULL) link_node_int_free(words);
 }

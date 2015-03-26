@@ -3,10 +3,10 @@
 
 #include "probab.h"
 
-void count_words(struct uas_record *datapoint, struct htable_int *store)
+void count_words(struct uas_record *datapoint, struct link_node_int *store)
 {
-	struct htable_int *tmp = NULL;
-	struct htable_int *aux = NULL;
+	struct link_node_int *tmp = NULL;
+	struct link_node_int *aux = NULL;
 
 	char* tokens[64];
 
@@ -39,14 +39,14 @@ void count_words(struct uas_record *datapoint, struct htable_int *store)
 	 */
 	for(int i = 0; i < number; i++) {
 		if (i == 0) {
-			htable_int_set(store, tokens[0], 1);
+			link_node_int_set(store, tokens[0], 1);
 		} else {
-			tmp = htable_int_get(store, tokens[i]);
+			tmp = link_node_int_get(store, tokens[i]);
 
 			if (tmp == NULL) {
-				tmp = htable_int_create();
-				htable_int_set(tmp, tokens[i], 1);
-				aux = htable_int_get_last(store);
+				tmp = link_node_int_create();
+				link_node_int_set(tmp, tokens[i], 1);
+				aux = link_node_int_get_last(store);
 				aux->next = tmp;
 			} else {
 				tmp->val++;

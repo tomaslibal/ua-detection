@@ -4,10 +4,10 @@
 
 #include "link_node.h"
 
-struct HTABLE_NAME *AUX(HTABLE_NAME, _create)()
+struct LINK_NODE_NAME *AUX(LINK_NODE_NAME, _create)()
 {
-	struct HTABLE_NAME *table = NULL;
-	table = (struct HTABLE_NAME *) malloc (sizeof(struct HTABLE_NAME));
+	struct LINK_NODE_NAME *table = NULL;
+	table = (struct LINK_NODE_NAME *) malloc (sizeof(struct LINK_NODE_NAME));
 	if (table == NULL) {
 		return NULL;
 	}
@@ -18,7 +18,7 @@ struct HTABLE_NAME *AUX(HTABLE_NAME, _create)()
 	return table;
 }
 
-void AUX(HTABLE_NAME, _set)(struct HTABLE_NAME *table, char *name, HTABLE_TYPE val)
+void AUX(LINK_NODE_NAME, _set)(struct LINK_NODE_NAME *table, char *name, NODE_TYPE val)
 {
 	if (table->name != NULL) {
 		free(table->name);
@@ -35,14 +35,14 @@ void AUX(HTABLE_NAME, _set)(struct HTABLE_NAME *table, char *name, HTABLE_TYPE v
 	table->val = val;
 }
 
-void AUX(HTABLE_NAME, _free)(struct HTABLE_NAME *table)
+void AUX(LINK_NODE_NAME, _free)(struct LINK_NODE_NAME *table)
 {
 	if (table == NULL) {
 		return;
 	}
 
-	struct HTABLE_NAME *tmp = NULL;
-	struct HTABLE_NAME *tmp_prev = NULL;
+	struct LINK_NODE_NAME *tmp = NULL;
+	struct LINK_NODE_NAME *tmp_prev = NULL;
 
 	tmp = table;
 
@@ -57,9 +57,9 @@ void AUX(HTABLE_NAME, _free)(struct HTABLE_NAME *table)
 	}
 }
 
-struct HTABLE_NAME *AUX(HTABLE_NAME, _get)(struct HTABLE_NAME *root, char *name)
+struct LINK_NODE_NAME *AUX(LINK_NODE_NAME, _get)(struct LINK_NODE_NAME *root, char *name)
 {
-	struct HTABLE_NAME *tmp = NULL;
+	struct LINK_NODE_NAME *tmp = NULL;
 
 	if (root == NULL || name == NULL) {
 		return NULL;
@@ -85,9 +85,9 @@ struct HTABLE_NAME *AUX(HTABLE_NAME, _get)(struct HTABLE_NAME *root, char *name)
 	return NULL;
 }
 
-HTABLE_TYPE AUX(HTABLE_NAME, _get_val)(struct HTABLE_NAME *table, char *name)
+NODE_TYPE AUX(LINK_NODE_NAME, _get_val)(struct LINK_NODE_NAME *table, char *name)
 {
-	struct HTABLE_NAME *tmp = NULL;
+	struct LINK_NODE_NAME *tmp = NULL;
 
 	if (table == NULL) {
 		return 0;
@@ -113,9 +113,9 @@ HTABLE_TYPE AUX(HTABLE_NAME, _get_val)(struct HTABLE_NAME *table, char *name)
 	return 0;
 }
 
-struct HTABLE_NAME *AUX(HTABLE_NAME, _get_last)(struct HTABLE_NAME *root)
+struct LINK_NODE_NAME *AUX(LINK_NODE_NAME, _get_last)(struct LINK_NODE_NAME *root)
 {
-	struct HTABLE_NAME *last = NULL;
+	struct LINK_NODE_NAME *last = NULL;
 
 	if (root == NULL) {
 		return NULL;
@@ -134,11 +134,11 @@ struct HTABLE_NAME *AUX(HTABLE_NAME, _get_last)(struct HTABLE_NAME *root)
 	return last;
 }
 
-HTABLE_TYPE AUX(HTABLE_NAME, _sum_val_rec)(struct HTABLE_NAME *node)
+NODE_TYPE AUX(LINK_NODE_NAME, _sum_val_rec)(struct LINK_NODE_NAME *node)
 {
-    HTABLE_TYPE sum = 0;
-    struct HTABLE_NAME *iterator = NULL;
-    struct HTABLE_NAME *aux = NULL;
+    NODE_TYPE sum = 0;
+    struct LINK_NODE_NAME *iterator = NULL;
+    struct LINK_NODE_NAME *aux = NULL;
 
     if (node == NULL) {
         return sum;

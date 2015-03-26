@@ -1,26 +1,26 @@
-#ifndef HTABLE_MODULE
-#define HTABLE_MODULE
+#ifndef LINK_NODE_H
+#define LINK_NODE_H
 
-#ifndef HTABLE_TYPE
-#define HTABLE_TYPE int
+#ifndef NODE_TYPE
+#define NODE_TYPE int
 #endif
 
 #define CONCAT(x, y) x ## y
 #define AUX(A, B) CONCAT(A, B)
-#define HTABLE_NAME AUX(htable_, HTABLE_TYPE)
+#define LINK_NODE_NAME AUX(link_node_, NODE_TYPE)
 
-struct HTABLE_NAME {
+struct LINK_NODE_NAME {
     char *name;
-    HTABLE_TYPE val;
-    struct HTABLE_NAME *next;
+    NODE_TYPE val;
+    struct LINK_NODE_NAME *next;
 };
 
-struct HTABLE_NAME *AUX(HTABLE_NAME, _create) ();
-void AUX(HTABLE_NAME, _set)(struct HTABLE_NAME *table, char *name, HTABLE_TYPE val);
-HTABLE_TYPE AUX(HTABLE_NAME, _get_val)(struct HTABLE_NAME *table, char *name);
-struct HTABLE_NAME *AUX(HTABLE_NAME, _get)(struct HTABLE_NAME *root, char *name);
-struct HTABLE_NAME *AUX(HTABLE_NAME, _get_last)(struct HTABLE_NAME *root);
-void AUX(HTABLE_NAME, _free)(struct HTABLE_NAME *table);
-HTABLE_TYPE AUX(HTABLE_NAME, _sum_val_rec)(struct HTABLE_NAME *node);
+struct LINK_NODE_NAME *AUX(LINK_NODE_NAME, _create) ();
+void AUX(LINK_NODE_NAME, _set)(struct LINK_NODE_NAME *table, char *name, NODE_TYPE val);
+NODE_TYPE AUX(LINK_NODE_NAME, _get_val)(struct LINK_NODE_NAME *table, char *name);
+struct LINK_NODE_NAME *AUX(LINK_NODE_NAME, _get)(struct LINK_NODE_NAME *root, char *name);
+struct LINK_NODE_NAME *AUX(LINK_NODE_NAME, _get_last)(struct LINK_NODE_NAME *root);
+void AUX(LINK_NODE_NAME, _free)(struct LINK_NODE_NAME *table);
+NODE_TYPE AUX(LINK_NODE_NAME, _sum_val_rec)(struct LINK_NODE_NAME *node);
 
 #endif

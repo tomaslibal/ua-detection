@@ -12,65 +12,65 @@ int i_dict = 0;
 
 void test_dictionary_create()
 {
-    struct dict_htable_int *dict = NULL;
-    dict = dict_htable_int_create();
+    struct dict_link_node_int *dict = NULL;
+    dict = dict_link_node_int_create();
 
     assert(dict != NULL);
 
-    dict_htable_int_free(dict);
+    dict_link_node_int_free(dict);
 
     success(i_dict);
 }
 
 void test_dictionary_set()
 {
-    struct dict_htable_int *dict = NULL;
-    dict = dict_htable_int_create();
+    struct dict_link_node_int *dict = NULL;
+    dict = dict_link_node_int_create();
 
     if (dict == NULL) {
         assert(0);
     }
 
-    struct htable_int *root = NULL;
-    root = htable_int_create();
+    struct link_node_int *root = NULL;
+    root = link_node_int_create();
 
-    dict_htable_int_set(dict, "SomeClass", root, NULL);
+    dict_link_node_int_set(dict, "SomeClass", root, NULL);
 
     assert(dict->class_name != NULL);
     assert(strcmp(dict->class_name, "SomeClass") == 0);
     assert(dict->root = root);
 
-    dict_htable_int_free(dict);
+    dict_link_node_int_free(dict);
 
     success(i_dict);
 }
 
 void test_dictionary_find()
 {
-    struct dict_htable_int *dict = NULL;
-    struct dict_htable_int *next = NULL;
-    dict = dict_htable_int_create();
-    next = dict_htable_int_create();
+    struct dict_link_node_int *dict = NULL;
+    struct dict_link_node_int *next = NULL;
+    dict = dict_link_node_int_create();
+    next = dict_link_node_int_create();
 
     if (dict == NULL) {
         assert(0);
     }
 
-    struct htable_int *root = NULL;
-    root = htable_int_create();
+    struct link_node_int *root = NULL;
+    root = link_node_int_create();
 
-    dict_htable_int_set(dict, "SomeClass", root, next);
-    dict_htable_int_set(next, "FindMe", NULL, NULL);
+    dict_link_node_int_set(dict, "SomeClass", root, next);
+    dict_link_node_int_set(next, "FindMe", NULL, NULL);
 
     assert(dict->next == next);
 
-    struct dict_htable_int *lookup = NULL;
+    struct dict_link_node_int *lookup = NULL;
 
-    lookup = dict_htable_int_find(dict, "FindMe");
+    lookup = dict_link_node_int_find(dict, "FindMe");
 
     assert(lookup == next);
 
-    dict_htable_int_free(dict);
+    dict_link_node_int_free(dict);
 
     success(i_dict);
 }

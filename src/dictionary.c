@@ -4,10 +4,10 @@
 #include <string.h>
 #include "link_node.h"
 
-struct dict_htable_int *dict_htable_int_create()
+struct dict_link_node_int *dict_link_node_int_create()
 {
-    struct dict_htable_int *node = NULL;
-    node = malloc(sizeof(struct dict_htable_int));
+    struct dict_link_node_int *node = NULL;
+    node = malloc(sizeof(struct dict_link_node_int));
     if(node == NULL) {
         return NULL;
     }
@@ -19,7 +19,7 @@ struct dict_htable_int *dict_htable_int_create()
     return node;
 }
 
-void dict_htable_int_set(struct dict_htable_int *node, char *class_name, struct htable_int *root, struct dict_htable_int *next)
+void dict_link_node_int_set(struct dict_link_node_int *node, char *class_name, struct link_node_int *root, struct dict_link_node_int *next)
 {
     if (node == NULL) {
         return;
@@ -36,9 +36,9 @@ void dict_htable_int_set(struct dict_htable_int *node, char *class_name, struct 
 
     node->next = next;
 }
-struct dict_htable_int *dict_htable_int_find(struct dict_htable_int *node, char *class_name)
+struct dict_link_node_int *dict_link_node_int_find(struct dict_link_node_int *node, char *class_name)
 {
-    struct dict_htable_int *iterator = NULL;
+    struct dict_link_node_int *iterator = NULL;
 
     if (node == NULL) {
         return NULL;
@@ -56,9 +56,9 @@ struct dict_htable_int *dict_htable_int_find(struct dict_htable_int *node, char 
     return iterator;
 }
 
-void dict_htable_int_free(struct dict_htable_int *node)
+void dict_link_node_int_free(struct dict_link_node_int *node)
 {
-    struct dict_htable_int *iterator = NULL;
+    struct dict_link_node_int *iterator = NULL;
 
     if (node == NULL) {
         return;
@@ -69,16 +69,16 @@ void dict_htable_int_free(struct dict_htable_int *node)
     }
 
     if (node->root != NULL) {
-        htable_int_free(node->root);
+        link_node_int_free(node->root);
     }
 
-    dict_htable_int_free(node->next);
+    dict_link_node_int_free(node->next);
     free(node);
 }
 
-struct dict_htable_int *dict_htable_int_find_last(struct dict_htable_int *root)
+struct dict_link_node_int *dict_link_node_int_find_last(struct dict_link_node_int *root)
 {
-    struct dict_htable_int *last = NULL;
+    struct dict_link_node_int *last = NULL;
 
     if (root == NULL) {
         return NULL;
