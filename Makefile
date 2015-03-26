@@ -13,6 +13,7 @@ CFLAGS=-g -std=c99 -lm
 SRCDIR=src
 BINDIR=bin
 TESTDIR=test
+DEPS=
 
 #
 # Main target ua_program
