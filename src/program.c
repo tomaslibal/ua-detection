@@ -33,7 +33,7 @@ void load_data_bin();
 void train(struct uas_record *root, struct link_node_int *prior);
 void evaluate(struct link_node_int *words, struct uas_record *uas_input);
 float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class);
-void read_user_input(int argc, char **argv, struct uas_record *uas_input);
+void read_CLI_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 void free_shared_res();
 
@@ -197,7 +197,7 @@ int main(int argc, char** argv) {
     uas_input = uas_record_create();
     chck_malloc((void *) uas_input, "UAS Struct for the User Input of Data");
 
-    read_user_input(argc, argv, uas_input);
+    read_CLI_input(argc, argv, uas_input);
 
     /*
      * LEARNING PHASE
@@ -492,7 +492,7 @@ void train(struct uas_record *root, struct link_node_int *prior)
 /*
  * Config via command line arguments
  */
-void read_user_input(int argc, char **argv, struct uas_record *uas_input)
+void read_CLI_input(int argc, char **argv, struct uas_record *uas_input)
 {
     char *uas = NULL;
     char *class = NULL;
@@ -532,8 +532,6 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
             case 'c':
                 mask_set(&settings, &CMP_ALL_CLS_FLAG);
                 break;
-            default:
-                printf("unrecognized option %s\n", long_options[option_index].name);
         }
     }
 
