@@ -515,8 +515,6 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
             break;
 
         switch (c){
-            case 0:
-                break;
             case 'h':
                 print_usage();
                 exit(0);
@@ -535,7 +533,7 @@ void read_user_input(int argc, char **argv, struct uas_record *uas_input)
                 mask_set(&settings, &CMP_ALL_CLS_FLAG);
                 break;
             default:
-                printf("unrecognized option\n");
+                printf("unrecognized option %s\n", long_options[option_index].name);
         }
     }
 
