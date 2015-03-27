@@ -115,10 +115,35 @@ float log_prob_word_class = 0;
  */
 unsigned short settings = 0;
 
+/*
+ * If this flag set, the program will open data/uas_with_class.txt and load the
+ * content of this file for further processing
+ */
 const unsigned short LOAD_DATA_FILE_FLAG = 1;
+
+/*
+ * This flag has currently no effect. It is reserved for later use when it saving
+ * the output of the training phase into a binary file is implemented. In that
+ * case, when this flag set, it will load that binary file
+ */
 const unsigned short LOAD_BIN_DATA_FLAG = 1 << 1;
+
+/*
+ * If this flag set and LOAD_DATA_FILE_FLAG is also set, the program will learn
+ * from the data loaded from the text data file data/uas_with_class.txt.
+ */
 const unsigned short TRAIN_ON_DATA_FLAG = 1 << 2;
+
+/*
+ * If this flag set, the program expects CLI input (at least a given user-agent
+ * string) and the program will try to predict which class the input belongs to
+ */
 const unsigned short DO_EVALUATE_FLAG = 1 << 3;
+
+/*
+ * If this flag set and the DO_EVALUATE_FLAG is also set, the program will
+ * compare the input against all known classes.
+ */
 const unsigned short CMP_ALL_CLS_FLAG = 1 << 4;
 
 int main(int argc, char** argv) {
