@@ -69,7 +69,7 @@ available online and can be downloaded using [the download script](data/download
 
 #### Data format
 
-The program can work with ascii/utf-8 encoded data of the following format:
+The program can work with ascii (8-bit) encoded data of the following format:
 
 1. one entry per line terminated by a new line character
 2. each entry has a one word label separated by a space character from the user-agent string following the label
