@@ -21,9 +21,26 @@ There are two end goals that I would like achieve:
    
 ### ua-detection
 
-build:
+`ua_program` is the implementation of a classification program that uses supervised
+learning method to learn from data and makes predictions about new data as to which
+class the input may belong. 
+
+#### dependencies
+
+Needed to build the binaries:
+
+- make utility
+- GCC or CLANG (c99)
+
+Use the download script for data:
+
+- UNIX like system with shell
+
+#### build
 
     make
+
+#### usage
 
 *default usage:*
 
@@ -47,6 +64,9 @@ More in the [data section](data/)
 Only sample and test data are part of this repository. Some datasets are
 available online and can be downloaded using [the download script](data/download-data.sh).
 
+    cd data/
+    /bin/sh download-data.sh
+
 #### Data format
 
 The program can work with ascii/utf-8 encoded data of the following format:
@@ -54,15 +74,12 @@ The program can work with ascii/utf-8 encoded data of the following format:
 1. one entry per line terminated by a new line character
 2. each entry has a one word label separated by a space character from the user-agent string following the label
 
+A user-agent string with a class "mobile" would look like this:
+
+    mobile Mozilla/5.0 (Linux; U; Android 4.0; en-us) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+
 See the [example](data/uas_with_class.txt) 
-   
-### Dependencies
-
-Needed to build the binaries:
-
-- make utility
-- GCC or CLANG (c99)
-   
+      
 ### Test
 
 `make test` compiles the test suite and runs it. If stdout prints "ALL TESTS
