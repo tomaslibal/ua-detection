@@ -19,8 +19,7 @@ int i_bnode = 0;
 
 int run_test_bnode()
 {
+    printf("testing the binary tree: ");
+
     return i_bnode;
 }
-
-#include
-
