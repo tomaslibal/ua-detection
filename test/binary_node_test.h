@@ -8,6 +8,6 @@
 #ifndef TEST_BINARY_NODE_TEST_H_
 #define TEST_BINARY_NODE_TEST_H_
 
-void run_test_bnode();
+int run_test_bnode();
 
 #endif /* TEST_BINARY_NODE_TEST_H_ */
