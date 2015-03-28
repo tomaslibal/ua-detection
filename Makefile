@@ -40,10 +40,14 @@ ua_db: $(UADBSRC)
 
 #
 
-.PHONY: test clean
 
 clean:
 	rm -f $(SRCDIR)/*.o
+
+test-clean:
+	rm -f $(TESTDIR)/*.o
+
+.PHONY: test clean
 
 # 
 # U N I T    T E S T I N G
