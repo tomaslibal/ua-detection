@@ -7,6 +7,7 @@
 #include "dictionary_test.h"
 #include "bitmask_test.h"
 #include "link_node_test.h"
+#include "binary_node_test.h"
 
 /*
  * Total Successful # of tests
@@ -23,6 +24,7 @@ int main()
     ts += run_test_probab();
     ts += run_test_dictionary();
     ts += run_test_bitmask();
+    ts += run_test_bnode();
 
     printf("\n%d tests successfully passed\n", ts);
     return 0;
