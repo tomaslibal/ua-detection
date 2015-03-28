@@ -17,9 +17,20 @@
 
 int i_bnode = 0;
 
+void test_bnode_create()
+{
+    struct bNode *root = NULL;
+    root = bNode_create();
+
+    assert(root != NULL);
+
+    success(i_bnode);
+}
+
 int run_test_bnode()
 {
     printf("testing the binary tree: ");
+    test_bnode_create();
 
     return i_bnode;
 }
