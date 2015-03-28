@@ -31,6 +31,6 @@ struct bNode {
     struct bNode *right;
 };
 
-void bNode_create();
+struct bNode *bNode_create();
 
 #endif /* SRC_BINARY_NODE_H_ */
