@@ -8,6 +8,27 @@
 #ifndef BINARY_NODE_H
 #define BINARY_NODE_H
 
+#include "link_node.h"
 
+/*
+ * Binary Node
+ *
+ * |----------------------|
+ * | char *uas ------------------> user-agent string
+ * |----------------------|
+ * | struct link_node * ---------> classes
+ * |----------------------|
+ * | struct bNode *left ---------> left bNode
+ * |----------------------|
+ * | struct bNode *right --------> right bNode
+ * |----------------------|
+ *
+ */
+struct bNode {
+    char *uas;
+    struct link_node *classes;
+    struct bNode *left;
+    struct bNode *right;
+};
 
 #endif /* SRC_BINARY_NODE_H_ */
