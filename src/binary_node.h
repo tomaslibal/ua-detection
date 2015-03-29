@@ -33,4 +33,12 @@ struct bNode {
 
 struct bNode *bNode_create();
 
+/*
+ * root is a node in a binary tree and the node passed into this function is
+ * another binary tree node; the node will be added to the tree such that it
+ * will be assigned as a left or right value of a leaf node in the tree
+ * depending on the result of strcmp operation on root->uas and node->uas
+ */
+void bNode_add(struct bNode *node, struct bNode *root);
+
 #endif /* SRC_BINARY_NODE_H_ */

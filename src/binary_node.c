@@ -22,3 +22,25 @@ struct bNode *bNode_create()
 
     return root;
 }
+
+
+void bNode_add(struct bNode *node, struct bNode *root)
+{
+    //if (root == NULL)
+
+    int d = strcmp(root->uas, node->uas);
+
+    if (d <= 0) {
+        if (root->right == NULL) {
+            root->right = node;
+        } else {
+            bNode_add(node, root->right);
+        }
+    } else {
+        if (root->left == NULL) {
+            root->left = node;
+        } else {
+            bNode_add(node, root->left);
+        }
+    }
+}
