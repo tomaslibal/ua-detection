@@ -30,13 +30,20 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 UAPROGRAMSRC=$(addprefix $(SRCDIR)/, bitmask.c dictionary.c fileutil.c link_node.c probab.c program.c reader.c tokenizer.c)
 
 ua_program: $(UAPROGRAMSRC)
+	@if [ ! -d bin ]; then \
+	  mkdir bin; \
+	fi
 	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
 
 
 UADBSRC=$(addprefix $(SRCDIR)/, ua_db.c)
 
 ua_db: $(UADBSRC)
+	@if [ ! -d bin ]; then \
+	  mkdir bin; \
+	fi
 	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
+	
 
 #
 
