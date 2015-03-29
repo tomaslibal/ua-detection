@@ -34,6 +34,11 @@ struct bNode {
 struct bNode *bNode_create();
 
 /*
+ * Frees the binary free recursively starting at the passed *root node
+ */
+void bNode_free(struct bNode *root);
+
+/*
  * root is a node in a binary tree and the node passed into this function is
  * another binary tree node; the node will be added to the tree such that it
  * will be assigned as a left or right value of a leaf node in the tree

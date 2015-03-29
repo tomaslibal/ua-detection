@@ -44,3 +44,34 @@ void bNode_add(struct bNode *node, struct bNode *root)
         }
     }
 }
+
+void bNode_free(struct bNode *root)
+{
+    if (root == NULL) {
+        return;
+    }
+
+    struct bNode *tmp = NULL;
+    struct bNode *tmp_prev = NULL;
+
+    tmp = root;
+
+    /*
+     * uas is a char * pointer
+     */
+    if (root->uas != NULL) {
+        free(root->uas);
+    }
+
+    /*
+     * classes is a link_node_int pointer
+     */
+    if (root->classes != NULL) {
+        link_node_int_free(root->classes);
+    }
+
+    bNode_free(root->left);
+    bNode_free(root->right);
+
+    free(root);
+}
