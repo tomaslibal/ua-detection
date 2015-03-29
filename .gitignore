@@ -5,9 +5,10 @@
 # Ignore the .DS_Store files from MAC OS
 .DS_Store
 
-# Ignore the binary output
-bin/*.*
-bin/detection
+# Ignore the binary directory
+bin
+
+# Ignore the test binary
 test/test
 
 # ignore object files
