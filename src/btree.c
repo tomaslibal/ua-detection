@@ -5,7 +5,7 @@
  *      Author: tmlbl
  */
 
-#include "binary_node.h"
+#include "btree.h"
 
 struct bNode *bNode_create()
 {
