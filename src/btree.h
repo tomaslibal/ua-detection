@@ -26,7 +26,7 @@
  */
 struct bNode {
     char *uas;
-    struct link_node *classes;
+    struct link_node_int *classes;
     struct bNode *left;
     struct bNode *right;
 };
