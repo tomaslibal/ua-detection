@@ -6,6 +6,8 @@
  */
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "test_suite.h"
 #include "../src/btree.c"
