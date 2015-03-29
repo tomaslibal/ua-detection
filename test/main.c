@@ -6,8 +6,8 @@
 #include "probab_test.h"
 #include "dictionary_test.h"
 #include "bitmask_test.h"
+#include "btree_test.h"
 #include "link_node_test.h"
-#include "binary_node_test.h"
 
 /*
  * Total Successful # of tests

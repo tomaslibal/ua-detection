@@ -5,9 +5,9 @@
  *      Author: tmlbl
  */
 
-#ifndef TEST_BINARY_NODE_TEST_H_
-#define TEST_BINARY_NODE_TEST_H_
+#ifndef TEST_BTREE_TEST_H_
+#define TEST_BTREE_TEST_H_
 
 int run_test_bnode();
 
-#endif /* TEST_BINARY_NODE_TEST_H_ */
+#endif /* TEST_BTREE_TEST_H_ */

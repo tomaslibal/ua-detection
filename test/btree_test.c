@@ -8,12 +8,8 @@
 #include <stdio.h>
 
 #include "test_suite.h"
-#include "binary_node_test.h"
-
-/*
- * Code under test
- */
-#include "../src/binary_node.c"
+#include "../src/btree.c"
+#include "btree_test.h"
 
 int i_bnode = 0;
 
