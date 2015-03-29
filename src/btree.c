@@ -7,6 +7,9 @@
 
 #include "btree.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 struct bNode *bNode_create()
 {
     struct bNode *root = NULL;
@@ -74,4 +77,48 @@ void bNode_free(struct bNode *root)
     bNode_free(root->right);
 
     free(root);
+}
+
+void bNode_set(struct bNode *node, char *uas, struct link_node_int *classes, struct bNode *left, struct bNode *right)
+{
+    if (node == NULL) {
+        return;
+    }
+
+    // assign uas to root->uas
+    if (uas != NULL) {
+        if (node->uas != NULL) {
+            free(node->uas);
+        }
+        node->uas = malloc((sizeof(char) * strlen(uas)) + 1);
+        if (node->uas == NULL) {
+            // malloc error
+            return;
+        }
+        strcpy(node->uas, uas);
+    }
+
+    // assign classes to root->classes
+    if (classes != NULL) {
+        if (node->classes != NULL) {
+            link_node_int_free(node->classes);
+        }
+        node->classes = classes;
+    }
+
+    // assign the left link
+    if (left != NULL) {
+        if (node->left != NULL) {
+            bNode_free(node->left);
+        }
+        node->left = left;
+    }
+
+    // assign the right link
+    if (right != NULL) {
+        if (node->right != NULL) {
+            bNode_free(node->right);
+        }
+        node->right = right;
+    }
 }

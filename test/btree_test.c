@@ -58,11 +58,53 @@ void test_bnode_add()
     success(i_bnode);
 }
 
+void test_bnode_set()
+{
+    struct bNode *root = NULL;
+    root = bNode_create();
+
+    struct bNode *rn = NULL;
+    rn = bNode_create();
+
+    bNode_set(root, "Some UAS", NULL, NULL, rn);
+
+    assert(root->uas != NULL);
+    assert(strcmp(root->uas, "Some UAS") == 0);
+    assert(root->right = rn);
+    assert(root->left == NULL);
+    assert(root->classes == NULL);
+
+    bNode_free(root);
+
+    success(i_bnode);
+}
+
+void test_bnode_set_with_classes()
+{
+    struct bNode *root = NULL;
+    root = bNode_create();
+
+    struct link_node_int *classes = NULL;
+    classes = link_node_int_create();
+    link_node_int_set(classes, "some_class", 1);
+
+    bNode_set(root, "Some UAS", classes, NULL, NULL);
+
+    assert(root->classes != NULL);
+    assert(root->classes == classes);
+
+    bNode_free(root);
+
+    success(i_bnode);
+}
+
 int run_test_bnode()
 {
     printf("testing the binary tree: ");
     test_bnode_create();
     test_bnode_add();
+    test_bnode_set();
+    test_bnode_set_with_classes();
 
     return i_bnode;
 }
