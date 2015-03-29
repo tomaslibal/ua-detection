@@ -31,6 +31,9 @@ void test_count_words()
 
 	assert(count == 8);
 
+	uas_record_free(record1);
+	link_node_int_free(dict);
+
 	success(i_probab);
 }
 
