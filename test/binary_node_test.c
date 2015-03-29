@@ -24,6 +24,8 @@ void test_bnode_create()
 
     assert(root != NULL);
 
+    bNode_free(root);
+
     success(i_bnode);
 }
 
@@ -52,6 +54,8 @@ void test_bnode_add()
 
     assert(root->right == rn);
     assert(rn->right == nested);
+
+    bNode_free(root);
 
     success(i_bnode);
 }
