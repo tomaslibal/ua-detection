@@ -33,7 +33,7 @@ ua_program: $(UAPROGRAMSRC)
 	@if [ ! -d bin ]; then \
 	  mkdir bin; \
 	fi
-	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
+	$(CC) -o $(BINDIR)/uadet $^ $(CFLAGS)
 
 
 UADBSRC=$(addprefix $(SRCDIR)/, ua_db.c)
@@ -42,7 +42,7 @@ ua_db: $(UADBSRC)
 	@if [ ! -d bin ]; then \
 	  mkdir bin; \
 	fi
-	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS)
+	$(CC) -o $(BINDIR)/uadb $^ $(CFLAGS)
 	
 
 #

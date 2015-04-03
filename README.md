@@ -21,7 +21,7 @@ There are two end goals that I would like achieve:
    
 ### ua-detection
 
-`ua_program` is the implementation of a classification program that uses supervised
+`uadet` is the implementation of a classification program that uses supervised
 learning method to learn from data and makes predictions about new data as to which
 class the input may belong. 
 
