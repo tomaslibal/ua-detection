@@ -41,7 +41,7 @@ const char NODE_SEPARATOR = 0;
 /*
  * Database file for the user agent strings
  */
-char *dbf = "data/ua.db.test";
+char *dbf = "data/ua.db.new";
 
 /*
  * Data are stored in memory in a binary tree and this is the root node
@@ -213,7 +213,7 @@ void load_db(char *dbf, struct bNode *root)
     FILE *fp = fopen(dbf, "r");
     if (fp == NULL) {
         printf("Error: unable to open database file %s\n", dbf);
-        return;
+        exit(EXIT_FAILURE);
     }
 
     unsigned int numNodes = 0;
@@ -304,6 +304,12 @@ void save_db(char *dbf, struct bNode *root)
     FILE *fp = fopen(dbf, "w");
     if (fp == NULL) {
         printf("Error: unable to open file %s for writing\n", dbf);
+        return;
+    }
+
+    if (root == NULL) {
+        fclose(fp);
+        printf("nothing to write to %s\n", dbf);
         return;
     }
 
@@ -398,7 +404,7 @@ char *serialize_bnode(struct bNode *node, char *out, int *len, int *num)
 
     printf("\n");
     //override the \0 char to NODE_SEPARATOR
-    *(out + *len - 1) = NODE_SEPARATOR;
+    if (*len > 0) *(out + *len - 1) = NODE_SEPARATOR;
 
     if (node->left != NULL) {
         out = serialize_bnode(node->left, out, len, num);
