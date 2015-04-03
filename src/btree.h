@@ -61,4 +61,15 @@ void bNode_add(struct bNode *node, struct bNode *root);
  */
 struct bNode *bNode_get(struct bNode *node, char *uas);
 
+/*
+ * Remove operation: removes the specified node but keeps all of its ancestors
+ * down the tree
+ */
+void bNode_remove_unique(struct bNode *root, struct bNode *node);
+
+struct bNode *bNode_get_parent(struct bNode *root, struct bNode *node);
+struct bNode *bNode_get_parent_(struct bNode *root, struct bNode *node);
+void bNode_add_recursive(struct bNode *root, struct bNode *root_add);
+void bNode_add_recursive_(struct bNode *root, struct bNode *node);
+
 #endif /* SRC_BINARY_NODE_H_ */

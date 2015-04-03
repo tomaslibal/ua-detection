@@ -143,3 +143,76 @@ struct bNode *bNode_get(struct bNode *root, char *uas)
 
     return NULL;
 }
+
+void bNode_remove_unique(struct bNode *root, struct bNode *node)
+{
+    struct bNode *removed_root = node;
+    struct bNode *parent = NULL;
+
+    parent = bNode_get_parent(root, node);
+
+    if (parent == NULL) {
+        printf("parent not found, delete cancelled!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (parent->left == node)
+        parent->left = NULL;
+    else
+        parent->right = NULL;
+
+    // now, add all ancestors of node back to root
+    bNode_add_recursive(root, removed_root);
+
+    return;
+}
+
+// untested
+struct bNode *bNode_get_parent(struct bNode *root, struct bNode *node)
+{
+    if (root == node) {
+        return node;
+    }
+
+    return bNode_get_parent_(root, node);
+}
+
+// untested
+struct bNode *bNode_get_parent_(struct bNode *root, struct bNode *node)
+{
+    struct bNode *left = NULL;
+    struct bNode *right = NULL;
+
+    if (root->left == node || root->right == node) {
+        return root;
+    }
+
+    left = bNode_get_parent_(root->left, node);
+    right = bNode_get_parent_(root->right, node);
+
+    if (left != NULL) return left;
+    if (right != NULL) return right;
+
+    return NULL;
+}
+
+// untested
+void bNode_add_recursive(struct bNode *root, struct bNode *root_add)
+{
+    bNode_add_recursive_(root, root_add->left);
+    bNode_add_recursive_(root, root_add->right);
+}
+
+// untested
+void bNode_add_recursive_(struct bNode *root, struct bNode *node)
+{
+    // base case
+    if (node == NULL) {
+        return;
+    }
+
+    // add itself
+    bNode_add(node , root);
+    bNode_add_recursive_(root, node->left);
+    bNode_add_recursive_(root, node->right);
+}
