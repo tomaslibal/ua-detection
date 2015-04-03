@@ -24,6 +24,7 @@ void load_db(char *dbf, struct bNode *root);
 void unserialize();
 void add_uas(struct bNode *root, char *uas);
 void find_uas(struct bNode *root, char *uas);
+void delete_uas(struct bNode *root, char *uas);
 void add_class(struct bNode *root, char *uas, char *class);
 void remove_class(struct bNode *root, char *uas, char *class);
 void print_btree(struct bNode *root);
@@ -124,6 +125,7 @@ void read_cli_arguments(int argc, char **argv)
             { "add", required_argument, 0, 'a' },
             { "get", required_argument, 0, 'g' },
             { "update", required_argument, 0, 'u' },
+            { "delete", required_argument, 0, 'd' },
             { "add-class", required_argument, 0, 'l' },
             { "remove-class", required_argument, 0, 'r' },
             { "help", no_argument, 0, 'h' }
@@ -132,7 +134,7 @@ void read_cli_arguments(int argc, char **argv)
      while (1) {
          int option_index = 0;
 
-         c = getopt_long(argc, argv, "a:g:l:r:h", long_options, &option_index);
+         c = getopt_long(argc, argv, "a:g:u:d:l:r:h", long_options, &option_index);
          // long_options[option_index].name
 
          if (c == -1)
@@ -149,6 +151,9 @@ void read_cli_arguments(int argc, char **argv)
              case 'u':
                  uas = malloc(sizeof(char) * strlen(optarg) + 1);
                  strcpy(uas, optarg);
+                 break;
+             case 'd':
+                 delete_uas(root, optarg);
                  break;
              case 'l':
                  add_class(root, uas, optarg);
@@ -467,7 +472,7 @@ void remove_class(struct bNode *root, char *uas, char *class)
     }
 
     if (node == NULL) {
-        printf("%s not found!", uas);
+        printf("Specified UAS not found!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -502,4 +507,21 @@ void remove_class(struct bNode *root, char *uas, char *class)
     // isolate the link to be delete out and free it from the memory
     head->next = NULL;
     link_node_int_free(head);
+}
+
+void delete_uas(struct bNode *root, char *uas)
+{
+    struct bNode *node = bNode_get(root, uas);
+
+    if (uas == NULL) {
+        printf("no UAS specified for removal!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (node == NULL) {
+        printf("Specified UAS not found!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    bNode_remove_unique(root, node);
 }
