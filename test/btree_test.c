@@ -98,6 +98,39 @@ void test_bnode_set_with_classes()
     success(i_bnode);
 }
 
+void test_bnode_get()
+{
+    struct bNode *root = NULL;
+    root = bNode_create();
+
+    struct bNode *rn = NULL;
+    rn = bNode_create();
+
+    struct bNode *nested = NULL;
+    nested = bNode_create();
+
+    root->uas = malloc(sizeof(char) * 2);
+    strcpy(root->uas, "m");
+
+    rn->uas = malloc(sizeof(char) * 2);
+    strcpy(rn->uas, "n");
+
+    nested->uas = malloc(sizeof(char) * 2);
+    strcpy(nested->uas, "x");
+
+    bNode_add(rn, root);
+    bNode_add(nested, root);
+
+    struct bNode *result = NULL;
+    result = bNode_get(root, "x");
+
+    assert(result != NULL);
+
+    bNode_free(root);
+
+    success(i_bnode);
+}
+
 int run_test_bnode()
 {
     printf("testing the binary tree: ");
@@ -105,6 +138,7 @@ int run_test_bnode()
     test_bnode_add();
     test_bnode_set();
     test_bnode_set_with_classes();
+    test_bnode_get();
 
     return i_bnode;
 }
