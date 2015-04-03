@@ -97,6 +97,9 @@ void print_btree(struct bNode *root)
     print_btree(root->right);
 }
 
+/*
+ * Prints 'link->name' from a linked list pointed to by *node
+ */
 void print_link_node_int(struct link_node_int *node)
 {
     if (node == NULL) {
@@ -179,7 +182,6 @@ void load_db(char *dbf, struct bNode *root)
 
     /*
      * first four bytes = num of nodes
-     *
      */
     FILE *fp = fopen(dbf, "r");
     if (fp == NULL) {
@@ -385,6 +387,12 @@ void add_uas(struct bNode *root, char *uas)
 
     link_node_int_set(classes, "<no class>", 0);
     bNode_set(new, uas, classes, NULL, NULL);
+
+    // special case: no data, i.e. root->uas empty
+    if (root->uas == NULL) {
+        bNode_set(root, uas, classes, NULL, NULL);
+        return;
+    }
 
     bNode_add(new, root);
 }
