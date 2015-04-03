@@ -47,6 +47,7 @@ ua_db: $(UADBSRC)
 
 #
 
+all: ua_program ua_db
 
 clean:
 	rm -f $(SRCDIR)/*.o
