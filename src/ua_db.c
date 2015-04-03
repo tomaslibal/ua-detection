@@ -24,6 +24,7 @@ void load_db(char *dbf, struct bNode *root);
 void unserialize();
 void add_uas(struct bNode *root, char *uas);
 void find_uas(struct bNode *root, char *uas);
+void add_class(struct bNode *root, char *uas, char *class);
 void print_btree(struct bNode *root);
 void print_link_node_int(struct link_node_int *node);
 
@@ -141,10 +142,12 @@ void read_cli_arguments(int argc, char **argv)
 {
     int c;
     char *tmp = NULL;
+    char *uas = NULL;
 
     static struct option long_options[] = {
             { "add", required_argument, 0, 'a' },
             { "get", required_argument, 0, 'g' },
+            { "update", required_argument, 0, 'u' },
             { "add-class", required_argument, 0, 'l' },
             { "remove-class", required_argument, 0, 'r' },
             { "help", no_argument, 0, 'h' }
@@ -167,7 +170,11 @@ void read_cli_arguments(int argc, char **argv)
              case 'g':
                  find_uas(root, optarg);
                  break;
+             case 'u':
+                 uas = malloc(sizeof(char) * strlen(optarg) + 1);
+                 break;
              case 'l':
+                 add_class(root, uas, optarg);
                  break;
              case 'r':
                  break;
@@ -177,6 +184,8 @@ void read_cli_arguments(int argc, char **argv)
                  break;
          }
      }
+
+     if (uas != NULL) free(uas);
 }
 
 void print_usage()
@@ -315,6 +324,8 @@ void save_db(char *dbf, struct bNode *root)
     fwrite(&num, 4, 1, fp);
     fwrite(serialized, sizeof(char), len, fp);
 
+    free(serialized);
+
     fclose(fp);
 }
 
@@ -407,7 +418,7 @@ void add_uas(struct bNode *root, char *uas)
     new = bNode_create();
     classes = link_node_int_create();
 
-    link_node_int_set(classes, "<no class>", 1);
+    link_node_int_set(classes, "<no class>", 0);
     bNode_set(new, uas, classes, NULL, NULL);
 
     bNode_add(new, root);
@@ -435,4 +446,34 @@ void find_uas(struct bNode *root, char *uas)
 
     printf("Cannot find %s\n", uas);
     exit(EXIT_FAILURE);
+}
+
+void add_class(struct bNode *root, char *uas, char *class)
+{
+    struct bNode *node = bNode_get(root, uas);
+    struct link_node_int *newClass = NULL;
+    struct link_node_int *last = NULL;
+
+    if (uas == NULL) {
+        printf("no UAS specified!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (node == NULL) {
+        printf("%s not found!", uas);
+        exit(EXIT_FAILURE);
+    }
+
+    newClass = link_node_int_create();
+    link_node_int_set(newClass, class, 1);
+    last = link_node_int_get_last(node->classes);
+    // no class yet, set the first link
+    if (node->classes->val == 0) {
+        link_node_int_set(node->classes, class, 1);
+    }
+    // or add at the end of the linked list
+    else {
+        last->next = newClass;
+    }
+    printf("add class %s to %s", class, uas);
 }
