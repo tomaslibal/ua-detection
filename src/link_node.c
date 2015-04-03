@@ -33,9 +33,7 @@ void AUX(LINK_NODE_NAME, _set)(struct LINK_NODE_NAME *table, char *name, NODE_TY
 
 	strcpy(table->name, name);
 
-	if (val != NULL) {
-	    table->val = val;
-	}
+    table->val = val;
 }
 
 void AUX(LINK_NODE_NAME, _free)(struct LINK_NODE_NAME *table)
