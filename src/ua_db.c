@@ -67,40 +67,11 @@ int main(int argc, char **argv)
 
     read_cli_arguments(argc, argv);
 
-    print_btree(root);
+    //print_btree(root);
 
-//    char *serialized = NULL;
-//    int len = 0;
-//    int num = 0;
-//    serialized = serialize_btree(root, serialized, &len, &num);
-
-//    int j = 0;
-//
-//    printf("serialized = ");
-//    while(j < len) {
-//        printf("%c", *(serialized + j));
-//        j++;
-//    }
-//    printf("\nlen(serialized) = %d\n", len);
-//    printf("num records = %d\n", num);
-
-//    //Print hex dump
-//    printf("\n\nhexdump:\n");
-//
-//    j = 0;
-//    int q = 0;
-//    while(j < len) {
-//        if (q == 2) { printf(" "); q = 0; }
-//        printf("%x", *(serialized + j) & 0xff);
-//        j++;
-//        q++;
-//    }
-
-//    printf("\n");
     save_db(dbf, root);
 
     bNode_free(root);
-//    free(serialized);
 
     return 0;
 }
@@ -297,10 +268,7 @@ void load_db(char *dbf, struct bNode *root)
 
 void save_db(char *dbf, struct bNode *root)
 {
-    /*
-     * first four bytes = num of nodes
-     *
-     */
+
     FILE *fp = fopen(dbf, "w");
     if (fp == NULL) {
         printf("Error: unable to open file %s for writing\n", dbf);
@@ -318,16 +286,10 @@ void save_db(char *dbf, struct bNode *root)
     int num = 0;
     serialized = serialize_btree(root, serialized, &len, &num);
 
-//    int j = 0;
-
-//    printf("serialized = ");
-//    while(j < len) {
-//        printf("%c", *(serialized + j));
-//        j++;
-//    }
-    printf("\nsaving %d bytes\n", len);
-//    printf("num records = %d\n", num);
-
+    /*
+     * first four bytes = num of nodes
+     */
+    printf("\nsaving %d bytes\n", len + 4);
     fwrite(&num, 4, 1, fp);
     fwrite(serialized, sizeof(char), len, fp);
 
@@ -345,10 +307,6 @@ char *serialize_btree(struct bNode *root, char *out, int *len, int *num)
         printf("no root\n");
         return out;
     }
-
-    // serialize = uas+classes
-    // classes separated by (char)10
-    // nodes separated by (char)0
 
     out = serialize_bnode(root, out, len, num);
 
