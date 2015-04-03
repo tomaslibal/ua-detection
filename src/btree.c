@@ -161,7 +161,7 @@ void bNode_remove_unique(struct bNode *root, struct bNode *node)
     else
         parent->right = NULL;
 
-    // now, add all ancestors of node back to root
+    // now, add all children of the node back to the root
     bNode_add_recursive(root, removed_root);
 
     return;

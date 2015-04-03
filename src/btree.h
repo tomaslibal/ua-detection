@@ -62,8 +62,8 @@ void bNode_add(struct bNode *node, struct bNode *root);
 struct bNode *bNode_get(struct bNode *node, char *uas);
 
 /*
- * Remove operation: removes the specified node but keeps all of its ancestors
- * down the tree
+ * Remove operation: removes the specified node but keeps all of its children
+ * nodes down the tree
  */
 void bNode_remove_unique(struct bNode *root, struct bNode *node);
 
