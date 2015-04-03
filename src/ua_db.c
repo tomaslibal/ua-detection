@@ -469,12 +469,13 @@ void add_class(struct bNode *root, char *uas, char *class)
     link_node_int_set(newClass, class, 1);
     last = link_node_int_get_last(node->classes);
     // no class yet, set the first link
-    if (node->classes->val == 0) {
+    printf("val = %d\n", node->classes->val);
+    if (node->classes->name != NULL && strcmp(node->classes->name, "<no class>") == 0) {
         link_node_int_set(node->classes, class, 1);
     }
     // or add at the end of the linked list
     else {
         last->next = newClass;
     }
-    printf("add class %s to %s", class, uas);
+    printf("add class %s to %s\n", class, uas);
 }
