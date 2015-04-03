@@ -126,6 +126,10 @@ void test_bnode_get()
 
     assert(result != NULL);
 
+    result = bNode_get(root, "y");
+
+    assert(result == NULL);
+
     bNode_free(root);
 
     success(i_bnode);
