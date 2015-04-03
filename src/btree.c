@@ -164,6 +164,11 @@ void bNode_remove_unique(struct bNode *root, struct bNode *node)
     // now, add all children of the node back to the root
     bNode_add_recursive(root, removed_root);
 
+    // free the removed node
+    removed_root->left = NULL;
+    removed_root->right = NULL;
+    bNode_free(removed_root);
+
     return;
 }
 
@@ -183,6 +188,12 @@ struct bNode *bNode_get_parent_(struct bNode *root, struct bNode *node)
     struct bNode *left = NULL;
     struct bNode *right = NULL;
 
+    // base case - not found
+    if (root == NULL) {
+        return NULL;
+    }
+
+    // base case - found
     if (root->left == node || root->right == node) {
         return root;
     }
