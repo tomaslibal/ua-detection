@@ -41,7 +41,7 @@ const char NODE_SEPARATOR = 0;
 /*
  * Database file for the user agent strings
  */
-char *dbf = "data/ua.db.new";
+char *dbf = "data/ua.db";
 
 /*
  * Data are stored in memory in a binary tree and this is the root node
@@ -55,10 +55,13 @@ int main(int argc, char **argv)
     /*
      * Usage
      *
-     *     ua_db add "Mozilla/5.0 (Linux; Android) Firefox/35.0"
-     *     ua_db get "Mozilla/5.0 ..."
-     *     ua_db add-label <uas-id> label1[, label2, ...]
-     *     ua_db remove-label <uas-id> label1[, label2, ...]
+     *     ua_db --add "Mozilla/5.0 (Linux; Android) Firefox/35.0"
+     *     ua_db --get "Mozilla/5.0 ..."
+     *     ua_db --update <uas> --add-class <label>
+     *     ua_db --update <uas> --remove-class <label>
+     *
+     *     @todo implement UAS-ID so that the update/get operations won't
+     *     need the whole <uas> string but could take an ID instead
      */
 
     root = bNode_create();
@@ -66,8 +69,6 @@ int main(int argc, char **argv)
     load_db(dbf, root);
 
     read_cli_arguments(argc, argv);
-
-    //print_btree(root);
 
     save_db(dbf, root);
 
