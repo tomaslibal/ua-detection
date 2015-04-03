@@ -90,7 +90,7 @@ void bNode_set(struct bNode *node, char *uas, struct link_node_int *classes, str
         if (node->uas != NULL) {
             free(node->uas);
         }
-        node->uas = malloc((sizeof(char) * strlen(uas)) + 1);
+        node->uas = malloc(sizeof(char) * strlen(uas) + 1);
         if (node->uas == NULL) {
             // malloc error
             return;
