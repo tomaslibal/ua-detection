@@ -299,7 +299,7 @@ void save_db(char *dbf, struct bNode *root)
     /*
      * first four bytes = num of nodes
      */
-    printf("\nsaving %d bytes\n", len + 4);
+    printf("\nsaving %d bytes into %s\n", len + 4, dbf);
     fwrite(&num, 4, 1, fp);
     fwrite(serialized, sizeof(char), len, fp);
 
@@ -334,7 +334,7 @@ char *serialize_bnode(struct bNode *node, char *out, int *len, int *num)
     }
 
     if (node->uas != NULL) {
-        printf("serializing node[%d] %s", *num, node->uas);
+        printf("node[%d] %s", *num, node->uas);
         *num += 1;
         l = strlen(node->uas);
 
