@@ -25,6 +25,7 @@ void unserialize();
 void add_uas(struct bNode *root, char *uas);
 void find_uas(struct bNode *root, char *uas);
 void add_class(struct bNode *root, char *uas, char *class);
+void remove_class(struct bNode *root, char *uas, char *class);
 void print_btree(struct bNode *root);
 void print_link_node_int(struct link_node_int *node);
 
@@ -153,6 +154,7 @@ void read_cli_arguments(int argc, char **argv)
                  add_class(root, uas, optarg);
                  break;
              case 'r':
+                 remove_class(root, uas, optarg);
                  break;
              case 'h':
                  print_usage();
@@ -451,4 +453,53 @@ void add_class(struct bNode *root, char *uas, char *class)
         last->next = newClass;
     }
     printf("add class %s to %s\n", class, uas);
+}
+
+void remove_class(struct bNode *root, char *uas, char *class)
+{
+    struct bNode *node = bNode_get(root, uas);
+    struct link_node_int *head = NULL;
+    struct link_node_int *tail = NULL;
+
+    if (uas == NULL) {
+        printf("no UAS specified!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (node == NULL) {
+        printf("%s not found!", uas);
+        exit(EXIT_FAILURE);
+    }
+
+    // seek the class link
+    head = node->classes;
+    while(head != NULL) {
+        // exit the while loop if head->name equals class
+        if (head->name != NULL && strcmp(head->name, class) == 0) {
+            break;
+        }
+
+        tail = head;
+        head = head->next;
+    }
+
+    // relink the list's node so that the class to be removed is left out
+    // special case #1
+    if (head == NULL) {
+        // class not found
+        printf("class %s not found in %s\n", class, uas);
+        return;
+    }
+    // special case #2
+    if (tail == NULL) {
+        // there was only one class
+        // restore that class to <no class>, 0 default
+        link_node_int_set(head, "<no class>", 0);
+        return;
+    }
+    // general case: relink
+    tail->next = head->next;
+    // isolate the link to be delete out and free it from the memory
+    head->next = NULL;
+    link_node_int_free(head);
 }
