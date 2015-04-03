@@ -52,8 +52,13 @@ void bNode_set(struct bNode *node, char *uas, struct link_node_int *classes, str
  * root is a node in a binary tree and the node passed into this function is
  * another binary tree node; the node will be added to the tree such that it
  * will be assigned as a left or right value of a leaf node in the tree
- * depending on the result of strcmp operation on root->uas and node->uas
+ * depending on the result of strcmp operation on root->uas and node->uas.
  */
 void bNode_add(struct bNode *node, struct bNode *root);
+
+/*
+ * Looks up a binary node by the value of its uas field.
+ */
+struct bNode *bNode_get(struct bNode *node, char *uas);
 
 #endif /* SRC_BINARY_NODE_H_ */

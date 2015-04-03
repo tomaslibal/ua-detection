@@ -122,3 +122,24 @@ void bNode_set(struct bNode *node, char *uas, struct link_node_int *classes, str
         node->right = right;
     }
 }
+
+struct bNode *bNode_get(struct bNode *root, char *uas)
+{
+    struct bNode *rl = NULL;
+    struct bNode *rr = NULL;
+
+    if (root == NULL) {
+        return NULL;
+    }
+
+    if (root->uas != NULL & strcmp(root->uas, uas) == 0) {
+        return root;
+    } else {
+        rl = bNode_get(root->left, uas);
+        rr = bNode_get(root->right, uas);
+        if (rl != NULL) return rl;
+        if (rr != NULL) return rr;
+    }
+
+    return NULL;
+}
