@@ -172,6 +172,7 @@ void read_cli_arguments(int argc, char **argv)
                  break;
              case 'u':
                  uas = malloc(sizeof(char) * strlen(optarg) + 1);
+                 strcpy(uas, optarg);
                  break;
              case 'l':
                  add_class(root, uas, optarg);
