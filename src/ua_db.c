@@ -145,8 +145,8 @@ void read_cli_arguments(int argc, char **argv)
     static struct option long_options[] = {
             { "add", required_argument, 0, 'a' },
             { "get", required_argument, 0, 'g' },
-            { "add-label", required_argument, 0, 'l' },
-            { "remove-label", required_argument, 0, 'r' },
+            { "add-class", required_argument, 0, 'l' },
+            { "remove-class", required_argument, 0, 'r' },
             { "help", no_argument, 0, 'h' }
      };
 
