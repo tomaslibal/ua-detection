@@ -118,5 +118,5 @@ void read_cli_arguments(int argc, char **argv)
 void print_usage()
 {
     printf("\nua_db usage:\n\n");
-    printf("ua_db add|get|add-label|remove-label|help\n");
+    printf("ua_db add|get|update|delete|add-class|remove-class|help\n");
 }
