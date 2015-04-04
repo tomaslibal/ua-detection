@@ -38,19 +38,19 @@ Use the download script for data:
 
 #### build
 
-    make
+    make all
 
 #### usage
 
 *default usage:*
 
-    bin/ua_detection --uas "Mozilla/5.0 ..." --group mobile
+    bin/uadet --uas "Mozilla/5.0 ..." --group mobile
     
 Prints to stdout the output of the `mobile` classifier.
 
 run a user-agent string against all classifiers (that have been seen in the training data):
 
-    bin/ua_detection --uas "Mozilla/5.0 ..." --cmp_all
+    bin/uadet --uas "Mozilla/5.0 ..." --cmp_all
 
 ### Data
 
