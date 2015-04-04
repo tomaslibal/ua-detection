@@ -82,7 +82,7 @@ See the [example](data/uas_with_class.txt)
 
 #### uadb
 
-`uadb` is a storing mechanism for <user-agent-string, [classes]>, e.g.
+`uadb` is a storing mechanism for (user-agent-string, [classes]), e.g.
 
     Mozilla/5.0 (Android; en_us... [Mobile, Android, en_us]
     Mozilla/5.0 (Linux; X11... [Desktop, Linux] 
