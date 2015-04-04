@@ -11,6 +11,7 @@ if hash clang 2>/dev/null; then \
 fi
 
 CFLAGS=-g -std=c99 -lm
+INCDIRS=-I/usr/src/linux-headers-3.16.0-33/include
 
 SRCDIR=src
 BINDIR=bin
@@ -36,13 +37,13 @@ ua_program: $(UAPROGRAMSRC)
 	$(CC) -o $(BINDIR)/uadet $^ $(CFLAGS)
 
 
-UADBSRC=$(addprefix $(SRCDIR)/, ua_db.c)
+UADBSRC=$(addprefix $(SRCDIR)/, btree.c link_node.c db.c ua_db.c)
 
 ua_db: $(UADBSRC)
 	@if [ ! -d bin ]; then \
 	  mkdir bin; \
 	fi
-	$(CC) -o $(BINDIR)/uadb $^ $(CFLAGS)
+	$(CC) -o $(BINDIR)/uadb $^ $(CFLAGS) $(INCDIRS)
 	
 
 #
