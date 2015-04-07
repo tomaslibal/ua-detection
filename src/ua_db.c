@@ -72,6 +72,17 @@ void read_cli_arguments(int argc, char **argv)
             { "delete", required_argument, 0, 'd' },
             { "add-class", required_argument, 0, 'l' },
             { "remove-class", required_argument, 0, 'r' },
+            /*
+             * UADB can generate a text file which is supposed to be a training
+             * set for a binary classifier. Each line is a pair of "class, UAS"
+             * where class is specified by the optarg of 'generate-cls' option.
+             *
+             * For instance, if 'generate-cls mobile' is supplied, the output
+             * file will have pairs "mobile, UAS" and "all-other, UAS" for
+             * user-agent strings that have 'mobile' class and those who do
+             * not, respectivelly.
+             */
+            { "generate-cls", required_argument, 0, 'g' },
             { "help", no_argument, 0, 'h' }
      };
 
