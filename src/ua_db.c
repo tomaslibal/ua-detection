@@ -19,6 +19,7 @@
 
 void print_usage();
 void read_cli_arguments(int argc, char **argv);
+void generate_clf_set(char *class);
 
 /*
  * Database file for the user agent strings
@@ -82,14 +83,14 @@ void read_cli_arguments(int argc, char **argv)
              * user-agent strings that have 'mobile' class and those who do
              * not, respectivelly.
              */
-            { "generate-cls", required_argument, 0, 'g' },
+            { "generate-cls", required_argument, 0, 'o' },
             { "help", no_argument, 0, 'h' }
      };
 
      while (1) {
          int option_index = 0;
 
-         c = getopt_long(argc, argv, "a:g:u:d:l:r:h", long_options, &option_index);
+         c = getopt_long(argc, argv, "a:g:u:d:l:r:o:h", long_options, &option_index);
          // long_options[option_index].name
 
          if (c == -1)
@@ -116,6 +117,9 @@ void read_cli_arguments(int argc, char **argv)
              case 'r':
                  remove_class(root, uas, optarg);
                  break;
+             case 'o':
+                 generate_clf_set(optarg);
+                 break;
              case 'h':
                  print_usage();
                  exit(EXIT_SUCCESS);
@@ -130,4 +134,9 @@ void print_usage()
 {
     printf("\nua_db usage:\n\n");
     printf("ua_db add|get|update|delete|add-class|remove-class|help\n");
+}
+
+void generate_clf_set(char *class)
+{
+
 }
