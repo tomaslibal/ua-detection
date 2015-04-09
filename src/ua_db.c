@@ -19,7 +19,9 @@
 
 void print_usage();
 void read_cli_arguments(int argc, char **argv);
-void generate_clf_set(char *class);
+void generate_clf_set(char *class, struct bNode *root);
+void writeout_btree(struct bNode *root, FILE *fp, char *class);
+void write_line_to_file(FILE *fp, char *line);
 
 /*
  * Database file for the user agent strings
@@ -118,7 +120,7 @@ void read_cli_arguments(int argc, char **argv)
                  remove_class(root, uas, optarg);
                  break;
              case 'o':
-                 generate_clf_set(optarg);
+                 generate_clf_set(optarg, root);
                  break;
              case 'h':
                  print_usage();
@@ -136,7 +138,90 @@ void print_usage()
     printf("ua_db add|get|update|delete|add-class|remove-class|help\n");
 }
 
-void generate_clf_set(char *class)
+/*
+ * Generate a training set for a given class. The strategy is one-vs-all.
+ *
+ * Each line in the output file will have a string of text (ascii) which
+ * is a tuple <class UAS> (separated by the first whitespace char).
+ *
+ */
+void generate_clf_set(char *class, struct bNode *root)
 {
+    char *out = "out.txt";
 
+    FILE *fp = NULL;
+
+    fp = fopen(out, "w");
+
+    if (fp == NULL) {
+        perror("cannot write the file\n");
+        return;
+    }
+
+    writeout_btree(root, fp, class);
+
+    fclose(fp);
+}
+
+void writeout_btree(struct bNode *root, FILE *fp, char *class)
+{
+    struct link_node_int *tmp;
+    char other[32] = "other";
+    char *line = NULL;
+    int offset = 0;
+    char *lf = NULL;
+
+    if (root == NULL) {
+        return;
+    }
+
+    if (root->uas != NULL) {
+        tmp = link_node_int_get(root->classes, class);
+        lf = NULL;
+        if (tmp != NULL) {
+            line = malloc(sizeof(char) * strlen(class) + sizeof(char) * strlen(root->uas) + 3); // +3 = 1 for null terminator, one for the space char between class and UAS and one for the new line char
+            memset(line, 0, sizeof(line));
+            strcpy(line, class);
+            line[strlen(class)] = ' ';
+            strcpy((line+strlen(class)+1), root->uas);
+            lf = strchr(line, '\n');
+            if (!lf)
+                line[strlen(line)] = '\n';
+
+            lf = strstr(line, "\n\n");
+            if (lf) {
+                lf[1] = '\0';
+            }
+
+            write_line_to_file(fp, line);
+        } else {
+            line = malloc(sizeof(char) * strlen("other ") + sizeof(char) * strlen(root->uas) + 2);
+            memset(line, 0, sizeof(line));
+            strcpy(line, "other ");
+            strcpy((line+strlen("other ")), root->uas);
+
+            lf = strchr(line, '\n');
+
+            if (lf == NULL) {
+                line[strlen(line)] = '\n';
+            }
+
+            lf = strstr(line, "\n\n");
+            if (lf) {
+                lf[1] = '\0';
+            }
+
+            write_line_to_file(fp, line);
+        }
+        free(line);
+        line = NULL;
+    }
+
+    writeout_btree(root->left, fp, class);
+    writeout_btree(root->right, fp, class);
+}
+
+void write_line_to_file(FILE *fp, char *line)
+{
+    int ret = fwrite(line, sizeof(char), strlen(line), fp);
 }
