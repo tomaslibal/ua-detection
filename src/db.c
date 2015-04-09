@@ -91,11 +91,11 @@ void load_db(char *dbf, struct bNode *root)
         if (c == STR_SEPARATOR) {
             if (i == 0) {
                 if (root->uas == NULL) {
-                    bNode_set(root, token, NULL, NULL, NULL);
+                    bNode_set(root, token, 0, NULL, NULL, NULL);
                     i++;
                 } else {
                     tmp = bNode_create();
-                    bNode_set(tmp, token, NULL, NULL, NULL);
+                    bNode_set(tmp, token, 0, NULL, NULL, NULL);
                     bNode_add(tmp, root);
                     i++;
                 }
@@ -105,9 +105,9 @@ void load_db(char *dbf, struct bNode *root)
                     cls = link_node_int_create();
                     link_node_int_set(cls, token, 1);
                     if (root->classes == NULL) {
-                        bNode_set(root, NULL, cls, NULL, NULL);
+                        bNode_set(root, NULL, 0, cls, NULL, NULL);
                     } else {
-                        bNode_set(tmp, NULL, cls, NULL, NULL);
+                        bNode_set(tmp, NULL, 0, cls, NULL, NULL);
                     }
                 } else {
                     cls_tmp = link_node_int_create();
@@ -128,9 +128,9 @@ void load_db(char *dbf, struct bNode *root)
                 cls = link_node_int_create();
                 link_node_int_set(cls, token, 1);
                 if (root->classes == NULL) {
-                    bNode_set(root, NULL, cls, NULL, NULL);
+                    bNode_set(root, NULL, 0, cls, NULL, NULL);
                 } else {
-                    bNode_set(tmp, NULL, cls, NULL, NULL);
+                    bNode_set(tmp, NULL, 0, cls, NULL, NULL);
                 }
             } else {
                 cls_tmp = link_node_int_create();
@@ -275,11 +275,11 @@ void add_uas(struct bNode *root, char *uas)
     classes = link_node_int_create();
 
     link_node_int_set(classes, "<no class>", 0);
-    bNode_set(new, uas, classes, NULL, NULL);
+    bNode_set(new, uas, 0, classes, NULL, NULL);
 
     // special case: no data, i.e. root->uas empty
     if (root->uas == NULL) {
-        bNode_set(root, uas, classes, NULL, NULL);
+        bNode_set(root, uas, 0, classes, NULL, NULL);
         return;
     }
 

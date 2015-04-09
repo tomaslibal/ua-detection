@@ -66,7 +66,7 @@ void test_bnode_set()
     struct bNode *rn = NULL;
     rn = bNode_create();
 
-    bNode_set(root, "Some UAS", NULL, NULL, rn);
+    bNode_set(root, "Some UAS", 0, NULL, NULL, rn);
 
     assert(root->uas != NULL);
     assert(strcmp(root->uas, "Some UAS") == 0);
@@ -88,7 +88,7 @@ void test_bnode_set_with_classes()
     classes = link_node_int_create();
     link_node_int_set(classes, "some_class", 1);
 
-    bNode_set(root, "Some UAS", classes, NULL, NULL);
+    bNode_set(root, "Some UAS", 0, classes, NULL, NULL);
 
     assert(root->classes != NULL);
     assert(root->classes == classes);

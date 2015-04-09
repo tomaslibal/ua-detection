@@ -25,6 +25,7 @@
  *
  */
 struct bNode {
+    int id;
     char *uas;
     struct link_node_int *classes;
     struct bNode *left;
@@ -46,7 +47,7 @@ void bNode_free(struct bNode *root);
  * someNode->left = left and will not override/re-set someNode->uas to NULL
  * and the like for the rest of the fields.
  */
-void bNode_set(struct bNode *node, char *uas, struct link_node_int *classes, struct bNode *left, struct bNode *right);
+void bNode_set(struct bNode *node, char *uas, int id, struct link_node_int *classes, struct bNode *left, struct bNode *right);
 
 /*
  * root is a node in a binary tree and the node passed into this function is

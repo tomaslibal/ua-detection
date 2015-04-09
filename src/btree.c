@@ -19,6 +19,7 @@ struct bNode *bNode_create()
         return NULL;
     }
 
+    root->id = 0;
     root->uas = NULL;
     root->classes = NULL;
     root->left = NULL;
@@ -80,11 +81,13 @@ void bNode_free(struct bNode *root)
     free(root);
 }
 
-void bNode_set(struct bNode *node, char *uas, struct link_node_int *classes, struct bNode *left, struct bNode *right)
+void bNode_set(struct bNode *node, char *uas, int id, struct link_node_int *classes, struct bNode *left, struct bNode *right)
 {
     if (node == NULL) {
         return;
     }
+
+    node->id = id;
 
     // assign uas to root->uas
     if (uas != NULL) {
