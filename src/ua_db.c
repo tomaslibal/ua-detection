@@ -29,6 +29,11 @@ void write_line_to_file(FILE *fp, char *line);
 char *dbf = "data/ua.db";
 
 /*
+ * Training set file
+ */
+char *out = "out.txt";
+
+/*
  * Data are stored in memory in a binary tree and this is the root node
  * of that data structure.
  */
@@ -147,8 +152,6 @@ void print_usage()
  */
 void generate_clf_set(char *class, struct bNode *root)
 {
-    char *out = "out.txt";
-
     FILE *fp = NULL;
 
     fp = fopen(out, "w");
