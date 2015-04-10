@@ -237,7 +237,6 @@ char *serialize_bnode(struct bNode *node, char *out, int *len, int *num)
     // make space for the Id (int) as a string
     char idStr[15];
     sprintf(idStr, "%d", node->id);
-    printf("id as string: %s\n", idStr);
     out = realloc(out, *len + strlen(idStr) + 1);
     strcpy((out + *len), idStr);
     *(out + *len + strlen(idStr)) = STR_SEPARATOR;
@@ -245,7 +244,7 @@ char *serialize_bnode(struct bNode *node, char *out, int *len, int *num)
 
     // serialize UAS
     if (node->uas != NULL) {
-        printf("node[%d](id=%d) %s", *num, node->id, node->uas);
+        //printf("node[%d](id=%d) %s", *num, node->id, node->uas);
         *num += 1;
         l = strlen(node->uas);
         *len += (l + 1);
@@ -260,7 +259,7 @@ char *serialize_bnode(struct bNode *node, char *out, int *len, int *num)
         iterator = node->classes;
         while(iterator) {
             if (iterator->name != NULL) {
-                printf(" %s", iterator->name);
+                //printf(" %s", iterator->name);
                 ll = strlen(iterator->name);
                 *len += (ll + 1);
                 out = realloc(out, *len);
@@ -273,7 +272,7 @@ char *serialize_bnode(struct bNode *node, char *out, int *len, int *num)
         }
     }
 
-    printf("\n");
+    //printf("\n");
     //override the \0 char to NODE_SEPARATOR
     if (*len > 0) *(out + *len - 1) = NODE_SEPARATOR;
 
@@ -310,28 +309,60 @@ void add_uas(struct bNode *root, char *uas)
     bNode_add(new, root);
 }
 
-void find_uas(struct bNode *root, char *uas)
+int find_uas(struct bNode *root, char *uas)
 {
-    struct bNode *tmp = NULL;
+    int diff = -1;
+    int r = 0;
+    int l = 0;
 
     if (root == NULL) {
-        return;
+        return 0;
     }
 
-    if (root->uas != NULL && strcmp(root->uas, uas) == 0) {
-        printf("Found %s\n", uas);
-        printf("%s:", root->uas);
+    diff = strcmp(root->uas, uas);
+
+    if (diff == 0) {
+        printf("Record found!\n");
+        printf("(id=%d) %s:", root->id, root->uas);
         print_link_node_int(root->classes);
         printf("\n");
-        exit(EXIT_SUCCESS);
-        return;
+        return 1;
+    }
+    // go left/right based on the strcmp of root->uas, uas
+
+    if (diff < 0) {
+        r = find_uas(root->right, uas);
     }
 
-    find_uas(root->left, uas);
-    find_uas(root->right, uas);
+    if (diff > 0) {
+        l = find_uas(root->left, uas);
+    }
 
-    printf("Cannot find %s\n", uas);
-    exit(EXIT_FAILURE);
+    return l || r;
+}
+
+int find_by_id(struct bNode *root, int id)
+{
+    int l;
+    int r;
+
+    if (root == NULL) {
+        return 0;
+    }
+
+    if (id > -1 && root->id == id) {
+        printf("Record found!\n");
+        printf("(id=%d) %s:", id, root->uas);
+        print_link_node_int(root->classes);
+        printf("\n");
+        //exit(EXIT_SUCCESS);
+        return 1;
+    }
+
+    l = find_by_id(root->left, id);
+    r = find_by_id(root->right, id);
+
+    return l || r;
 }
 
 void add_class(struct bNode *root, char *uas, char *class)
