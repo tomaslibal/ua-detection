@@ -231,3 +231,24 @@ void bNode_add_recursive_(struct bNode *root, struct bNode *node)
     bNode_add_recursive_(root, node->left);
     bNode_add_recursive_(root, node->right);
 }
+
+struct bNode *bNode_get_by_id(struct bNode *root, int id)
+{
+    struct bNode *rl = NULL;
+    struct bNode *rr = NULL;
+
+    if (root == NULL) {
+        return NULL;
+    }
+
+    if (root->id == id) {
+        return root;
+    } else {
+        rl = bNode_get_by_id(root->left, id);
+        rr = bNode_get_by_id(root->right, id);
+        if (rl != NULL) return rl;
+        if (rr != NULL) return rr;
+    }
+
+    return NULL;
+}

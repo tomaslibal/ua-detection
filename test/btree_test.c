@@ -179,6 +179,38 @@ void test_bnode_remove_unique()
     success(i_bnode);
 }
 
+void test_bnode_get_by_id()
+{
+    struct bNode *root = NULL;
+    root = bNode_create();
+
+    struct bNode *rn = NULL;
+    rn = bNode_create();
+
+    struct bNode *nested = NULL;
+    nested = bNode_create();
+
+    bNode_set(root, "some uas", 1, NULL, NULL, NULL);
+    bNode_set(rn, "<another>", 2, NULL, NULL, NULL);
+    bNode_set(nested, "uas-3", 3, NULL, NULL, NULL);
+
+    bNode_add(rn, root);
+    bNode_add(nested, root);
+
+    struct bNode *result = NULL;
+
+    result = bNode_get_by_id(root, 3);
+
+    assert(result == nested);
+
+    result = bNode_get_by_id(root, 2);
+
+    assert(rn == result);
+
+    bNode_free(root);
+    success(i_bnode);
+}
+
 int run_test_bnode()
 {
     printf("testing the binary tree: ");
@@ -188,6 +220,7 @@ int run_test_bnode()
     test_bnode_set_with_classes();
     test_bnode_get();
     test_bnode_remove_unique();
+    test_bnode_get_by_id();
 
     return i_bnode;
 }

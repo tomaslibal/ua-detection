@@ -63,6 +63,11 @@ void bNode_add(struct bNode *node, struct bNode *root);
 struct bNode *bNode_get(struct bNode *node, char *uas);
 
 /*
+ * Looks up a binary node by the value of its id field.
+ */
+struct bNode *bNode_get_by_id(struct bNode *node, int id);
+
+/*
  * Remove operation: removes the specified node but keeps all of its children
  * nodes down the tree
  */

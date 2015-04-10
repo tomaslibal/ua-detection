@@ -23,6 +23,11 @@ const char STR_SEPARATOR = 10;
 const char NODE_SEPARATOR = 0;
 
 /*
+ * autoincrement ID for the btree nodes' IDs
+ */
+int inc = 1;
+
+/*
  * Prints the strings of each node in the binary tree whose root node
  * is passed in
  */
@@ -85,29 +90,44 @@ void load_db(char *dbf, struct bNode *root)
 
     int c; // note: int, not char, required to handle EOF
     int i = 0;
+    int aux;
 
     while ((c = fgetc(fp)) != EOF) {
 
         if (c == STR_SEPARATOR) {
+            // i == 0 : ID
             if (i == 0) {
+                if (token != NULL) {
+                    aux = atoi(token);
+                } else {
+                    aux = inc;
+                }
                 if (root->uas == NULL) {
-                    bNode_set(root, token, 0, NULL, NULL, NULL);
-                    i++;
+                    root->id = aux;
                 } else {
                     tmp = bNode_create();
-                    bNode_set(tmp, token, 0, NULL, NULL, NULL);
-                    bNode_add(tmp, root);
-                    i++;
+                    tmp->id = aux;
                 }
+                i++;
+            // i == 1 : UAS
+            } else if (i == 1) {
+                if (root->uas == NULL) {
+                    bNode_set(root, token, root->id, NULL, NULL, NULL);
+                } else {
+                    bNode_set(tmp, token, tmp->id, NULL, NULL, NULL);
+                    bNode_add(tmp, root);
+                    inc++;
+                }
+                i++;
+            // Classes
             } else {
-                // class
                 if (cls == NULL) {
                     cls = link_node_int_create();
                     link_node_int_set(cls, token, 1);
                     if (root->classes == NULL) {
-                        bNode_set(root, NULL, 0, cls, NULL, NULL);
+                        bNode_set(root, NULL, aux, cls, NULL, NULL);
                     } else {
-                        bNode_set(tmp, NULL, 0, cls, NULL, NULL);
+                        bNode_set(tmp, NULL, aux, cls, NULL, NULL);
                     }
                 } else {
                     cls_tmp = link_node_int_create();
@@ -117,7 +137,7 @@ void load_db(char *dbf, struct bNode *root)
                 }
             }
             memset(token, 0, l);
-            *token = '\0';
+            if (l > 0) *token = '\0';
             l = 0;
             continue;
         }
@@ -128,9 +148,9 @@ void load_db(char *dbf, struct bNode *root)
                 cls = link_node_int_create();
                 link_node_int_set(cls, token, 1);
                 if (root->classes == NULL) {
-                    bNode_set(root, NULL, 0, cls, NULL, NULL);
+                    bNode_set(root, NULL, aux, cls, NULL, NULL);
                 } else {
-                    bNode_set(tmp, NULL, 0, cls, NULL, NULL);
+                    bNode_set(tmp, NULL, aux, cls, NULL, NULL);
                 }
             } else {
                 cls_tmp = link_node_int_create();
@@ -139,7 +159,7 @@ void load_db(char *dbf, struct bNode *root)
                 cls_last->next = cls_tmp;
             }
             memset(token, 0, l);
-            *token = '\0';
+            if (l > 0) *token = '\0';
             l = 0;
             i = 0;
             cls = NULL;
@@ -207,32 +227,34 @@ char *serialize_btree(struct bNode *root, char *out, int *len, int *num)
 char *serialize_bnode(struct bNode *node, char *out, int *len, int *num)
 {
     struct link_node_int *iterator;
-    char *orig = NULL;
     int l, ll;
 
     if (node == NULL) {
         return out;
     }
 
+    // serialize Id
+    // make space for the Id (int) as a string
+    char idStr[15];
+    sprintf(idStr, "%d", node->id);
+    printf("id as string: %s\n", idStr);
+    out = realloc(out, *len + strlen(idStr) + 1);
+    strcpy((out + *len), idStr);
+    *(out + *len + strlen(idStr)) = STR_SEPARATOR;
+    *len += strlen(idStr) + 1;
+
+    // serialize UAS
     if (node->uas != NULL) {
-        printf("node[%d] %s", *num, node->uas);
+        printf("node[%d](id=%d) %s", *num, node->id, node->uas);
         *num += 1;
         l = strlen(node->uas);
-
-        if (out != NULL) {
-            orig = malloc(sizeof(char) * (*len) + 1);
-            strcpy(orig, out);
-        }
         *len += (l + 1);
         out = realloc(out, *len);
-        if (orig != NULL) strcpy(out, orig);
-        free(orig);
         strcpy((out + *len - l - 1), node->uas);
-        //override the \0 char to STR_SEPARATOR
         *(out + *len - 1) = STR_SEPARATOR;
     }
 
-    // classes
+    // serialize classes
     if (node->classes != NULL) {
 
         iterator = node->classes;
@@ -275,14 +297,16 @@ void add_uas(struct bNode *root, char *uas)
     classes = link_node_int_create();
 
     link_node_int_set(classes, "<no class>", 0);
-    bNode_set(new, uas, 0, classes, NULL, NULL);
+    bNode_set(new, uas, inc, classes, NULL, NULL);
 
     // special case: no data, i.e. root->uas empty
     if (root->uas == NULL) {
-        bNode_set(root, uas, 0, classes, NULL, NULL);
+        bNode_set(root, uas, inc, classes, NULL, NULL);
+        inc++;
         return;
     }
 
+    inc++;
     bNode_add(new, root);
 }
 
