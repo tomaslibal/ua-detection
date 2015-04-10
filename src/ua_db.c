@@ -70,10 +70,13 @@ int main(int argc, char **argv)
 void read_cli_arguments(int argc, char **argv)
 {
     int c;
+    int use_id = 0;
+    int res;
     char *tmp = NULL;
     char *uas = NULL;
 
     static struct option long_options[] = {
+            { "by-id", no_argument, 0, 'i' },
             { "add", required_argument, 0, 'a' },
             { "get", required_argument, 0, 'g' },
             { "update", required_argument, 0, 'u' },
@@ -97,19 +100,32 @@ void read_cli_arguments(int argc, char **argv)
      while (1) {
          int option_index = 0;
 
-         c = getopt_long(argc, argv, "a:g:u:d:l:r:o:h", long_options, &option_index);
+         c = getopt_long(argc, argv, "ia:g:u:d:l:r:o:h", long_options, &option_index);
          // long_options[option_index].name
 
          if (c == -1)
              break;
 
          switch (c){
+             case 'i':
+                 use_id = 1;
+                 break;
              case 'a':
                  printf("adding UAS %s\n", optarg);
                  add_uas(root, optarg);
                  break;
              case 'g':
-                 find_uas(root, optarg);
+                 if (use_id == 1) {
+                     res = find_by_id(root, atoi(optarg));
+                     if (!res) {
+                         printf("Cannot find a record with id=%d\n", atoi(optarg));
+                     }
+                 } else {
+                     res = find_uas(root, optarg);
+                     if (!res) {
+                         printf("Cannot find a record with uas=%s\n", optarg);
+                     }
+                 }
                  break;
              case 'u':
                  uas = malloc(sizeof(char) * strlen(optarg) + 1);
