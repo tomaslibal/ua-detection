@@ -156,7 +156,15 @@ void read_cli_arguments(int argc, char **argv)
 void print_usage()
 {
     printf("\nua_db usage:\n\n");
-    printf("ua_db add|get|update|delete|add-class|remove-class|help\n");
+    printf("\tby-id                if -i/--by-id used, instead of lookup by user-agent\n\t                     string the ID is used to find records\n");
+    printf("\tadd <uas>            adds a record\n");
+    printf("\tget <uas/id>         retrieve the matching record\n");
+    printf("\tupdate <uas/id>      use for update operations like add-class or\n\t                     remove-class\n");
+    printf("\tdelete <uas/id>      removes the matching record\n");
+    printf("\tadd-class <class>    adds a class, must be used in conjunction\n\t                     with --update <uas/id>\n");
+    printf("\tremove-class <class> removes a class, must be used in conjunction\n\t                     with --update <uas/id>\n");
+    printf("\tgenerate-cls <class> saves a file\n");
+    printf("\thelp                 displays this help\n");
 }
 
 /*
