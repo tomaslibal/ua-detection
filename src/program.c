@@ -28,6 +28,7 @@
  */
 void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
+void read_cls_data(char *class_name, struct uas_record *root, int *lc);
 void save_data_bin();
 void load_data_bin();
 void train(struct uas_record *root, struct link_node_int *prior);
@@ -313,7 +314,8 @@ int main(int argc, char** argv) {
     chck_malloc((void *) root, "Array of UAS Records");
 
     if (mask_is_set_bool(&settings, &LOAD_DATA_FILE_FLAG))
-        read_data_with_class("data/uas_with_class.txt", root, &lc);
+        read_cls_data(uas_input->class, root, &lc);
+        //read_data_with_class("data/uas_with_class.txt", root, &lc);
 
     /*
      * TRAIN FROM THE DATA
@@ -336,6 +338,8 @@ int main(int argc, char** argv) {
         //
         float prior_class_val = 0;
         float log_prob = 0;
+        float a = 0.0;
+        float b = 0.0;
         struct link_node_float *aux_float = NULL;
 
         /*
@@ -375,7 +379,22 @@ int main(int argc, char** argv) {
             if (aux_float != NULL)
                 prior_class_val = aux_float->val;
 
-            printf("[cls:output %s] = %f\n", uas_input->class, expf(log_prob_word_class + logf(prior_class_val)));
+            a = expf(log_prob_word_class + logf(prior_class_val));
+            //printf("[cls:output %s] = %f\n", uas_input->class, a);
+
+            // -vs-all:
+
+            prior_class_val = 0;
+            aux_float = link_node_float_get(p_prior, "other");
+            if (aux_float != NULL)
+                prior_class_val = aux_float->val;
+
+            log_prob = evaluate_cls(words, uas_input, "other");
+
+            b = expf(log_prob + logf(prior_class_val));
+            //printf("[cls:output non-%s] = %f\n", uas_input->class, b);
+
+            printf("[cls:%s]=%f%%\n", uas_input->class, (a / (a+b))*100);
         }
     }
 
@@ -406,6 +425,23 @@ void read_data_with_class(char *path, struct uas_record *root, int *lc)
 
     //print_uas_records(root);
     printf("lines of data read = %d\n", *lc);
+}
+
+/*
+ * one-vs-all strategy: read a separate <class_name>.cls.txt data file which contains
+ * pairs <class, uas> where class = { <class_name>, other }
+ */
+void read_cls_data(char *class_name, struct uas_record *root, int *lc)
+{
+    char *path = NULL;
+    *lc = 0;
+
+    path = malloc(sizeof(char) * strlen(class_name) + sizeof(char) * 13);
+    sprintf(path, "data/%s.cls.txt", class_name);
+    *lc = read_uas_with_class(path, root);
+    printf("read %d lines of data\n", *lc);
+
+    free(path);
 }
 
 // root = root node of the uas_record linked list containing UA strings
@@ -490,7 +526,7 @@ void train(struct uas_record *root, struct link_node_int *prior)
 }
 
 /*
- * Config via command line arguments
+ * Config via command line arg  uments
  */
 void read_CLI_input(int argc, char **argv, struct uas_record *uas_input)
 {
