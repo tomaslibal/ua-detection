@@ -192,7 +192,7 @@ void generate_clf_set(char *class, struct bNode *root)
 
 void writeout_btree(struct bNode *root, FILE *fp, char *class)
 {
-    struct link_node_int *tmp;
+    struct link_node_int *tmp = NULL;
     char other[32] = "other";
     char *line = NULL;
     int offset = 0;
@@ -211,32 +211,17 @@ void writeout_btree(struct bNode *root, FILE *fp, char *class)
             strcpy(line, class);
             line[strlen(class)] = ' ';
             strcpy((line+strlen(class)+1), root->uas);
-            lf = strchr(line, '\n');
-            if (!lf)
-                line[strlen(line)] = '\n';
 
-            lf = strstr(line, "\n\n");
-            if (lf) {
-                lf[1] = '\0';
-            }
+            strcat(line, "\n");
 
             write_line_to_file(fp, line);
         } else {
-            line = malloc(sizeof(char) * strlen("other ") + sizeof(char) * strlen(root->uas) + 2);
+            line = malloc(sizeof(char) * strlen("other ") + sizeof(char) * strlen(root->uas) + 3);
             memset(line, 0, sizeof(line));
             strcpy(line, "other ");
             strcpy((line+strlen("other ")), root->uas);
 
-            lf = strchr(line, '\n');
-
-            if (lf == NULL) {
-                line[strlen(line)] = '\n';
-            }
-
-            lf = strstr(line, "\n\n");
-            if (lf) {
-                lf[1] = '\0';
-            }
+            strcat(line, "\n");
 
             write_line_to_file(fp, line);
         }
