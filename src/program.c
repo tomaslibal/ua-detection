@@ -1,3 +1,8 @@
+/**
+ * Main entry point for `uadet` program.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -23,9 +28,7 @@
 #include "link_node.h"
 #include "link_node.c"
 
-/*
- * Helper functions for ua_detection
- */
+
 void chck_malloc(void *ptr, char *desc);
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
 void read_cls_data(char *class_name, struct uas_record *root, int *lc);
