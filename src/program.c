@@ -771,8 +771,8 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
     struct link_node_int *cls_iterator = NULL;
     float prior_class_val = 0;
     float log_prob = 0;
-    //float a = 0.0;
-    //float b = 0.0;
+    float a = 0.0;
+    float b = 0.0;
     struct link_node_float *aux_float = NULL;
     int lc = 0;
 
@@ -796,8 +796,20 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
 
         log_prob = evaluate_cls(words, uas_input, cls_iterator->name);
 
-        printf("[cls:output %s] = %f\n", cls_iterator->name, expf(log_prob + logf(prior_class_val)));
+        a = expf(log_prob + logf(prior_class_val));
 
+        prior_class_val = 0;
+        aux_float = link_node_float_get(p_prior, "other");
+        if (aux_float != NULL)
+            prior_class_val = aux_float->val;
+
+        log_prob = evaluate_cls(words, uas_input, "other");
+
+        b = expf(log_prob + logf(prior_class_val));
+
+        //printf("[cls:output %s] = %f\n", cls_iterator->name, a);
+        //printf("[cls:output non-%s] = %f\n", cls_iterator->name, b);
+        printf("[cls:%s]=%f%%\n", cls_iterator->name, (a / (a+b))*100);
         cls_iterator = cls_iterator->next;
     }
 }
