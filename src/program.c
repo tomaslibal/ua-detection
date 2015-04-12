@@ -37,6 +37,7 @@ void load_data_bin();
 void train(struct uas_record *root, struct link_node_int *prior);
 void evaluate(struct link_node_int *words, struct uas_record *uas_input);
 float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class);
+void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input);
 void read_CLI_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 void free_shared_res();
@@ -316,9 +317,13 @@ int main(int argc, char** argv) {
     root = uas_record_create();
     chck_malloc((void *) root, "Array of UAS Records");
 
+    // when CMP_ALL is set, read_cls_data would not know which class's
+    // training set to load, so here we disable the file loading
+    if(mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG))
+        mask_unset(&settings, &LOAD_DATA_FILE_FLAG);
+
     if (mask_is_set_bool(&settings, &LOAD_DATA_FILE_FLAG))
         read_cls_data(uas_input->class, root, &lc);
-        //read_data_with_class("data/uas_with_class.txt", root, &lc);
 
     /*
      * TRAIN FROM THE DATA
@@ -350,19 +355,7 @@ int main(int argc, char** argv) {
          * Compare the user-agent against all classifiers
          */
         if (mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG)) {
-            struct link_node_int *cls_iterator = prior;
-            while(cls_iterator) {
-                prior_class_val = 0;
-                aux_float = link_node_float_get(p_prior, cls_iterator->name);
-                if (aux_float != NULL)
-                    prior_class_val = aux_float->val;
-
-                log_prob = evaluate_cls(words, uas_input, cls_iterator->name);
-
-                printf("[cls:output %s] = %f\n", cls_iterator->name, expf(log_prob + logf(prior_class_val)));
-
-                cls_iterator = cls_iterator->next;
-            }
+            cmp_all(prior, words, uas_input);
         /*
          * Or compare against the one given class
          */
@@ -764,6 +757,48 @@ void evaluate(struct link_node_int *words, struct uas_record *uas_input)
         }
 
         iterator = iterator->next;
+    }
+}
+
+void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input)
+{
+    // each class must have a *.cls.txt file in the data folder
+    // so list that folder and evaluate uas_input for each class
+    // found in that directory
+
+    // for now, manually override to mobile,desktop,android
+    struct link_node_int *tmp = NULL;
+    struct link_node_int *cls_iterator = NULL;
+    float prior_class_val = 0;
+    float log_prob = 0;
+    //float a = 0.0;
+    //float b = 0.0;
+    struct link_node_float *aux_float = NULL;
+    int lc = 0;
+
+    cls_iterator = link_node_int_create();
+    link_node_int_set(cls_iterator, "mobile", 0);
+    tmp = link_node_int_create();
+    link_node_int_set(tmp, "desktop", 0);
+    cls_iterator->next = tmp;
+    tmp = link_node_int_create();
+    link_node_int_set(tmp, "android", 0);
+    cls_iterator->next->next = tmp;
+
+    while(cls_iterator) {
+        read_cls_data(cls_iterator->name, root, &lc);
+        train(root, prior);
+
+        prior_class_val = 0;
+        aux_float = link_node_float_get(p_prior, cls_iterator->name);
+        if (aux_float != NULL)
+            prior_class_val = aux_float->val;
+
+        log_prob = evaluate_cls(words, uas_input, cls_iterator->name);
+
+        printf("[cls:output %s] = %f\n", cls_iterator->name, expf(log_prob + logf(prior_class_val)));
+
+        cls_iterator = cls_iterator->next;
     }
 }
 
