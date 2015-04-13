@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 curl --output mobile.cls.txt -O http://libal.eu/eph/uastrings/sample1.txt 
 

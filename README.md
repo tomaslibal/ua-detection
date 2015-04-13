@@ -34,7 +34,7 @@ Needed to build the binaries:
 
 Use the download script for data:
 
-- UNIX like system with shell
+- UNIX like system with bash interpreter
 
 #### build
 
