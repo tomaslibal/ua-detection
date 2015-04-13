@@ -43,9 +43,9 @@ void print_usage();
 void free_shared_res();
 
 /*
- * Corpus Dictionary keeps reference of each 'word' from the user agent
- * strings that have been read and keeps a counter for how many times
- * each word has been seen in the input.
+ * Corpus Dictionary keeps a reference to each 'word' from the user agent
+ * strings that have been read and keeps a counter for each word to track
+ * how many times the word has been seen in the input.
  */
 struct link_node_int *corpusDict = NULL;
 
@@ -160,19 +160,20 @@ int main(int argc, char** argv) {
      *     to a pre-defined class (group)?
      *
      *     For this problem, you'd call this program with two parameters:
-     *         ./program -ua <some user-agent string> -group <some group> [-treshold=0.8]
+     *         ./program --uas <some user-agent string> --group <some group> [-treshold=0.8]
      *
-     *     This will print "probably yes" or "probably no" given the P(ua|class) and
-     *     the treshold.
+     *     This will print P(uas|class)
      *
      *     It can also print the probabilities for each learned class, e.g.:
      *
-     *     class1=0.909032
-     *     class2=0.870211
-     *     ...
+     *         ./program --uas <uas> --cmp_all
      *
+     *     This will print P(uas|class) for each class for which it has training
+     *     data (in data/{class}.cls.txt)
+     *
+     *     NOT YET IMPLEMENTED:
      *     Optionally, you can specify which format of the output you want:
-     *     ./program ... -output application/json
+     *     ./program ... --output json
      *
      */
 
@@ -210,41 +211,40 @@ int main(int argc, char** argv) {
      *
      * I. Open data file with pairs (class, user-agent string)
      *
-     *    set struct uas_record *current = NULL
-     *    set struct uas_record *previous = NULL
-     *
-     * 	  For each line as current (class, user-agent string) do:
+     * 	  For each line as current = (class, user-agent string) do:
      *        set prior[class] += 1
      *
      *    This increments the counter that checks how many UA strings from
-     *    each class we have encountered
+     *    each class we have encountered.
      *
+     *    Then do:
      *        count_words(current, corpusDict)
      *
      *    This will tokenize current->uas and add count for each unique word
-     *    from that user-agent string to corpusDict
+     *    from that user-agent string to corpusDict.
      *
+     *    Then do:
      *        set struct link_node_int thisClassDict = NULL
      *
      *        thisClassDict = dict_link_node_int_find(classDict, class)
      *
      *    This will lookup the dictionary of words for the given class. If
-     *    the class' dictionary does not exists yet, create it
+     *    the class' dictionary does not exists yet, create it:
      *
      *        if (thisClassDict == NULL)
      *            thisClassDict = link_node_int_create()
      *
+     *    Then do:
      *        count_words(current, thisClassDict)
      *
      *    Tokenize current->uas and add unique words count to the dictionary
-     *    of the current class
+     *    of the current class.
      *
      *
      *
-     * II. Evaluate category probabilities, i.e.
+     * II. Evaluate categories' probabilities, i.e.
      *
-     *     For each prior as (class, cnt):
-     *
+     *     For each prior as (class, cnt) do:
      *         p_prior[class]->val = prior[class]->val / sum(all priors->val)
      *
      *     This will evaluate P(class) probabilities.
@@ -257,7 +257,6 @@ int main(int argc, char** argv) {
      * III. Initialize log_prob which will hold the probability for each class
      *
      *     For each prior as (class, ...) do:
-     *
      *         log_prob[class] = 0.0
      *
      *
@@ -286,22 +285,7 @@ int main(int argc, char** argv) {
      *
      * VII. Print results
      *
-     *     set float treshold = 0.8
-     *     set short belong_to_group = 0
-     *     set char* group = argv // supplied group thru arguments
-     *
-     *     For each log_prob as (class, value) do:
-     *
-     *         print("%s=%f", class, value)
-     *
-     *         if (value >= treshold && strcmp(group, class) == 0):
-     *             belong_to_group = 1
-     *
-     *     if (belong_to_group == 1):
-     *         print("probably yes")
-     *     else
-     *         print("probably no")
-     *
+     *     ....
      *
      * VIII. CLEAN UP
      *
@@ -317,8 +301,13 @@ int main(int argc, char** argv) {
     root = uas_record_create();
     chck_malloc((void *) root, "Array of UAS Records");
 
-    // when CMP_ALL is set, read_cls_data would not know which class's
-    // training set to load, so here we disable the file loading
+    /*
+     * When CMP_ALL is set, it is most likely that the user has supplied only
+     * a user-agent string (and no class). Function read_cls_data would not
+     * know which class's training set to load, so here we disable the file
+     * loading altogether, as it happens later on in function cmp_all which
+     * will load a training set for each class separately.
+     */
     if(mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG))
         mask_unset(&settings, &LOAD_DATA_FILE_FLAG);
 
