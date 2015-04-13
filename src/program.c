@@ -322,9 +322,13 @@ int main(int argc, char** argv) {
         train(root, prior);
 
     /*
-     * IV. READ USER INPUT
+     * Evaluation Phase
+     *
+     * 1) Evaluate a given UA-String against all available classifiers
+     * 2) Evaluate a given UA-String against one classifier
      */
     if (mask_is_set_bool(&settings, &DO_EVALUATE_FLAG)) {
+
         /*
          * V. Compute the features of the user input
          */
@@ -334,13 +338,14 @@ int main(int argc, char** argv) {
         count_words(uas_input, words);
 
         /*
-         * CMP_ALL_CLS_FLAG
-         * Compare the user-agent against all classifiers
+         * CMP_ALL_CLS_FLAG set to true means that we're to compare
+         * the user-agent against all classifiers
          */
         if (mask_is_set_bool(&settings, &CMP_ALL_CLS_FLAG)) {
             cmp_all(prior, words, uas_input);
         /*
-         * Or compare against the one given class
+         * Else compare against the one given class (which is stored in
+         * uas_input->class).
          */
         } else {
             cmp_one(words, uas_input);
