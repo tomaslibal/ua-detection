@@ -38,7 +38,7 @@ void train(struct uas_record *root, struct link_node_int *prior);
 void evaluate(struct link_node_int *words, struct uas_record *uas_input);
 float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class);
 void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input);
-void cmp_one(struct link_node_int *words, struct uas_record *uas_input, const char *class);
+void cmp_one(struct link_node_int *words, struct uas_record *uas_input);
 void read_CLI_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 void free_shared_res();
@@ -350,7 +350,7 @@ int main(int argc, char** argv) {
          * Or compare against the one given class
          */
         } else {
-            cmp_one(words, uas_input, uas_input->class);
+            cmp_one(words, uas_input);
         }
     }
 
@@ -789,11 +789,10 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
 /**
  * Evaluates a given User-Agent string against a given classifier
  *
- * uas_record *uas_input should contain the User-Agent string
- * char *class is the name of the classifier/class to be used
- * *prior
+ * uas_record *uas_input should contain the User-Agent string and the class
+ * link_node_int *words bag-of-words from the User-Agent string
  */
-void cmp_one(struct link_node_int *words, struct uas_record *uas_input, const char *class)
+void cmp_one(struct link_node_int *words, struct uas_record *uas_input)
 {
     float prior_class_val = 0;
     float log_prob = 0;
