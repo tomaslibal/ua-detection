@@ -38,6 +38,7 @@ void train(struct uas_record *root, struct link_node_int *prior);
 void evaluate(struct link_node_int *words, struct uas_record *uas_input);
 float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class);
 void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input);
+void cmp_one(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input, const char *class);
 void read_CLI_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 void free_shared_res();
@@ -349,37 +350,7 @@ int main(int argc, char** argv) {
          * Or compare against the one given class
          */
         } else {
-            /*
-             * VI. Evaluate the user input
-             */
-            evaluate(words, uas_input);
-
-            /*
-             * Print the result:
-             */
-
-            aux_float = link_node_float_get(p_prior, uas_input->class);
-
-            // if found
-            if (aux_float != NULL)
-                prior_class_val = aux_float->val;
-
-            a = expf(log_prob_word_class + logf(prior_class_val));
-            //printf("[cls:output %s] = %f\n", uas_input->class, a);
-
-            // -vs-all:
-
-            prior_class_val = 0;
-            aux_float = link_node_float_get(p_prior, "other");
-            if (aux_float != NULL)
-                prior_class_val = aux_float->val;
-
-            log_prob = evaluate_cls(words, uas_input, "other");
-
-            b = expf(log_prob + logf(prior_class_val));
-            //printf("[cls:output non-%s] = %f\n", uas_input->class, b);
-
-            printf("[cls:%s]=%f%%\n", uas_input->class, (a / (a+b))*100);
+            cmp_one(prior, words, uas_input, uas_input->class);
         }
     }
 
@@ -801,6 +772,47 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
         printf("[cls:%s]=%f%%\n", cls_iterator->name, (a / (a+b))*100);
         cls_iterator = cls_iterator->next;
     }
+}
+
+void cmp_one(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input, const char *class)
+{
+    float prior_class_val = 0;
+    float log_prob = 0;
+    float a = 0.0;
+    float b = 0.0;
+    struct link_node_float *aux_float = NULL;
+
+    /*
+     * VI. Evaluate the user input
+     */
+    evaluate(words, uas_input);
+
+    /*
+     * Print the result:
+     */
+
+    aux_float = link_node_float_get(p_prior, uas_input->class);
+
+    // if found
+    if (aux_float != NULL)
+        prior_class_val = aux_float->val;
+
+    a = expf(log_prob_word_class + logf(prior_class_val));
+    //printf("[cls:output %s] = %f\n", uas_input->class, a);
+
+    // -vs-all:
+
+    prior_class_val = 0;
+    aux_float = link_node_float_get(p_prior, "other");
+    if (aux_float != NULL)
+        prior_class_val = aux_float->val;
+
+    log_prob = evaluate_cls(words, uas_input, "other");
+
+    b = expf(log_prob + logf(prior_class_val));
+    //printf("[cls:output non-%s] = %f\n", uas_input->class, b);
+
+    printf("[cls:%s]=%f%%\n", uas_input->class, (a / (a+b))*100);
 }
 
 void print_usage()
