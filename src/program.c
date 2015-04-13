@@ -1,5 +1,5 @@
 /**
- * Main entry point for `uadet` program.
+ * This file includes the main() entry point for `uadet` program.
  *
  */
 
