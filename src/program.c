@@ -744,9 +744,18 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
     tmp = link_node_int_create();
     link_node_int_set(tmp, "android", 0);
     cls_iterator->next->next = tmp;
+    tmp = cls_iterator;
 
     while(cls_iterator) {
+        uas_record_free(root);
+        root = uas_record_create();
+        chck_malloc((void *) root, "Array of UAS Records");
         read_cls_data(cls_iterator->name, root, &lc);
+//        link_node_int_free(prior);
+//        prior = link_node_int_create();
+//        chck_malloc((void *) prior, "Array of Prior Classes");
+        link_node_float_free(p_prior);
+        p_prior = link_node_float_create();
         train(root, prior);
 
         prior_class_val = 0;
@@ -770,8 +779,14 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
         //printf("[cls:output %s] = %f\n", cls_iterator->name, a);
         //printf("[cls:output non-%s] = %f\n", cls_iterator->name, b);
         printf("[cls:%s]=%f%%\n", cls_iterator->name, (a / (a+b))*100);
+
+//        link_node_float_free(p_iterator);
+//        p_prior = link_node_float_create();
+
         cls_iterator = cls_iterator->next;
     }
+
+    link_node_int_free(tmp);
 }
 
 void cmp_one(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input, const char *class)
