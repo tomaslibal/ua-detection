@@ -38,7 +38,7 @@ void train(struct uas_record *root, struct link_node_int *prior);
 void evaluate(struct link_node_int *words, struct uas_record *uas_input);
 float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class);
 void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input);
-void cmp_one(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input, const char *class);
+void cmp_one(struct link_node_int *words, struct uas_record *uas_input, const char *class);
 void read_CLI_input(int argc, char **argv, struct uas_record *uas_input);
 void print_usage();
 void free_shared_res();
@@ -350,7 +350,7 @@ int main(int argc, char** argv) {
          * Or compare against the one given class
          */
         } else {
-            cmp_one(prior, words, uas_input, uas_input->class);
+            cmp_one(words, uas_input, uas_input->class);
         }
     }
 
@@ -780,16 +780,20 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
         //printf("[cls:output non-%s] = %f\n", cls_iterator->name, b);
         printf("[cls:%s]=%f%%\n", cls_iterator->name, (a / (a+b))*100);
 
-//        link_node_float_free(p_iterator);
-//        p_prior = link_node_float_create();
-
         cls_iterator = cls_iterator->next;
     }
 
     link_node_int_free(tmp);
 }
 
-void cmp_one(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input, const char *class)
+/**
+ * Evaluates a given User-Agent string against a given classifier
+ *
+ * uas_record *uas_input should contain the User-Agent string
+ * char *class is the name of the classifier/class to be used
+ * *prior
+ */
+void cmp_one(struct link_node_int *words, struct uas_record *uas_input, const char *class)
 {
     float prior_class_val = 0;
     float log_prob = 0;
@@ -830,6 +834,9 @@ void cmp_one(struct link_node_int *prior, struct link_node_int *words, struct ua
     printf("[cls:%s]=%f%%\n", uas_input->class, (a / (a+b))*100);
 }
 
+/*
+ * Prints how to use the program from the command line interface
+ */
 void print_usage()
 {
     printf("\nua-detection usage:\n\n");
