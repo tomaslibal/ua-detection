@@ -333,13 +333,6 @@ int main(int argc, char** argv) {
 
         count_words(uas_input, words);
 
-        //
-        float prior_class_val = 0;
-        float log_prob = 0;
-        float a = 0.0;
-        float b = 0.0;
-        struct link_node_float *aux_float = NULL;
-
         /*
          * CMP_ALL_CLS_FLAG
          * Compare the user-agent against all classifiers
