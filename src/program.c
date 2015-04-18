@@ -516,7 +516,7 @@ void train(struct uas_record *root, struct link_node_int *prior)
     int sum_prior_vals = link_node_int_sum_val_rec(prior);
     float val;
 
-    LOGM("sum_prior_vals=%d", sum_prior_vals);
+    LOGM("sum_prior_vals=%d\n", sum_prior_vals);
     
     while(iterator) {
         LOGM("prior: class %s, cnt %d\n", iterator->name, iterator->val);
@@ -818,7 +818,7 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
 
         b = expf(log_prob + logf(prior_class_val));
 
-	LOGM("[cls:input] %s", uas_input->uas);
+	LOGM("[cls:input] %s\n", uas_input->uas);
         LOGM("[cls:output %s] = %f\n", cls_iterator->name, a);
         LOGM("[cls:output non-%s] = %f\n", cls_iterator->name, b);
 	
@@ -860,7 +860,7 @@ void cmp_one(struct link_node_int *words, struct uas_record *uas_input)
         prior_class_val = aux_float->val;
 
     a = expf(log_prob_word_class + logf(prior_class_val));
-    LOGM("[cls:input] %s", uas_input->uas);
+    LOGM("[cls:input] %s\n", uas_input->uas);
     LOGM("[cls:output %s] = %f\n", uas_input->class, a);
 
     // -vs-all:
