@@ -30,3 +30,4 @@ archive
 
 # ignore kdeveloper project settings
 *.kdev4
+*.kate-swp
