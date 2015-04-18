@@ -14,6 +14,7 @@
 #include "link_node.h"
 #include "tokenizer.h"
 #include "probab.h"
+#include "logging.h"
 
 /*
  * Undefine LINK_NODE_H so that it can define "link_node_float" as the header
@@ -28,19 +29,65 @@
 #include "link_node.h"
 #include "link_node.c"
 
-
+/*
+ * Checks if *ptr is address 0x0 and if so, exits the program with an error
+ * message and prints char *desc as well. 
+ */
 void chck_malloc(void *ptr, char *desc);
+/*
+ * Scheduled for removal. 0 uses found. Was used to read data/uas_with_class.txt
+ * but now uadet uses separate data file per each classifier 
+ * e.g. data/mobile.cls.txt
+ */
 void read_data_with_class(char *path, struct uas_record *root, int *lc);
+/*
+ * 
+ */
 void read_cls_data(char *class_name, struct uas_record *root, int *lc);
+/*
+ * 
+ */
 void save_data_bin();
+/*
+ * 
+ */
 void load_data_bin();
+/*
+ * 
+ */
 void train(struct uas_record *root, struct link_node_int *prior);
+/*
+ * 
+ */
 void evaluate(struct link_node_int *words, struct uas_record *uas_input);
+/*
+ * 
+ */
 float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, char *class);
+/*
+ * 
+ */
 void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct uas_record *uas_input);
+/*
+ * 
+ */
 void cmp_one(struct link_node_int *words, struct uas_record *uas_input);
+
+/*
+ * Uses getopt_long to set bits in a shared "int settings" based on user's
+ * command line input. 
+ */
 void read_CLI_input(int argc, char **argv, struct uas_record *uas_input);
+
+/*
+ * This prints a manually typed usage info. If API changes this function 
+ * won't autoupdate. 
+ */
 void print_usage();
+
+/*
+ * Frees the program-wide shared resources if they are not a null pointer
+ */
 void free_shared_res();
 
 /*
@@ -372,12 +419,12 @@ void chck_malloc(void *ptr, char *desc)
 }
 
 void read_data_with_class(char *path, struct uas_record *root, int *lc)
-{
+{    
     *lc = 0;
 
     *lc = read_uas_with_class(path, root);
 
-    //print_uas_records(root);
+    LOGM("lines of data read = %d\n", *lc);
     printf("lines of data read = %d\n", *lc);
 }
 
@@ -393,12 +440,17 @@ void read_cls_data(char *class_name, struct uas_record *root, int *lc)
     path = malloc(sizeof(char) * strlen(class_name) + sizeof(char) * 13);
     sprintf(path, "data/%s.cls.txt", class_name);
     *lc = read_uas_with_class(path, root);
+    
+    LOGM("lines of data read = %d\n", *lc);
     printf("read %d lines of data\n", *lc);
 
     free(path);
 }
 
-// root = root node of the uas_record linked list containing UA strings
+/*
+ * struct uas_record *root: pass the root node of the uas_record linked list 
+ * containing UA strings.
+ */
 void train(struct uas_record *root, struct link_node_int *prior)
 {
     struct uas_record *record = root;
@@ -464,15 +516,15 @@ void train(struct uas_record *root, struct link_node_int *prior)
     int sum_prior_vals = link_node_int_sum_val_rec(prior);
     float val;
 
-    //printf("sum_prior_vals = %d\n", sum_prior_vals);
-
+    LOGM("sum_prior_vals=%d", sum_prior_vals);
+    
     while(iterator) {
-        //printf("prior: class %s, cnt %d\n", iterator->name, iterator->val);
+        LOGM("prior: class %s, cnt %d\n", iterator->name, iterator->val);
         val = (float)iterator->val / (float)sum_prior_vals;
 
         link_node_float_set(p_iterator, iterator->name, val);
         p_iterator->next = link_node_float_create();
-        //printf("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
+        LOGM("P(%s) = %d / %d = %f\n", p_iterator->name, iterator->val, sum_prior_vals, p_iterator->val);
 
         p_iterator = p_iterator->next;
         iterator = iterator->next;
@@ -597,7 +649,7 @@ float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, ch
          */
         p_word = (float)aux->val / (float)link_node_int_sum_val_rec(corpusDict);
 
-        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, link_node_int_sum_val_rec(corpusDict), p_word);
+        LOGM("P(%s) = %d / %d = %f\n", iterator->name, aux->val, link_node_int_sum_val_rec(corpusDict), p_word);
 
         /*
          * Now look up the dictionary of the given class
@@ -624,11 +676,9 @@ float evaluate_cls(struct link_node_int *words, struct uas_record *uas_input, ch
          */
         p_word_class = (float)aux->val / (float)link_node_int_sum_val_rec(thisClassDict->root);
 
-        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, class, aux->val, link_node_int_sum_val_rec(thisClassDict->root), p_word_class);
+        LOGM("P(%s|%s) = %d / %d = %f\n", iterator->name, class, aux->val, link_node_int_sum_val_rec(thisClassDict->root), p_word_class);
 
-        //
-        //if (P(word|class) > 0:
-        //     *             log_prob[class] += log(count * P(word|class) / P(word))
+        
         if (p_word_class > 0) {
             log_prob += logf((float)iterator->val * p_word_class / p_word);
         }
@@ -678,7 +728,7 @@ void evaluate(struct link_node_int *words, struct uas_record *uas_input)
          */
         p_word = (float)aux->val / (float)link_node_int_sum_val_rec(corpusDict);
 
-        //printf("P(%s) = %d / %d = %f\n", iterator->name, aux->val, link_node_int_sum_val_rec(corpusDict), p_word);
+        LOGM("P(%s) = %d / %d = %f\n", iterator->name, aux->val, link_node_int_sum_val_rec(corpusDict), p_word);
 
         /*
          * Now look up the dictionary of the given class
@@ -705,11 +755,8 @@ void evaluate(struct link_node_int *words, struct uas_record *uas_input)
          */
         p_word_class = (float)aux->val / (float)link_node_int_sum_val_rec(thisClassDict->root);
 
-        //printf("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, link_node_int_sum_val_rec(thisClassDict->root), p_word_class);
+        LOGM("P(%s|%s) = %d / %d = %f\n", iterator->name, uas_input->class, aux->val, link_node_int_sum_val_rec(thisClassDict->root), p_word_class);
 
-        //
-        //if (P(word|class) > 0:
-        //     *             log_prob[class] += log(count * P(word|class) / P(word))
         if (p_word_class > 0) {
             log_prob_word_class += logf((float)iterator->val * p_word_class / p_word);
         }
@@ -749,9 +796,6 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
         root = uas_record_create();
         chck_malloc((void *) root, "Array of UAS Records");
         read_cls_data(cls_iterator->name, root, &lc);
-//        link_node_int_free(prior);
-//        prior = link_node_int_create();
-//        chck_malloc((void *) prior, "Array of Prior Classes");
         link_node_float_free(p_prior);
         p_prior = link_node_float_create();
         train(root, prior);
@@ -774,8 +818,10 @@ void cmp_all(struct link_node_int *prior, struct link_node_int *words, struct ua
 
         b = expf(log_prob + logf(prior_class_val));
 
-        //printf("[cls:output %s] = %f\n", cls_iterator->name, a);
-        //printf("[cls:output non-%s] = %f\n", cls_iterator->name, b);
+	LOGM("[cls:input] %s", uas_input->uas);
+        LOGM("[cls:output %s] = %f\n", cls_iterator->name, a);
+        LOGM("[cls:output non-%s] = %f\n", cls_iterator->name, b);
+	
         printf("[cls:%s]=%f%%\n", cls_iterator->name, (a / (a+b))*100);
 
         cls_iterator = cls_iterator->next;
@@ -814,7 +860,8 @@ void cmp_one(struct link_node_int *words, struct uas_record *uas_input)
         prior_class_val = aux_float->val;
 
     a = expf(log_prob_word_class + logf(prior_class_val));
-    //printf("[cls:output %s] = %f\n", uas_input->class, a);
+    LOGM("[cls:input] %s", uas_input->uas);
+    LOGM("[cls:output %s] = %f\n", uas_input->class, a);
 
     // -vs-all:
 
@@ -826,7 +873,7 @@ void cmp_one(struct link_node_int *words, struct uas_record *uas_input)
     log_prob = evaluate_cls(words, uas_input, "other");
 
     b = expf(log_prob + logf(prior_class_val));
-    //printf("[cls:output non-%s] = %f\n", uas_input->class, b);
+    LOGM("[cls:output non-%s] = %f\n", uas_input->class, b);
 
     printf("[cls:%s]=%f%%\n", uas_input->class, (a / (a+b))*100);
 }
@@ -846,11 +893,11 @@ void print_usage()
 
 void free_shared_res()
 {
-    if (root != NULL)       uas_record_free(root);
-    if (uas_input != NULL)  uas_record_free(uas_input);
-    if (prior != NULL)      link_node_int_free(prior);
-    if (corpusDict != NULL) link_node_int_free(corpusDict);
-    if (p_prior != NULL)    link_node_float_free(p_prior);
-    if (classDict != NULL)  dict_link_node_int_free(classDict);
-    if(words != NULL) link_node_int_free(words);
+    if (root       != NULL)  uas_record_free(root);
+    if (uas_input  != NULL)  uas_record_free(uas_input);
+    if (prior      != NULL)  link_node_int_free(prior);
+    if (corpusDict != NULL)  link_node_int_free(corpusDict);
+    if (p_prior    != NULL)  link_node_float_free(p_prior);
+    if (classDict  != NULL)  dict_link_node_int_free(classDict);
+    if (words      != NULL)  link_node_int_free(words);
 }
