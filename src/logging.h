@@ -9,6 +9,6 @@ struct logline {
     char *src;  // source file from which the message was logged
 };
 
-void log(char *message, char *src);
+void logm(char *message, char *src);
 
 #endif
