@@ -1,10 +1,20 @@
-# 
-# For instruction on how to build the project see INSTALL
+# This is Makefile for ua-detection
+#
+# Binary targets:
+#
+# * uadet: builds a binary into bin/uadet. This is the user-agent program 
+#          that classifies user-agents.
+#
+# * uadb: builds a binary into bin/uadb. This is a helper utility which 
+#         uses a file-backed storage for user-agent strings.
+#
+# ---
+#
+# For instruction on how to build the project see INSTALL file.
 #
 
+# Set the compiler
 CC=gcc
-
-#
 # If clang is available on the system, switch to that compiler
 if hash clang 2>/dev/null; then \
 	$(CC)=clang; \
@@ -12,7 +22,6 @@ fi
 
 CFLAGS=-g -std=c99 -lm
 INCDIRS=
-
 SRCDIR=src
 BINDIR=bin
 TESTDIR=test
@@ -30,7 +39,7 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 
 UAPROGRAMSRC=$(addprefix $(SRCDIR)/, bitmask.c dictionary.c fileutil.c link_node.c probab.c program.c reader.c tokenizer.c logging.c)
 
-ua_program: $(UAPROGRAMSRC)
+uadet: $(UAPROGRAMSRC)
 	@if [ ! -d bin ]; then \
 	  mkdir bin; \
 	fi
@@ -39,7 +48,7 @@ ua_program: $(UAPROGRAMSRC)
 
 UADBSRC=$(addprefix $(SRCDIR)/, btree.c link_node.c db.c ua_db.c)
 
-ua_db: $(UADBSRC)
+uadb: $(UADBSRC)
 	@if [ ! -d bin ]; then \
 	  mkdir bin; \
 	fi
