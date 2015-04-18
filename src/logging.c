@@ -2,7 +2,7 @@
 
 const char logm_separator = '\n';
 
-void logm(char *msg, char *src)
+void logmsg(char *msg, char *src)
 {
  
 }
