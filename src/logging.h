@@ -2,7 +2,7 @@
 #define LOGGING_H
 
 #ifdef DEBUG_BUILD
-#define LOGM(...) fprintf(stderr, __VA_ARGS__)
+#define LOGM(...) fprintf(stderr, "[LOG] %s:%d ", __FILE__, __LINE__); fprintf(stderr, __VA_ARGS__);
 #else
 #define LOGM(...) do {} while (0)
 #endif
