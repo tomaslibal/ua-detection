@@ -27,3 +27,6 @@ archive
 .cproject
 .project
 .settings
+
+# ignore kdeveloper project settings
+*.kdev4
