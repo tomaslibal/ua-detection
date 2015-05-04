@@ -37,6 +37,11 @@ struct uas_record {
  */
 int read_uas_with_class(const char *path, struct uas_record *root);
 
+/*
+ * 
+ */
+void read_cls_data(char *class_name, struct uas_record *root, int *lc);
+
 void print_uas_records(struct uas_record *root);
 
 struct uas_record *uas_record_create();

@@ -1,10 +1,12 @@
 /*
- * ua_db.c
- *
- * ua_db is a program that stores, labels and retrieves user-agent string data.
- *
+ * ua_db.c contains the main() for `uadb` compilation target. This is 
+ * a file-backed database front-end for storing, labelling and retrieval of
+ * user-agent strings.
+ * 
  *  Created on: Mar 26, 2015
  *      Author: tmlbl
+ * 
+ *  License: GNU 2.0 Free Software. See the LICENSE file.
  */
 
 #include <stdio.h>

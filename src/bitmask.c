@@ -5,7 +5,7 @@
  *      Author: tmlbl
  */
 
-#include "bitmask.h"
+#include "util/bitmask.h"
 
 TYPE mask_is_set(TYPE *mask, CONST_TYPE *flag)
 {

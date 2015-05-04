@@ -3,6 +3,7 @@
 */
 
 #include "reader.h"
+#include "util/logging.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,6 +37,25 @@ int read_uas_with_class(const char *path, struct uas_record *root)
 	fclose(fp);
 
 	return cnt;
+}
+
+/*
+ * one-vs-all strategy: read a separate <class_name>.cls.txt data file which contains
+ * pairs <class, uas> where class = { <class_name>, other }
+ */
+void read_cls_data(char *class_name, struct uas_record *root, int *lc)
+{
+    char *path = NULL;
+    *lc = 0;
+
+    path = malloc(sizeof(char) * strlen(class_name) + sizeof(char) * 13);
+    sprintf(path, "data/%s.cls.txt", class_name);
+    *lc = read_uas_with_class(path, root);
+    
+    LOGM("lines of data read = %d\n", *lc);
+    printf("read %d lines of data\n", *lc);
+
+    free(path);
 }
 
 void print_uas_records(struct uas_record *root)
