@@ -1,6 +1,12 @@
 /**
  * This file includes the main() entry point for `uadet` program.
+ * 
+ * Uadet is a software that uses a probabilistic approach to machine learning
+ * and its domain is classification of user-agent strings.
  *
+ *  May 2015
+ * 
+ *  License: GNU 2.0 Free Software. See the LICENSE file.
  */
 
 #include <stdio.h>
@@ -10,11 +16,11 @@
 
 #include "reader.h"
 #include "dictionary.h"
-#include "bitmask.h"
+#include "util/bitmask.h"
 #include "link_node.h"
 #include "tokenizer.h"
 #include "probab.h"
-#include "logging.h"
+#include "util/logging.h"
 
 /*
  * Undefine LINK_NODE_H so that it can define "link_node_float" as the header
@@ -29,29 +35,10 @@
 #include "link_node.h"
 #include "link_node.c"
 
-/*
- * Checks if *ptr is address 0x0 and if so, exits the program with an error
- * message and prints char *desc as well. 
- */
-void chck_malloc(void *ptr, char *desc);
-/*
- * Scheduled for removal. 0 uses found. Was used to read data/uas_with_class.txt
- * but now uadet uses separate data file per each classifier 
- * e.g. data/mobile.cls.txt
- */
-void read_data_with_class(char *path, struct uas_record *root, int *lc);
-/*
- * 
- */
-void read_cls_data(char *class_name, struct uas_record *root, int *lc);
-/*
- * 
- */
-void save_data_bin();
-/*
- * 
- */
-void load_data_bin();
+#include "util/types.h"
+#include "util/memutil.h"
+
+
 /*
  * 
  */
@@ -400,22 +387,10 @@ int main(int argc, char** argv) {
     }
 
     free_shared_res();
+    
+    //save_data_bin("test", p_prior, corpusDict, classDict);
 
     return 0;
-}
-
-/*
- * malloc can return a NULL pointer if the allocation fails
- *
- * If *ptr is a pointer that has just been malloc'd and passed to this function
- * it will print an error and exit if *ptr is a NULL pointer.
- */
-void chck_malloc(void *ptr, char *desc)
-{
-    if (ptr == NULL) {
-        printf("Error malloc'ing for %s\n", desc);
-        exit(1);
-    }
 }
 
 void read_data_with_class(char *path, struct uas_record *root, int *lc)
@@ -426,25 +401,6 @@ void read_data_with_class(char *path, struct uas_record *root, int *lc)
 
     LOGM("lines of data read = %d\n", *lc);
     printf("lines of data read = %d\n", *lc);
-}
-
-/*
- * one-vs-all strategy: read a separate <class_name>.cls.txt data file which contains
- * pairs <class, uas> where class = { <class_name>, other }
- */
-void read_cls_data(char *class_name, struct uas_record *root, int *lc)
-{
-    char *path = NULL;
-    *lc = 0;
-
-    path = malloc(sizeof(char) * strlen(class_name) + sizeof(char) * 13);
-    sprintf(path, "data/%s.cls.txt", class_name);
-    *lc = read_uas_with_class(path, root);
-    
-    LOGM("lines of data read = %d\n", *lc);
-    printf("read %d lines of data\n", *lc);
-
-    free(path);
 }
 
 /*
