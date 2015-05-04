@@ -1,4 +1,4 @@
-# This is Makefile for ua-detection
+# This is the Makefile for the ua-detection project.
 #
 # Binary targets:
 #
@@ -15,7 +15,9 @@
 
 # Set the compiler
 CC=gcc
-# If clang is available on the system, switch to that compiler
+# At the time OS X latest is the Yosemite version and it does not come with GCC.
+# It comes with clang so if clang is available on the system, switch to that 
+# compiler.
 if hash clang 2>/dev/null; then \
 	$(CC)=clang; \
 fi
@@ -27,9 +29,6 @@ BINDIR=bin
 TESTDIR=test
 DEPS=
 
-#
-# Main target ua_program
-#
 $(SRCDIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
@@ -37,7 +36,7 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 # Binary targets
 # 
 
-UAPROGRAMSRC=$(addprefix $(SRCDIR)/, bitmask.c dictionary.c fileutil.c link_node.c probab.c program.c reader.c tokenizer.c logging.c)
+UAPROGRAMSRC=$(addprefix $(SRCDIR)/, bitmask.c dictionary.c link_node.c probab.c program.c reader.c tokenizer.c utils.c)
 
 uadet: $(UAPROGRAMSRC)
 	@if [ ! -d bin ]; then \
@@ -55,7 +54,7 @@ uadb: $(UADBSRC)
 	$(CC) -o $(BINDIR)/uadb $^ $(CFLAGS) $(INCDIRS)
 	
 
-#
+# AUXILLIARY
 
 all: test ua_program ua_db
 
