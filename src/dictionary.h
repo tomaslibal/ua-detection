@@ -1,6 +1,10 @@
 #ifndef DICTIONARY
 #define DICTIONARY
 
+#include "link_node.h"
+#define NODE_TYPE float
+#include "link_node.h"
+
 struct dict_link_node_int {
     char *class_name;
     struct link_node_int *root;

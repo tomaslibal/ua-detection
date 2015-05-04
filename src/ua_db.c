@@ -17,7 +17,7 @@
 // http://userpages.umbc.edu/~mabzug1/cs/md5/md5.html
 // http://sourceforge.net/projects/libmd5-rfc/files/
 
-#include "db.h"
+#include "lib/db.h"
 
 void print_usage();
 void read_cli_arguments(int argc, char **argv);

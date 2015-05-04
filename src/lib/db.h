@@ -8,7 +8,7 @@
 #ifndef SRC_DB_H_
 #define SRC_DB_H_
 
-#include "btree.h"
+#include "util/btree.h"
 #include "link_node.h"
 
 char *serialize_btree(struct bNode *root, char *out, int *len, int *num);

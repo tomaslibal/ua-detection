@@ -5,7 +5,7 @@
  *      Author: tmlbl
  */
 
-#include "btree.h"
+#include "util/btree.h"
 
 #include <stdio.h>
 #include <stdlib.h>

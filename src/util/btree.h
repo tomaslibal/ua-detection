@@ -8,7 +8,7 @@
 #ifndef BINARY_NODE_H
 #define BINARY_NODE_H
 
-#include "link_node.h"
+#include "../link_node.h"
 
 /*
  * Binary Node

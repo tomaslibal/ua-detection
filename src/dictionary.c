@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "link_node.h"
 
 struct dict_link_node_int *dict_link_node_int_create()
 {

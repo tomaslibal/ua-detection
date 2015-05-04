@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "../src/link_node.c"
+#include "../src/linked_list.c"
 #include "test_suite.h"
 
 /*
