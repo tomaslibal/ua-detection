@@ -36,7 +36,7 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 # Binary targets
 # 
 
-UAPROGRAMSRC=$(addprefix $(SRCDIR)/, bitmask.c dictionary.c link_node.c probab.c program.c reader.c tokenizer.c utils.c)
+UAPROGRAMSRC=$(addprefix $(SRCDIR)/, linked_list.c lib/types.c bitmask.c dictionary.c probab.c program.c reader.c tokenizer.c utils.c training.c evaluation.c)
 
 uadet: $(UAPROGRAMSRC)
 	@if [ ! -d bin ]; then \
