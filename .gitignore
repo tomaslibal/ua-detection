@@ -2,6 +2,9 @@
 *.*~
 *~
 
+# Ignore vim temp/swap files
+*.swp
+
 # Ignore the .DS_Store files from MAC OS
 .DS_Store
 
