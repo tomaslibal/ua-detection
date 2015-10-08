@@ -1,5 +1,9 @@
-import SimpleHTTPServer 
-import SocketServer
+""" httpend.py
+
+    HTTP End-point for label lab (py-mgr) which interacts between the user and
+    the persistent storage of users agents and their labels persisted in 
+    a postgres database
+"""
 
 import BaseHTTPServer
 import time
