@@ -34,3 +34,6 @@ archive
 # ignore kdeveloper project settings
 *.kdev4
 *.kate-swp
+
+# Ignore netbeans project for now
+nbproject
