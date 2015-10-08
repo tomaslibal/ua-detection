@@ -8,6 +8,33 @@
 import BaseHTTPServer
 import time
 
+       
+class RouteGeneric:
+    def __init__(self, path):
+        self.path = path
+        
+    def matches(self, path):
+        return self.path is path
+    
+    def serve(self):
+        pass
+       
+       
+class RouteFile(RouteGeneric):
+    def serve(self):
+        print "serving a file %s..." % self.path
+        return open(self.path).read()
+        
+
+routes = {
+    "*": RouteFile("static/404.html")
+}
+
+
+def findroutematch(path):
+    return routes["*"]
+
+
 class HTTPResponse:
     def __init__(self, conn):
         self.conn = conn
@@ -28,14 +55,17 @@ class HTTPResponse:
 class Router:
     @staticmethod
     def route(reqpath, res):
-        print reqpath
+        print "user request %s" % reqpath
+        route = findroutematch(reqpath)
+        content = route.serve()
+        
         httpres = HTTPResponse(res)
-        httpres.status(200)
+        httpres.status(404)
         httpres.header('Content-Type', 'text/html')
         httpres.end_headers()
-        httpres.write_text('<!doctype html><html><head><title>Response</title></head><body>')
-        httpres.write_text('<p>You requested %s</p>' % reqpath)
-        
+        httpres.write_text(content)
+       
+                
 class IncomingRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(self):
         self.send_response(200)
