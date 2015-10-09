@@ -79,8 +79,9 @@ int tok(char* user_agent, char** p_buffer, int* p_length)
 
         // a separator found
         if(in_array(separators, c) == 1) {
-            if(strlen(token)==0) { i++; continue; }
-            push_tok(p_buffer, p_length, token);
+            if(strlen(token) > 0) {
+              push_tok(p_buffer, p_length, token);
+            }
         } else {
             // char wasn't a separator, add the character to the end of
             // the token string
