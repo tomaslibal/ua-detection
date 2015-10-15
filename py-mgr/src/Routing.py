@@ -1,3 +1,5 @@
+import HTTP
+
 """
     Base class for HTTP Request Routing
     
@@ -29,4 +31,18 @@ class RouteFile(RouteGeneric):
     def serve(self):
         print "serving a file %s..." % self.path
         return open(self.path).read()
+    
+    
+class Router:
+    @staticmethod
+    def route(reqpath, res):
+        print "user request %s" % reqpath
+        route = findroutematch(reqpath)
+        content = route.serve()
+        
+        httpres = HTTP.HTTPResponse(res)
+        httpres.status(404)
+        httpres.header('Content-Type', 'text/html')
+        httpres.end_headers()
+        httpres.write_text(content)
  
