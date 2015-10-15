@@ -1,4 +1,4 @@
-export default class ItemRowModel {
+export default class TableRowModel {
         
         constructor() {
             // each column holds one cell
