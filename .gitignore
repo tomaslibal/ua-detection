@@ -29,6 +29,15 @@ dump/
 # ignore the archived files
 archive
 
+# ignore node_modules
+py-mgr/node_modules
+
+# ignore built js files (es5.1)
+py-mgr/js-build
+
+# ignore the packed/browserified js file
+py-mgr/js-dist
+
 # ignore eclipse project folders/files
 .cproject
 .project
