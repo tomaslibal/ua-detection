@@ -1,7 +1,15 @@
 {
   "private": true,
+  "scripts": {
+    "transpile": "export BABEL_ENV=build; mkdir -p js-build && node_modules/babel/bin/babel.js js-src/ -d js-build",
+    "pack": "mkdir -p js-dist && node_modules/browserify/bin/cmd.js js-build/demo.js -o js-dist/out.js",
+    "build": "npm run clear && npm run transpile && npm run pack",
+    "clear": "rm -rf js-build && rm -rf js-dist",
+    "test": "export BABEL_ENV=development; ./node_modules/mocha/bin/mocha --compilers js:babel/register --recursive js-test"
+  },
   "devDependencies": {
     "babel": "^5.8.23",
-    "browserify": "^11.2.0"
+    "browserify": "^11.2.0",
+    "mocha": "^2.3.3"
   }
 }
