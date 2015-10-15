@@ -20,6 +20,9 @@ test/test
 # Ignore the mongodb dumps for the moment
 dump/
 
+# ignore the compiled python code
+*.pyc
+
 # ignore intellij idea folder
 .idea
 
