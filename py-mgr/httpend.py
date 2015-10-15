@@ -6,16 +6,19 @@
 """
 
 import BaseHTTPServer
-import time
+import time 
 import src.Routing as Routing
 
 
 routes = {
+    "/": Routing.RouteFile("static/index.html"),
     "*": Routing.RouteFile("static/404.html")
 }
 
 
 def findroutematch(path):
+    if path in routes:
+        return routes[path]
     return routes["*"]
 
              
@@ -26,7 +29,7 @@ class IncomingRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.end_headers()
     def do_GET(self):
         """ This method handles a GET request """
-        Routing.Router.route(self.path, self)
+        Routing.Router.route(self.path, findroutematch, self)
 
 PORT=8080
 

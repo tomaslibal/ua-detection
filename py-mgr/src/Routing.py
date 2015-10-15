@@ -35,9 +35,9 @@ class RouteFile(RouteGeneric):
     
 class Router:
     @staticmethod
-    def route(reqpath, res):
+    def route(reqpath, matchfunc, res):
         print "user request %s" % reqpath
-        route = findroutematch(reqpath)
+        route = matchfunc(reqpath)
         content = route.serve()
         
         httpres = HTTP.HTTPResponse(res)
