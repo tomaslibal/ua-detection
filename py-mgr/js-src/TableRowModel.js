@@ -9,7 +9,7 @@ export default class TableRowModel {
             return this.columns.length;
         }
         
-        getAddColumn(cell) {
+        addColumn(cell) {
             return this.columns.push(cell);
         }
        
