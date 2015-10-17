@@ -8,6 +8,8 @@
 #ifndef NGRAMBUILDER_H
 #define	NGRAMBUILDER_H
 
+#include "../model/tokenList.h"
+
 typedef struct Ngram {
     int len;
     char* tokens[64];
@@ -21,13 +23,11 @@ public:
     
     int level;
     
-    int fromTokenList(char **tokens, int numTokens, Ngram * &ngrams);
-    int fromString(const char *sentence, Ngram * &ngrams);
-    void tokenize(const char *sentence, char **out, int *len);
+    int fromTokenList(tokenList *tokens, Ngram * &ngrams);
+    int fromUserAgentString(const char *sentence, Ngram * &ngrams);
     void print(Ngram *ng);
 private:
-    bool in_array(char *array, char ch);
-    void push_tok(char **p_buffer, int *p_length, char *token);
+    
 };
 
 #endif	/* NGRAMBUILDER_H */

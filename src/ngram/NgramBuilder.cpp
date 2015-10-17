@@ -7,6 +7,7 @@
 
 #include "NgramBuilder.h"
 #include "../util/StringBuffer.h"
+#include "../tokenizer/UserAgentTokenizer.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -23,62 +24,6 @@ NgramBuilder::NgramBuilder(const NgramBuilder& orig) {
 NgramBuilder::~NgramBuilder() {
 }
 
-bool NgramBuilder::in_array(char* array, char ch) {
-    int i = 0;
-    int len = strlen(array);
-    for(;i < len;i++) {
-        if(array[i] == ch) return true;
-    }
-    return false;
-}
-
-void NgramBuilder::push_tok(char** p_buffer, int* p_length, char* token) { 
-    p_buffer[*p_length] = (char*)malloc(strlen(token)+1);
-    strcpy(p_buffer[*p_length], token);
-    *p_length = *p_length+1;
-
-    // Clear the token
-    memset(token, '\0', 64);
-}
-
-// Temp. method. as this reimplements the origin C tokenize function
-void NgramBuilder::tokenize(const char *sentence, char **out, int *len) {
-    char sep[] = { ' ', '(', ')', '<', '>', '@', ',', ';', ':', '"', '[', ']', '?', '=', '{', '}' };
-
-    if (sentence == NULL) {
-        *len = 0;
-        return;
-    }
-
-    char c;
-    int i = 0;
-    char token[64] = {0};
-    int maxi = strlen(sentence);
-    int tmp;
-
-    while(i < maxi) {
-        strncpy(&c, (sentence + i), 1);
-
-        if(this->in_array(sep, c)) {
-            if(strlen(token) > 0) { 
-                StringBuffer::pushTokenToBuffer(out, len, token);
-                //this->push_tok(out, len, token);
-            }
-        } else {
-            tmp = strlen(token);
-            strncpy((token+tmp), &c, 1);
-        }
-
-        i++;
-    }
-
-    if (strlen(token) > 0) {
-        StringBuffer::pushTokenToBuffer(out, len, token);
-        //this->push_tok(out, len, token);
-    }
-
-}
-
 void NgramBuilder::print(Ngram *ng) {
     int l = ng->len;
     for(int i = 0; i < l; i++) {
@@ -87,15 +32,15 @@ void NgramBuilder::print(Ngram *ng) {
     std::cout << endl;
 }
 
-int NgramBuilder::fromTokenList(char **tokens, int numTokens, Ngram*& ngrams) {
-    ngrams = (Ngram *)realloc(ngrams, sizeof(Ngram) * (numTokens));
+int NgramBuilder::fromTokenList(tokenList *tokens, Ngram*& ngrams) {
+    ngrams = (Ngram *)realloc(ngrams, sizeof(Ngram) * (tokens->length));
 
     int slider = 0;
     int u = 0;
 
-    for(; slider < numTokens; slider++) {
+    for(; slider < tokens->length; slider++) {
         // num remaining tokens must be > this->level
-        int rem = numTokens - (slider+this->level);
+        int rem = tokens->length - (slider+this->level);
         if (rem < 0) {
             break;
         }
@@ -103,21 +48,18 @@ int NgramBuilder::fromTokenList(char **tokens, int numTokens, Ngram*& ngrams) {
         ngrams[slider].len = this->level;
 
         for(int j = 0; j < this->level; j++) {
-            ngrams[slider].tokens[j] = (char *)malloc(strlen(tokens[slider+j]));
-            strcpy(ngrams[slider].tokens[j], tokens[slider+j]);
-
+            ngrams[slider].tokens[j] = (char *)malloc(strlen(tokens->tokens[slider+j]));
+            strcpy(ngrams[slider].tokens[j], tokens->tokens[slider+j]);
         }
     }
     
     return slider;
 }
 
-int NgramBuilder::fromString(const char *sentence, Ngram * &ngrams) {
-    char* tokens[64];
+int NgramBuilder::fromUserAgentString(const char *sentence, Ngram * &ngrams) {
+    tokenList *tokens = (tokenList*)malloc(sizeof(tokenList));
     
-    int length = 0;
-    int* len = &length;
-    this->tokenize(sentence, tokens, len);
-
-    return this->fromTokenList(tokens, length, ngrams);
+    UserAgentTokenizer::staticTokenize(sentence, tokens);
+    
+    return this->fromTokenList(tokens, ngrams);
 }
