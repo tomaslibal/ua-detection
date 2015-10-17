@@ -19,15 +19,15 @@ public:
     NgramBuilder(const NgramBuilder& orig);
     virtual ~NgramBuilder();
     
-    uint level;
+    int level;
     
-    void fromTokenList(char **tokens, uint numTokens, Ngram * &ngrams);
+    void fromTokenList(char **tokens, int numTokens, Ngram * &ngrams);
     void fromString(const char *sentence, Ngram * &ngrams);
-    void tokenize(const char *sentence, char **out, uint *len);
+    void tokenize(const char *sentence, char **out, int *len);
     void print(Ngram *ng);
 private:
     bool in_array(char *array, char ch);
-    void push_tok(char **p_buffer, uint *p_length, char *token);
+    void push_tok(char **p_buffer, int *p_length, char *token);
 };
 
 #endif	/* NGRAMBUILDER_H */

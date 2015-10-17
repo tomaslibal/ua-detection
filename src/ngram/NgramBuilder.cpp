@@ -31,7 +31,7 @@ bool NgramBuilder::in_array(char* array, char ch) {
     return false;
 }
 
-void NgramBuilder::push_tok(char** p_buffer, uint* p_length, char* token) { 
+void NgramBuilder::push_tok(char** p_buffer, int* p_length, char* token) { 
     p_buffer[*p_length] = (char*)malloc(strlen(token)+1);
     strcpy(p_buffer[*p_length], token);
     *p_length = *p_length+1;
@@ -41,7 +41,7 @@ void NgramBuilder::push_tok(char** p_buffer, uint* p_length, char* token) {
 }
 
 // Temp. method. as this reimplements the origin C tokenize function
-void NgramBuilder::tokenize(const char *sentence, char **out, uint *len) {
+void NgramBuilder::tokenize(const char *sentence, char **out, int *len) {
     char sep[] = {' '};
 
     if (sentence == NULL) {
@@ -84,22 +84,22 @@ void NgramBuilder::print(Ngram *ng) {
     std::cout << endl;
 }
 
-void NgramBuilder::fromTokenList(char **tokens, uint numTokens, Ngram*& ngrams) {
+void NgramBuilder::fromTokenList(char **tokens, int numTokens, Ngram*& ngrams) {
     ngrams = (Ngram *)realloc(ngrams, sizeof(Ngram) * (numTokens));
 
     int slider = 0;
     int u = 0;
 
-    for(; slider < (int) numTokens; slider++) {
+    for(; slider < numTokens; slider++) {
         // num remaining tokens must be > this->level
-        int rem = numTokens - (slider+(int)this->level);
+        int rem = numTokens - (slider+this->level);
         if (rem < 0) {
             break;
         }
 
         ngrams[slider].len = this->level;
 
-        for(int j = 0; j < (int)this->level; j++) {
+        for(int j = 0; j < this->level; j++) {
             ngrams[slider].tokens[j] = (char *)malloc(strlen(tokens[slider+j]));
             strcpy(ngrams[slider].tokens[j], tokens[slider+j]);
 
@@ -110,8 +110,8 @@ void NgramBuilder::fromTokenList(char **tokens, uint numTokens, Ngram*& ngrams) 
 void NgramBuilder::fromString(const char *sentence, Ngram * &ngrams) {
     char* tokens[64];
     
-    uint length = 0;
-    uint* len = &length;
+    int length = 0;
+    int* len = &length;
     this->tokenize(sentence, tokens, len);
 
     this->fromTokenList(tokens, length, ngrams);
