@@ -36,7 +36,7 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 # Binary targets
 # 
 
-UADET2=$(addprefix $(SRCDIR)/, uadet.cpp ngram/NgramBuilder.cpp)
+UADET2=$(addprefix $(SRCDIR)/, uadet.cpp util/utils.cpp tokenizer/UserAgentTokenizer.cpp util/StringBuffer.cpp ngram/NgramBuilder.cpp)
 
 uadet2: $(UADET2)
 	@if [ ! -d bin ]; then \
