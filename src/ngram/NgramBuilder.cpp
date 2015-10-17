@@ -42,7 +42,7 @@ void NgramBuilder::push_tok(char** p_buffer, int* p_length, char* token) {
 
 // Temp. method. as this reimplements the origin C tokenize function
 void NgramBuilder::tokenize(const char *sentence, char **out, int *len) {
-    char sep[] = {' '};
+    char sep[] = { ' ', '(', ')', '<', '>', '@', ',', ';', ':', '"', '[', ']', '?', '=', '{', '}' };
 
     if (sentence == NULL) {
         *len = 0;
