@@ -21,8 +21,8 @@ public:
     
     int level;
     
-    void fromTokenList(char **tokens, int numTokens, Ngram * &ngrams);
-    void fromString(const char *sentence, Ngram * &ngrams);
+    int fromTokenList(char **tokens, int numTokens, Ngram * &ngrams);
+    int fromString(const char *sentence, Ngram * &ngrams);
     void tokenize(const char *sentence, char **out, int *len);
     void print(Ngram *ng);
 private:

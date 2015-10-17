@@ -6,6 +6,7 @@
  */
 
 #include "NgramBuilder.h"
+#include "../util/StringBuffer.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -60,7 +61,8 @@ void NgramBuilder::tokenize(const char *sentence, char **out, int *len) {
 
         if(this->in_array(sep, c)) {
             if(strlen(token) > 0) { 
-                this->push_tok(out, len, token);
+                StringBuffer::pushTokenToBuffer(out, len, token);
+                //this->push_tok(out, len, token);
             }
         } else {
             tmp = strlen(token);
@@ -71,7 +73,8 @@ void NgramBuilder::tokenize(const char *sentence, char **out, int *len) {
     }
 
     if (strlen(token) > 0) {
-        this->push_tok(out, len, token);
+        StringBuffer::pushTokenToBuffer(out, len, token);
+        //this->push_tok(out, len, token);
     }
 
 }
@@ -84,7 +87,7 @@ void NgramBuilder::print(Ngram *ng) {
     std::cout << endl;
 }
 
-void NgramBuilder::fromTokenList(char **tokens, int numTokens, Ngram*& ngrams) {
+int NgramBuilder::fromTokenList(char **tokens, int numTokens, Ngram*& ngrams) {
     ngrams = (Ngram *)realloc(ngrams, sizeof(Ngram) * (numTokens));
 
     int slider = 0;
@@ -105,14 +108,16 @@ void NgramBuilder::fromTokenList(char **tokens, int numTokens, Ngram*& ngrams) {
 
         }
     }
+    
+    return slider;
 }
 
-void NgramBuilder::fromString(const char *sentence, Ngram * &ngrams) {
+int NgramBuilder::fromString(const char *sentence, Ngram * &ngrams) {
     char* tokens[64];
     
     int length = 0;
     int* len = &length;
     this->tokenize(sentence, tokens, len);
 
-    this->fromTokenList(tokens, length, ngrams);
+    return this->fromTokenList(tokens, length, ngrams);
 }
