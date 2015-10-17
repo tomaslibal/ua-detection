@@ -14,7 +14,7 @@
 #
 
 # Set the compiler
-CC=gcc
+CC=c++
 # At the time OS X latest is the Yosemite version and it does not come with GCC.
 # It comes with clang so if clang is available on the system, switch to that 
 # compiler.
@@ -22,7 +22,7 @@ if hash clang 2>/dev/null; then \
 	$(CC)=clang; \
 fi
 
-CFLAGS=-g -std=c99 -lm
+CFLAGS=-g -std=c++98 -lm
 INCDIRS=
 SRCDIR=src
 BINDIR=bin
@@ -36,7 +36,17 @@ $(SRCDIR)/%.o: %.c $(DEPS)
 # Binary targets
 # 
 
-UAPROGRAMSRC=$(addprefix $(SRCDIR)/, linked_list.c lib/types.c bitmask.c dictionary.c probab.c program.c reader.c tokenizer.c utils.c training.c evaluation.c)
+UADET2=$(addprefix $(SRCDIR)/, uadet.cpp ngram/NgramBuilder.cpp)
+
+uadet2: $(UADET2)
+	@if [ ! -d bin ]; then \
+	    mkdir bin; \
+	fi
+	$(CC) -o $(BINDIR)/uadet2 $^ $(CFLAGS) $(INCDIRS)
+
+
+
+UAPROGRAMSRC=$(addprefix $(SRCDIR)/, linked_list.c bitmask.c dictionary.c probab.c program.c reader.c tokenizer.c utils.c training.c evaluation.c)
 
 uadet: $(UAPROGRAMSRC)
 	@if [ ! -d bin ]; then \
