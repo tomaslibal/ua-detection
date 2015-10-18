@@ -9,6 +9,7 @@
 #include "../util/StringBuffer.h"
 #include "../tokenizer/UserAgentTokenizer.h"
 
+#include <string.h>
 #include <cstdlib>
 #include <iostream>
 
