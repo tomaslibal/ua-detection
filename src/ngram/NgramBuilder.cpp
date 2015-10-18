@@ -35,7 +35,7 @@ void NgramBuilder::print(Ngram *ng) {
 
 int NgramBuilder::fromTokenList(tokenList *tokens, Ngram*& ngrams) {
     ngrams = (Ngram *)realloc(ngrams, sizeof(Ngram) * (tokens->length));
-
+    
     int slider = 0;
     int u = 0;
 
@@ -54,6 +54,8 @@ int NgramBuilder::fromTokenList(tokenList *tokens, Ngram*& ngrams) {
         }
     }
     
+    free(tokens);
+    
     return slider;
 }
 
@@ -63,4 +65,11 @@ int NgramBuilder::fromUserAgentString(const char *sentence, Ngram * &ngrams) {
     UserAgentTokenizer::staticTokenize(sentence, tokens);
     
     return this->fromTokenList(tokens, ngrams);
+}
+
+void NgramBuilder::freeNgram(Ngram* ng) {
+    for (int i = 0; i < ng->len; i++) {
+        free(ng->tokens[i]);
+    }
+    free(ng);
 }

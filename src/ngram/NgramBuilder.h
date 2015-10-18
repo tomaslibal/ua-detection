@@ -26,6 +26,7 @@ public:
     int fromTokenList(tokenList *tokens, Ngram * &ngrams);
     int fromUserAgentString(const char *sentence, Ngram * &ngrams);
     void print(Ngram *ng);
+    static void freeNgram(Ngram *ng);
 private:
     
 };

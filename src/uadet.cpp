@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 
     NgramBuilder *ngb = new NgramBuilder();
     
-    Ngram *ngram;
+    Ngram *ngram = (Ngram *) malloc(sizeof(Ngram));
     
     const char *uas = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:43.0) Gecko/20100101 Firefox/43.0";
     
@@ -43,6 +43,7 @@ int main(int argc, char** argv) {
     for(int i = 0; i < l; i++) {
         if (ngram[i].len != NULL) {
             ngb->print(&ngram[i]);
+            NgramBuilder::freeNgram(&ngram[i]);
         }
     }
     
