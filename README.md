@@ -67,15 +67,6 @@ A user-agent string with a class "mobile" would look like this:
 
 See the [example](data/uas_with_class.txt) 
 
-#### uadb
-
-`uadb` is a storing mechanism for (user-agent-string, [classes]), e.g.
-
-    Mozilla/5.0 (Android; en_us... [Mobile, Android, en_us]
-    Mozilla/5.0 (Linux; X11... [Desktop, Linux] 
-      
-To see usage, execute `uadb --help`
-
 ### Test
 
 `make test` compiles the test suite and runs it. If stdout prints "ALL TESTS
