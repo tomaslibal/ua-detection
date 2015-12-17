@@ -54,19 +54,6 @@ run a user-agent string against all classifiers (that have been seen in the trai
 
 ### Data
 
-More in the [data section](data/)
-
-> You can contribute by sending additional user-agent string data either 
-> labelled or unlabelled. 
->  
-> All content must be publicly available and compatible with the [GNU License](LICENSE)
-
-Only sample and test data are part of this repository. Some datasets are
-available online and can be downloaded using [the download script](data/download-data.sh).
-
-    cd data/
-    /bin/sh download-data.sh
-
 #### Data format
 
 The program can work with ascii (8-bit) encoded data of the following format:
