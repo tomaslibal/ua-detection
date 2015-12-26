@@ -15,6 +15,9 @@
 
 using namespace std;
 
+/*
+ * Function foreach applies the callback function to each element of the vector
+ */
 void foreach(vector<string>* vec, function<void (string)> &callback);
 
 /*
