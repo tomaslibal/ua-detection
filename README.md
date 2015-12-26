@@ -21,7 +21,7 @@ There are two end goals that I would like achieve:
    
 ### ua-detection
 
-`uadet` is the implementation of a classification program that uses supervised
+`uadet2` is the implementation of a classification program that uses supervised
 learning method to learn from data and makes predictions about new data as to which
 class the input may belong. 
 
@@ -29,28 +29,28 @@ class the input may belong.
 
 Needed to build the binaries:
 
-- make utility
-- GCC or CLANG (c99)
-
-Use the download script for data:
-
-- UNIX like system with bash interpreter
+- GNU Make utility
+- C++11 Compiler
 
 #### build
 
-    make all
+    make
+
+This outputs an executable binary in `dist/{CONFIGURATION}/{PLATFORM}/uadet2`.
 
 #### usage
 
+> This is for the previous version !!!
+
 *default usage:*
 
-    bin/uadet --uas "Mozilla/5.0 ..." --group mobile
+    dist/{CONFIGURATION}/{PLATFORM}/uadet2 --uas "Mozilla/5.0 ..." --group mobile
     
 Prints to stdout the output of the `mobile` classifier.
 
-run a user-agent string against all classifiers (that have been seen in the training data):
+Run a user-agent string against all classifiers (that have been seen in the training data):
 
-    bin/uadet --uas "Mozilla/5.0 ..." --cmp_all
+    bin/uadet --uas "Mozilla/5.0 ..."
 
 ### Data
 
@@ -59,13 +59,13 @@ run a user-agent string against all classifiers (that have been seen in the trai
 The program can work with ascii (8-bit) encoded data of the following format:
 
 1. one entry per line terminated by a new line character
-2. each entry has a one word label separated by a space character from the user-agent string following the label
+2. each entry has a one word label separated by a tab character from the user-agent string following the label
 
 A user-agent string with a class "mobile" would look like this:
 
-    mobile Mozilla/5.0 (Linux; U; Android 4.0; en-us) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    mobile  Mozilla/5.0 (Linux; U; Android 4.0; en-us) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
 
-See the [example](data/uas_with_class.txt) 
+See the [example](/data_in.txt) 
 
 ### Test
 
@@ -83,6 +83,7 @@ of their owners. I hope that this repository or its part will be of use to someo
 
 ---
 
+- December 2015: ported to a C++ version
 - March 2015: wrote and added a probability based algorithm
 - August 2014: added a user-agent string tokenizer
 - April-May 2014: first attempt to create a model for predicting the class of an UA input
