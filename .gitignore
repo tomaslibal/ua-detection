@@ -51,3 +51,5 @@ py-mgr/js-dist
 # Project build and dist directories
 build
 dist
+
+nbproject/private/private.xml
