@@ -1,0 +1,29 @@
+/* 
+ * File:   UATokenizer.h
+ * Author: tlibal
+ *
+ * Created on November 22, 2015, 7:08 PM
+ */
+
+#ifndef UATOKENIZER_H
+#define	UATOKENIZER_H
+
+#include <string>
+#include <vector>
+
+#include "../../NgramBuilder/src/NgramBuilder.h"
+
+class UATokenizer {
+public:
+    UATokenizer();
+    UATokenizer(const UATokenizer &orig);
+    
+    virtual ~UATokenizer();
+    
+    static void staticTokenize(const std::string &sentence, std::vector<std::string> *tokens);
+private:
+
+};
+
+#endif	/* UATOKENIZER_H */
+
