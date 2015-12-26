@@ -46,3 +46,8 @@ py-mgr/js-dist
 # ignore kdeveloper project settings
 *.kdev4
 *.kate-swp
+
+# 
+# Project build and dist directories
+build
+dist
