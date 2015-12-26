@@ -11,8 +11,6 @@
 #include <fstream>
 #include <functional>
 
-#include "UATokenizer/src/UATokenizer.h"
-#include "NgramBuilder/src/NgramBuilder.h"
 #include "NaiveBayessClassifier/src/NaiveBayessClassifier.h"
 
 using namespace std;
