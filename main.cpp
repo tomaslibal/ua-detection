@@ -60,6 +60,10 @@ int main(int argc, char** argv) {
      */
     nb.stats();
     
+    /*
+     * A lambda function that takes the supplied user agent string and a category
+     * and evaluates the probability P(ua|category).
+     */
     function<void (string)> eval_ua_in_category = [&ua, &nb](string category) {
         cout.precision(5);        
         cout << "P(ua|" + category << ")=" << nb.classify(ua, category) << endl;
