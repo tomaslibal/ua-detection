@@ -33,8 +33,10 @@ int main(int argc, char** argv) {
     
     
     /* 
-     * Open data_in and read the <category, user-agent-string> pairs. The columns
-     * are assumed to be separated by a \t character.
+     * A lambda function that takes a string line, expecting it to be a pair
+     * of <categories, user-agent string> separated by a tab character.
+     * The function then calls NaiveBayesClassifier.add_data to add the new 
+     * user agent string with its category(ies) to the memory.
      */
     function<void (string)> add_line = [&nb](string line) {
         string category, uas;
