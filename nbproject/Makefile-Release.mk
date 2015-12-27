@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/NaiveBayessClassifier/src/NaiveBayessClassifier.o \
 	${OBJECTDIR}/NgramBuilder/src/NgramBuilder.o \
 	${OBJECTDIR}/UATokenizer/src/UATokenizer.o \
+	${OBJECTDIR}/common/src/uadet2.o \
 	${OBJECTDIR}/main.o
 
 
@@ -85,6 +86,11 @@ ${OBJECTDIR}/UATokenizer/src/UATokenizer.o: UATokenizer/src/UATokenizer.cpp
 	${MKDIR} -p ${OBJECTDIR}/UATokenizer/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/UATokenizer/src/UATokenizer.o UATokenizer/src/UATokenizer.cpp
+
+${OBJECTDIR}/common/src/uadet2.o: common/src/uadet2.cpp 
+	${MKDIR} -p ${OBJECTDIR}/common/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/common/src/uadet2.o common/src/uadet2.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
