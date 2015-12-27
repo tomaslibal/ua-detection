@@ -24,6 +24,22 @@ void foreach(vector<string>* vec, function<void (string)> &callback);
 
 void print_usage();
 
+struct UadetSettings {
+    string ua;
+    string category;
+};
+
+class InvalidArgsException: virtual public exception{
+public:
+    InvalidArgsException(string m="Invalid Arguments!") : msg(m) {}
+    ~InvalidArgsException() throw() {}
+    const char* what() const throw() { return msg.c_str(); }
+private:
+    string msg;
+};
+
+void parse_args(int argc, char** argv, UadetSettings& settings);
+
 /*
  * 
  */
@@ -34,12 +50,20 @@ int main(int argc, char** argv) {
         exit(1);
     }
     
+    UadetSettings settings;
+    
+    try {
+        parse_args(argc, argv, settings);
+    } catch (const InvalidArgsException& e) {
+        cout << "Error handling the program arguments!" << endl;
+        cout << e.what() << endl;
+        exit(1);
+    }
+    
     NaiveBayessClassifier nb;
     string dataFile = "data_in.txt";
-    string ua = "Mozilla/5.0 (X11; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0";
+    string ua = settings.ua;
     cout << "Using user-agent " + ua << endl;
-    
-    cout << "argc=" << argc << endl;
     
     /* 
      * A lambda function that takes a string line, expecting it to be a pair
@@ -100,4 +124,17 @@ void print_usage() {
     cout << "uadet2 User-agent String Classifier" << endl << endl;
     cout << tab << "uadet2 --ua='Mozilla/5.0 ...'" << endl;
     // cout << tab << "uadet2 --ua='Mozilla/5.0 ...' --category=mobile" << endl;
+}
+
+void parse_args(int argc, char** argv, UadetSettings& settings) {
+    // user-agent
+    string ua_arg;
+    ua_arg = argv[1];
+    
+    string::size_type n = ua_arg.find("--ua=");
+    if (n != string::npos) {
+        settings.ua = ua_arg.substr(n+1);
+    } else {
+        throw InvalidArgsException("Cannot parse out the user-agent string");
+    }
 }
