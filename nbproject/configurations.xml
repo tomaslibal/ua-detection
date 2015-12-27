@@ -8,6 +8,7 @@
       <itemPath>NaiveBayessClassifier/src/NaiveBayessClassifier.h</itemPath>
       <itemPath>NgramBuilder/src/NgramBuilder.h</itemPath>
       <itemPath>UATokenizer/src/UATokenizer.h</itemPath>
+      <itemPath>common/src/uadet2.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -75,6 +76,8 @@
       </item>
       <item path="UATokenizer/src/UATokenizer.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="common/src/uadet2.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -125,6 +128,8 @@
       <item path="UATokenizer/src/UATokenizer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="UATokenizer/src/UATokenizer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="common/src/uadet2.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
