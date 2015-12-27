@@ -18,17 +18,6 @@
 
 using namespace std;
 
-class InvalidArgsException: virtual public exception{
-public:
-    InvalidArgsException(string m="Invalid Arguments!") : msg(m) {}
-    ~InvalidArgsException() throw() {}
-    const char* what() const throw() { return msg.c_str(); }
-private:
-    string msg;
-};
-
-
-
 /*
  * 
  */

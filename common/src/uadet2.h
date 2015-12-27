@@ -33,6 +33,14 @@ void print_usage();
 
 void parse_args(int argc, char** argv, UadetSettings& settings);
 
+class InvalidArgsException: virtual public exception{
+public:
+    InvalidArgsException(std::string m="Invalid Arguments!") : msg(m) {}
+    ~InvalidArgsException() throw() {}
+    const char* what() const throw() { return msg.c_str(); }
+private:
+    std::string msg;
+};
 
 
 #endif	/* UADET2_H */
