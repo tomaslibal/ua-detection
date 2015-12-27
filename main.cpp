@@ -23,9 +23,14 @@ using namespace std;
  */
 int main(int argc, char** argv) {
     
+    /* 
+     * The program expects to be run with at least one argument specifying 
+     * the user agent string to be tested. If this test fails, exit with 
+     * a failure status.
+     */
     if (argc < 2) {
         print_usage();
-        exit(1);
+        exit(EXIT_FAILURE);        
     }
     
     UadetSettings settings;
