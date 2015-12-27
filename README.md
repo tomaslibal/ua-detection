@@ -2,7 +2,7 @@
 
 ### Introduction
 
-This is an experimental repository about device detection for the World Wide
+This is an experimental repository for device detection on the World Wide
 Web. I'm mostly interested in device detection for the user agents connecting
 to web servers through the HTTP requests.
 
