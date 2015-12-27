@@ -14,20 +14,9 @@
 
 #include "FileInputReader/src/FileInputReader.h"
 #include "NaiveBayessClassifier/src/NaiveBayessClassifier.h"
+#include "common/src/uadet2.h"
 
 using namespace std;
-
-/*
- * Function foreach applies the callback function to each element of the vector
- */
-void foreach(vector<string>* vec, function<void (string)> &callback);
-
-void print_usage();
-
-struct UadetSettings {
-    string ua;
-    string category;
-};
 
 class InvalidArgsException: virtual public exception{
 public:
@@ -38,7 +27,7 @@ private:
     string msg;
 };
 
-void parse_args(int argc, char** argv, UadetSettings& settings);
+
 
 /*
  * 
