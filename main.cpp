@@ -22,15 +22,24 @@ using namespace std;
  */
 void foreach(vector<string>* vec, function<void (string)> &callback);
 
+void print_usage();
+
 /*
  * 
  */
 int main(int argc, char** argv) {
+    
+    if (argc < 2) {
+        print_usage();
+        exit(1);
+    }
+    
     NaiveBayessClassifier nb;
     string dataFile = "data_in.txt";
     string ua = "Mozilla/5.0 (X11; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0";
     cout << "Using user-agent " + ua << endl;
     
+    cout << "argc=" << argc << endl;
     
     /* 
      * A lambda function that takes a string line, expecting it to be a pair
@@ -83,4 +92,12 @@ void foreach(vector<string>* vec, function<void (string)>& callback) {
     for(vector<string>::iterator it = vec->begin(); it != vec->end(); ++it) {
         callback(*it);
     }
+}
+
+void print_usage() {
+    char tab = '\t';
+    
+    cout << "uadet2 User-agent String Classifier" << endl << endl;
+    cout << tab << "uadet2 --ua='Mozilla/5.0 ...'" << endl;
+    cout << tab << "uadet2 --ua='Mozilla/5.0 ...' --category=mobile" << endl;
 }
