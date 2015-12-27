@@ -33,14 +33,21 @@ int main(int argc, char** argv) {
         exit(EXIT_FAILURE);        
     }
     
+    /* 
+     * This struct stores the user input
+     */
     UadetSettings settings;
     
+    /* 
+     * As the user input needs some cleaning/parsing, we attempt it here and
+     * if successful, store the result in `UadetSettings settings`.
+     */
     try {
         parse_args(argc, argv, settings);
     } catch (const InvalidArgsException& e) {
         cout << "Error handling the program arguments!" << endl;
         cout << e.what() << endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     
     NaiveBayessClassifier nb;
