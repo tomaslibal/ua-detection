@@ -40,17 +40,12 @@ This outputs an executable binary in `dist/{CONFIGURATION}/{PLATFORM}/uadet2`.
 
 #### usage
 
-> This is for the previous version !!!
-
 *default usage:*
 
-    dist/{CONFIGURATION}/{PLATFORM}/uadet2 --uas "Mozilla/5.0 ..." --group mobile
+    dist/{CONFIGURATION}/{PLATFORM}/uadet2 --ua="Mozilla/5.0 ..."
     
-Prints to stdout the output of the `mobile` classifier.
-
-Run a user-agent string against all classifiers (that have been seen in the training data):
-
-    bin/uadet --uas "Mozilla/5.0 ..."
+Prints to stdout the output of classification of the given user agent string 
+against all known categories present in the data file.
 
 ### Data
 
