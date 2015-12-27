@@ -53,11 +53,25 @@ NgramBuilder::~NgramBuilder() {
 
 int NgramBuilder::fromTokenList(vector<std::string> &tokens, vector<Ngram> *ngrams) {
     int size = tokens.size();
+    /*
+     * Offset of the first token to be taken into a new n-gram. Keeps increasing
+     * by one with each finished n-gram.
+     */
     int slider = 0;
-    int u = 0;
 
+    /*
+     * Suppose tokens = 'foo', 'bar', 'baz', 'qux', 'lux'
+     * and we're building a 3-grams. Then the 3-grams will be
+     * [0] 'foo','bar','baz'
+     * [1] 'bar','baz','qux'
+     * [2] 'baz','qux','lux'
+     */
     for(; slider < size; slider++) {
-        // num remaining tokens must be > this->level
+        /* 
+         * The number of remaining tokens must be greater than this->level,
+         * otherwise this would not be a valid N-gram of length N. Hence, if it
+         * is not the case, we break out from the loop.
+         */
         int rem = size - (slider+this->level);
         if (rem < 0) {
             break;
