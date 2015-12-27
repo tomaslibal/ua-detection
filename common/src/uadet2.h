@@ -33,7 +33,7 @@ void print_usage();
 
 void parse_args(int argc, char** argv, UadetSettings& settings);
 
-class InvalidArgsException: virtual public exception{
+class InvalidArgsException: virtual public std::exception{
 public:
     InvalidArgsException(std::string m="Invalid Arguments!") : msg(m) {}
     ~InvalidArgsException() throw() {}
