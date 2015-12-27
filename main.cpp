@@ -99,5 +99,5 @@ void print_usage() {
     
     cout << "uadet2 User-agent String Classifier" << endl << endl;
     cout << tab << "uadet2 --ua='Mozilla/5.0 ...'" << endl;
-    cout << tab << "uadet2 --ua='Mozilla/5.0 ...' --category=mobile" << endl;
+    // cout << tab << "uadet2 --ua='Mozilla/5.0 ...' --category=mobile" << endl;
 }
