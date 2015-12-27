@@ -50,8 +50,20 @@ int main(int argc, char** argv) {
         exit(EXIT_FAILURE);
     }
     
+    /*
+     * The program uses a Naive Bayess Classifier to predict a posterior of 
+     * a given user-agent string.
+     */
     NaiveBayessClassifier nb;
+    
+    /*
+     * The learning data
+     */
     string dataFile = "data_in.txt";
+    
+    /*
+     * Use the user-agent from the command line arguments
+     */
     string ua = settings.ua;
     cout << "Using user-agent " + ua << endl;
     
@@ -75,6 +87,10 @@ int main(int argc, char** argv) {
         }
     };
     
+    /*
+     * FileInputReader for reading in the data file, and passing each file line
+     * to the previous lambda.
+     */
     FileInputReader reader;
     reader.readLines(dataFile, add_line);
     
@@ -93,10 +109,17 @@ int main(int argc, char** argv) {
         cout << "P(category)=" << nb.prob_category(category) << endl;
     };
     
+    /*
+     * Get dynamically all categories that the NaiveBayesClassifier has seen
+     * and test the probability of the user-agent belonging to them.
+     */
     vector<string>* categories = nb.get_categories();
-    
     foreach(categories, eval_ua_in_category);
     
+    /*
+     * NaiveBayesClassifier.get_categories returns a pointer which had been
+     * 'new'ed so the memory needs to be free'd now that it is not needed.
+     */
     delete categories;
     
     return 0;
