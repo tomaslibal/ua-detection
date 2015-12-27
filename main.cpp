@@ -68,16 +68,15 @@ int main(int argc, char** argv) {
     cout << "Using user-agent " + ua << endl;
     
     /* 
-     * A lambda function that takes a string line, expecting it to be a pair
-     * of <categories, user-agent string> separated by a tab character.
+     * A lambda function that takes a string line. It expects the line to have
+     * two columns: categories and a user-agent string, separated by a tab
+     * character.
      * The function then calls NaiveBayesClassifier.add_data to add the new 
      * user agent string with its category(ies) to the memory.
      */
     function<void (string)> add_line = [&nb](string line) {
         string category, uas;
-        string::size_type n;
-        
-        n = line.find('\t');
+        string::size_type n = line.find('\t');
         
         if (n != string::npos) {
             category = line.substr(0, n);
