@@ -52,9 +52,6 @@ NgramBuilder::~NgramBuilder() {
 }
 
 int NgramBuilder::fromTokenList(vector<std::string> &tokens, vector<Ngram> *ngrams) {
-    //ngrams = (Ngram *)realloc(ngrams, sizeof(Ngram) * (tokens->length));
-    
-    
     int size = tokens.size();
     int slider = 0;
     int u = 0;
@@ -79,9 +76,7 @@ int NgramBuilder::fromTokenList(vector<std::string> &tokens, vector<Ngram> *ngra
     return slider;
 }
 
-int NgramBuilder::fromUserAgentString(string &sentence, vector<Ngram> *ngrams) {
-    //tokenList *tokens = (tokenList*)malloc(sizeof(tokenList));
-    
+int NgramBuilder::fromUserAgentString(string &sentence, vector<Ngram> *ngrams) {    
     UATokenizer tok;
     vector<string> uaTokens;
     
