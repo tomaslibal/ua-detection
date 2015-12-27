@@ -12,6 +12,7 @@
 #include <fstream>
 #include <functional>
 
+#include "FileInputReader/src/FileInputReader.h"
 #include "NaiveBayessClassifier/src/NaiveBayessClassifier.h"
 
 using namespace std;
@@ -26,6 +27,7 @@ void foreach(vector<string>* vec, function<void (string)> &callback);
  */
 int main(int argc, char** argv) {
     NaiveBayessClassifier nb;
+    string dataFile = "data_in.txt";
     string ua = "Mozilla/5.0 (X11; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0";
     cout << "Using user-agent " + ua << endl;
     
@@ -34,21 +36,22 @@ int main(int argc, char** argv) {
      * Open data_in and read the <category, user-agent-string> pairs. The columns
      * are assumed to be separated by a \t character.
      */
-    ifstream infile("data_in.txt");
-        
-    string line;
-    string fcat, fua;
-    while (getline(infile, line)) {
+    function<void (string)> add_line = [&nb](string line) {
+        string category, uas;
         string::size_type n;
+        
         n = line.find('\t');
         
         if (n != string::npos) {
-            fcat = line.substr(0, n);
-            fua = line.substr(n+1);
+            category = line.substr(0, n);
+            uas = line.substr(n+1);
     
-            nb.add_data(fua, fcat);            
+            nb.add_data(uas, category);            
         }
-    }
+    };
+    
+    FileInputReader reader;
+    reader.readLines(dataFile, add_line);
     
     /*
      * Prints summary of number of categories and n-grams that have been read.
