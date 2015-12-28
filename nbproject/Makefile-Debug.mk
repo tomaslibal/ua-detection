@@ -48,6 +48,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 # Test Files
 TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f2
 
 # C Compiler Flags
@@ -113,6 +114,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/FileInputReader/test/fileInputReaderTest.o $
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
+${TESTDIR}/TestFiles/f3: ${TESTDIR}/NgramBuilder/test/ngramBuilderTest.o ${TESTDIR}/NgramBuilder/test/ngramBuilderTestRunner.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
+
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/UATokenizer/test/uaTokenizerTest.o ${TESTDIR}/UATokenizer/test/uaTokenizerTestRunner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
@@ -128,6 +133,18 @@ ${TESTDIR}/FileInputReader/test/fileInputReaderTestRunner.o: FileInputReader/tes
 	${MKDIR} -p ${TESTDIR}/FileInputReader/test
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/FileInputReader/test/fileInputReaderTestRunner.o FileInputReader/test/fileInputReaderTestRunner.cpp
+
+
+${TESTDIR}/NgramBuilder/test/ngramBuilderTest.o: NgramBuilder/test/ngramBuilderTest.cpp 
+	${MKDIR} -p ${TESTDIR}/NgramBuilder/test
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/NgramBuilder/test/ngramBuilderTest.o NgramBuilder/test/ngramBuilderTest.cpp
+
+
+${TESTDIR}/NgramBuilder/test/ngramBuilderTestRunner.o: NgramBuilder/test/ngramBuilderTestRunner.cpp 
+	${MKDIR} -p ${TESTDIR}/NgramBuilder/test
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/NgramBuilder/test/ngramBuilderTestRunner.o NgramBuilder/test/ngramBuilderTestRunner.cpp
 
 
 ${TESTDIR}/UATokenizer/test/uaTokenizerTest.o: UATokenizer/test/uaTokenizerTest.cpp 
@@ -225,6 +242,7 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp
 	@if [ "${TEST}" = "" ]; \
 	then  \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	else  \
 	    ./${TEST} || true; \

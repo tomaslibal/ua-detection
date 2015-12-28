@@ -36,6 +36,14 @@
         <itemPath>FileInputReader/test/fileInputReaderTest.h</itemPath>
         <itemPath>FileInputReader/test/fileInputReaderTestRunner.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f3"
+                     displayName="NgramBuilder Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>NgramBuilder/test/ngramBuilderTest.cpp</itemPath>
+        <itemPath>NgramBuilder/test/ngramBuilderTest.h</itemPath>
+        <itemPath>NgramBuilder/test/ngramBuilderTestRunner.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f2"
                      displayName="UATokenizer Test"
                      projectFiles="true"
@@ -104,6 +112,21 @@
       </item>
       <item path="NgramBuilder/src/NgramBuilder.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="NgramBuilder/test/ngramBuilderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="NgramBuilder/test/ngramBuilderTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="NgramBuilder/test/ngramBuilderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="UATokenizer/src/UATokenizer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="UATokenizer/src/UATokenizer.h" ex="false" tool="3" flavor2="0">
@@ -147,6 +170,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -214,6 +251,21 @@
       </item>
       <item path="NgramBuilder/src/NgramBuilder.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="NgramBuilder/test/ngramBuilderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="NgramBuilder/test/ngramBuilderTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="NgramBuilder/test/ngramBuilderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="UATokenizer/src/UATokenizer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="UATokenizer/src/UATokenizer.h" ex="false" tool="3" flavor2="0">
@@ -257,6 +309,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
