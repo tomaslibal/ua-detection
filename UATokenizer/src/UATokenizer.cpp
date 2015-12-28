@@ -66,8 +66,8 @@ void UATokenizer::staticTokenize(const string &sentence, vector<string> *tokens)
         i++;
     }
 
-    if (strlen(token) > 0) {
-        tokens->push_back(string(token));
+    if (os.str().length() > 0) {
+        tokens->push_back(os.str());
     }
     
 }
