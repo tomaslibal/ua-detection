@@ -7,6 +7,8 @@
 
 #include "fileInputReaderTest.h"
 
+#include <functional>
+#include <string>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(fileInputReaderTest);
 
@@ -24,7 +26,15 @@ void fileInputReaderTest::tearDown() {
     delete reader;
 }
 
-void fileInputReaderTest::testReadLines() {
+void fileInputReaderTest::testReadLinesReadsAllLinesInTheFile() {
+    int numLinesRead = 0;
     
+    std::function<void (std::string)> test_callback = [&numLinesRead](std::string line) {
+        numLinesRead++;
+    };
+    
+    reader->readLines("FileInputReader/test/resources/test.txt", test_callback);
+    
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The file has 3 lines thus 3 lines should have been read", 3, numLinesRead);
 }
 
