@@ -36,6 +36,14 @@
         <itemPath>FileInputReader/test/fileInputReaderTest.h</itemPath>
         <itemPath>FileInputReader/test/fileInputReaderTestRunner.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="UATokenizer Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>UATokenizer/test/uaTokenizerTest.cpp</itemPath>
+        <itemPath>UATokenizer/test/uaTokenizerTest.h</itemPath>
+        <itemPath>UATokenizer/test/uaTokenizerTestRunner.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -100,6 +108,18 @@
       </item>
       <item path="UATokenizer/src/UATokenizer.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="UATokenizer/test/uaTokenizerTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="UATokenizer/test/uaTokenizerTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="UATokenizer/test/uaTokenizerTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="common/src/uadet2.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="common/src/uadet2.h" ex="false" tool="3" flavor2="0">
@@ -113,6 +133,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -184,6 +218,18 @@
       </item>
       <item path="UATokenizer/src/UATokenizer.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="UATokenizer/test/uaTokenizerTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="UATokenizer/test/uaTokenizerTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="UATokenizer/test/uaTokenizerTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="common/src/uadet2.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="common/src/uadet2.h" ex="false" tool="3" flavor2="0">
@@ -197,6 +243,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
