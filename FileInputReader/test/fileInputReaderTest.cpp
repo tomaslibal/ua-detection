@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(fileInputReaderTest);
 
@@ -36,5 +37,28 @@ void fileInputReaderTest::testReadLinesReadsAllLinesInTheFile() {
     reader->readLines("FileInputReader/test/resources/test.txt", test_callback);
     
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The file has 3 lines thus 3 lines should have been read", 3, numLinesRead);
+}
+
+void fileInputReaderTest::testReadLinesPassesInTheLinesAsStrings() {
+    std::vector<std::string> lines;
+    
+    std::function<void (std::string)> test_callback = [&lines](std::string line) {
+        lines.push_back(line);
+    };
+    
+    reader->readLines("FileInputReader/test/resources/test.txt", test_callback);
+    
+    for(int i = 0; i < lines.size(); i++) {
+        if (i == 0) {
+            CPPUNIT_ASSERT_MESSAGE("The first line should read 'foo,1'", "foo,1" == lines[i]);
+        }
+        if (i == 1) {
+            CPPUNIT_ASSERT_MESSAGE("The second line should read 'bar,2'", "bar,2" == lines[i]);
+        }
+        if (i == 2) {
+            CPPUNIT_ASSERT_MESSAGE("The third line should read 'baz,3'", "baz,3" == lines[i]);           
+        }
+    }
+    
 }
 
