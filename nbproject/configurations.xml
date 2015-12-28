@@ -28,6 +28,14 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="FileInputReader Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>FileInputReader/test/fileInputReaderTest.cpp</itemPath>
+        <itemPath>FileInputReader/test/fileInputReaderTest.h</itemPath>
+        <itemPath>FileInputReader/test/fileInputReaderTestRunner.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -59,6 +67,21 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="FileInputReader/test/fileInputReaderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="FileInputReader/test/fileInputReaderTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="FileInputReader/test/fileInputReaderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="NaiveBayessClassifier/src/NaiveBayessClassifier.cpp"
             ex="false"
             tool="1"
@@ -81,6 +104,20 @@
       </item>
       <item path="common/src/uadet2.h" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -114,6 +151,21 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="FileInputReader/test/fileInputReaderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="FileInputReader/test/fileInputReaderTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="FileInputReader/test/fileInputReaderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="NaiveBayessClassifier/src/NaiveBayessClassifier.cpp"
             ex="false"
             tool="1"
@@ -136,6 +188,20 @@
       </item>
       <item path="common/src/uadet2.h" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
