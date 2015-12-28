@@ -33,6 +33,7 @@ Needed to build the binaries:
 
 - GNU Make utility
 - C++11 Compiler
+- CppUnit for tests
 
 #### build
 
@@ -66,10 +67,10 @@ See the [example](/data_in.txt)
 
 ### Test
 
-`make test` compiles the test suite and runs it. If stdout prints "ALL TESTS
-PASSED" the suite returned with no errors. Otherwise, it will stop on the first
-error printing the test file and corresponding line number where the error
-occured.
+`make test` compiles the test suite and runs it. There are multiple test runners for each
+class and they print OK(###) if all tests within that runner passed (### is the number of
+passing tests). Otherwise, it prints the test errors with the message (if the message was
+defined).
 
 ### Disclaimers
 
