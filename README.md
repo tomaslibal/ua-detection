@@ -25,6 +25,8 @@ There are two end goals that I would like achieve:
 learning method to learn from data and makes predictions about new data as to which
 class the input may belong.
 
+Currently the program is both the backend and the client in one executable. This also means that each time the program is invoked, the learning process has to be completed. The learning part would be ideally separated from the querying to optimize resources and to lower the latency.
+
 #### dependencies
 
 Needed to build the binaries:
