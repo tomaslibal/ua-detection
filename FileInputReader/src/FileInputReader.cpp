@@ -6,6 +6,7 @@
  */
 
 #include <fstream>
+#include <iostream>
 
 #include "FileInputReader.h"
 
@@ -19,6 +20,11 @@ FileInputReader::~FileInputReader() {
 
 void FileInputReader::readLines(string filename, function<void (string)>& f) {
     ifstream infile(filename);
+    
+    if (!infile.good()) {
+        cerr << "Cannot find datafile " << filename << endl;
+        return;
+    }
         
     string line;
     
