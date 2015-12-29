@@ -30,7 +30,7 @@ UATokenizer::~UATokenizer() {
 /*
  * Returns true if character ch is in array
  */
-bool in_array(const char* array, char ch) {
+bool UATokenizer::in_array(const char* array, char ch) {
     int i = 0;
     int len = strlen(array);
     for (; i < len; i++) {
@@ -42,7 +42,7 @@ bool in_array(const char* array, char ch) {
 /*
  * Splits a string sentence into a vector of string tokens
  */
-void UATokenizer::staticTokenize(const string &sentence, vector<string> *tokens) {
+void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
     /*
      * These separators are used to determine where each token ends. They are
      * taken from the RFC-2616. I had made a decision to omit \ and / characters
@@ -124,5 +124,5 @@ void UATokenizer::tokenize(std::vector<std::string>* tokens) {
         return;
     }
     
-    staticTokenize(uas, tokens);
+    tokenize(uas, tokens);
 }

@@ -27,10 +27,10 @@ public:
     
     std::string uas;
     
-    static void staticTokenize(const std::string &sentence, std::vector<std::string> *tokens);
+    void tokenize(const std::string &sentence, std::vector<std::string> *tokens);
     void tokenize(std::vector<std::string>* tokens);
 private:
-    
+    bool in_array(const char* array, char ch);
 
 };
 

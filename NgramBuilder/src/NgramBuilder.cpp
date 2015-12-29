@@ -94,7 +94,7 @@ int NgramBuilder::fromUserAgentString(string &sentence, vector<Ngram> *ngrams) {
     UATokenizer tok;
     vector<string> uaTokens;
     
-    tok.staticTokenize(sentence, &uaTokens);
+    tok.tokenize(sentence, &uaTokens);
     
     return this->fromTokenList(uaTokens, ngrams);
 }
