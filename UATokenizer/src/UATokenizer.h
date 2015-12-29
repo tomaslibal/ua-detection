@@ -24,9 +24,11 @@ public:
     
     virtual ~UATokenizer();
     
+    std::string uas;
+    
     static void staticTokenize(const std::string &sentence, std::vector<std::string> *tokens);
 private:
-    std::string uas;
+    
 
 };
 

@@ -17,6 +17,10 @@ UATokenizer::UATokenizer(string uas) {
     this->uas = uas;
 }
 
+UATokenizer::UATokenizer(const UATokenizer& orig) {
+    this->uas = orig->uas;
+}
+
 UATokenizer::~UATokenizer() {
 }
 
