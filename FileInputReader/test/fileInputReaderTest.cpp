@@ -62,3 +62,12 @@ void fileInputReaderTest::testReadLinesPassesInTheLinesAsStrings() {
     
 }
 
+void fileInputReaderTest::testReadLinesWontExecuteTheCallbackIfFileNotFound() {
+    std::string nonExistingFile = "bar.txt";
+    
+    std::function<void (std::string)> test_callback = [](std::string line) {        
+        CPPUNIT_FAIL("The callback should not be invoked when the file cannot be found");
+    };
+    
+    reader->readLines(nonExistingFile, test_callback);
+}

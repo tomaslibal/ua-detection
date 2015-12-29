@@ -17,6 +17,7 @@ class fileInputReaderTest : public CPPUNIT_NS::TestFixture {
 
     CPPUNIT_TEST(testReadLinesReadsAllLinesInTheFile);
     CPPUNIT_TEST(testReadLinesPassesInTheLinesAsStrings);
+    CPPUNIT_TEST(testReadLinesWontExecuteTheCallbackIfFileNotFound);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -30,6 +31,7 @@ private:
     FileInputReader* reader;
     void testReadLinesReadsAllLinesInTheFile();
     void testReadLinesPassesInTheLinesAsStrings();
+    void testReadLinesWontExecuteTheCallbackIfFileNotFound();
 };
 
 #endif	/* FILEINPUTREADERTEST_H */
