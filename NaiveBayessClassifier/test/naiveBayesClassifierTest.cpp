@@ -7,6 +7,7 @@
 
 #include "naiveBayesClassifierTest.h"
 
+using namespace std;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(naiveBayesClassifierTest);
 
@@ -25,6 +26,23 @@ void naiveBayesClassifierTest::tearDown() {
 }
 
 void naiveBayesClassifierTest::testIncPriorsFreqIncreasesFrequencyByOne() {
+    string cat = "smart_tv";
+    double p = nbc->prob_category(cat);
     
+    CPPUNIT_ASSERT_MESSAGE("Probability of an unknown category is 0", p == 0.0);
+    
+    string test_data = "foo bar";
+    nbc->add_data(test_data, cat);
+    
+    p = nbc->prob_category(cat);
+    
+    CPPUNIT_ASSERT_MESSAGE("Probability should be 1/1 = 1", p == 1.0);
+    
+    string cat2 = "mobile";
+    nbc->add_data(test_data, cat2);
+    
+    p = nbc->prob_category(cat2);
+    
+    CPPUNIT_ASSERT_MESSAGE("Probability should be 1/2 = 1", p == 0.5);
 }
 
