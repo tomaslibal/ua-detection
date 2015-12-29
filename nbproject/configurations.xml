@@ -36,6 +36,14 @@
         <itemPath>FileInputReader/test/fileInputReaderTest.h</itemPath>
         <itemPath>FileInputReader/test/fileInputReaderTestRunner.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f4"
+                     displayName="NaiveBayesClassifier Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp</itemPath>
+        <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTest.h</itemPath>
+        <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3"
                      displayName="NgramBuilder Test"
                      projectFiles="true"
@@ -108,6 +116,21 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="NgramBuilder/src/NgramBuilder.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="NgramBuilder/src/NgramBuilder.h" ex="false" tool="3" flavor2="0">
@@ -184,6 +207,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f3</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -247,6 +284,21 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="NgramBuilder/src/NgramBuilder.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="NgramBuilder/src/NgramBuilder.h" ex="false" tool="3" flavor2="0">
@@ -323,6 +375,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f3</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
