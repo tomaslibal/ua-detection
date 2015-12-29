@@ -19,13 +19,14 @@
  */
 class UATokenizer {
 public:
-    UATokenizer();
+    UATokenizer(std::string uas);
     UATokenizer(const UATokenizer &orig);
     
     virtual ~UATokenizer();
     
     static void staticTokenize(const std::string &sentence, std::vector<std::string> *tokens);
 private:
+    std::string uas;
 
 };
 

@@ -13,7 +13,8 @@
 
 using namespace std; 
 
-UATokenizer::UATokenizer() {
+UATokenizer::UATokenizer(string uas) {
+    this->uas = uas;
 }
 
 UATokenizer::~UATokenizer() {
