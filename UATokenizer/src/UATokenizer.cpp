@@ -13,12 +13,15 @@
 
 using namespace std; 
 
+UATokenizer::UATokenizer() {    
+}
+
 UATokenizer::UATokenizer(string uas) {
     this->uas = uas;
 }
 
 UATokenizer::UATokenizer(const UATokenizer& orig) {
-    this->uas = orig->uas;
+    this->uas = orig.uas;
 }
 
 UATokenizer::~UATokenizer() {
@@ -114,4 +117,12 @@ void UATokenizer::staticTokenize(const string &sentence, vector<string> *tokens)
         tokens->push_back(os.str());
     }
     
+}
+
+void UATokenizer::tokenize(std::vector<std::string>* tokens) {
+    if (uas.empty()) {
+        return;
+    }
+    
+    staticTokenize(uas, tokens);
 }
