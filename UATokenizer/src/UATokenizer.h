@@ -13,6 +13,10 @@
 
 #include "../../NgramBuilder/src/NgramBuilder.h"
 
+/*
+ * User-agent Tokenizer. Given a user-agent string, this class can segment the
+ * string into tokens, as specified by the RFC2616.
+ */
 class UATokenizer {
 public:
     UATokenizer();
