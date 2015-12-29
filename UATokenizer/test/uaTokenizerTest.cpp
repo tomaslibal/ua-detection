@@ -29,7 +29,7 @@ void uaTokenizerTest::tearDown() {
 void uaTokenizerTest::testStaticTokenizeBreaksUpSentenceIntoTokens() {
     std::vector<std::string> tokens;
     std::string sentence = "Subtracting equation (53) from equation (52) gives 8";
-    tok->staticTokenize(sentence, &tokens);
+    tok->tokenize(sentence, &tokens);
     
     CPPUNIT_ASSERT_MESSAGE("Tokens.size()=8", 8 == tokens.size());
     CPPUNIT_ASSERT_MESSAGE("Tokens[0]=Subtracting", "Subtracting" == tokens[0]);
@@ -45,7 +45,7 @@ void uaTokenizerTest::testStaticTokenizeBreaksUpSentenceIntoTokens() {
 void uaTokenizerTest::testStaticTokenizeSkipsLeadingSeparatorsOrWhitespace() {
     std::vector<std::string> tokens;
     std::string sentence = "  (complementary function of the differential equation";
-    tok->staticTokenize(sentence, &tokens);
+    tok->tokenize(sentence, &tokens);
     
     CPPUNIT_ASSERT_MESSAGE("Tokens.size()=6", 6 == tokens.size());
     CPPUNIT_ASSERT_MESSAGE("Tokens[0]=complementary", "complementary" == tokens[0]);
