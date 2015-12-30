@@ -53,3 +53,8 @@ build
 dist
 
 nbproject/private/private.xml
+
+Makefile
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
