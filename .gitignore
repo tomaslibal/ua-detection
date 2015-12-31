@@ -52,8 +52,7 @@ py-mgr/js-dist
 build
 dist
 
-nbproject/private/private.xml
-
+nbproject/private
 Makefile
 CMakeCache.txt
 CMakeFiles
