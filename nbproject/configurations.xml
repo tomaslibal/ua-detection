@@ -84,6 +84,7 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-mtune=generic -march=x86-64 -std=c++11"/>
+        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -103,15 +104,8 @@
             ex="false"
             tool="1"
             flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/c++/4.8.2</pElem>
-            <pElem>FileInputReader/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/ext</pElem>
-            <pElem>/usr/include/c++/4.8.2/debug</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -160,16 +154,8 @@
             ex="false"
             tool="1"
             flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/c++/4.8.2</pElem>
-            <pElem>/usr/include/c++/4.8.2/bits</pElem>
-            <pElem>NaiveBayessClassifier/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/ext</pElem>
-            <pElem>NgramBuilder/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/debug</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -214,15 +200,8 @@
         </ccTool>
       </item>
       <item path="NgramBuilder/src/NgramBuilder.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/c++/4.8.2</pElem>
-            <pElem>NgramBuilder/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/ext</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/debug</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -267,15 +246,8 @@
         </ccTool>
       </item>
       <item path="UATokenizer/src/UATokenizer.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/c++/4.8.2</pElem>
-            <pElem>UATokenizer/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/ext</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/debug</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -320,31 +292,14 @@
         </ccTool>
       </item>
       <item path="common/src/uadet2.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/c++/4.8.2</pElem>
-            <pElem>common/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/ext</pElem>
-            <pElem>/usr/include/c++/4.8.2/debug</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.8.2/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2</pElem>
-            <pElem>common/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/ext</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/debug</pElem>
-            <pElem>.</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
-          </incDir>
+        <ccTool flags="1">
         </ccTool>
       </item>
     </conf>
