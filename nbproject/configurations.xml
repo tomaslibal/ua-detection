@@ -65,10 +65,10 @@
                    displayName="Important Files"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
-      <itemPath>Makefile</itemPath>
+      <itemPath>CMakeLists.txt</itemPath>
     </logicalFolder>
   </logicalFolder>
-  <projectmakefile>Makefile</projectmakefile>
+  <projectmakefile>CMakeLists.txt</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
