@@ -116,6 +116,46 @@
           </incDir>
         </ccTool>
       </item>
+      <item path="FileInputReader/test/fileInputReaderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/cppunit</pElem>
+            <pElem>/usr/include/cppunit/extensions</pElem>
+            <pElem>FileInputReader/test</pElem>
+            <pElem>/usr/include/c++/4.8.2/backward</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/cppunit/portability</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="FileInputReader/test/fileInputReaderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/cppunit/portability</pElem>
+            <pElem>FileInputReader/test</pElem>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/cppunit</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
       <item path="NaiveBayessClassifier/src/NaiveBayessClassifier.cpp"
             ex="false"
             tool="1"
@@ -129,6 +169,45 @@
             <pElem>NgramBuilder/src</pElem>
             <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
             <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/cppunit</pElem>
+            <pElem>/usr/include/cppunit/extensions</pElem>
+            <pElem>NaiveBayessClassifier/test</pElem>
+            <pElem>/usr/include/c++/4.8.2/backward</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/cppunit/portability</pElem>
+            <pElem>NaiveBayessClassifier/test</pElem>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/cppunit</pElem>
             <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
             <pElem>.</pElem>
           </incDir>
@@ -148,7 +227,46 @@
           </incDir>
         </ccTool>
       </item>
-     <item path="UATokenizer/src/UATokenizer.cpp" ex="false" tool="1" flavor2="8">
+      <item path="NgramBuilder/test/ngramBuilderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/cppunit</pElem>
+            <pElem>/usr/include/cppunit/extensions</pElem>
+            <pElem>NgramBuilder/test</pElem>
+            <pElem>/usr/include/c++/4.8.2/backward</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="NgramBuilder/test/ngramBuilderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/cppunit/portability</pElem>
+            <pElem>NgramBuilder/test</pElem>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/cppunit</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="UATokenizer/src/UATokenizer.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
           <incDir>
             <pElem>/usr/include/c++/4.8.2</pElem>
@@ -162,7 +280,46 @@
           </incDir>
         </ccTool>
       </item>
-     <item path="common/src/uadet2.cpp" ex="false" tool="1" flavor2="8">
+      <item path="UATokenizer/test/uaTokenizerTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/cppunit</pElem>
+            <pElem>/usr/include/cppunit/extensions</pElem>
+            <pElem>UATokenizer/test</pElem>
+            <pElem>/usr/include/c++/4.8.2/backward</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="UATokenizer/test/uaTokenizerTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/cppunit/portability</pElem>
+            <pElem>UATokenizer/test</pElem>
+            <pElem>/usr/include/c++/4.8.2</pElem>
+            <pElem>/usr/include/c++/4.8.2/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
+            <pElem>/usr/include/c++/4.8.2/ext</pElem>
+            <pElem>/usr/include/c++/4.8.2/debug</pElem>
+            <pElem>/usr/include/cppunit</pElem>
+            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="common/src/uadet2.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
           <incDir>
             <pElem>/usr/include/c++/4.8.2</pElem>
