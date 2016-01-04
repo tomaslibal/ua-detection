@@ -31,7 +31,7 @@ Currently the program is both the backend and the client in one executable. This
 
 Needed to build the binaries:
 
-- CMake 2.8+
+- CMake 2.6+
 - GNU Make utility
 - C++11 Compiler
 - CppUnit for tests
