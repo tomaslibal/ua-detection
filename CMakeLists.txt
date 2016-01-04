@@ -15,9 +15,15 @@ file(GLOB ALL_SRC
     "UATokenizer/src/*.cpp"
 )
 
+file(GLOB CLIENT_SRC
+    "client.cpp"
+)
+
 add_executable(uadet2 ${ALL_SRC})
 set_property(TARGET uadet2 PROPERTY CXX_STANDARD 11)
 set_property(TARGET uadet2 PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(uadet2cli ${CLIENT_SRC})
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
