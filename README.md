@@ -39,13 +39,13 @@ Needed to build the binaries:
 
     make
 
-This outputs an executable binary in `dist/{CONFIGURATION}/{PLATFORM}/uadet2`.
+This outputs an executable binary in `dist/uadet2`.
 
 #### usage
 
 *default usage:*
 
-    dist/{CONFIGURATION}/{PLATFORM}/uadet2 --ua="Mozilla/5.0 ..."
+    dist/uadet2 --ua="Mozilla/5.0 ..."
     
 Prints to stdout the output of classification of the given user agent string 
 against all known categories present in the data file.
