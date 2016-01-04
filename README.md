@@ -67,7 +67,7 @@ See the [example](/data_in.txt)
 
 ### Test
 
-> Tests are currently not runnable from make! I changed to CMake build tool because it 
+> Tests are currently not runnable from make! I switched to CMake build tool because it 
 > supports multiple binary targets in the project (client & server binaries). This caused
 > a loss of NetBeans generated `build-tests` target which was used to compile test runners.
 > I will add test compilation back and a test runner in the future.
