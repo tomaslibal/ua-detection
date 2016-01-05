@@ -9,5 +9,5 @@ using std::endl;
 
 void error(string msg) {
     cerr << msg << endl;
-    exit(1);
+    exit(EXIT_FAILURE);
 }
