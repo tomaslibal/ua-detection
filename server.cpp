@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
         error("binding failed");
     }
     
-    cout << "binding to the socket successful on port " << portno << << endl;
+    cout << "binding to the socket successful on port " << portno << endl;
     
     int backlogsize = 5;
     /*
