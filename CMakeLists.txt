@@ -42,6 +42,19 @@ set_property(TARGET uadet2 PROPERTY CXX_STANDARD_REQUIRED ON)
 add_executable(uadet2d ${SERVER_SRC})
 add_executable(uadet2cli ${CLIENT_SRC})
 
+SET(CMAKE_CXX_FLAGS_DEBUG "-lpthread") 
+SET(CMAKE_CXX_FLAGS_RELEASE "-lpthread") 
+
+# More portable threading:
+#find_package (Threads REQUIRED)
+#if(THREADS_HAVE_PTHREAD_ARG)
+#  set_property(TARGET uadet2d PROPERTY COMPILE_OPTIONS "-pthread")
+#  set_property(TARGET uadet2d PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
+#endif()
+#if(CMAKE_THREAD_LIBS_INIT)
+#  target_link_libraries(uadet2d "${CMAKE_THREAD_LIBS_INIT}")
+#endif()
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/dist)

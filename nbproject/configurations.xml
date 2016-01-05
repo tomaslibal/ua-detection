@@ -318,9 +318,19 @@
         <ccTool flags="1">
         </ccTool>
       </item>
-      <item path="server/src/protocol.cpp" ex="false" tool="1" flavor2="4">
+      <item path="server/src/protocol.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
       </item>
-      <item path="server/src/sockets.cpp" ex="false" tool="1" flavor2="4">
+      <item path="server/src/sockets.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
       </item>
       <item path="server/src/utils.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
