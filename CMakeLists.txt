@@ -19,10 +19,25 @@ file(GLOB CLIENT_SRC
     "client.cpp"
 )
 
+file(GLOB SERVER_SRC
+    "server.cpp"
+    "common/src/*.h"
+    "common/src/*.cpp"
+    "NaiveBayessClassifier/src/*.h"
+    "NaiveBayessClassifier/src/*.cpp"
+    "NgramBuilder/src/*.h"
+    "NgramBuilder/src/*.cpp"
+    "FileInputReader/src/*.h"
+    "FileInputReader/src/*.cpp"
+    "UATokenizer/src/*.h"
+    "UATokenizer/src/*.cpp"
+)
+
 add_executable(uadet2 ${ALL_SRC})
 set_property(TARGET uadet2 PROPERTY CXX_STANDARD 11)
 set_property(TARGET uadet2 PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(uadet2d ${SERVER_SRC})
 add_executable(uadet2cli ${CLIENT_SRC})
 
 set(CMAKE_CXX_STANDARD 11)
