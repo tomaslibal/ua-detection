@@ -8,7 +8,10 @@
       <itemPath>NaiveBayessClassifier/src/NaiveBayessClassifier.h</itemPath>
       <itemPath>NgramBuilder/src/NgramBuilder.h</itemPath>
       <itemPath>UATokenizer/src/UATokenizer.h</itemPath>
+      <itemPath>server/src/protocol.h</itemPath>
+      <itemPath>server/src/sockets.h</itemPath>
       <itemPath>common/src/uadet2.h</itemPath>
+      <itemPath>server/src/utils.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -23,8 +26,11 @@
       <itemPath>UATokenizer/src/UATokenizer.cpp</itemPath>
       <itemPath>client.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>server/src/protocol.cpp</itemPath>
       <itemPath>server.cpp</itemPath>
+      <itemPath>server/src/sockets.cpp</itemPath>
       <itemPath>common/src/uadet2.cpp</itemPath>
+      <itemPath>server/src/utils.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -305,21 +311,22 @@
         </ccTool>
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.8.2/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2</pElem>
-            <pElem>common/src</pElem>
-            <pElem>/usr/include/c++/4.8.2/ext</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux/bits</pElem>
-            <pElem>/usr/include/c++/4.8.2/debug</pElem>
-            <pElem>.</pElem>
-            <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
-          </incDir>
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="server.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="server/src/protocol.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="server/src/sockets.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="server/src/utils.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
         </ccTool>
       </item>
     </conf>

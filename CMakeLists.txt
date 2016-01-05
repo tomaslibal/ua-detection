@@ -21,6 +21,8 @@ file(GLOB CLIENT_SRC
 
 file(GLOB SERVER_SRC
     "server.cpp"
+    "server/src/*.h"
+    "server/src/*.cpp"
     "common/src/*.h"
     "common/src/*.cpp"
     "NaiveBayessClassifier/src/*.h"
