@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
     
     if (argc < 3)
     {
-        std::cerr << "usage" << argv[0] << " hostname port" << std::endl;
+        std::cerr << "Usage: " << std::endl << argv[0] << " <hostname> <port>" << std::endl;
         exit(EXIT_SUCCESS);
     }
     
