@@ -17,18 +17,14 @@
 #include <functional>
 #include <mutex>
 
+#include <cstring>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
 
 int create_socket_inet_stream();
 
-void wait_and_accept(
-    sockaddr_in* cli_addr, 
-    int insockfd, 
-    std::function<void ()>& exit_callback, 
-    std::unique_lock<std::mutex>& signal_exit
-);
+void wait_and_accept(sockaddr_in* cli_addr, int insockfd, std::function<void ()>& exit_callback, std::unique_lock<std::mutex>& signal_exit);
 
 #endif /* SOCKETS_H */
 

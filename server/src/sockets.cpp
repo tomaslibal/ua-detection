@@ -28,7 +28,7 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
     bzero(buffer,256);
     n = read(insockfd,buffer,255);
     if (n < 0) error("ERROR reading from socket");
-    string* output = process_message(buffer);   
+    std::string* output = process_message(buffer);   
     cout << "message out is " << *output;
     
     if (strcmp(buffer, "exit\n") == 0) {
