@@ -19,6 +19,7 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 int create_socket_inet_stream();
 
