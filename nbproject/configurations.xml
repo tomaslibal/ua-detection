@@ -23,6 +23,7 @@
       <itemPath>UATokenizer/src/UATokenizer.cpp</itemPath>
       <itemPath>client.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>server.cpp</itemPath>
       <itemPath>common/src/uadet2.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -349,6 +350,8 @@
             <pElem>/usr/include/c++/4.8.2/x86_64-redhat-linux</pElem>
           </incDir>
         </ccTool>
+      </item>
+      <item path="server.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>
