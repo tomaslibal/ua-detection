@@ -19,10 +19,10 @@ file(GLOB CLIENT_SRC
     "client.cpp"
 )
 
-file(GLOB SERVER_SRC
-    "server.cpp"
+file(GLOB SERVER_SRC    
     "server/src/*.h"
     "server/src/*.cpp"
+    "server.cpp"
     "common/src/*.h"
     "common/src/*.cpp"
     "NaiveBayessClassifier/src/*.h"
