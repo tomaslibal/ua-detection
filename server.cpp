@@ -13,6 +13,7 @@
 #include <chrono>
 #include <mutex>
 #include <cstring>
+#include <csignal>
 
 #include "server/src/utils.h"
 #include "server/src/sockets.h"
@@ -24,11 +25,13 @@ using std::endl;
 using std::mutex;
 using std::thread;
 
+static int sockfd;
+
 /*
  * 
  */
 int main(int argc, char** argv) {
-    int sockfd, insockfd;
+    int insockfd;
     int portno;
     sockaddr_in serv_addr, cli_addr;
     
@@ -39,8 +42,16 @@ int main(int argc, char** argv) {
      * Get a new Internet socket
      */
     sockfd = create_socket_inet_stream();
-   
-    bzero((char *) &serv_addr, sizeof(serv_addr));
+
+	/*
+	 * catch the ctrl+c interrupt signal
+	 */
+	signal(SIGINT, [] (int signum) {
+		close(sockfd);
+		exit(signum);
+	});
+    
+	bzero((char *) &serv_addr, sizeof(serv_addr));
     portno = 10128;
     
     serv_addr.sin_family = AF_INET;
@@ -73,7 +84,7 @@ int main(int argc, char** argv) {
     std::unique_lock<mutex> lck (signal_exit);
     lck.unlock();
     
-    function<void ()> exitCallback = [&sockfd]() {
+    function<void ()> exitCallback = []() {
         cout << "exiting now..." << endl;
         close(sockfd);
         exit(EXIT_SUCCESS);
