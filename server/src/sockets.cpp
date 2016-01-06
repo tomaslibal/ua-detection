@@ -13,7 +13,7 @@ using std::unique_lock;
 int create_socket_inet_stream() {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-        error("ERROR Opening Socket");
+        perror("ERROR Opening Socket");
     }
     return sockfd;
 }
@@ -27,7 +27,7 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
 
     bzero(buffer,256);
     n = read(insockfd,buffer,255);
-    if (n < 0) error("ERROR reading from socket");
+	if (n < 0) perror("ERROR reading from socket");
     std::string* output = process_message(buffer);   
     cout << "message out is " << *output;
     
@@ -40,7 +40,7 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
     }
     
     n = write(insockfd, output->data(), output->length());
-    if (n < 0) error("ERROR writing to socket");
+    if (n < 0) perror("ERROR writing to socket");
     close(insockfd);
       
     bzero(buffer, 256);
