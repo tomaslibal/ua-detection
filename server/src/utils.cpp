@@ -8,6 +8,6 @@ using std::cerr;
 using std::endl;
 
 void error(string msg) {
-    cerr << msg << endl;
+	perror(msg.data());
     exit(EXIT_FAILURE);
 }
