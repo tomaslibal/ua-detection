@@ -42,8 +42,8 @@ set_property(TARGET uadet2 PROPERTY CXX_STANDARD_REQUIRED ON)
 add_executable(uadet2d ${SERVER_SRC})
 add_executable(uadet2cli ${CLIENT_SRC})
 
-SET(CMAKE_CXX_FLAGS_DEBUG "-lpthread") 
-SET(CMAKE_CXX_FLAGS_RELEASE "-lpthread") 
+SET(CMAKE_CXX_FLAGS_DEBUG "-pthread -lpthread") 
+SET(CMAKE_CXX_FLAGS_RELEASE "-pthread -lpthread") 
 
 # More portable threading:
 #find_package (Threads REQUIRED)
