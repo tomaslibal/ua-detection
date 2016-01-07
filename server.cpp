@@ -14,9 +14,15 @@
 #include <mutex>
 #include <cstring>
 #include <csignal>
+#include <vector>
+#include <fstream>
 
 #include "server/src/utils.h"
 #include "server/src/sockets.h"
+
+#include "FileInputReader/src/FileInputReader.h"
+#include "NaiveBayessClassifier/src/NaiveBayessClassifier.h"
+#include "common/src/uadet2.h"
 
 using std::function;
 using std::cout;
@@ -24,6 +30,7 @@ using std::cerr;
 using std::endl;
 using std::mutex;
 using std::thread;
+using std::string;
 
 static int sockfd;
 
@@ -51,7 +58,57 @@ int main(int argc, char** argv) {
             exit(signum);
     });
     
-	bzero((char *) &serv_addr, sizeof(serv_addr));
+    /*
+     * Start the learning phase: open the data file and add the data to the naive
+     * bayess classifier
+     */
+    /*
+     * The program uses a Naive Bayess Classifier to predict a posterior of 
+     * a given user-agent string.
+     */
+    NaiveBayessClassifier nb;
+    
+    /*
+     * The learning data file
+     */
+    string dataFile = "data_in.txt";
+    
+    /* 
+     * A lambda function that takes a string line. It expects the line to have
+     * two columns: categories and a user-agent string, separated by a tab
+     * character.
+     * The function then calls NaiveBayesClassifier.add_data to add the new 
+     * user agent string with its category(ies) to the memory.
+     */
+    function<void (string)> add_line = [&nb](string line) {
+        string category, uas;
+        string::size_type n = line.find('\t');
+        
+        if (n != string::npos) {
+            category = line.substr(0, n);
+            uas = line.substr(n+1);
+    
+            nb.add_data(uas, category);            
+        }
+    };
+    
+    /*
+     * FileInputReader for reading in the data file, and passing each file line
+     * to the previous lambda.
+     */
+    FileInputReader reader;
+    reader.readLines(dataFile, add_line);
+    
+    /*
+     * Prints summary of number of categories and n-grams that have been read.
+     */
+    nb.stats();
+    
+    /*
+     * Start the network server:
+     */
+    
+    bzero((char *) &serv_addr, sizeof(serv_addr));
     portno = 10128;
     
     serv_addr.sin_family = AF_INET;
