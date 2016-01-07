@@ -37,7 +37,7 @@ vector<string>* tok(const char* msg) {
  * Takes an incoming message of chars and acts on it, based on the contents
  * of the message.
  */
-string* process_message(const char* msg) {
+vector<string>* process_message(const char* msg) {
     cout << "I got: " << msg << endl;
     
     vector<string>* tokens = tok(msg);
@@ -62,7 +62,10 @@ string* process_message(const char* msg) {
     cout << "what: " << what << endl;
     cout << "data: " << data << endl;
     
-    string* output = new string("OK");
+    vector<string>* output = new vector<string>;
+    output->push_back(operation);
+    output->push_back(what);
+    output->push_back(data);
 
     return output;
 }

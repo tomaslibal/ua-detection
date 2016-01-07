@@ -19,7 +19,7 @@ struct Token {
 };
 
 std::vector<std::string>* tok(const char* msg);
-std::string* process_message(const char* msg);
+std::vector<std::string>* process_message(const char* msg);
 
 #endif /* PROTOCOL_H */
 
