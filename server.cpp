@@ -43,13 +43,13 @@ int main(int argc, char** argv) {
      */
     sockfd = create_socket_inet_stream();
 
-	/*
-	 * catch the ctrl+c interrupt signal
-	 */
-	signal(SIGINT, [] (int signum) {
-		close(sockfd);
-		exit(signum);
-	});
+    /*
+     * catch the ctrl+c interrupt signal
+     */
+    signal(SIGINT, [] (int signum) {
+            close(sockfd);
+            exit(signum);
+    });
     
 	bzero((char *) &serv_addr, sizeof(serv_addr));
     portno = 10128;
