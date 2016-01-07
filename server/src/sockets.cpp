@@ -3,6 +3,7 @@
 #include "protocol.h"
 
 #include <iostream>
+#include <sstream>
 
 using std::cout;
 using std::endl;
@@ -38,7 +39,22 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
         return;
     }
     
-    n = write(insockfd, "OK", 2);
+    /*
+     * If token[0] == "eval" then evaluate the given user-agent (token[2]) using
+     * the naive bayess classifier using the category (token[1])
+     */
+    if (output->at(0) == "eval") {
+        
+        double p = nbc.classify(output->at(2), output->at(1));
+        
+        std::ostringstream pstrs;
+        pstrs << p;
+        std::string str = pstrs.str();
+        n = write(insockfd, str.data(), str.length());
+    } else {
+        n = write(insockfd, "\nCommand not understood", 23);
+    }
+    
     if (n < 0) perror("ERROR writing to socket");
     close(insockfd);
       
