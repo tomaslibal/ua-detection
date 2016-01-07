@@ -7,6 +7,9 @@
 
 using namespace std;
 
+/*
+ * Tokenizes the given message of chars by splitting it into tokens.
+ */
 vector<string>* tok(const char* msg) {
     const char s = ' ';
     char c;
@@ -30,6 +33,10 @@ vector<string>* tok(const char* msg) {
     return tokens;
 }
 
+/*
+ * Takes an incoming message of chars and acts on it, based on the contents
+ * of the message.
+ */
 string* process_message(const char* msg) {
     cout << "I got: " << msg << endl;
     
@@ -56,6 +63,6 @@ string* process_message(const char* msg) {
     cout << "data: " << data << endl;
     
     string* output = new string("OK");
-    //output->append(msg);
+
     return output;
 }
