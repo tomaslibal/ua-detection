@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 #include <cstring>
 #include <sys/types.h>
@@ -46,9 +47,11 @@ int main(int argc, char** argv) {
      */
     struct hostent *server;
     
-    if (argc < 3)
+    if (argc < 4)
     {
-        std::cerr << "Usage: " << std::endl << argv[0] << " <hostname> <port>" << std::endl;
+        std::cerr << "Usage: " << std::endl << "    " << argv[0] << " <hostname> <port> <command>" << std::endl;
+        std::cerr << std::endl << "Example:" << std::endl;
+        std::cerr << "    " << "uadet2cli localhost 10128 'eval mobile Mozilla/5.0 Linux Android'" << std::endl;
         exit(EXIT_SUCCESS);
     }
     
@@ -78,9 +81,9 @@ int main(int argc, char** argv) {
     }
     
     char buffer[256];
-    const char cmd[] = "add user-agent Mozilla/5.0 Linux 64bit Firefox45.0\0";
-
-    n = write(sockfd,cmd,strlen(cmd));
+    std::string command = argv[3];
+    
+    n = write(sockfd,command.data(),command.length());
     
     if (n < 0)
     {
