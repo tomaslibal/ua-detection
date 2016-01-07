@@ -35,6 +35,7 @@ Needed to build the binaries:
 - GNU Make utility
 - C++11 Compiler
 - CppUnit for tests
+- CTest 2.6+ for tests
 
 #### build
 
@@ -69,15 +70,9 @@ See the [example](/data_in.txt)
 
 ### Test
 
-> Tests are currently not runnable from make! I switched to CMake build tool because it 
-> supports multiple binary targets in the project (client & server binaries). This caused
-> a loss of NetBeans generated `build-tests` target which was used to compile test runners.
-> I will add test compilation back and a test runner in the future.
+Run all tests and print output
 
-`make test` compiles the test suite and runs it. There are multiple test runners for each
-class and they print OK(###) if all tests within that runner passed (### is the number of
-passing tests). Otherwise, it prints the test errors with the message (if the message was
-defined).
+    ctest .
 
 ### Disclaimers
 
