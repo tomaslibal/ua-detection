@@ -99,10 +99,18 @@ int main(int argc, char** argv) {
     };
     
     while(1) {
+        /*
+         * worker2 calls wait_and_accept (in sockets.h) which may lock the unique
+         * lock 'lck' if it receives a signal to exit. This lock will interrupt
+         * this while loop.
+         */
         if (lck) {
             cout << "mutex locked, must exit" << endl;
             break;
         }
+        /*
+         * waits until an incoming connection is made
+         */
         int in_sockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         
         thread a_thread (worker2, in_sockfd);
