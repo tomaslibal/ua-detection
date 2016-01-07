@@ -18,7 +18,7 @@ int create_socket_inet_stream() {
     return sockfd;
 }
 
-void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exit_callback, unique_lock<mutex>& signal_exit) {
+void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exit_callback, unique_lock<mutex>& signal_exit, NaiveBayessClassifier& nbc) {
     socklen_t clilen;
     char buffer[256];
     int n;
@@ -28,8 +28,7 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
     bzero(buffer,256);
     n = read(insockfd,buffer,255);
 	if (n < 0) perror("ERROR reading from socket");
-    std::string* output = process_message(buffer);   
-    cout << "message out is " << *output;
+    std::vector<std::string>* output = process_message(buffer);
     
     if (strcmp(buffer, "exit\n") == 0) {
         signal_exit.try_lock();
@@ -39,7 +38,7 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
         return;
     }
     
-    n = write(insockfd, output->data(), output->length());
+    n = write(insockfd, "OK", 2);
     if (n < 0) perror("ERROR writing to socket");
     close(insockfd);
       
