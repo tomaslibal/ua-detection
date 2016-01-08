@@ -55,6 +55,8 @@ against all known categories present in the data file.
 
 ### Data
 
+The program will look for a file named `data_in.txt` in the current working directory. This file will be read prior to the evaluation of the user-agent string.
+
 #### Data format
 
 The program can work with ascii (8-bit) encoded data of the following format:
