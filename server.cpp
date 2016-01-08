@@ -43,12 +43,17 @@ int main(int argc, char** argv) {
     sockaddr_in serv_addr, cli_addr;
     
     socklen_t clilen;
+	clilen = sizeof(cli_addr);
     
     char buffer[256];
     /*
      * Get a new Internet socket
      */
     sockfd = create_socket_inet_stream();
+
+	if (sockfd < 0) {
+		error("Creating a socket failed");
+	}
 
     /*
      * catch the ctrl+c interrupt signal
@@ -135,8 +140,12 @@ int main(int argc, char** argv) {
     /*
      * Accept incoming connections
      */
-    listen(sockfd,backlogsize);
-    
+    int ls = listen(sockfd,backlogsize);
+
+	if (ls < 0) {
+		error("cannot accept connection");
+	}    
+
     mutex signal_exit;
     std::unique_lock<mutex> lck (signal_exit);
     lck.unlock();
@@ -169,7 +178,9 @@ int main(int argc, char** argv) {
          * waits until an incoming connection is made
          */
         int in_sockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
-        
+
+		if (in_sockfd < 0) { perror("in_sockfd < 0"); }       
+ 
         thread a_thread (worker2, in_sockfd);
         a_thread.detach();
     }
