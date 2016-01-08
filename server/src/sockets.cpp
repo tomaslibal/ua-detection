@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cassert>
 
 using std::cout;
 using std::endl;
@@ -23,6 +24,8 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
     socklen_t clilen;
     char buffer[256];
     int n;
+
+	assert(insockfd >= 0);
     
     cout << "Connection established (" << insockfd << ")" << endl;
 
