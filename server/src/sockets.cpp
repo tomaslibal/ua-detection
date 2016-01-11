@@ -54,6 +54,12 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
         pstrs << p;
         std::string str = pstrs.str();
         n = write(insockfd, str.data(), str.length());
+    } else if (output->at(0) == "add") {
+        std::string category = output->at(1);
+        std::string ua_agent = output->at(2);
+        
+        nbc.add_data(ua_agent, category);
+        n = write(insockfd, "added OK", 8*sizeof(char));
     } else {
         n = write(insockfd, "\nCommand not understood", 23);
     }
