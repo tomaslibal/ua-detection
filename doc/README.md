@@ -5,11 +5,6 @@
 
 ## Hashing function for User-Agent strings
 
-- [Node.js implementation](../tools/ua_string_hash.js)
-
-In the file above I have described the hashing function in terms of its
-pseudocode and I also implemented it in node.js.
-
 Function prototype in C would look something like this:
 
 ````c
