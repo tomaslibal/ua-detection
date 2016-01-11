@@ -2,6 +2,7 @@
 
 - [Parsing the User-Agent string](Parsing_UA.md)
 - [User-Agent string definition](user_agent.md)
+- [Manual: basic usage of the program](uadet.md)
 
 ## Hashing function for User-Agent strings
 

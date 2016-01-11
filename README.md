@@ -25,8 +25,6 @@ There are two end goals that I would like achieve:
 learning method to learn from data and makes predictions about new data as to which
 class the input may belong.
 
-Currently the program is both the backend and the client in one executable. This also means that each time the program is invoked, the learning process has to be completed. The learning part would be ideally separated from the querying to optimize resources and to lower the latency.
-
 #### dependencies
 
 Needed to build the binaries:
@@ -42,20 +40,23 @@ Needed to build the binaries:
     cmake .
     make
 
-This outputs an executable binary in `dist/uadet2`.
+This outputs the background service (`uadet2d`) and the client CLI program (`uadet2cli`) binaries in `dist/`.
 
 #### usage
 
 *default usage:*
 
-    dist/uadet2 --ua="Mozilla/5.0 ..."
-    
+    $1 dist/uadet2d # start this process in one shell and keep it running
+    $2 dist/uadet2cli localhost 10128 "eval desktop Mozilla/5.0 (Linux..."
+
 Prints to stdout the output of classification of the given user agent string 
 against all known categories present in the data file.
 
+[See a Manual: basic usage of uadet2](doc/uadet.md)
+
 ### Data
 
-The program will look for a file named `data_in.txt` in the current working directory. This file will be read prior to the evaluation of the user-agent string.
+The background service will look for a file named `data_in.txt` in the current working directory. This file will be read prior to the evaluation of the user-agent string.
 
 #### Data format
 
