@@ -23,6 +23,7 @@
 #include "FileInputReader/src/FileInputReader.h"
 #include "NaiveBayessClassifier/src/NaiveBayessClassifier.h"
 #include "common/src/uadet2.h"
+#include "common/src/ProgramConfig.h"
 
 using std::function;
 using std::cout;
