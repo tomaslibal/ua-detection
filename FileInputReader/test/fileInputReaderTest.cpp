@@ -34,7 +34,7 @@ void fileInputReaderTest::testReadLinesReadsAllLinesInTheFile() {
         numLinesRead++;
     };
     
-    reader->readLines("FileInputReader/test/resources/test.txt", test_callback);
+    reader->readLines("../../FileInputReader/test/resources/test.txt", test_callback);
     
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The file has 3 lines thus 3 lines should have been read", 3, numLinesRead);
 }
@@ -46,7 +46,7 @@ void fileInputReaderTest::testReadLinesPassesInTheLinesAsStrings() {
         lines.push_back(line);
     };
     
-    reader->readLines("FileInputReader/test/resources/test.txt", test_callback);
+    reader->readLines("../../FileInputReader/test/resources/test.txt", test_callback);
     
     for(int i = 0; i < lines.size(); i++) {
         if (i == 0) {

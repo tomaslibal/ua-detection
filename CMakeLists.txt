@@ -67,16 +67,7 @@ set(CMAKE_BUILD_TYPE Debug)
 enable_testing()
 
 # FileInputReader
-file(GLOB f1
-    "FileInputReader/test/*.h"
-    "FileInputReader/test/*.cpp"
-    "FileInputReader/src/*.h"
-    "FileInputReader/src/*.cpp"
-)
-add_executable(f1 ${f1})
-TARGET_LINK_LIBRARIES(f1 cppunit)
-set_target_properties(f1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(FileInputReader dist/tests/f1)
+add_subdirectory(FileInputReader/test)
 
 # NaiveBayessClassifier
 add_subdirectory(NaiveBayessClassifier/test)
