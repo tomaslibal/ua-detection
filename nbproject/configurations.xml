@@ -50,6 +50,7 @@
                      displayName="NaiveBayesClassifier Test"
                      projectFiles="true"
                      kind="TEST">
+        <itemPath>NaiveBayessClassifier/test/CMakeLists.txt</itemPath>
         <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp</itemPath>
         <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTest.h</itemPath>
         <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp</itemPath>
@@ -158,6 +159,11 @@
           </incDir>
         </ccTool>
       </item>
+      <item path="NaiveBayessClassifier/test/CMakeLists.txt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp"
             ex="false"
             tool="1"
@@ -242,6 +248,11 @@
             <pElem>.</pElem>
           </incDir>
         </ccTool>
+      </item>
+      <item path="common/test/CMakeLists.txt"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="common/src/uadet2.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">

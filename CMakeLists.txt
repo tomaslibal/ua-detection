@@ -79,16 +79,7 @@ set_target_properties(f1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DI
 add_test(FileInputReader dist/tests/f1)
 
 # NaiveBayessClassifier
-file(GLOB f2
-    "NaiveBayessClassifier/test/*"
-    "NaiveBayessClassifier/src/*"
-    "NgramBuilder/src/*"    
-    "UATokenizer/src/*"
-)
-add_executable(f2 ${f2})
-TARGET_LINK_LIBRARIES(f2 cppunit)
-set_target_properties(f2 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(NaiveBayessClassifier dist/tests/f2)
+add_subdirectory(NaiveBayessClassifier/test)
 
 # NgramBuilder
 file(GLOB f3
@@ -111,5 +102,5 @@ TARGET_LINK_LIBRARIES(f4 cppunit)
 set_target_properties(f4 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
 add_test(UATokenizer dist/tests/f4)
 
-# ProgramConfig
+# Common Tests
 add_subdirectory(common/test)
