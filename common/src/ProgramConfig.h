@@ -28,7 +28,7 @@ public:
     /*
      * Reads the config file and sets the read values into the config object
      */
-    void update();
+    void update(ProgramConfigObject& conf);
 private:
     FileInputReader r;
     std::string path = "common/config/server.txt";
