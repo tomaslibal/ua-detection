@@ -43,7 +43,7 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
         }
         if (line.find("port") != std::string::npos) {
             p_str = get_value(line, "port");
-            confObj.portno = *p_str;
+            confObj.portno = std::atoi(p_str->c_str());
             delete p_str;
         }
     };
