@@ -40,6 +40,11 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
             confObj.hostname = *p_str;
             delete p_str;
         }
+        if (line.find("port") != std::string::npos) {
+            std::string* p_str = get_value(line, "port");
+            confObj.port = *p_str;
+            delete p_str;
+        }
     };
 
     r.readLines(path, onReadLine);
