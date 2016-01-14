@@ -15,7 +15,7 @@
 class programConfigTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(programConfigTest);
 
-    CPPUNIT_TEST(testVoid);
+    CPPUNIT_TEST(testProgramConfigObjectWithParams);
     
     CPPUNIT_TEST_SUITE_END();
 
@@ -25,8 +25,9 @@ public:
     void setUp();
     void tearDown();
 
-private:    
-    void testVoid();
+private: 
+    ProgramConfig* pconf;   
+    void testProgramConfigObjectWithParams();
 };
 
 #endif	/* PROGRAMCONFIGTEST_H */

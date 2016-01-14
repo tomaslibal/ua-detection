@@ -16,13 +16,13 @@ programConfigTest::~programConfigTest() {
 }
 
 void programConfigTest::setUp() {
-    
+    pconf = new ProgramConfig();    
 }
 
 void programConfigTest::tearDown() {
-    
+    delete pconf;
 }
 
-void programConfigTest::testVoid() {
+void programConfigTest::testProgramConfigObjectWithParams() {
     
 }
