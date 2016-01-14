@@ -19,6 +19,11 @@
 struct ProgramConfigObject {
     int portno;
     std::string hostname;
+
+    ProgramConfigObject(int portno=10128, std::string hostname="localhost")
+        : portno(portno), hostname(hostname)
+    {
+    }
 };
 
 class ProgramConfig {
