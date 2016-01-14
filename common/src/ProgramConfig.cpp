@@ -13,6 +13,14 @@
 
 #include "ProgramConfig.h"
 
+#include <iostream>
+
+std::string* get_value(const std::string& config_line, const std::string& parameter)
+{
+    std::string* str = new std::string(config_line.substr(config_line.find(parameter) + parameter.size()));
+    return str;
+}
+
 ProgramConfig::ProgramConfig() {
 }
 
@@ -22,3 +30,17 @@ ProgramConfig::ProgramConfig(const ProgramConfig& orig) {
 ProgramConfig::~ProgramConfig() {
 }
 
+void ProgramConfig::update(ProgramConfigObject& confObj)
+{
+
+    std::function<void (std::string)> onReadLine = [&confObj](std::string line) {
+        std::cout << line << std::endl;
+        if (line.find("hostname") != std::string::npos) {
+            std::string* p_str = get_value(line, "hostname");
+            confObj.hostname = *p_str;
+            delete p_str;
+        }
+    };
+
+    r.readLines(path, onReadLine);
+}
