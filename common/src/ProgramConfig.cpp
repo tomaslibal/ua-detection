@@ -35,13 +35,14 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
 
     std::function<void (std::string)> onReadLine = [&confObj](std::string line) {
         std::cout << line << std::endl;
+        std::string* p_str;
         if (line.find("hostname") != std::string::npos) {
-            std::string* p_str = get_value(line, "hostname");
+            p_str = get_value(line, "hostname");
             confObj.hostname = *p_str;
             delete p_str;
         }
         if (line.find("port") != std::string::npos) {
-            std::string* p_str = get_value(line, "port");
+            p_str = get_value(line, "port");
             confObj.portno = *p_str;
             delete p_str;
         }
