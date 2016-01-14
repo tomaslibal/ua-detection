@@ -12,6 +12,7 @@
 #define PROGRAMCONFIG_H
 
 #include <string>
+#include <functional>
 
 #include "../../FileInputReader/src/FileInputReader.h"
 
