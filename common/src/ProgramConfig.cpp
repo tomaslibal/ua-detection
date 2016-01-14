@@ -17,7 +17,7 @@
 
 std::string* get_value(const std::string& config_line, const std::string& parameter)
 {
-    std::string* str = new std::string(config_line.substr(config_line.find(parameter) + parameter.size()));
+    std::string* str = new std::string(config_line.substr(config_line.find(parameter) + 1 + parameter.size()));
     return str;
 }
 
