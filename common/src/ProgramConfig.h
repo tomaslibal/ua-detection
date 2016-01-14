@@ -15,11 +15,20 @@
 
 #include "../../FileInputReader/src/FileInputReader.h"
 
+struct ProgramConfigObject {
+    int portno;
+    std::string hostname;
+};
+
 class ProgramConfig {
 public:
     ProgramConfig();
     ProgramConfig(const ProgramConfig& orig);
     virtual ~ProgramConfig();
+    /*
+     * Reads the config file and sets the read values into the config object
+     */
+    void update();
 private:
     FileInputReader r;
     std::string path = "common/config/server.txt";
