@@ -46,6 +46,11 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
             confObj.portno = std::atoi(p_str->c_str());
             delete p_str;
         }
+        if (line.find("datafile") != std::string::npos) {
+            p_str = get_value(line, "datafile");
+            confObj.datafile = *p_str;
+            delete p_str;
+        }
     };
 
     r.readLines(path, onReadLine);

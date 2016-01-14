@@ -24,11 +24,16 @@ void programConfigTest::tearDown() {
 }
 
 void programConfigTest::testProgramConfigObjectWithParams() {
-    ProgramConfigObject confObj(0, "foo");
+    ProgramConfigObject confObj(0, "foo", "bar");
+
+    CPPUNIT_ASSERT(confObj.portno == 0);
+    CPPUNIT_ASSERT(confObj.hostname == std::string("foo"));
+    CPPUNIT_ASSERT(confObj.datafile == std::string("bar"));
 
     pconf->path = "../../common/config/server.txt";
     pconf->update(confObj);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("port no. is set to 10128", 10128, confObj.portno);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("hostname is set to localhost", std::string("localhost"), confObj.hostname);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("datafile is set to data_in.txt", std::string("data_in.txt"), confObj.datafile);
 }
