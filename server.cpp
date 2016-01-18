@@ -45,6 +45,14 @@ int main(int argc, char** argv) {
     
     socklen_t clilen;
     clilen = sizeof(cli_addr);
+
+	/*
+     * Get the program config
+     */
+    ProgramConfigObject conf;
+    ProgramConfig confCtrl;
+
+    confCtrl.update(conf);
     
     char buffer[256];
     /*
@@ -77,7 +85,7 @@ int main(int argc, char** argv) {
     /*
      * The learning data file
      */
-    string dataFile = "data_in.txt";
+    string dataFile = conf.datafile;
     
     /* 
      * A lambda function that takes a string line. It expects the line to have
@@ -115,9 +123,11 @@ int main(int argc, char** argv) {
      */
     
     bzero((char *) &serv_addr, sizeof(serv_addr));
-    portno = 10128;
+    portno = conf.portno;
     
     serv_addr.sin_family = AF_INET;
+    // host address: INADDR_ANY = 0.0.0.0?
+    // this should be read from the config as well
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(portno);
     
