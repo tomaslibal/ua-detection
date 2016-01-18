@@ -13,8 +13,6 @@
 
 #include "ProgramConfig.h"
 
-#include <iostream>
-
 std::string* get_value(const std::string& config_line, const std::string& parameter)
 {
     std::string* str = new std::string(config_line.substr(config_line.find(parameter) + 1 + parameter.size()));
@@ -34,7 +32,6 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
 {
 
     std::function<void (std::string)> onReadLine = [&confObj](std::string line) {
-        std::cout << line << std::endl;
         std::string* p_str;
         if (line.find("hostname") != std::string::npos) {
             p_str = get_value(line, "hostname");
