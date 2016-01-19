@@ -48,6 +48,11 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
             confObj.datafile = *p_str;
             delete p_str;
         }
+		if (line.find("logfile") != std::string::npos) {
+			p_str = get_value(line, "logfile");
+			confObj.logfile = *p_str;
+			delete p_str;
+		}
     };
 
     r.readLines(path, onReadLine);
