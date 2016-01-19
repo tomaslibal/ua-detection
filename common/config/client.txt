@@ -1,0 +1,3 @@
+portno=10128
+hostname=localhost
+logfile=client.log.txt
