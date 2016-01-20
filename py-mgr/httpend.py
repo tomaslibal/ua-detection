@@ -12,7 +12,8 @@ import src.Routing as Routing
 
 routes = {
     "/": Routing.RouteFile("static/index.html"),
-    "*": Routing.RouteFile("static/404.html")
+    "*": Routing.RouteFile("static/404.html"),
+    "/add.html": Routing.RouteFile("static/add.html")
 }
 
 
