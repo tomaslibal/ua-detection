@@ -25,7 +25,7 @@ class Pg:
         cur.close()
     def add_label(self, label_value):
         cur = self.conn.cursor()
-        query = 'INSERT INTO labels (value) VALUES("{}")'.format(label_value)
+        query = 'INSERT INTO labels (value) VALUES(\'{}\')'.format(label_value)
         cur.execute(query)
         self.conn.commit()
         cur.close()
