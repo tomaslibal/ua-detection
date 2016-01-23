@@ -61,7 +61,25 @@ class RouteGETAPI(RouteGeneric):
         if (d[0] == "dp"):
             pg.add_datapoint(urllib.unquote_plus(d[1]))
         return "adding a new datapoint..."
-    
+
+class RouteGET_Label_Add(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        print "GET API: add new label"
+        parsed = urllib.splitquery(self.req)
+        query = parsed[1]
+        if (not query):
+            return "no arguments passed"
+        if ('&' in query):
+            args = query.split('&')
+            query = args[0]
+        label = query
+        d = label.split('=')
+        pg = Pg.Pg()
+        if (d[0] == 'label'):
+            pg.add_label(urllib.unquote_plus(d[1]))
+        return 'adding a new label... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
+ 
 class Router:
     @staticmethod
     def route(reqpath, matchfunc, res):
