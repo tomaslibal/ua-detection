@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(portno);
     
-    int retries = 3;
+    int retries = 12;
     int result = -1;
     int wait = 3;
     
