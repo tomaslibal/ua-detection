@@ -4,6 +4,11 @@
         <title>Data Lab</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .table span {
+                padding: 5px 10px;
+            }
+        </style>
     </head>
     <body>
         <h1>Data Lab. Manage data labels.</h1>
@@ -13,5 +18,57 @@
                 <li><a href="/add.html">Add datapoint/label</a></li>
             </ul>
         </div>
+
+        <div>
+            <h2>Datapoints</h2>
+            <div class="table" id="datapointsTable"></div>
+        </div>
+
+        <div>
+            <h2>Labels</h2>
+
+            <div class="table" id="labelsTable"></div>
+        </div>
+
+<script>
+function httpreq(method, url, onprogress, onload) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.onprogress = onprogress;
+    xhr.onload = onload;
+    xhr.send(null);
+}
+
+function getTableApiCall(name, limit, offset) {
+    return "/table?name=" + name + "&limit=" + limit + "&offset=" + offset;
+}
+
+function callApi(apiUrl, callback) {
+    var noop = function() {}
+    httpreq('GET', apiUrl, noop, callback);
+}
+
+function getTable(name, limit, offset, callback) {
+    var url = getTableApiCall(name, limit, offset);
+
+    callApi(url, callback);
+}
+
+function populateTable(domTableEl, tableName, limit, offset) {
+    var callback = function() {
+        var response = this.responseText;
+        domTableEl.innerHTML = response;
+    }
+
+    getTable(tableName, limit, offset, callback);
+}
+
+///// Populate datapoints
+var datapointsTable = document.querySelector("#datapointsTable");
+var labelsTable = document.querySelector("#labelsTable");
+
+populateTable(datapointsTable, 'datapoints', 10, 0);
+populateTable(labelsTable, 'labels', 10, 0);
+</script>
     </body>
 </html>
