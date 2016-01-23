@@ -11,9 +11,29 @@ class Pg:
         cur = self.conn.cursor()
         query = 'SELECT * FROM "{}" LIMIT {} OFFSET {}'.format(table_name, limit, offset)
         cur.execute(query)
+        ret=[]
         for record in cur:
+            ret.append(record)
             print record
         cur.close()
-        return cur
+        return ret
+    def add_datapoint(self, datapoint_value):
+        cur = self.conn.cursor()
+        query = 'INSERT INTO datapoints (value) VALUES(\'{}\')'.format(datapoint_value)
+        cur.execute(query)
+        self.conn.commit()
+        cur.close()
+    def add_label(self, label_value):
+        cur = self.conn.cursor()
+        query = 'INSERT INTO labels (value) VALUES("{}")'.format(label_value)
+        cur.execute(query)
+        self.conn.commit()
+        cur.close()
+    def add_datapoint_label(self, datapoint_id, label_id, confidence=0):
+        cur = self.conn.cursor()
+        query = 'INSERT INTO datapoint_labels (datapoint_id, label_id, confidence) VALUES({}, {}, {})'.format(datapoint_id, label_id, confidence)
+        cur.execute(query)
+        self.conn.commit()
+        cur.close()
     def __exit__(self, exc_type, exc_value, traceback):
         self.conn.close()
