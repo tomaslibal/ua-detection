@@ -127,7 +127,7 @@ class RouteGET_Label_Remove(RouteGeneric):
         params = parse_request_path(self.req)
         firstParam = params[0]
         pg = Pg.Pg()
-        if (firstParam[0] is 'id'):
+        if (firstParam[0] == 'id'):
             pg.remove_label(firstParam[1])
         return 'remove label... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
