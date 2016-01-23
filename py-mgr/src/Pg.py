@@ -31,7 +31,7 @@ class Pg:
         cur.close()
     def remove_label(self, label_id):
         cur = self.conn.cursor()
-        query = 'DELETE FROM labels WHERE id = \'{}\' LIMIT 1'.format(label_id)
+        query = 'DELETE FROM labels WHERE id = \'{}\''.format(label_id)
         cur.execute(query)
         self.conn.commit()
         cur.close()
