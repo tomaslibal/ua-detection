@@ -43,10 +43,10 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
     }
     
     /*
-     * If token[0] == "eval" then evaluate the given user-agent (token[2]) using
-     * the naive bayess classifier using the category (token[1])
+     * If token[0] == "eval_one" then evaluate the given user-agent (token[2]) using
+     * the naive bayess classifier for the specified category (token[1])
      */
-    if (output->at(0) == "eval") {
+    if (output->at(0) == "eval_one") {
         
         double p = nbc.classify(output->at(2), output->at(1));
         
@@ -54,6 +54,61 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
         pstrs << p;
         std::string str = pstrs.str();
         n = write(insockfd, str.data(), str.length());
+    // If token[0] == "eval" then:
+    // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
+    // was the most probable or not
+    } else if (output->at(0) == "eval") {
+        std::vector<std::string>* categories = nbc.get_categories();
+        std::ostringstream pstrs;
+        double threshold = 0.75;
+        double highest_prob = 0;
+        double p_category = 0;
+        bool has_highest_prob = false;
+        
+        for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
+            std::string category = *it;
+            double p = nbc.classify(output->at(2), category);
+        
+            if (p > highest_prob) {
+                highest_prob = p;
+                
+                if (category == output->at(1)) {
+                    has_highest_prob = true;
+                    p_category = p;
+                } else {
+                    has_highest_prob = false;
+                }
+            }
+            
+            pstrs << category << ":" << p << std::endl;
+        }
+        
+        // If the given category (output->at(1)) has highest probability, then
+        // is_in_category(UA, category) = maybe
+        // If is_in_category == maybe and p(category|UA) > threshold then is_in_category = true
+        std::string result;
+        if (has_highest_prob == true) {
+            result = "maybe";
+            
+            if (p_category > threshold) {
+                result = "true";
+            }
+        } else {
+            // alternatively, if p(category|UA) is not the highest but it is
+            // over the threshold, is_in_category = maybe, otherwise false.
+            result = "false";
+            
+            if (p_category > threshold) {
+                result = "maybe";
+            }
+        }
+        
+        pstrs << "UA is in " << output->at(1) << ": " << result << std::endl;
+        
+        std::string str = pstrs.str();
+        n = write(insockfd, str.data(), str.length());
+        
+        delete categories;
     } else if (output->at(0) == "add") {
         std::string category = output->at(1);
         std::string ua_agent = output->at(2);

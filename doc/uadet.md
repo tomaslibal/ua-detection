@@ -47,4 +47,15 @@ This command will add a user agent string beginning with *Mozilla/5.0 (Linux ...
     ./dist/uadet2cli localhost 10128 "eval desktop Mozilla/5.0 (Linux ..."
 ```
 
-This command will classify a user agent string beginning with *Mozilla/5.0 (Linux ...* as if it belonged to the group *desktop* and will print the resulting probability of the fact, based on the previous data.
+This command will evaluate the probability of the user-agent string belonging for each known class (from the data file) and then evaluate if the supplied class "desktop" is either:
+
+- a class with the highest probability
+- a class with a probability over the threshold (0.75)
+
+If both conditions hold, then the server prints "UA is in desktop: true". If only one of them holds, then the server's response is "UA is in desktop: maybe". Otherwise, if none of the conditions hold, it replies "UA is in desktop: false".
+
+```bash
+    ./dist/uadet2cli localhost 10128 "eval_one smart_tv Mozilla/5.0 (Linux ..."
+```
+
+This command will evaluate the probability only for the given class *smart_tv* given the user-agent string.
