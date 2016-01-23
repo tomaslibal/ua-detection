@@ -60,7 +60,7 @@ class RouteGETAPI(RouteGeneric):
         pg = Pg.Pg()
         if (d[0] == "dp"):
             pg.add_datapoint(urllib.unquote_plus(d[1]))
-        return "adding a new datapoint..."
+        return 'adding a new datapoint... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
 class RouteGET_Label_Add(RouteGeneric):
     def serve(self):
