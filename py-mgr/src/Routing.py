@@ -50,13 +50,16 @@ class RouteGETAPI(RouteGeneric):
         parsed = urllib.splitquery(self.req)
         query = parsed[1]
         if (not query):
-            return "no datapoint passed"
-        # args = query.split('&')
+            return "no arguments passed"
+        if ('&' in query):
+            args = query.split('&')
+            query = args[0]
+        
         datapoint = query # args[0]
         d = datapoint.split('=')
         pg = Pg.Pg()
         if (d[0] == "dp"):
-            pg.add_datapoint(d[1])
+            pg.add_datapoint(urllib.unquote_plus(d[1]))
         return "adding a new datapoint..."
     
 class Router:
