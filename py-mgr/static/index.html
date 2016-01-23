@@ -67,8 +67,16 @@ function populateTable(domTableEl, tableName, limit, offset) {
 var datapointsTable = document.querySelector("#datapointsTable");
 var labelsTable = document.querySelector("#labelsTable");
 
-populateTable(datapointsTable, 'datapoints', 10, 0);
-populateTable(labelsTable, 'labels', 10, 0);
+var tables = {
+    'datapoints': document.querySelector('#datapointsTable'),
+    'labels': document.querySelector('#labelsTable')
+};
+
+Object
+    .getOwnPropertyNames(tables)
+    .forEach(function(key) {
+        populateTable(tables[key], key, 10, 0);
+    });
 </script>
     </body>
 </html>
