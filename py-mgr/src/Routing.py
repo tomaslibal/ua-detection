@@ -1,4 +1,6 @@
 import HTTP
+import urllib
+import Pg
 
 """
     Base class for HTTP Request Routing
@@ -8,6 +10,8 @@ import HTTP
     object RouteGeneric('/profile/:id')
 """
 class RouteGeneric:
+    status = 404
+    req = ''
     def __init__(self, path):
         self.path = path
         
@@ -29,19 +33,42 @@ class RouteGeneric:
 """
 class RouteFile(RouteGeneric):
     def serve(self):
+        self.status = 200
         print "serving a file %s..." % self.path
         return open(self.path).read()
-    
+
+class RouteErrorFile(RouteFile):
+    def serve(self):
+        self.status = 404
+        print "serving an error file %s..." % self.path
+        return open(self.path).read()
+
+class RouteGETAPI(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        print "serving GET request to the API for action %s" % self.path
+        parsed = urllib.splitquery(self.req)
+        query = parsed[1]
+        if (not query):
+            return "no datapoint passed"
+        # args = query.split('&')
+        datapoint = query # args[0]
+        d = datapoint.split('=')
+        pg = Pg.Pg()
+        if (d[0] == "dp"):
+            pg.add_datapoint(d[1])
+        return "adding a new datapoint..."
     
 class Router:
     @staticmethod
     def route(reqpath, matchfunc, res):
         print "user request %s" % reqpath
         route = matchfunc(reqpath)
+        route.req = reqpath
         content = route.serve()
         
         httpres = HTTP.HTTPResponse(res)
-        httpres.status(404)
+        httpres.status(route.status)
         httpres.header('Content-Type', 'text/html')
         httpres.end_headers()
         httpres.write_text(content)
