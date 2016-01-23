@@ -9,22 +9,27 @@ import BaseHTTPServer
 import time 
 import src.Routing as Routing
 import re
+import sys
 
 routes = {
     "/": Routing.RouteFile("static/index.html"),
-    "404": Routing.RouteFile("static/404.html"),
-    "/add.html": Routing.RouteFile("static/add.html")
+    "error404": Routing.RouteErrorFile("static/404.html"),
+    "/add.html": Routing.RouteFile("static/add.html"),
+    "/add\?.*": Routing.RouteGETAPI("add")
 }
-
 
 def findroutematch(path):
     for r in routes:
         regex = r + '$'
-        test = re.compile(regex, re.IGNORECASE)
-        match = test.match(path)
-        if (match):
-            return routes[r]
-    return routes["404"]
+        try:
+            test = re.compile(regex, re.IGNORECASE)
+            match = test.match(path)
+            if (match):
+                return routes[r]
+        except:
+            e = sys.exc_info()[0]
+            print e
+    return routes["error404"]
 
              
 class IncomingRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
