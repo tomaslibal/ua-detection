@@ -102,7 +102,36 @@ class RouteGET_Table_Get(RouteGeneric):
         for row in table:
             retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span></div>'.format(row[0], row[1])
         return retstr
- 
+
+def parse_request_path(req_path):
+    params=[]
+    parsed = urllib.splitquery(req_path)
+    if (not parsed[1]):
+        return params
+    query_string = parsed[1]
+    args=[query_string]
+    if ('&' in query_string):
+        args = query_string.split('&')
+    for arg in args:
+        if ('=' in arg):
+            arg = arg.split('=')
+        else:
+            arg = [arg, None]
+        params.append(arg)
+    return params
+
+class RouteGET_Label_Remove(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        print "GET API: remove label"
+        params = parse_request_path(self.req)
+        firstParam = params[0]
+        pg = Pg.Pg()
+        if (firstParam[0] is 'id'):
+            pg.remove_label(firstParam[1])
+        return 'remove label... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
+
+
 class Router:
     @staticmethod
     def route(reqpath, matchfunc, res):
