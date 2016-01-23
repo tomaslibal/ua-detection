@@ -16,7 +16,8 @@ routes = {
     "error404": Routing.RouteErrorFile("static/404.html"),
     "/add.html": Routing.RouteFile("static/add.html"),
     "/add\?.*": Routing.RouteGETAPI("add"),
-    "/label_add\?.*": Routing.RouteGET_Label_Add("add")
+    "/label_add\?.*": Routing.RouteGET_Label_Add("add"),
+    "/table\?.*": Routing.RouteGET_Table_Get("table")
 }
 
 def findroutematch(path):

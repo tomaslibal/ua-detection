@@ -79,6 +79,29 @@ class RouteGET_Label_Add(RouteGeneric):
         if (d[0] == 'label'):
             pg.add_label(urllib.unquote_plus(d[1]))
         return 'adding a new label... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
+
+class RouteGET_Table_Get(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        print "GET API: get table"
+        parsed = urllib.splitquery(self.req)
+        query = parsed[1]
+        if (not query):
+            return "no arguments passed"
+        args = [query]
+        if ('&' in query):
+            args = query.split('&')
+        tableArg = args[0]
+        tableArg = tableArg.split('=')
+        tableName = tableArg[1]
+        pg = Pg.Pg()
+        offset=0
+        limit=10
+        table = pg.list_table(tableName, offset, limit)
+        retstr = ''
+        for row in table:
+            retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span></div>'.format(row[0], row[1])
+        return retstr
  
 class Router:
     @staticmethod
