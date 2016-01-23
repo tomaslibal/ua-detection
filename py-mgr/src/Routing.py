@@ -100,7 +100,7 @@ class RouteGET_Table_Get(RouteGeneric):
         table = pg.list_table(tableName, offset, limit)
         retstr = ''
         for row in table:
-            retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span></div>'.format(row[0], row[1])
+            retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span><span><a href="/edit?type={}&id={}">edit</a> | <a href="/remove?type={}&id={}">remove</a></span></div>'.format(row[0], row[1], tableName, row[0], tableName, row[0])
         return retstr
 
 def parse_request_path(req_path):
