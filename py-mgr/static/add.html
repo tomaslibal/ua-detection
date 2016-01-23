@@ -8,12 +8,12 @@
     <body>
         <div>
             <h1>Add new user-agent record</h1>
-            <form>
-                <label>User-agent string<input type="text" name="ua_string"></label>
+            <form action="/add" method="get">
+                <label>User-agent string<input type="text" name="dp"></label>
                 <label>Category 1<input type="text" name="cat1"></label>
                 <label>Category 2<input type="text" name="cat2"></label>
                 <label>Category 3<input type="text" name="cat3"></label>
-                <button>Add</button>
+                <button type="submit">Add</button>
             </form>
             
         </div>
