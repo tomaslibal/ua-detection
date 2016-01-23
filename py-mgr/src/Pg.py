@@ -29,6 +29,12 @@ class Pg:
         cur.execute(query)
         self.conn.commit()
         cur.close()
+    def remove_label(self, label_id):
+        cur = self.conn.cursor()
+        query = 'DELETE FROM labels WHERE id = \'{}\' LIMIT 1'.format(label_id)
+        cur.execute(query)
+        self.conn.commit()
+        cur.close()
     def add_datapoint_label(self, datapoint_id, label_id, confidence=0):
         cur = self.conn.cursor()
         query = 'INSERT INTO datapoint_labels (datapoint_id, label_id, confidence) VALUES({}, {}, {})'.format(datapoint_id, label_id, confidence)
