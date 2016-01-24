@@ -41,5 +41,11 @@ class Pg:
         cur.execute(query)
         self.conn.commit()
         cur.close()
+    """
+/       data file is a tab separated file with two columns: label; user-agent-string
+    """
+    def generate_data_file(self):
+        pass
+        
     def __exit__(self, exc_type, exc_value, traceback):
         self.conn.close()
