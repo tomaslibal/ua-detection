@@ -21,7 +21,7 @@ class Pg:
         cur = self.conn.cursor()
         query = 'SELECT * FROM "{}" WHERE id = {} LIMIT 1'.format(table_name, rowId)
         cur.execute(query)
-        ret = cur
+        ret = cur.fetchone()
         cur.close()
         return ret
     def add_datapoint(self, datapoint_value):
