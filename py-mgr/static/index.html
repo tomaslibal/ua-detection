@@ -30,53 +30,6 @@
             <div class="table" id="labelsTable"></div>
         </div>
 
-<script>
-function httpreq(method, url, onprogress, onload) {
-    var xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
-    xhr.onprogress = onprogress;
-    xhr.onload = onload;
-    xhr.send(null);
-}
-
-function getTableApiCall(name, limit, offset) {
-    return "/table?name=" + name + "&limit=" + limit + "&offset=" + offset;
-}
-
-function callApi(apiUrl, callback) {
-    var noop = function() {}
-    httpreq('GET', apiUrl, noop, callback);
-}
-
-function getTable(name, limit, offset, callback) {
-    var url = getTableApiCall(name, limit, offset);
-
-    callApi(url, callback);
-}
-
-function populateTable(domTableEl, tableName, limit, offset) {
-    var callback = function() {
-        var response = this.responseText;
-        domTableEl.innerHTML = response;
-    }
-
-    getTable(tableName, limit, offset, callback);
-}
-
-///// Populate datapoints
-var datapointsTable = document.querySelector("#datapointsTable");
-var labelsTable = document.querySelector("#labelsTable");
-
-var tables = {
-    'datapoints': document.querySelector('#datapointsTable'),
-    'labels': document.querySelector('#labelsTable')
-};
-
-Object
-    .getOwnPropertyNames(tables)
-    .forEach(function(key) {
-        populateTable(tables[key], key, 10, 0);
-    });
-</script>
+<script src="app.js"></script>
     </body>
 </html>
