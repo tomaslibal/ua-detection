@@ -17,6 +17,13 @@ class Pg:
             print record
         cur.close()
         return ret
+    def select_row_by_id(self, table_name, rowId):
+        cur = self.conn.cursor()
+        query = 'SELECT * FROM "{}" WHERE id = {} LIMIT 1'.format(table_name, rowId)
+        cur.execute(query)
+        ret = cur
+        cur.close()
+        return ret
     def add_datapoint(self, datapoint_value):
         cur = self.conn.cursor()
         query = 'INSERT INTO datapoints (value) VALUES(\'{}\')'.format(datapoint_value)
