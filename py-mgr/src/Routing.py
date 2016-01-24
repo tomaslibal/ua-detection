@@ -141,13 +141,31 @@ class RouteGET_Datapoint_Edit(RouteGeneric):
         if (not idParam[0] == 'id'):
             return "req. not understood"
         pg = Pg.Pg()
+        datapoint_labels = pg.select_row_by_key_id('datapoint_labels', 'datapoint_id', idParam[1])
+        if (datapoint_labels):
+            current_datapoint_label_id = datapoint_labels[2]
+            current_datapoint_id = datapoint_labels[0]
+        
         labels = pg.list_table('labels', 0, 10)
         labelsSelectbox = '<select name="label1"><option value="">--</option>'
         for lab in labels:
             labelsSelectbox += '<option value="{}">{}</option>'.format(lab[0], lab[1])
+        labelsSelectbox += '</select>'
         datapoint = pg.select_row_by_id('datapoints', idParam[1])
+        
         datapointValue = datapoint[1]
-        return '<form action="/datapoints_update" method="get">Datapoint<input type="text" value="{}"> Label 1 {} <button type="submit">Update</button></form>'.format(datapointValue, labelsSelectbox)
+        return '<form action="/datapoints_update" method="get"><input type="hidden" name="datapoint_id" value="{}"> Datapoint<input type="text" name="value" value="{}"> Label 1 {} <button type="submit">Update</button></form>'.format(idParam[1], datapointValue, labelsSelectbox)
+
+class RouteGET_Datapoint_Update(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        params = parse_request_path(self.req)
+        idDatapoint = params[0]
+        value=params[1]
+        label1=params[2]
+        pg = Pg.Pg()
+        pg.update_datapoint_value(idDatapoint[1], urllib.unquote_plus(value[1]))
+        return 'updating datapoint... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
 class Router:
     @staticmethod
