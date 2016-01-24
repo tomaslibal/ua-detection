@@ -1,6 +1,4 @@
-import TableModel from "./TableModel";
-import TableRowModel from "./TableRowModel";
-import { TableController } from "./TableController";
+import { TableController } from "./Table";
 
 var tableInstances = ['datapoints', 'labels'];
 

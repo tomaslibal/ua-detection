@@ -1,6 +1,40 @@
-import TableModel from "./TableModel";
-import TableRowModel from "./TableRowModel";
 import { callApi } from "./API";
+
+class TableModel {
+        constructor() {
+            // current page
+            this.index = 0;
+            // displays this many rows
+            this.limit = 20;
+            // keeps the items/rows
+            this.items = [];
+        }
+
+        getNumPages() {
+            return Math.ceil(this.items.length / this.limit);
+        }
+
+        addItem(item) {
+            this.items.push(item);
+        }
+}
+
+class TableRowModel {
+
+        constructor() {
+            // each column holds one cell
+            this.columns = [];
+        }
+
+        getNumColumns() {
+            return this.columns.length;
+        }
+
+        addColumn(cell) {
+            return this.columns.push(cell);
+        }
+
+}
 
 class TableController {
 
@@ -33,4 +67,4 @@ class TableController {
 
 }
 
-export { TableController };
+export { TableModel, TableRowModel, TableController };
