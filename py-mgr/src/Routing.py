@@ -12,8 +12,9 @@ import Pg
 class RouteGeneric:
     status = 404
     req = ''
-    def __init__(self, path):
+    def __init__(self, path, mimeType='text/html'):
         self.path = path
+        self.mimeType = mimeType
         
     def matches(self, path):
         return self.path is path
@@ -142,7 +143,7 @@ class Router:
         
         httpres = HTTP.HTTPResponse(res)
         httpres.status(route.status)
-        httpres.header('Content-Type', 'text/html')
+        httpres.header('Content-Type', route.mimeType)
         httpres.end_headers()
         httpres.write_text(content)
  
