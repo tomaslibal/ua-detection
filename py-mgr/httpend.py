@@ -13,6 +13,7 @@ import sys
 
 routes = {
     "/": Routing.RouteFile("static/index.html"),
+    "/app.js": Routing.RouteFile("js-dist/out.js", "application/javascript"),
     "error404": Routing.RouteErrorFile("static/404.html"),
     "/add.html": Routing.RouteFile("static/add.html"),
     "/add\?.*": Routing.RouteGETAPI("add"),
