@@ -101,7 +101,7 @@ class RouteGET_Table_Get(RouteGeneric):
         table = pg.list_table(tableName, offset, limit)
         retstr = ''
         for row in table:
-            retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span><span><a href="/edit?type={}&id={}">edit</a> | <a href="/{}_remove?id={}">remove</a></span></div>'.format(row[0], row[1], tableName, row[0], tableName, row[0])
+            retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span><span><a href="/{}_edit?id={}">edit</a> | <a href="/{}_remove?id={}">remove</a></span></div>'.format(row[0], row[1], tableName, row[0], tableName, row[0])
         return retstr
 
 def parse_request_path(req_path):
@@ -132,6 +132,22 @@ class RouteGET_Label_Remove(RouteGeneric):
             pg.remove_label(firstParam[1])
         return 'remove label... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
+class RouteGET_Datapoint_Edit(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        print "GET API: edit datapoint"
+        params = parse_request_path(self.req)
+        idParam = params[0]
+        if (not idParam[0] == 'id'):
+            return "req. not understood"
+        pg = Pg.Pg()
+        labels = pg.list_table('labels', 0, 10)
+        labelsSelectbox = '<select name="label1"><option value="">--</option>'
+        for lab in labels:
+            labelsSelectbox += '<option value="{}">{}</option>'.format(lab[0], lab[1])
+        datapoint = pg.select_row_by_id('datapoints', idParam[1])
+        datapointValue = datapoint[1]
+        return '<form action="/datapoints_update" method="get">Datapoint<input type="text" value="{}"> Label 1 {} <button type="submit">Update</button></form>'.format(datapointValue, labelsSelectbox)
 
 class Router:
     @staticmethod
