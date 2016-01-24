@@ -50,6 +50,14 @@ class Pg:
         cur.execute(query)
         self.conn.commit()
         cur.close()
+    def update_datapoint_value(self, datapoint_id, datapoint_value):
+        cur = self.conn.cursor()
+        query = 'UPDATE datapoints SET value = \'{}\' WHERE id = {}'.format(datapoint_value, datapoint_id)
+        cur.execute(query)
+        self.conn.commit()
+        cur.close()
+    def update_datapoint_label(self, datapoint_label_id, label_id):
+        pass
     """
 /       data file is a tab separated file with two columns: label; user-agent-string
     """
