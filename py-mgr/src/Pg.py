@@ -18,8 +18,10 @@ class Pg:
         cur.close()
         return ret
     def select_row_by_id(self, table_name, rowId):
+        return self.select_row_by_key_id(table_name, 'id', rowId)
+    def select_row_by_key_id(self, table_name, key, keyId):
         cur = self.conn.cursor()
-        query = 'SELECT * FROM "{}" WHERE id = {} LIMIT 1'.format(table_name, rowId)
+        query = 'SELECT * FROM "{}" WHERE {} = {} LIMIT 1'.format(table_name, key, keyId)
         cur.execute(query)
         ret = cur.fetchone()
         cur.close()
