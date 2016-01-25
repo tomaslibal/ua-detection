@@ -1,13 +1,15 @@
 import { callApi } from "./API";
 
 class TableModel {
-        constructor() {
+        constructor(tableId) {
             // current page
             this.index = 0;
             // displays this many rows
             this.limit = 20;
             // keeps the items/rows
             this.items = [];
+            // tableId is also the selector
+            this.tableId = tableId;
         }
 
         getNumPages() {
