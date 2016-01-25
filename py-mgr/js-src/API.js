@@ -13,6 +13,10 @@ function callApi(apiUrl, callback) {
 
 class API {
 
+    constructor() {
+
+    }
+
 }
 
 export { API, callApi };
