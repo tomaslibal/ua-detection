@@ -30,6 +30,16 @@ class API {
         if (!tableName) {
             throw new APIException("no table name given for getTableRowCount");
         }
+
+        const apiURL = `/${tableName}/rows/count`;
+        const countPromise = new Promise();
+       
+        callApi(apiURL, () => {
+            const data = this.responseText;
+            countPromise.resolve(data);
+        });
+      
+        return countPromise;
     }
 }
 
