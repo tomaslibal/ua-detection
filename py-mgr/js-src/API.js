@@ -11,12 +11,26 @@ function callApi(apiUrl, callback) {
     httpreq('GET', apiUrl, noop, callback);
 }
 
+class APIException extends Error {
+    constructor(msg) {
+        super(msg);
+        this.name = "APIException";
+        this.message = msg;
+        this.stack = (new Error()).stack;
+    }
+}
+
 class API {
 
     constructor() {
 
     }
 
+    getTableRowCount(tableName) {
+        if (!tableName) {
+            throw new APIException("no table name given for getTableRowCount");
+        }
+    }
 }
 
 export { API, callApi };
