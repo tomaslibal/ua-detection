@@ -46,6 +46,22 @@ class TableRowModel {
 
 }
 
+class TableRowView {
+
+    constructor(tableRowModel) {
+        if (!tableRowModel) {
+            throw new Error("You must pass in TableRowModel into the constructor");
+            return;
+        }
+
+        this.tableRowModel = tableRowModel;
+    }
+
+    getHTML() {
+        return "";
+    }
+}
+
 class TableController {
 
     constructor(tableEl, tableName) {
