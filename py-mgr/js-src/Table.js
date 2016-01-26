@@ -30,7 +30,7 @@ class TableModel {
 
 class TableRowModel {
 
-        constructor(columnSchema=[]) {
+        constructor(parentTableModel, rowData='', columnSchema=[]) {
             // Array<String> columnNames: columns' schema
             // <example>
             //     ["id", "value"]
@@ -76,20 +76,39 @@ class TableController {
         this.tableModel = new TableModel(tableName);
     }
 
-    getTableApiCall(name, limit, offset) {
-        return "/table?name=" + name + "&limit=" + limit + "&offset=" + offset;
+    /*
+     * String mode: set this value to an empty string to use the legacy
+     * API endpoint which returns a formatted HTML string, or set it to
+     * "_plain" to get back plain text separated by new line characters.
+     */
+    getTableApiCall(name, limit, offset, mode='_plain') {
+        return getTableApiCallWithMode(mode, name, limit, offset)        
+    }
+
+    getTableApiCallWithMode(mode, name, limit, offset) {
+        return "/table" + mode + "?name=" + name + "&limit=" + limit + "&offset=" + offset;
     }
 
     getTable(name, limit, offset, callback) {
-        var url = this.getTableApiCall(name, limit, offset);
+        var url = this.getTableApiCall(name, limit, offset, '');
         callApi(url, callback);
     }
 
     populate() {
         const domTableEl = this.tableEl;
+        const tableModel = this.tableModel;
 
         var callback = function() {
             var response = this.responseText;
+            var lines = response.split('\n');
+            lines
+                .filter(line => {
+                    return line.length > 0;
+                })
+                .forEach(line => {
+                    tableModel.addItem(new TableRowModel(tableModel, line, ["id", "value"]);
+                });
+
             domTableEl.innerHTML = response;
         }
 
