@@ -1,6 +1,7 @@
 import HTTP
 import urllib
 import Pg
+import json
 
 """
     Routing.py defines actions for various routes. A route is a mapping
@@ -9,6 +10,9 @@ import Pg
 
     The idea is that these routes build up an API structure for this 
     Python HTTP server.
+
+    Most transported data should be text/json format. This needs some 
+    updates.
 """
 
 
@@ -136,12 +140,12 @@ class RouteGET_Table_Get(RouteGeneric):
 
 """
     Route: GET /table_plain?
-    Description: returns table rows as plain text separated by new line
-                 characters.
+    Description: returns table rows as text/json.
 """
-class RouteGET_Table_Plain_Get(RouteGeneric):
+class RouteGET_Table_Get_Json(RouteGeneric):
     def serve(self):
         self.status = 200
+        self.mimeType='text/json'
         print "GET API: table plain get"
         params = parse_request_path(self.req)
         tableName = params[0][1]
@@ -149,10 +153,10 @@ class RouteGET_Table_Plain_Get(RouteGeneric):
         limit=10 # limit=params[2][1]
         pg = Pg.Pg()
         table = pg.list_table(tableName, offset, limit)
-        retstr = ''
+        retstr = '{ rows: ['
         for row in table:
-            retstr += '{} {}\n'.format(row[0], row[1])
-        return retstr
+            retstr += '{{ rowId: {0}, value: "{1}" }}\n'.format(row[0], row[1])
+        return retstr+'] }';
 
 
 def parse_request_path(req_path):
