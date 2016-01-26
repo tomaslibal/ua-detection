@@ -12,6 +12,10 @@ class TableModel {
             this.tableId = tableId;
         }
 
+        getNumRows() {
+
+        }
+
         getNumPages() {
             return Math.ceil(this.items.length / this.limit);
         }
@@ -23,7 +27,11 @@ class TableModel {
 
 class TableRowModel {
 
-        constructor() {
+        constructor(columnSchema=[]) {
+            // Array<String> columnNames: columns' schema
+            // <example>
+            //     ["id", "value"]
+            this.columnSchema = columnSchema
             // each column holds one cell
             this.columns = [];
         }
