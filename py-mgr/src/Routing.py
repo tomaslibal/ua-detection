@@ -104,6 +104,27 @@ class RouteGET_Table_Get(RouteGeneric):
             retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span><span><a href="/{}_edit?id={}">edit</a> | <a href="/{}_remove?id={}">remove</a></span></div>'.format(row[0], row[1], tableName, row[0], tableName, row[0])
         return retstr
 
+"""
+    Route: GET /table_plain?
+    Description: returns table rows as plain text separated by new line
+                 characters.
+"""
+class RouteGET_Table_Plain_Get(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        print "GET API: table plain get"
+        params = parse_request_path(self.req)
+        tableName = params[0][1]
+        offset=0 # offset=params[1][1]
+        limit=10 # limit=params[2][1]
+        pg = Pg.Pg()
+        table = pg.list_table(tableName, offset, limit)
+        retstr = ''
+        for row in table:
+            retstr += '{} {}\n'.format(row[0], row[1])
+        return retstr
+
+
 def parse_request_path(req_path):
     params=[]
     parsed = urllib.splitquery(req_path)
