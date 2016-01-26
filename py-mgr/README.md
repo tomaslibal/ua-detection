@@ -18,3 +18,7 @@ python httpend.py
 ```
 
 Then open `http://localhost:8080/`.
+
+## API
+
+The API description goes here.
