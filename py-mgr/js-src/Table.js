@@ -10,7 +10,7 @@ class TableModel {
             this.items = [];
             // tableId is also the selector
             this.tableId = tableId;
-        }
+        } 
 
         getNumRows() {
 
@@ -20,6 +20,9 @@ class TableModel {
             return Math.ceil(this.items.length / this.limit);
         }
 
+        /*
+         * TableRowModel item
+         */
         addItem(item) {
             this.items.push(item);
         }
@@ -69,6 +72,8 @@ class TableController {
         this.tableName = tableName;
         this.limit = 10;
         this.offset = 0;
+
+        this.tableModel = new TableModel(tableName);
     }
 
     getTableApiCall(name, limit, offset) {
