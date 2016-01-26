@@ -3,6 +3,16 @@ import urllib
 import Pg
 
 """
+    Routing.py defines actions for various routes. A route is a mapping
+    from an HTTP request's path (e.g. /some/path/0/1/) to these classes
+    done by the matching function in httpend.py.
+
+    The idea is that these routes build up an API structure for this 
+    Python HTTP server.
+"""
+
+
+"""
     Base class for HTTP Request Routing
     
     A route instance is an abstract layer to a HTTP request to a certain
@@ -24,7 +34,8 @@ class RouteGeneric:
        
        
 """
-    A route that serves content of a file
+    Route: <filename>
+    Description: A route that serves content of a file
     
     <example>
         error404 = RouteFile("path/to/404.html")
@@ -38,12 +49,21 @@ class RouteFile(RouteGeneric):
         print "serving a file %s..." % self.path
         return open(self.path).read()
 
+"""
+    Route: <error case>
+    Description: Used for 404 Not Found error.
+"""
 class RouteErrorFile(RouteFile):
     def serve(self):
         self.status = 404
         print "serving an error file %s..." % self.path
         return open(self.path).read()
 
+"""
+    Route: GET /datapoint_add?
+    Description: Takes the value of the new datapoint and calls Pg class
+                 to store this value in DB.
+"""
 class RouteGETAPI(RouteGeneric):
     def serve(self):
         self.status = 200
@@ -63,6 +83,11 @@ class RouteGETAPI(RouteGeneric):
             pg.add_datapoint(urllib.unquote_plus(d[1]))
         return 'adding a new datapoint... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
+"""
+    Route: GET /label_add?
+    Description: Takes an argument which is the label value and calls
+                 a method on Pg class to store that label in DB.
+"""
 class RouteGET_Label_Add(RouteGeneric):
     def serve(self):
         self.status = 200
@@ -81,6 +106,11 @@ class RouteGET_Label_Add(RouteGeneric):
             pg.add_label(urllib.unquote_plus(d[1]))
         return 'adding a new label... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
+"""
+    Route: GET /table?
+    Description: LEGACY route which lists table rows as formatted HTML
+                 string.
+"""
 class RouteGET_Table_Get(RouteGeneric):
     def serve(self):
         self.status = 200
