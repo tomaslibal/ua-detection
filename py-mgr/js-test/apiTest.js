@@ -15,4 +15,15 @@ describe('API', () => {
         chai.assert.equal(api.portno, settings.portno, "port number is copied");
     });
 
+    it('onCallDone takes a httpResponse and returns the response text', () => {
+        const mockResponse = {
+            responseText: 'foo bar'
+        };
+
+        const api = new API();
+        const responseText = api.onCallDone(mockResponse);
+
+        chai.assert.equal(responseText, mockResponse.responseText);
+    });
+
 });
