@@ -117,4 +117,4 @@ class TableController {
 
 }
 
-export { TableModel, TableRowModel, TableController };
+export { TableModel, TableRowModel, TableRowView, TableController };
