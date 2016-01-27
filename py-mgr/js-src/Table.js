@@ -106,7 +106,7 @@ class TableController {
                     return line.length > 0;
                 })
                 .forEach(line => {
-                    tableModel.addItem(new TableRowModel(tableModel, line, ["id", "value"]);
+                    tableModel.addItem(new TableRowModel(tableModel, line, ["id", "value"]));
                 });
 
             domTableEl.innerHTML = response;
