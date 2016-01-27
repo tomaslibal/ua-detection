@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "transpile": "export BABEL_ENV=build; mkdir -p js-build && node_modules/babel/bin/babel.js js-src/ -d js-build",
+    "transpile": "mkdir -p js-build && BABEL_ENV=build; node_modules/babel/bin/babel.js js-src/ -d js-build",
     "pack": "mkdir -p js-dist && node_modules/browserify/bin/cmd.js js-build/main.js -o js-dist/out.js",
     "build": "npm run clear && npm run transpile && npm run pack",
     "clear": "rm -rf js-build && rm -rf js-dist",
