@@ -8,7 +8,9 @@ function httpreq(method, url, onprogress, onload) {
 
 function callApi(apiUrl, callback) {
     var noop = function() {}
-    httpreq('GET', apiUrl, noop, callback);
+    httpreq('GET', apiUrl, noop, () => {
+        callback(this);
+    });
 }
 
 class APIException extends Error {
@@ -22,24 +24,23 @@ class APIException extends Error {
 
 class API {
 
-    constructor() {
-
+    constructor(settings={}) {
+        this.portno = settings.portno || '';
     }
 
-    getTableRowCount(tableName) {
-        if (!tableName) {
-            throw new APIException("no table name given for getTableRowCount");
-        }
+    onCallDone(httpResponse) {
+        return httpResponse.responseText;
+    }
 
-        const apiURL = `/${tableName}/rows/count`;
-        const countPromise = new Promise();
-       
-        callApi(apiURL, () => {
-            const data = this.responseText;
-            countPromise.resolve(data);
+    call(urlPath='/') {
+        const callPromise = new Promise();
+
+        callApi(urlPath, (httpResponse) => {
+            const finalize = this.onCallDone(httpResponse);
+            callPromise.resolve(finalize);
         });
-      
-        return countPromise;
+
+        return callPromise;
     }
 }
 
