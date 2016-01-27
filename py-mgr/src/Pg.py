@@ -3,6 +3,10 @@ import psycopg2
 """
     PgConnection handles connection to Postgres database as well as
     the execution of queries.
+
+    This class is intended for database access objects which would
+    model the queries needed for their purposes and then call methods
+    on this class to persist changes to the database.
 """
 class PgConnection:
     dbname = 'uadet'
