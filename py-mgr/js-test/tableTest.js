@@ -1,4 +1,4 @@
-import TableModel from '../js-src/Table';
+import { TableModel, TableRowModel } from '../js-src/Table';
 
 let chai = require('chai');
 let assert = require('assert');
