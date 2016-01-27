@@ -1,3 +1,16 @@
+/**
+ * 
+ * API Module
+ *
+ * Defines API class and others which abstract calls to the HTTP endpoints
+ * of the api.
+ *
+ */
+
+/*
+ * @private
+ *
+ */
 function httpreq(method, url, onprogress, onload) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
@@ -6,6 +19,10 @@ function httpreq(method, url, onprogress, onload) {
     xhr.send(null);
 }
 
+/*
+ * @private
+ *
+ */
 function callApi(apiUrl, callback) {
     var noop = function() {}
     httpreq('GET', apiUrl, noop, () => {
@@ -22,6 +39,16 @@ class APIException extends Error {
     }
 }
 
+/*
+ * Makes HTTP requests to the given endpoint.
+ *
+ * <example>
+ *     const api = new API({ portno: 7000 });
+ *     const getSomeTable = api.call('/someTable');
+ *
+ *     getSomeTable.then(data => processData);
+ * </example>
+ */
 class API {
 
     constructor(settings={}) {
