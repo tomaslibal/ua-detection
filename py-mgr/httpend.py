@@ -15,6 +15,7 @@ routes = {
     "/": Routing.RouteFile("static/index.html"),
     "/app.js": Routing.RouteFile("js-dist/out.js", "application/javascript"),
     "error404": Routing.RouteErrorFile("static/404.html"),
+    "/import.html": Routing.RouteFile("static/import.html"),
     "/add.html": Routing.RouteFile("static/add.html"),
     "/add\?.*": Routing.RouteGETAPI("add"),
     "/label_add\?.*": Routing.RouteGET_Label_Add("add"),

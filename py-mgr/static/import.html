@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Import multiple user-agent records</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            <h1>User-agent records import</h1>
+            <form action="/import" method="get">
+                <label>Separator<input type="text" name="separator" value="\t"><span>Use \t for a tab char</span></label>
+                <label>Num. columns<input type="text" name="num_columns" value="2"></label>
+                <label for="data">Data</label>
+                <textarea name="data" id="data" cols="80" rows="50"></textarea>
+                <button type="submit">Run import</button>
+            </form>   
+            <p>Data should be one record per line (ended with \n character) and the columns should be separated by the separator character. It is okay if the second column contains the separator character again and number of columns is set to 2.</p>
+        </div>
+    </body>
+</html>
