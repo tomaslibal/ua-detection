@@ -1,5 +1,32 @@
 import psycopg2
 
+"""
+    PgConnection handles connection to Postgres database as well as
+    the execution of queries.
+"""
+class PgConnection:
+    dbname = 'uadet'
+    user = 'client'
+    pwd = 'client'
+    conn = None
+    def __init__(self):
+        pass
+    def connect(self):
+        self.conn = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.pwd,
+            host="127.0.0.1"
+        )
+    def close(self):
+        if (self.conn):
+            self.conn.close()
+    def commit(self):
+        if (self.conn):
+            self.conn.commit()
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
 class Pg:
     dbname = 'uadet'
     user = 'client'
