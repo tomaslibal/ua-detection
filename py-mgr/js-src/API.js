@@ -29,6 +29,10 @@ class API {
     }
 
     onCallDone(httpResponse) {
+        if (!httpResponse) {
+            throw new APIException("No response");
+        }
+
         return httpResponse.responseText;
     }
 
@@ -44,4 +48,4 @@ class API {
     }
 }
 
-export { API, callApi };
+export { API, callApi, APIException };
