@@ -7,12 +7,15 @@
  *
  */
 
+import { BrowserObjectsWrapper } from './BrowserObjectsWrapper';
+
 /*
  * @private
  *
  */
 function httpreq(method, url, onprogress, onload) {
-    var xhr = new XMLHttpRequest();
+    var xhrClass = BrowserObjectsWrapper.getXMLHttpRequest();
+    var xhr = new xhrClass();
     xhr.open(method, url, true);
     xhr.onprogress = onprogress;
     xhr.onload = onload;
@@ -39,6 +42,24 @@ class APIException extends Error {
     }
 }
 
+class NanoPromise {
+    constructor() {
+        this.state = 'pending';
+        this.thenCallbacks = [];
+    }
+
+    then(callback) {
+        this.thenCallbacks.push(callback);
+    }
+
+    resolve(data) {
+        this.state = 'resolved';
+        this.thenCallbacks.forEach(callback => {
+            callback(data);
+        });
+    }
+}
+
 /*
  * Makes HTTP requests to the given endpoint.
  *
@@ -53,6 +74,7 @@ class API {
 
     constructor(settings={}) {
         this.portno = settings.portno || '';
+        this.completableFuture = NanoPromise;
     }
 
     onCallDone(httpResponse) {
@@ -64,7 +86,7 @@ class API {
     }
 
     call(urlPath='/') {
-        const callPromise = new Promise();
+        const callPromise = new this.completableFuture();
 
         callApi(urlPath, (httpResponse) => {
             const finalize = this.onCallDone(httpResponse);
@@ -75,4 +97,4 @@ class API {
     }
 }
 
-export { API, callApi, APIException };
+export { API, callApi, APIException, NanoPromise };

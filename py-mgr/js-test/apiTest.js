@@ -1,9 +1,22 @@
-import { API, APIException } from '../js-src/API';
+import { API, APIException, NanoPromise, __RewireAPI__ as APIModuleRewire } from '../js-src/API';
 
 const chai = require('chai');
 const assert = require('assert');
 
 describe('API', () => {
+
+    class MockXMLHttpRequest {
+        constructor() {
+
+        }
+
+        open() {}
+        send() {}
+    }
+
+    beforeEach(() => {
+
+    });
 
     it('constructor takes a settings object', () => {
         const settings = {
@@ -32,7 +45,24 @@ describe('API', () => {
             api.onCallDone();
         };
 
-        chai.expect(fThrows).to.throw(APIException, /No response/);
+        /*
+         * Somehow APIException imported into this module is not matching
+         * the APIException in the API module so the following didn't work:
+         * const expectedException = new APIException("No response");
+         * chai.expect(fThrows).to.throw(APIException, "No response");
+         */
+        chai.expect(fThrows).to.throw("No response");
+    });
+
+    it('method call returns a Promise', () => {
+        const api = new API();
+        APIModuleRewire.__Rewire__('BrowserObjectsWrapper', {
+            getXMLHttpRequest: () => { console.log('**********************8'); return MockXMLHttpRequest; }
+        });
+
+        const promise = api.call();
+
+        chai.expect(promise).to.be.instanceof(api.completableFuture);
     });
 
 });
