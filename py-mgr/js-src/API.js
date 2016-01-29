@@ -42,7 +42,7 @@ class APIException extends Error {
     }
 }
 
-class NanoPromise {
+class CompletableFuture {
     constructor() {
         this.state = 'pending';
         this.thenCallbacks = [];
@@ -74,7 +74,7 @@ class API {
 
     constructor(settings={}) {
         this.portno = settings.portno || '';
-        this.completableFuture = NanoPromise;
+        this.completableFuture = CompletableFuture;
     }
 
     onCallDone(httpResponse) {
@@ -97,4 +97,4 @@ class API {
     }
 }
 
-export { API, callApi, APIException, NanoPromise };
+export { API, callApi, APIException, CompletableFuture };

@@ -1,4 +1,4 @@
-import { API, APIException, NanoPromise, __RewireAPI__ as APIModuleRewire } from '../js-src/API';
+import { API, APIException, CompletableFuture, __RewireAPI__ as APIModuleRewire } from '../js-src/API';
 
 const chai = require('chai');
 const assert = require('assert');
@@ -57,7 +57,7 @@ describe('API', () => {
     it('method call returns a Promise', () => {
         const api = new API();
         APIModuleRewire.__Rewire__('BrowserObjectsWrapper', {
-            getXMLHttpRequest: () => { console.log('**********************8'); return MockXMLHttpRequest; }
+            getXMLHttpRequest: () => { return MockXMLHttpRequest; }
         });
 
         const promise = api.call();
