@@ -2,37 +2,38 @@ cmake_minimum_required (VERSION 2.6)
 project (uadet2 CXX)
 
 file(GLOB ALL_SRC
-    "main.cpp"
-    "common/src/*.h"
-    "common/src/*.cpp"
-    "NaiveBayessClassifier/src/*.h"
-    "NaiveBayessClassifier/src/*.cpp"
-    "NgramBuilder/src/*.h"
-    "NgramBuilder/src/*.cpp"
-    "FileInputReader/src/*.h"
-    "FileInputReader/src/*.cpp"
-    "UATokenizer/src/*.h"
-    "UATokenizer/src/*.cpp"
+    "src/*.cpp"
+    "src/*.h"
+    "src/common/src/*.h"
+    "src/common/src/*.cpp"
+    "src/NaiveBayessClassifier/src/*.h"
+    "src/NaiveBayessClassifier/src/*.cpp"
+    "src/NgramBuilder/src/*.h"
+    "src/NgramBuilder/src/*.cpp"
+    "src/FileInputReader/src/*.h"
+    "src/FileInputReader/src/*.cpp"
+    "src/UATokenizer/src/*.h"
+    "src/UATokenizer/src/*.cpp"
 )
 
 file(GLOB CLIENT_SRC
-    "client.cpp"
+    "src/client.cpp"
 )
 
 file(GLOB SERVER_SRC    
-    "server/src/*.h"
-    "server/src/*.cpp"
-    "server.cpp"
-    "common/src/*.h"
-    "common/src/*.cpp"
-    "NaiveBayessClassifier/src/*.h"
-    "NaiveBayessClassifier/src/*.cpp"
-    "NgramBuilder/src/*.h"
-    "NgramBuilder/src/*.cpp"
-    "FileInputReader/src/*.h"
-    "FileInputReader/src/*.cpp"
-    "UATokenizer/src/*.h"
-    "UATokenizer/src/*.cpp"
+    "src/server/src/*.h"
+    "src/server/src/*.cpp"
+    "src/server.cpp"
+    "src/common/src/*.h"
+    "src/common/src/*.cpp"
+    "src/NaiveBayessClassifier/src/*.h"
+    "src/NaiveBayessClassifier/src/*.cpp"
+    "src/NgramBuilder/src/*.h"
+    "src/NgramBuilder/src/*.cpp"
+    "src/FileInputReader/src/*.h"
+    "src/FileInputReader/src/*.cpp"
+    "src/UATokenizer/src/*.h"
+    "src/UATokenizer/src/*.cpp"
 )
 
 add_executable(uadet2 ${ALL_SRC})
@@ -44,16 +45,6 @@ add_executable(uadet2cli ${CLIENT_SRC})
 
 SET(CMAKE_CXX_FLAGS_DEBUG "-pthread -lpthread") 
 SET(CMAKE_CXX_FLAGS_RELEASE "-pthread -lpthread") 
-
-# More portable threading:
-#find_package (Threads REQUIRED)
-#if(THREADS_HAVE_PTHREAD_ARG)
-#  set_property(TARGET uadet2d PROPERTY COMPILE_OPTIONS "-pthread")
-#  set_property(TARGET uadet2d PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
-#endif()
-#if(CMAKE_THREAD_LIBS_INIT)
-#  target_link_libraries(uadet2d "${CMAKE_THREAD_LIBS_INIT}")
-#endif()
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
@@ -67,16 +58,16 @@ set(CMAKE_BUILD_TYPE Debug)
 enable_testing()
 
 # FileInputReader
-add_subdirectory(FileInputReader/test)
+add_subdirectory(src/FileInputReader/test)
 
 # NaiveBayessClassifier
-add_subdirectory(NaiveBayessClassifier/test)
+add_subdirectory(src/NaiveBayessClassifier/test)
 
 # NgramBuilder
 file(GLOB f3
-    "NgramBuilder/test/*"    
-    "NgramBuilder/src/*"    
-    "UATokenizer/src/*"
+    "src/NgramBuilder/test/*"    
+    "src/NgramBuilder/src/*"    
+    "src/UATokenizer/src/*"
 )
 add_executable(f3 ${f3})
 TARGET_LINK_LIBRARIES(f3 cppunit)
@@ -85,8 +76,8 @@ add_test(NgramBuilder dist/tests/f3)
 
 # UATokenizer
 file(GLOB f4
-    "UATokenizer/test/*"
-    "UATokenizer/src/*"
+    "src/UATokenizer/test/*"
+    "src/UATokenizer/src/*"
 )
 add_executable(f4 ${f4})
 TARGET_LINK_LIBRARIES(f4 cppunit)
@@ -94,4 +85,4 @@ set_target_properties(f4 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DI
 add_test(UATokenizer dist/tests/f4)
 
 # Common Tests
-add_subdirectory(common/test)
+add_subdirectory(src/common/test)
