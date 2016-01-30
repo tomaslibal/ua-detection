@@ -20,7 +20,7 @@ struct ProgramConfigObject {
     int portno;
     std::string hostname;
     std::string datafile;
-	std::string logfile;
+    std::string logfile;
 
     ProgramConfigObject(int portno=10128, std::string hostname="localhost", std::string datafile="common/config/server.txt", std::string logfile="log.txt")
         : portno(portno), hostname(hostname), datafile(datafile), logfile(logfile)
