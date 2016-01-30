@@ -51,8 +51,9 @@ int main(int argc, char** argv) {
 	/*
      * Get the program config
      */
+    string serverConfigFile = "src/common/config/server.txt";
     ProgramConfigObject conf;
-    ProgramConfig confCtrl;
+    ProgramConfig confCtrl(serverConfigFile);
 
     confCtrl.update(conf);
     
