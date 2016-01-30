@@ -63,15 +63,7 @@ add_subdirectory(src/FileInputReader/test)
 add_subdirectory(src/NaiveBayessClassifier/test)
 
 # NgramBuilder
-file(GLOB f3
-    "src/NgramBuilder/test/*"    
-    "src/NgramBuilder/src/*"    
-    "src/UATokenizer/src/*"
-)
-add_executable(f3 ${f3})
-TARGET_LINK_LIBRARIES(f3 cppunit)
-set_target_properties(f3 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(NgramBuilder dist/tests/f3)
+add_subdirectory(src/NgramBuilder/test)
 
 # UATokenizer
 file(GLOB f4
