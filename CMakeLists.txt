@@ -2,8 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 project (uadet2 CXX)
 
 file(GLOB ALL_SRC
-    "src/*.cpp"
-    "src/*.h"
+    "src/main.cpp"
     "src/common/src/*.h"
     "src/common/src/*.cpp"
     "src/NaiveBayessClassifier/src/*.h"
