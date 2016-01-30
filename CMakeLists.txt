@@ -17,6 +17,9 @@ file(GLOB ALL_SRC
 
 file(GLOB CLIENT_SRC
     "src/client.cpp"
+    "src/common/src/*.h"
+    "src/common/src/*.cpp"
+    "src/FileInputReader/src/*"
 )
 
 file(GLOB SERVER_SRC    
