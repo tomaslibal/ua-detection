@@ -35,6 +35,8 @@ int main(int argc, char** argv) {
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
 
+    std::string command;
+
     /*
      * Host's information is stored in this struct.
      * 
@@ -59,20 +61,14 @@ int main(int argc, char** argv) {
 
     confCtrl.update(conf);
 
-    /*if (argc < 4)
-    {
-        std::cerr << "Usage: " << std::endl << "    " << argv[0] << " <hostname> <port> <command>" << std::endl;
-        std::cerr << std::endl << "Example:" << std::endl;
-        std::cerr << "    " << "uadet2cli localhost 10128 'eval mobile Mozilla/5.0 Linux Android'" << std::endl;
-        exit(EXIT_SUCCESS);
-    }*/
-
     // uadet2cli hostname portno command
     if (argc == 4) {
+        command = std::string(argv[3]);
         portno = atoi(argv[2]);
         server = gethostbyname(argv[1]);
     } else if (argc == 2) {
     // uadet2cli command
+        command = std::string(argv[1]);
         portno = conf.portno;
         server = gethostbyname(conf.hostname.c_str());
     } else {
@@ -107,7 +103,6 @@ int main(int argc, char** argv) {
     }
 
     char buffer[256];
-    std::string command = argv[3];
 
     n = write(sockfd,command.data(),command.length());
 
