@@ -31,6 +31,7 @@ struct ProgramConfigObject {
 class ProgramConfig {
 public:
     ProgramConfig();
+    ProgramConfig(const std::string& configFilePath);
     ProgramConfig(const ProgramConfig& orig);
     virtual ~ProgramConfig();
     /*

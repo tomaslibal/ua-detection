@@ -22,6 +22,10 @@ std::string* get_value(const std::string& config_line, const std::string& parame
 ProgramConfig::ProgramConfig() {
 }
 
+ProgramConfig::ProgramConfig(const std::string& configFilePath) {
+    path = configFilePath;
+}
+
 ProgramConfig::ProgramConfig(const ProgramConfig& orig) {
 }
 
