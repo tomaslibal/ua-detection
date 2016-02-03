@@ -14,3 +14,8 @@ FileLog::~FileLog()
 {
 
 }
+
+void FileLog::setPath(const std::string& path)
+{
+    this.path = path;
+}
