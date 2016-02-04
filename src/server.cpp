@@ -26,6 +26,7 @@
 #include "NaiveBayessClassifier/src/NaiveBayessClassifier.h"
 #include "common/src/uadet2.h"
 #include "common/src/ProgramConfig.h"
+#include "common/src/FileLog.h"
 
 using std::function;
 using std::cout;
@@ -48,6 +49,9 @@ int main(int argc, char** argv) {
     socklen_t clilen;
     clilen = sizeof(cli_addr);
 
+	FileLog logger;
+	logger.log("Initializing Server");
+
 	/*
      * Get the program config
      */
@@ -56,7 +60,8 @@ int main(int argc, char** argv) {
     ProgramConfig confCtrl(serverConfigFile);
 
     confCtrl.update(conf);
-    
+	logger.log("Config file read and updated");
+
     char buffer[256];
     /*
      * Get a new Internet socket
@@ -65,6 +70,7 @@ int main(int argc, char** argv) {
 
     if (sockfd < 0) {
             error("Creating a socket failed");
+		logger.log("Creating a socket failed");
     }
 
     /*
