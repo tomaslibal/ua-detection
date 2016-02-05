@@ -1,9 +1,10 @@
 # ProgramConfig Test
 file(GLOB f5
-    "./*.h"
-    "./*.cpp"
-    "../src/*.h"
-    "../src/*.cpp"
+    "./programConfigTest.h"
+    "./programConfigTest.cpp"
+    "./programConfigTestRunner.cpp"
+    "../src/ProgramConfig.h"
+    "../src/ProgramConfig.cpp"
     "../../FileInputReader/src/*"
 )
 add_executable(f5 ${f5})
