@@ -20,7 +20,7 @@ fileLogTest::~fileLogTest()
 
 void fileLogTest::setUp()
 {
-    logger = new Logger;
+    logger = new FileLog();
 }
 
 void fileLogTest::tearDown()

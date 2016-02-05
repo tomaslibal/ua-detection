@@ -26,7 +26,7 @@ public:
     void tearDown();
 
 private:
-    FileLog logger;
+    FileLog* logger;
     void testFoo();
 };
 
