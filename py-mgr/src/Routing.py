@@ -149,9 +149,15 @@ class RouteGET_Table_Get(RouteGeneric):
         offset=0
         limit=10
         table = pg.list_table(tableName, offset, limit)
+        # table = pg.get_datapoints_with_labels(offset, limit)
         retstr = ''
         for row in table:
-            retstr += '<div><span>id</span><span>{}</span><span>ua</span><span>{}</span><span><a href="/{}_edit?id={}">edit</a> | <a href="/{}_remove?id={}">remove</a></span></div>'.format(row[0], row[1], tableName, row[0], tableName, row[0])
+            label1=''
+            if (tableName == 'datapoints'):
+                labels = pg.get_datapoint_labels(row[0])
+                if (labels):
+                    label1 = 'labels: ' + labels[0][0]
+            retstr += '<div><span>id</span><span>{}</span><span>value</span><span>{}</span><span>{}</span><span><a href="/{}_edit?id={}">edit</a> | <a href="/{}_remove?id={}">remove</a></span></div>'.format(row[0], row[1], label1, tableName, row[0], tableName, row[0])
         return retstr
 
 """
