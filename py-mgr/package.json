@@ -1,15 +1,16 @@
 {
   "private": true,
   "scripts": {
-    "transpile": "mkdir -p js-build && BABEL_ENV=build; node_modules/babel/bin/babel.js js-src/ -d js-build",
+    "transpile": "mkdir -p js-build && node_modules/babel-cli/bin/babel.js js-src/ -d js-build",
     "pack": "mkdir -p js-dist && node_modules/browserify/bin/cmd.js js-build/main.js -o js-dist/out.js",
     "build": "npm run clear && npm run transpile && npm run pack",
     "clear": "rm -rf js-build && rm -rf js-dist",
     "test": "BABEL_ENV=development; ./node_modules/mocha/bin/mocha --compilers js:babel-register --recursive js-test"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel-cli": "^6.4.5",
     "babel-core": "^6.4.5",
+    "babel-plugin-rewire": "^1.0.0-beta-5",
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.4.3",
     "babel-template": "^6.3.13",
@@ -21,10 +22,12 @@
   "babel": {
     "env": {
       "development": {
+        "presets": [
+          "es2015"
+        ],
         "plugins": [
           "babel-plugin-rewire"
-        ],
-        "presets": ["es2015"]
+        ]
       }
     }
   }
