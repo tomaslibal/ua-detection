@@ -59,10 +59,13 @@ class Pg:
         return ret
     def add_datapoint(self, datapoint_value):
         cur = self.conn.cursor()
-        query = 'INSERT INTO datapoints (value) VALUES(\'{}\')'.format(datapoint_value)
+        query = 'INSERT INTO datapoints (value) VALUES(\'{}\') RETURNING id'.format(datapoint_value)
         cur.execute(query)
+        res = cur.fetchone()
+        last_inserted_id=res[0]
         self.conn.commit()
         cur.close()
+        return last_inserted_id
     def add_label(self, label_value):
         cur = self.conn.cursor()
         query = 'INSERT INTO labels (value) VALUES(\'{}\')'.format(label_value)
