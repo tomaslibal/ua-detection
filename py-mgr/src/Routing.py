@@ -15,6 +15,24 @@ import json
     updates.
 """
 
+def parse_request_path(req_path):
+    params=[]
+    parsed = urllib.splitquery(req_path)
+    if (not parsed[1]):
+        return params
+    query_string = parsed[1]
+    args=[query_string]
+    if ('&' in query_string):
+        args = query_string.split('&')
+    for arg in args:
+        if ('=' in arg):
+            arg = arg.split('=')
+        else:
+            arg = [arg, None]
+        params.append(arg)
+    return params
+
+
 
 """
     Base class for HTTP Request Routing
@@ -73,18 +91,16 @@ class RouteGETAPI(RouteGeneric):
         self.status = 200
         print "serving GET request to the API for action %s" % self.path
         parsed = urllib.splitquery(self.req)
-        query = parsed[1]
-        if (not query):
-            return "no arguments passed"
-        if ('&' in query):
-            args = query.split('&')
-            query = args[0]
-        
-        datapoint = query # args[0]
-        d = datapoint.split('=')
+        params = parse_request_path(self.req)
+        datapoint=params[0]
+        label1=params[1]
         pg = Pg.Pg()
-        if (d[0] == "dp"):
-            pg.add_datapoint(urllib.unquote_plus(d[1]))
+        newId=None
+        if (datapoint[0] == "dp"):
+            newId=pg.add_datapoint(urllib.unquote_plus(datapoint[1]))
+        if (label1[0] == "cat1" and newId is not None):
+            label1Id = pg.get_label_id_by_val(label1[1])
+            pg.add_datapoint_label(newId, label1Id[0])
         return 'adding a new datapoint... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
 """
@@ -158,23 +174,6 @@ class RouteGET_Table_Get_Json(RouteGeneric):
             retstr += '{{ rowId: {0}, value: "{1}" }}\n'.format(row[0], row[1])
         return retstr+'] }';
 
-
-def parse_request_path(req_path):
-    params=[]
-    parsed = urllib.splitquery(req_path)
-    if (not parsed[1]):
-        return params
-    query_string = parsed[1]
-    args=[query_string]
-    if ('&' in query_string):
-        args = query_string.split('&')
-    for arg in args:
-        if ('=' in arg):
-            arg = arg.split('=')
-        else:
-            arg = [arg, None]
-        params.append(arg)
-    return params
 
 class RouteGET_Label_Remove(RouteGeneric):
     def serve(self):
