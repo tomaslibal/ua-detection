@@ -76,17 +76,17 @@ class TableController {
         this.tableModel = new TableModel(tableName);
     }
 
+    getTableApiCallWithMode(mode, name, limit, offset) {
+        return "/table" + mode + "?name=" + name + "&limit=" + limit + "&offset=" + offset;
+    }
+
     /*
      * String mode: set this value to an empty string to use the legacy
      * API endpoint which returns a formatted HTML string, or set it to
      * "_plain" to get back plain text separated by new line characters.
      */
     getTableApiCall(name, limit, offset, mode='_plain') {
-        return getTableApiCallWithMode(mode, name, limit, offset)        
-    }
-
-    getTableApiCallWithMode(mode, name, limit, offset) {
-        return "/table" + mode + "?name=" + name + "&limit=" + limit + "&offset=" + offset;
+        return this.getTableApiCallWithMode(mode, name, limit, offset)        
     }
 
     getTable(name, limit, offset, callback) {
