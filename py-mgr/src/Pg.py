@@ -48,6 +48,8 @@ class Pg:
             print record
         cur.close()
         return ret
+    def get_datapoints_with_labels(self, offset, limit):
+        pass
     def select_row_by_id(self, table_name, rowId):
         return self.select_row_by_key_id(table_name, 'id', rowId)
     def select_row_by_key_id(self, table_name, key, keyId):
@@ -90,6 +92,13 @@ class Pg:
         cur.execute(query)
         self.conn.commit()
         cur.close()
+    def get_datapoint_labels(self, datapoint_id):
+        cur = self.conn.cursor()
+        query = 'select l.value from labels l inner join datapoint_labels dl on dl.label_id = l.id where dl.datapoint_id = \'{}\''.format(datapoint_id)
+        cur.execute(query)
+        res=cur.fetchall()
+        cur.close()
+        return res
     def get_label_id_by_val(self, label_value):
         cur = self.conn.cursor()
         query = 'SELECT id FROM labels WHERE value = \'{}\''.format(label_value)
