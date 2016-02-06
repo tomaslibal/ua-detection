@@ -87,6 +87,13 @@ class Pg:
         cur.execute(query)
         self.conn.commit()
         cur.close()
+    def get_label_id_by_val(self, label_value):
+        cur = self.conn.cursor()
+        query = 'SELECT id FROM labels WHERE value = \'{}\''.format(label_value)
+        cur.execute(query)
+        result=cur.fetchone()
+        cur.close()
+        return result
     def update_datapoint_label(self, datapoint_label_id, label_id):
         pass
     """
