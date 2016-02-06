@@ -9,16 +9,20 @@
 
 import { BrowserObjectsWrapper } from './BrowserObjectsWrapper';
 
+let browserObjects = new BrowserObjectsWrapper();
+
 /*
  * @private
  *
  */
 function httpreq(method, url, onprogress, onload) {
-    var xhrClass = BrowserObjectsWrapper.getXMLHttpRequest();
+    var xhrClass = browserObjects.getXMLHttpRequest();
     var xhr = new xhrClass();
     xhr.open(method, url, true);
     xhr.onprogress = onprogress;
-    xhr.onload = onload;
+    xhr.onload = function() {
+        onload.call(this);
+    };
     xhr.send(null);
 }
 
@@ -28,9 +32,7 @@ function httpreq(method, url, onprogress, onload) {
  */
 function callApi(apiUrl, callback) {
     var noop = function() {}
-    httpreq('GET', apiUrl, noop, () => {
-        callback(this);
-    });
+    httpreq('GET', apiUrl, noop, callback);
 }
 
 class APIException extends Error {
