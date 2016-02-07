@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+#
+# import.sh    Import script that reads an ASCII text data file containing two
+#              columns of data separated by a whitespace character. The first
+# column is one or more categories separated by a comma and the second column
+# is the datapoint (user-agent string). The data is then processed in this
+# manner and send to a URL on the localhost in a GET HTTP request. This end
+# point is assumed to be the 'httpend.py' server from py-mgr.
+#
+# <example>
+#     echo "mobile Mozilla/5.0 (Linux; Phone Android Cn-cn) Firefox/45.0" > data_in.txt
+#     ./import.sh
+# </example>
+
 function import_one {
     ua=$1
     label1=$2
