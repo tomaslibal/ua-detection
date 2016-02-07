@@ -10,7 +10,7 @@ class TableModel {
             this.items = [];
             // tableId is also the selector
             this.tableId = tableId;
-        } 
+        }
 
         getNumRows() {
 
@@ -26,6 +26,37 @@ class TableModel {
         addItem(item) {
             this.items.push(item);
         }
+}
+
+class BaseView {
+    constructor() {}
+    render() {}
+}
+
+class TableModelView extends BaseView {
+    constructor(tableModel) {
+        super();
+
+        this.tableModel = tableModel;
+    }
+
+    getTableHeader() {
+        return '<div><span>Id</span><span>Value</span><span>...</span><span>Actions</span></div>';
+    }
+
+    render() {
+        // render table header
+        const tableHeader = this.getTableHeader();
+        // table rows are constructed from the tableRowModels
+        let tableRows = this.tableModel.items
+                                .map(rowModel => {
+                                    return new TableRowView(rowModel).render();
+                                })
+                                .reduce((prev, current, idx) => {
+                                    return prev + current.render();
+                                });
+        return tableHeader + tableRows;
+    }
 }
 
 class TableRowModel {
@@ -49,9 +80,11 @@ class TableRowModel {
 
 }
 
-class TableRowView {
+class TableRowView extends BaseView {
 
     constructor(tableRowModel) {
+        super();
+
         if (!tableRowModel) {
             throw new Error("You must pass in TableRowModel into the constructor");
             return;
@@ -60,8 +93,8 @@ class TableRowView {
         this.tableRowModel = tableRowModel;
     }
 
-    getHTML() {
-        return "";
+    render() {
+        
     }
 }
 
@@ -86,7 +119,7 @@ class TableController {
      * "_plain" to get back plain text separated by new line characters.
      */
     getTableApiCall(name, limit, offset, mode='_plain') {
-        return this.getTableApiCallWithMode(mode, name, limit, offset)        
+        return this.getTableApiCallWithMode(mode, name, limit, offset)
     }
 
     getTable(name, limit, offset, callback) {
@@ -115,6 +148,10 @@ class TableController {
         this.getTable(this.tableName, this.limit, this.offset, callback);
     }
 
+    render() {
+        const tableView = new TableModelView(this.tableModel);
+        tableView.render();
+    }
 }
 
 export { TableModel, TableRowModel, TableRowView, TableController };
