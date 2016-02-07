@@ -50,6 +50,15 @@ class Pg:
         return ret
     def get_datapoints_with_labels(self, offset, limit):
         pass
+    def get_datapoints_with_first_label(self):
+        cur = self.conn.cursor()
+        query = 'select l.value, d.value from labels l join datapoint_labels dl on dl.label_id = l.id join datapoints d on d.id = dl.datapoint_id GROUP BY l.value, d.value;'
+        cur.execute(query)
+        ret=[]
+        for record in cur:
+            ret.append(record)
+        cur.close()
+        return ret
     def select_row_by_id(self, table_name, rowId):
         return self.select_row_by_key_id(table_name, 'id', rowId)
     def select_row_by_key_id(self, table_name, key, keyId):

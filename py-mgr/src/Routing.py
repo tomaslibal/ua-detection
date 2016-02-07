@@ -228,7 +228,7 @@ class RouteGET_Datapoint_Update(RouteGeneric):
         return 'updating datapoint... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
 class RouteGET_Datapoint_Remove(RouteGeneric):
-    def server(self):
+    def serve(self):
         self.status=200
         params = parse_request_path(self.req)
         if (params[0] != "id"):
@@ -236,6 +236,22 @@ class RouteGET_Datapoint_Remove(RouteGeneric):
         idDatapoint = params[0][0]
         pg.remove_datapoint(idDatapoint)
         return 'Removing datapoint... <meta http-equiv="refresh" content="0; url=/">'
+
+class RouteGET_Generate_Download(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        pg = Pg.Pg()
+        rows = pg.get_datapoints_with_first_label()
+        f = open('out/data_down.txt', 'w')
+        for row in rows:
+            f.write('{}\t{}\n'.format(row[0], row[1]))
+        return 'generating the file... <meta http-equiv="refresh" content="0; url=/download_list.html">'
+
+class RouteGET_Download_List(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        return '<h1>Download list</h1><a href="/data_down.txt">Datapoints with first label</a>'
+
 
 
 
