@@ -44,9 +44,11 @@ def parse_request_path(req_path):
 class RouteGeneric:
     status = 404
     req = ''
-    def __init__(self, path, mimeType='text/html'):
+    def __init__(self, path, mimeType='text/html', fileName=''):
         self.path = path
         self.mimeType = mimeType
+        self.fileName = fileName
+        self.contentDisposition = ''
         
     def matches(self, path):
         return self.path is path
@@ -69,6 +71,12 @@ class RouteFile(RouteGeneric):
     def serve(self):
         self.status = 200
         print "serving a file %s..." % self.path
+        return open(self.path).read()
+
+class RouteDownloadFile(RouteGeneric):
+    def serve(self):
+        self.status = 200
+        self.contentDisposition = 'attachment; filename="{}.txt"'.format(self.fileName)
         return open(self.path).read()
 
 """
@@ -266,6 +274,8 @@ class Router:
         httpres = HTTP.HTTPResponse(res)
         httpres.status(route.status)
         httpres.header('Content-Type', route.mimeType)
+        if (route.contentDisposition is not ''):
+            httpres.header('Content-Disposition', route.contentDisposition)
         httpres.end_headers()
         httpres.write_text(content)
  

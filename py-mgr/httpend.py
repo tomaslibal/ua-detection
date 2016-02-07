@@ -26,7 +26,7 @@ routes = {
     "/datapoints_remove\?.*": Routing.RouteGET_Datapoint_Remove("remove"),
     "/download": Routing.RouteGET_Generate_Download("generate"),
     "/download_list.html": Routing.RouteGET_Download_List("list"),
-    "/data_down.txt": Routing.RouteFile("out/data_down.txt")
+    "/data_down.txt": Routing.RouteDownloadFile("out/data_down.txt", "text/plain", 'data_in')
 }
 
 def findroutematch(path):
