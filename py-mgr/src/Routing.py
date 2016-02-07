@@ -227,6 +227,18 @@ class RouteGET_Datapoint_Update(RouteGeneric):
         pg.update_datapoint_value(idDatapoint[1], urllib.unquote_plus(value[1]))
         return 'updating datapoint... <meta HTTP-EQUIV="REFRESH" content="0; url=/">'
 
+class RouteGET_Datapoint_Remove(RouteGeneric):
+    def server(self):
+        self.status=200
+        params = parse_request_path(self.req)
+        if (params[0] != "id"):
+           return "error. no id supplied"
+        idDatapoint = params[0][0]
+        pg.remove_datapoint(idDatapoint)
+        return 'Removing datapoint... <meta http-equiv="refresh" content="0; url=/">'
+
+
+
 class Router:
     @staticmethod
     def route(reqpath, matchfunc, res):

@@ -80,6 +80,12 @@ class Pg:
         cur.execute(query)
         self.conn.commit()
         cur.close()
+    def remove_datapoint(self, datapoint_id):
+        cur = self.conn.cursor()
+        query = 'DELETE FROM datapoints WHERE id = \'{}\''.format(datapoint_id)
+        cur.execute(query)
+        self.conn.commit()
+        cur.close()
     def add_datapoint_label(self, datapoint_id, label_id, confidence=0):
         cur = self.conn.cursor()
         query = 'INSERT INTO datapoint_labels (datapoint_id, label_id, confidence) VALUES({}, {}, {})'.format(datapoint_id, label_id, confidence)

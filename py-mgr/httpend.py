@@ -22,7 +22,8 @@ routes = {
     "/table\?.*": Routing.RouteGET_Table_Get("table"),
     "/labels_remove\?.*": Routing.RouteGET_Label_Remove("remove"),
     "/datapoints_edit\?.*": Routing.RouteGET_Datapoint_Edit("edit"),
-    "/datapoints_update\?.*": Routing.RouteGET_Datapoint_Update("update")
+    "/datapoints_update\?.*": Routing.RouteGET_Datapoint_Update("update"),
+    "/datapoints_remove\?.*": Routing.RouteGET_Datapoint_Remove("remove")
 }
 
 def findroutematch(path):
