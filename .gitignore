@@ -52,6 +52,9 @@ py-mgr/js-dist
 build
 dist
 
+# Ignore the log out
+*.log.txt
+
 nbproject/private
 Makefile
 CMakeCache.txt
