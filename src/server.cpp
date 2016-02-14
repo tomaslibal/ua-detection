@@ -18,6 +18,7 @@
 #include <csignal>
 #include <vector>
 #include <fstream>
+#include <sstream>
 
 #include "server/src/utils.h"
 #include "server/src/sockets.h"
@@ -37,6 +38,22 @@ using std::thread;
 using std::string;
 
 static int sockfd;
+
+/**
+ * Splits a string by given delimiter and returns a vector of string tokens
+ *
+ */
+//std::vector<std::string>& strsplit(const std::string& str, char delimiter, std::vector<std::string>& tokens) {
+void strsplit(const std::string& str, char delimiter, std::vector<std::string>& tokens) {
+    std::stringstream ss(str);
+    std::string token;
+
+    while (std::getline(ss, token, delimiter)) {
+        tokens.push_back(token);
+    }
+
+    //return tokens;
+}
 
 /*
  * 
@@ -95,7 +112,8 @@ int main(int argc, char** argv) {
      * The learning data file
      */
     string dataFile = conf.datafile;
-    
+
+
     /* 
      * A lambda function that takes a string line. It expects the line to have
      * two columns: categories and a user-agent string, separated by a tab
@@ -106,12 +124,20 @@ int main(int argc, char** argv) {
     function<void (string)> add_line = [&nb](string line) {
         string category, uas;
         string::size_type n = line.find('\t');
+        std::vector<std::string> categories;
         
         if (n != string::npos) {
             category = line.substr(0, n);
             uas = line.substr(n+1);
-    
-            nb.add_data(uas, category);            
+
+            strsplit(category, ',', categories);
+            if (categories.size() > 1) {
+                for(std::vector<std::string>::iterator it = categories.begin(); it != categories.end(); ++it) {
+                    nb.add_data(uas, *it);
+                }
+            } else {
+                nb.add_data(uas, category);
+            }
         }
     };
     
