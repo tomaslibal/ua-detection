@@ -63,11 +63,15 @@ The background service will look for a file named `data_in.txt` in the current w
 The program can work with ascii (8-bit) encoded data of the following format:
 
 1. one entry per line terminated by a new line character
-2. each entry has a one word label separated by a tab character from the user-agent string following the label
+2. each entry has two columns separated by a tab character: first colum is the label (or multiple labels separated by comma) and the second column is the user-agent string
 
 A user-agent string with a class "mobile" would look like this:
 
     mobile  Mozilla/5.0 (Linux; U; Android 4.0; en-us) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    
+Example with multiple labels:
+
+    mobile,android,safari Mozilla/5.0 (Linux; U; Android 4.0; en-us) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
 
 See the [example](/data_in.txt) 
 
@@ -75,6 +79,8 @@ See the [example](/data_in.txt)
 
 Run all tests and print output
 
+    cmake .
+    make
     ctest .
 
 ### Disclaimers
