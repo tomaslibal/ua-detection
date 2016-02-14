@@ -59,6 +59,12 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
     // was the most probable or not
     } else if (output->at(0) == "eval") {
         std::vector<std::string>* categories = nbc.get_categories();
+	
+	/*
+	 * Keeps evalution results for each category:
+	 *     cateogory, eval_result
+	 */
+	std::map<double, std::string, std::greater<double>> results;
         std::ostringstream pstrs;
         double threshold = 0.75;
         double highest_prob = 0;
@@ -80,9 +86,18 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
                 }
             }
             
-            pstrs << category << ":" << p << std::endl;
-        }
+            //pstrs << category << ":" << p << std::endl;
+	    results.insert(std::pair<double, std::string>(p, category));
+        }     
         
+        /*
+	 * Now results are in order by the highest probability descending
+	 * 
+	 */
+	for (auto& item: results) {
+	    pstrs << item.second << ":" << item.first << std::endl;
+	}
+                
         // If the given category (output->at(1)) has highest probability, then
         // is_in_category(UA, category) = maybe
         // If is_in_category == maybe and p(category|UA) > threshold then is_in_category = true
