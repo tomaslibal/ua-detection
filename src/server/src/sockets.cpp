@@ -118,7 +118,11 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
             }
         }
         
-        pstrs << "UA is in " << output->at(1) << ": " << result << std::endl;
+        /*
+	 * Temporarily disable this evaluation as the multiple labels change has broken this
+	 * because this was not previously made for a multi-class classification.
+	 */
+        //pstrs << "UA is in " << output->at(1) << ": " << result << std::endl;
         
         std::string str = pstrs.str();
         n = write(insockfd, str.data(), str.length());
