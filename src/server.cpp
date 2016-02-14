@@ -41,7 +41,10 @@ static int sockfd;
 
 /**
  * Splits a string by given delimiter and returns a vector of string tokens
- *
+ * @param std::string& The string to be split
+ * @param char A character delimiter
+ * @param std::vector<std::string>& Vector container for the split tokens
+ * @returns void
  */
 void strsplit(const std::string& str, char delimiter, std::vector<std::string>& tokens) {
     std::stringstream ss(str);
