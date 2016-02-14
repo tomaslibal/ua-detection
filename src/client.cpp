@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
         error("ERROR reading from socket");
     }
 
-    std::cout << "server's response was " << buffer << std::endl;
+    std::cout << buffer << std::endl;
 
     return 0;
 }
