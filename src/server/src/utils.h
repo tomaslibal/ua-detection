@@ -27,7 +27,7 @@ void error(std::string msg);
  * 
  * @return double Number between 0 and 100 (inclusive 0 and 100)
  */
-double get_percentile(double value, std::map<double, std::string>& population);
+double get_percentile(double value, std::map<double, std::string, std::greater<double>>& population);
 
 #endif /* SERVER_H */
 

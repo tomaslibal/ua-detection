@@ -102,27 +102,21 @@ void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exi
         // is_in_category(UA, category) = maybe
         // If is_in_category == maybe and p(category|UA) > threshold then is_in_category = true
         std::string result;
-        if (has_highest_prob == true) {
-            result = "maybe";
-            
-            if (p_category > threshold) {
-                result = "true";
-            }
-        } else {
-            // alternatively, if p(category|UA) is not the highest but it is
-            // over the threshold, is_in_category = maybe, otherwise false.
-            result = "false";
-            
-            if (p_category > threshold) {
-                result = "maybe";
-            }
-        }
+	double percentile = get_percentile(p_category, results);
+        
+        if (percentile > 60.0 || has_highest_prob) {
+	  result = "maybe";
+	}
+	
+        if (p_category > threshold) {
+	    result = "true";
+	}	
         
         /*
 	 * Temporarily disable this evaluation as the multiple labels change has broken this
 	 * because this was not previously made for a multi-class classification.
 	 */
-        //pstrs << "UA is in " << output->at(1) << ": " << result << std::endl;
+        pstrs << "UA is in " << output->at(1) << ":" << result << std::endl;
         
         std::string str = pstrs.str();
         n = write(insockfd, str.data(), str.length());

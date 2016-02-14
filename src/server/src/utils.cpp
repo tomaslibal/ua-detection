@@ -14,7 +14,7 @@ void error(string msg)
     exit(EXIT_FAILURE);
 }
 
-double get_percentile(double value, std::map<double, std::string>& population)
+double get_percentile(double value, std::map<double, std::string, std::greater<double>>& population)
 {
     int size = population.size();
     int num_higher_values = 0;
