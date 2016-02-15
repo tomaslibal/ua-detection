@@ -2,7 +2,7 @@
 
 There are two binaries: 
 
-- a background service `uadet2d` which trains a model based on the data a receives commands over TCP
+- a background service `uadet2d` which trains a model based on the data and receives commands over TCP
 - a command line program `uadet2cli` for issuing commands to the background service and printing out the server's response
 
 The development is done on Scientific Linux 7.1 (similar to RHEL or CentOS or maybe other RPM based Linux systems) where it should be possible to build the project and run it, dependent on the requirements criteria.
