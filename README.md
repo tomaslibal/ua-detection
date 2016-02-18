@@ -29,24 +29,32 @@ class the input may belong.
 
 In the figure above you can see a sample result of evaluating a user-agent string constrained to top 10 labels. Features 3-10 were evaluated extremely unlikely. This data set had 17 features in total and only two features evaluated positively as expected for the given input.
 
-#### dependencies
+### Build the project from source
 
-Needed to build the binaries:
+Currently no binaries are distributed. Here's a manual how to build it from the source code.
+
+#### Dependencies
+
+Most *nix systems should have these tools available.
 
 - CMake 2.6+
 - GNU Make utility
 - C++11 Compiler
-- CppUnit for tests
-- CTest 2.6+ for tests
+- [CppUnit for tests]
+- [CTest 2.6+ for tests]
 
-#### build
+#### Build process
+
+In the root of the repository execute the following commands
 
     cmake .
     make
 
 This outputs the background service (`uadet2d`) and the client CLI program (`uadet2cli`) binaries in `dist/`.
 
-#### usage
+There is no installation as of now.
+
+### Usage
 
 *default usage:*
 
@@ -81,7 +89,7 @@ See the [example](/data_in.txt)
 
 ### Test
 
-Run all tests and print output
+To run all tests and print the output to STDOUT execute the next commands:
 
     cmake .
     make
