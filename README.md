@@ -25,6 +25,8 @@ There are two end goals that I would like achieve:
 learning method to learn from data and makes predictions about new data as to which
 class the input may belong.
 
+![Sample result](/doc/ua_eval_test.png)
+
 #### dependencies
 
 Needed to build the binaries:
