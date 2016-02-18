@@ -27,6 +27,8 @@ class the input may belong.
 
 ![Sample result](/doc/ua_eval_test.png)
 
+In the figure above you can see a sample result of evaluating a user-agent string constrained to top 10 labels. Features 3-10 were evaluated extremely unlikely. This data set had 17 features in total and only two features evaluated positively as expected for the given input.
+
 #### dependencies
 
 Needed to build the binaries:
@@ -49,7 +51,7 @@ This outputs the background service (`uadet2d`) and the client CLI program (`uad
 *default usage:*
 
     $1 dist/uadet2d # start this process in one shell and keep it running
-    $2 dist/uadet2cli localhost 10128 "eval desktop Mozilla/5.0 (Linux..."
+    $2 dist/uadet2cli "eval desktop Mozilla/5.0 (Linux..."
 
 Prints to stdout the output of classification of the given user agent string 
 against all known categories present in the data file.
@@ -58,7 +60,7 @@ against all known categories present in the data file.
 
 ### Data
 
-The background service will look for a file named `data_in.txt` in the current working directory. This file will be read prior to the evaluation of the user-agent string.
+Data file is consumed by the background service which will read it and train a model on it. Currently the data format is plain text with columns separated by a tab character.
 
 #### Data format
 
@@ -94,6 +96,7 @@ of their owners. I hope that this repository or its part will be of use to someo
 
 ---
 
+- February 2016: added basic multiclass features
 - December 2015: ported to a C++ version
 - March 2015: wrote and added a probability based algorithm
 - August 2014: added a user-agent string tokenizer
