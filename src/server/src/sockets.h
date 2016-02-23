@@ -26,7 +26,24 @@
 
 int create_socket_inet_stream();
 
-void evaluate_incoming_request(sockaddr_in* cli_addr, int insockfd, std::function<void ()>& exit_callback, std::unique_lock<std::mutex>& signal_exit, NaiveBayessClassifier& nbc);
+/**
+ * Reads the incoming socket connection and parses it using protocol::process_message().
+ * 
+ * @param sockaddr_in* cli_addr seems unused; delete this
+ * @param int insockfd socket descriptor of the incoming request
+ * @param std::function<void ()>& exit_callback is a callable object that is called if function exits early; rename to early_exit_callback
+ * @param std::unique_lock<std::mutex>& signal_exit is used to signal to the main thread that the user wishes to terminate the server program; remove this functionality
+ * @param NaiveBayessClassifier& nbc is an instance of learned NaiveBayessClassifier
+ * 
+ * @return void
+ */
+void evaluate_incoming_request(int insockfd, std::function<void ()>& exit_callback, std::unique_lock<std::mutex>& signal_exit, NaiveBayessClassifier& nbc);
+
+/**
+ * Classifies the given data using NaiveBayessClassifier
+ * 
+ */
+void classify_data();
 
 #endif /* SOCKETS_H */
 

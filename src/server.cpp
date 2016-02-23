@@ -206,8 +206,8 @@ int main(int argc, char** argv) {
      * Worker is started as a new thread, it processes the incoming request
      * in a detached state so it should not block other requests.
      */
-    function<void (int)> worker2 = [&cli_addr, &exitCallback, &lck, &nb](int in_sockfd) {
-        evaluate_incoming_request(&cli_addr, in_sockfd, exitCallback, lck, nb);
+    function<void (int)> worker2 = [&exitCallback, &lck, &nb](int in_sockfd) {
+        evaluate_incoming_request(in_sockfd, exitCallback, lck, nb);
     };
     
     while(1) {

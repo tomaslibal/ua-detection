@@ -23,7 +23,7 @@ int create_socket_inet_stream() {
 /**
  * 
  */
-void evaluate_incoming_request(sockaddr_in* cli_addr, int insockfd, function<void ()>& exit_callback, unique_lock<mutex>& signal_exit, NaiveBayessClassifier& nbc) {
+void evaluate_incoming_request(int insockfd, function< void () >& exit_callback, unique_lock< mutex >& signal_exit, NaiveBayessClassifier& nbc) {
     /**
      * 
      */
