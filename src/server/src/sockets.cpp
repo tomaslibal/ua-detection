@@ -20,6 +20,8 @@ int create_socket_inet_stream() {
     return sockfd;
 }
 
+#define BUFFERSIZE 512
+
 /**
  * 
  */
@@ -31,7 +33,7 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
     /**
      * Input buffer. The incoming connection data is read into it.
      */
-    char buffer[256];
+    char buffer[BUFFERSIZE];
     /**
      * 
      */
@@ -44,8 +46,8 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
 
     cout << "Connection established (" << insockfd << ")" << endl;
 
-    bzero(buffer,256);
-    n = read(insockfd,buffer,255);
+    bzero(buffer,BUFFERSIZE);
+    n = read(insockfd,buffer,BUFFERSIZE);
 
     if (n < 0) perror("ERROR reading from socket");
 
@@ -151,7 +153,7 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
     if (n < 0) perror("ERROR writing to socket");
     close(insockfd);
       
-    bzero(buffer, 256);
+    bzero(buffer, BUFFERSIZE);
     delete input;
     return;
 }
