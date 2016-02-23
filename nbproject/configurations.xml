@@ -4,15 +4,16 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>FileInputReader/src/FileInputReader.h</itemPath>
-      <itemPath>NaiveBayessClassifier/src/NaiveBayessClassifier.h</itemPath>
-      <itemPath>NgramBuilder/src/NgramBuilder.h</itemPath>
-      <itemPath>common/src/ProgramConfig.h</itemPath>
-      <itemPath>UATokenizer/src/UATokenizer.h</itemPath>
-      <itemPath>server/src/protocol.h</itemPath>
-      <itemPath>server/src/sockets.h</itemPath>
-      <itemPath>common/src/uadet2.h</itemPath>
-      <itemPath>server/src/utils.h</itemPath>
+      <itemPath>src/FileInputReader/src/FileInputReader.h</itemPath>
+      <itemPath>src/common/src/FileLog.h</itemPath>
+      <itemPath>src/NaiveBayessClassifier/src/NaiveBayessClassifier.h</itemPath>
+      <itemPath>src/NgramBuilder/src/NgramBuilder.h</itemPath>
+      <itemPath>src/common/src/ProgramConfig.h</itemPath>
+      <itemPath>src/UATokenizer/src/UATokenizer.h</itemPath>
+      <itemPath>src/server/src/protocol.h</itemPath>
+      <itemPath>src/server/src/sockets.h</itemPath>
+      <itemPath>src/common/src/uadet2.h</itemPath>
+      <itemPath>src/server/src/utils.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -21,18 +22,19 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>FileInputReader/src/FileInputReader.cpp</itemPath>
-      <itemPath>NaiveBayessClassifier/src/NaiveBayessClassifier.cpp</itemPath>
-      <itemPath>NgramBuilder/src/NgramBuilder.cpp</itemPath>
-      <itemPath>common/src/ProgramConfig.cpp</itemPath>
-      <itemPath>UATokenizer/src/UATokenizer.cpp</itemPath>
-      <itemPath>client.cpp</itemPath>
-      <itemPath>main.cpp</itemPath>
-      <itemPath>server/src/protocol.cpp</itemPath>
-      <itemPath>server.cpp</itemPath>
-      <itemPath>server/src/sockets.cpp</itemPath>
-      <itemPath>common/src/uadet2.cpp</itemPath>
-      <itemPath>server/src/utils.cpp</itemPath>
+      <itemPath>src/FileInputReader/src/FileInputReader.cpp</itemPath>
+      <itemPath>src/common/src/FileLog.cpp</itemPath>
+      <itemPath>src/NaiveBayessClassifier/src/NaiveBayessClassifier.cpp</itemPath>
+      <itemPath>src/NgramBuilder/src/NgramBuilder.cpp</itemPath>
+      <itemPath>src/common/src/ProgramConfig.cpp</itemPath>
+      <itemPath>src/UATokenizer/src/UATokenizer.cpp</itemPath>
+      <itemPath>src/client.cpp</itemPath>
+      <itemPath>src/main.cpp</itemPath>
+      <itemPath>src/server/src/protocol.cpp</itemPath>
+      <itemPath>src/server.cpp</itemPath>
+      <itemPath>src/server/src/sockets.cpp</itemPath>
+      <itemPath>src/common/src/uadet2.cpp</itemPath>
+      <itemPath>src/server/src/utils.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -42,43 +44,43 @@
                      displayName="FileInputReader Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>FileInputReader/test/fileInputReaderTest.cpp</itemPath>
-        <itemPath>FileInputReader/test/fileInputReaderTest.h</itemPath>
-        <itemPath>FileInputReader/test/fileInputReaderTestRunner.cpp</itemPath>
+        <itemPath>src/FileInputReader/test/fileInputReaderTest.cpp</itemPath>
+        <itemPath>src/FileInputReader/test/fileInputReaderTest.h</itemPath>
+        <itemPath>src/FileInputReader/test/fileInputReaderTestRunner.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4"
                      displayName="NaiveBayesClassifier Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>NaiveBayessClassifier/test/CMakeLists.txt</itemPath>
-        <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp</itemPath>
-        <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTest.h</itemPath>
-        <itemPath>NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp</itemPath>
+        <itemPath>src/NaiveBayessClassifier/test/CMakeLists.txt</itemPath>
+        <itemPath>src/NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp</itemPath>
+        <itemPath>src/NaiveBayessClassifier/test/naiveBayesClassifierTest.h</itemPath>
+        <itemPath>src/NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f3"
                      displayName="NgramBuilder Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>NgramBuilder/test/ngramBuilderTest.cpp</itemPath>
-        <itemPath>NgramBuilder/test/ngramBuilderTest.h</itemPath>
-        <itemPath>NgramBuilder/test/ngramBuilderTestRunner.cpp</itemPath>
+        <itemPath>src/NgramBuilder/test/ngramBuilderTest.cpp</itemPath>
+        <itemPath>src/NgramBuilder/test/ngramBuilderTest.h</itemPath>
+        <itemPath>src/NgramBuilder/test/ngramBuilderTestRunner.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f5"
                      displayName="ProgramConfig Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>common/test/CMakeLists.txt</itemPath>
-        <itemPath>common/test/programConfigTest.cpp</itemPath>
-        <itemPath>common/test/programConfigTest.h</itemPath>
-        <itemPath>common/test/programConfigTestRunner.cpp</itemPath>
+        <itemPath>src/common/test/CMakeLists.txt</itemPath>
+        <itemPath>src/common/test/programConfigTest.cpp</itemPath>
+        <itemPath>src/common/test/programConfigTest.h</itemPath>
+        <itemPath>src/common/test/programConfigTestRunner.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f2"
                      displayName="UATokenizer Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>UATokenizer/test/uaTokenizerTest.cpp</itemPath>
-        <itemPath>UATokenizer/test/uaTokenizerTest.h</itemPath>
-        <itemPath>UATokenizer/test/uaTokenizerTestRunner.cpp</itemPath>
+        <itemPath>src/UATokenizer/test/uaTokenizerTest.cpp</itemPath>
+        <itemPath>src/UATokenizer/test/uaTokenizerTest.h</itemPath>
+        <itemPath>src/UATokenizer/test/uaTokenizerTestRunner.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -113,143 +115,14 @@
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath>dist/uadet2</executablePath>
+          <ccTool flags="0">
+          </ccTool>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
           <preBuildCommand>cmake  .</preBuildCommand>
         </preBuild>
       </makefileType>
-      <item path="FileInputReader/src/FileInputReader.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>FileInputReader/test</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="FileInputReader/test/fileInputReaderTest.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="FileInputReader/test/fileInputReaderTestRunner.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="NaiveBayessClassifier/src/NaiveBayessClassifier.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>NaiveBayessClassifier/test</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="NgramBuilder/src/NgramBuilder.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>NaiveBayessClassifier/test</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="NgramBuilder/test/ngramBuilderTest.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="NgramBuilder/test/ngramBuilderTestRunner.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="UATokenizer/src/UATokenizer.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>NaiveBayessClassifier/test</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="UATokenizer/test/uaTokenizerTest.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="UATokenizer/test/uaTokenizerTestRunner.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="client.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="common/src/ProgramConfig.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="common/src/uadet2.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <item path="common/test/programConfigTest.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="common/test/programConfigTestRunner.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
       <folder path="TestFiles/f5">
         <cTool>
           <incDir>
@@ -260,29 +133,169 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
-      <item path="main.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/FileInputReader/src/FileInputReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>src/FileInputReader/test</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/FileInputReader/test/fileInputReaderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="server.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/FileInputReader/test/fileInputReaderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="server/src/protocol.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/NaiveBayessClassifier/src/NaiveBayessClassifier.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>src/NaiveBayessClassifier/test</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/NaiveBayessClassifier/test/naiveBayesClassifierTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/NaiveBayessClassifier/test/naiveBayesClassifierTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/NgramBuilder/src/NgramBuilder.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>src/NaiveBayessClassifier/test</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/NgramBuilder/test/ngramBuilderTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
         <ccTool flags="0">
           <incDir>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
-      <item path="server/src/sockets.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/NgramBuilder/test/ngramBuilderTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
         <ccTool flags="0">
           <incDir>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
-      <item path="server/src/utils.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/UATokenizer/src/UATokenizer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>src/NaiveBayessClassifier/test</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/UATokenizer/test/uaTokenizerTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/UATokenizer/test/uaTokenizerTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/common/src/FileLog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/common/src/FileLog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/common/src/ProgramConfig.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/common/src/uadet2.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/common/test/programConfigTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/common/test/programConfigTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/server.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/server/src/protocol.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/server/src/sockets.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="src/server/src/utils.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
           <incDir>
             <pElem>.</pElem>
