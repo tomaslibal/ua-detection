@@ -15,8 +15,10 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <sstream>
 
 #include "common/src/ProgramConfig.h"
+#include "common/src/FileLog.h"
 
 /*
  * Prints the error message and exits the program with the implementation
@@ -50,6 +52,13 @@ int main(int argc, char** argv) {
      * };
      */
     struct hostent *server;
+    
+    /*
+     * Initialize the file logger 
+     */
+    FileLog logger;  
+    logger.setPath("./uadet2.client.log.txt");
+    logger.log("Initializing Client");
 
     /*
      * Client Config
@@ -61,17 +70,29 @@ int main(int argc, char** argv) {
 
     confCtrl.update(conf);
 
+    //
+    std::string argc_as_string = static_cast<std::ostringstream*>( &(std::ostringstream() << (argc-1)) )->str();
+    logger.log("Got " + argc_as_string + " arguments");
+    
     // uadet2cli hostname portno command
     if (argc == 4) {
         command = std::string(argv[3]);
         portno = atoi(argv[2]);
         server = gethostbyname(argv[1]);
+        
+        logger.log(std::string(argv[1]));
+        logger.log(std::string(argv[2]));
+        logger.log(command);
     } else if (argc == 2) {
     // uadet2cli command
         command = std::string(argv[1]);
         portno = conf.portno;
         server = gethostbyname(conf.hostname.c_str());
+        
+        logger.log(command);
     } else {
+        logger.log("Invalid call without required arguments");
+        
         std::cerr << "Usage: " << std::endl << "    " << argv[0] << " [<hostname> <port>] <command>" << std::endl;
         std::cerr << std::endl << "Example:" << std::endl;
         std::cerr << "    " << "uadet2cli 'eval mobile Mozilla/5.0 Linux Android'" << std::endl;
@@ -82,11 +103,13 @@ int main(int argc, char** argv) {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) 
     {
+        logger.log("ERROR opening socket");
         error("ERROR opening socket");
     }
 
     if (server == NULL)
     {
+        logger.log("ERROR, no such host");
         error("ERROR, no such host");
     }
 
@@ -97,8 +120,8 @@ int main(int argc, char** argv) {
           server->h_length);
     serv_addr.sin_port = htons(portno);
 
-    if (::connect(sockfd,(const sockaddr*) &serv_addr,sizeof(serv_addr)) < 0)
-    {
+    if (::connect(sockfd,(const sockaddr*) &serv_addr,sizeof(serv_addr)) < 0) {        
+        logger.log("ERROR connecting");
         error("ERROR connecting");
     }
 
@@ -106,21 +129,24 @@ int main(int argc, char** argv) {
 
     n = write(sockfd,command.data(),command.length());
 
-    if (n < 0)
-    {
+    if (n < 0) {
+        logger.log("ERROR writing to socket");
         error("ERROR writing to socket");
     }
 
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
 
-    if (n < 0)
-    {
+    if (n < 0) {
+        logger.log("ERROR reading from socket");
         error("ERROR reading from socket");
     }
-
+    
+    logger.log("Received response from the server");
+    logger.log(std::string(buffer));
     std::cout << buffer << std::endl;
 
+    logger.log("Exiting from main");
     return 0;
 }
 
