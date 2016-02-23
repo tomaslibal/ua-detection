@@ -20,7 +20,7 @@ int create_socket_inet_stream() {
     return sockfd;
 }
 
-void wait_and_accept(sockaddr_in* cli_addr, int insockfd, function<void ()>& exit_callback, unique_lock<mutex>& signal_exit, NaiveBayessClassifier& nbc) {
+void evaluate_incoming_request(sockaddr_in* cli_addr, int insockfd, function<void ()>& exit_callback, unique_lock<mutex>& signal_exit, NaiveBayessClassifier& nbc) {
     socklen_t clilen;
     char buffer[256];
     int n;

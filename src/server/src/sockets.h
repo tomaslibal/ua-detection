@@ -26,7 +26,7 @@
 
 int create_socket_inet_stream();
 
-void wait_and_accept(sockaddr_in* cli_addr, int insockfd, std::function<void ()>& exit_callback, std::unique_lock<std::mutex>& signal_exit, NaiveBayessClassifier& nbc);
+void evaluate_incoming_request(sockaddr_in* cli_addr, int insockfd, std::function<void ()>& exit_callback, std::unique_lock<std::mutex>& signal_exit, NaiveBayessClassifier& nbc);
 
 #endif /* SOCKETS_H */
 

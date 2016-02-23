@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
      * in a detached state so it should not block other requests.
      */
     function<void (int)> worker2 = [&cli_addr, &exitCallback, &lck, &nb](int in_sockfd) {
-        wait_and_accept(&cli_addr, in_sockfd, exitCallback, lck, nb);
+        evaluate_incoming_request(&cli_addr, in_sockfd, exitCallback, lck, nb);
     };
     
     while(1) {
