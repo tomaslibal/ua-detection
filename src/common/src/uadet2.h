@@ -42,6 +42,7 @@ private:
     std::string msg;
 };
 
+void strsplit(const std::string& str, char delimiter, std::vector<std::string>& tokens);
 
 #endif	/* UADET2_H */
 

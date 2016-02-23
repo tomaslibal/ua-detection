@@ -37,23 +37,12 @@ using std::mutex;
 using std::thread;
 using std::string;
 
-static int sockfd;
-
 /**
- * Splits a string by given delimiter and returns a vector of string tokens
- * @param std::string& The string to be split
- * @param char A character delimiter
- * @param std::vector<std::string>& Vector container for the split tokens
- * @returns void
+ * Static socket filedescriptor variable so that it can be referenced from the signal handler function.
+ * 
+ * @param int sockfd
  */
-void strsplit(const std::string& str, char delimiter, std::vector<std::string>& tokens) {
-    std::stringstream ss(str);
-    std::string token;
-
-    while (std::getline(ss, token, delimiter)) {
-        tokens.push_back(token);
-    }
-}
+static int sockfd;
 
 /*
  * 
@@ -66,10 +55,10 @@ int main(int argc, char** argv) {
     socklen_t clilen;
     clilen = sizeof(cli_addr);
 
-	FileLog logger;
-	logger.log("Initializing Server");
+    FileLog logger;
+    logger.log("Initializing Server");
 
-	/*
+    /*
      * Get the program config
      */
     string serverConfigFile = "src/common/config/server.txt";
@@ -77,7 +66,7 @@ int main(int argc, char** argv) {
     ProgramConfig confCtrl(serverConfigFile);
 
     confCtrl.update(conf);
-	logger.log("Config file read and updated");
+    logger.log("Config file read and updated");
 
     char buffer[256];
     /*
@@ -86,8 +75,8 @@ int main(int argc, char** argv) {
     sockfd = create_socket_inet_stream();
 
     if (sockfd < 0) {
-            error("Creating a socket failed");
-		logger.log("Creating a socket failed");
+        error("Creating a socket failed");
+        logger.log("Creating a socket failed");
     }
 
     /*

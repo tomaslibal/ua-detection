@@ -1,6 +1,7 @@
 #include "./uadet2.h"
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -28,5 +29,21 @@ void parse_args(int argc, char** argv, UadetSettings& settings) {
         settings.ua = ua_arg.substr(n+1);
     } else {
         throw InvalidArgsException("Cannot parse out the user-agent string");
+    }
+}
+
+/**
+ * Splits a string by given delimiter and returns a vector of string tokens
+ * @param std::string& The string to be split
+ * @param char A character delimiter
+ * @param std::vector<std::string>& Vector container for the split tokens
+ * @returns void
+ */
+void strsplit(const std::string& str, char delimiter, std::vector<std::string>& tokens) {
+    std::stringstream ss(str);
+    std::string token;
+
+    while (std::getline(ss, token, delimiter)) {
+        tokens.push_back(token);
     }
 }
