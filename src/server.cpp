@@ -102,6 +102,7 @@ int main(int argc, char** argv) {
      */
     string dataFile = conf.datafile;
 
+    logger.log("Using " + conf.datafile + " datafile");
 
     /* 
      * A lambda function that takes a string line. It expects the line to have
@@ -135,7 +136,12 @@ int main(int argc, char** argv) {
      * to the previous lambda.
      */
     FileInputReader reader;
+    
+    logger.log("Start: reading the datafile");
+    
     reader.readLines(dataFile, add_line);
+    
+    logger.log("Finish: reading the datafile");
     
     /*
      * Prints summary of number of categories and n-grams that have been read.
@@ -148,6 +154,8 @@ int main(int argc, char** argv) {
     
     bzero((char *) &serv_addr, sizeof(serv_addr));
     portno = conf.portno;
+    
+    logger.log("Using port number " + std::to_string(portno));
     
     serv_addr.sin_family = AF_INET;
     // host address: INADDR_ANY = 0.0.0.0?
@@ -169,6 +177,7 @@ int main(int argc, char** argv) {
         error("binding failed");
     }
     
+    logger.log("Binding to the socket successful");
     cout << "binding to the socket successful on port " << portno << endl;
     
     int backlogsize = 5;
@@ -178,8 +187,10 @@ int main(int argc, char** argv) {
     int ls = listen(sockfd,backlogsize);
 
     if (ls < 0) {
-            error("cannot accept connection");
-    }    
+	error("cannot accept connection");
+    }
+    
+    logger.log("Now listening to incoming connections");
 
     mutex signal_exit;
     std::unique_lock<mutex> lck (signal_exit);
@@ -212,9 +223,13 @@ int main(int argc, char** argv) {
         /*
          * waits until an incoming connection is made
          */
+	logger.log("Waiting for a connection");
+	
         int in_sockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
 
-        if (in_sockfd < 0) { perror("in_sockfd < 0"); }       
+        if (in_sockfd < 0) { perror("in_sockfd < 0"); }
+        
+        logger.log("Incoming connection...Creating a new thread to handle it");
  
         thread a_thread (worker2, in_sockfd);
         a_thread.detach();
