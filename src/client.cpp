@@ -70,8 +70,8 @@ int main(int argc, char** argv) {
 
     confCtrl.update(conf);
 
-    //
-    std::string argc_as_string = static_cast<std::ostringstream*>( &(std::ostringstream() << (argc-1)) )->str();
+    //    
+    std::string argc_as_string = std::to_string(argc);
     logger.log("Got " + argc_as_string + " arguments");
     
     // uadet2cli hostname portno command
