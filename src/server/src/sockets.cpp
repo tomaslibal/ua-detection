@@ -50,16 +50,15 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
     n = read(insockfd,buffer,BUFFERSIZE);
 
     if (n < 0) perror("ERROR reading from socket");
-
-    std::vector<std::string>* input = process_message(buffer);
-
+    
     if (strcmp(buffer, "exit\n") == 0) {
         signal_exit.try_lock();
-        delete input;
         close(insockfd);
         exit_callback();
         return;
     }
+
+    std::vector<std::string>* input = process_message(buffer);
 
     /*
      * If token[0] == "eval_one" then evaluate the given user-agent (token[2]) using
