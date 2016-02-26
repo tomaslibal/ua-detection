@@ -43,7 +43,7 @@ void evaluate_incoming_request(int insockfd, std::function<void ()>& exit_callba
  * Classifies the given data using NaiveBayessClassifier
  * 
  */
-void classify_data();
+std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc);
 
 #endif /* SOCKETS_H */
 

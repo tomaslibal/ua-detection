@@ -157,3 +157,8 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
     delete input;
     return;
 }
+
+std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc)
+{
+    return nullptr;
+}
