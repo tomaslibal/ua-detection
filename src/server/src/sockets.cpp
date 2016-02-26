@@ -78,6 +78,8 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
 {
     std::string* p_str = nullptr;
     
+    std::ostringstream pstrs;
+    
     /*
      * If token[0] == "eval_one" then evaluate the given user-agent (token[2]) using
      * the naive bayess classifier for the specified category (token[1])
@@ -85,7 +87,6 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
     if (input.at(0) == "eval_one") {
         double p = nbc.classify(input.at(2), input.at(1));
 
-        std::ostringstream pstrs;
         pstrs << p;
         std::string str = pstrs.str();
 	p_str = new std::string(str);
@@ -101,7 +102,7 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
 	 *     cateogory, eval_result
 	 */
 	std::map<double, std::string, std::greater<double>> results;
-        std::ostringstream pstrs;
+        
         double threshold = 0.75;
         double highest_prob = 0;
         double p_category = 0;
