@@ -59,22 +59,41 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
     }
 
     std::vector<std::string>* input = process_message(buffer);
+    
+    std::string* output = classify_data(*input, nbc);
+    
+    n = write(insockfd, output->data(), output->length());
+    
+    delete output;
+    
+    if (n < 0) perror("ERROR writing to socket");
+    close(insockfd);
+      
+    bzero(buffer, BUFFERSIZE);
+    delete input;
+    return;
+}
 
+std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc)
+{
+    std::string* p_str = nullptr;
+    
     /*
      * If token[0] == "eval_one" then evaluate the given user-agent (token[2]) using
      * the naive bayess classifier for the specified category (token[1])
      */
-    if (input->at(0) == "eval_one") {
-        double p = nbc.classify(input->at(2), input->at(1));
+    if (input.at(0) == "eval_one") {
+        double p = nbc.classify(input.at(2), input.at(1));
 
         std::ostringstream pstrs;
         pstrs << p;
         std::string str = pstrs.str();
-        n = write(insockfd, str.data(), str.length());
+	p_str = new std::string(str);
+	return p_str;
     // If token[0] == "eval" then:
     // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
     // was the most probable or not
-    } else if (input->at(0) == "eval") {
+    } else if (input.at(0) == "eval") {
         std::vector<std::string>* categories = nbc.get_categories();
 	
 	/*
@@ -90,12 +109,12 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
         
         for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
             std::string category = *it;
-            double p = nbc.classify(input->at(2), category);
+            double p = nbc.classify(input.at(2), category);
         
             if (p > highest_prob) {
                 highest_prob = p;
                 
-                if (category == input->at(1)) {
+                if (category == input.at(1)) {
                     has_highest_prob = true;
                     p_category = p;
                 } else {
@@ -133,31 +152,21 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
 	 * Temporarily disable this evaluation as the multiple labels change has broken this
 	 * because this was not previously made for a multi-class classification.
 	 */
-        pstrs << "UA is in " << input->at(1) << ":" << result << std::endl;
+        pstrs << "UA is in " << input.at(1) << ":" << result << std::endl;
         
         std::string str = pstrs.str();
-        n = write(insockfd, str.data(), str.length());
-        
+	p_str = new std::string(str);
+	        
         delete categories;
-    } else if (input->at(0) == "add") {
-        std::string category = input->at(1);
-        std::string ua_agent = input->at(2);
+	
+	return p_str;
+    } else if (input.at(0) == "add") {
+        std::string category = input.at(1);
+        std::string ua_agent = input.at(2);
         
         nbc.add_data(ua_agent, category);
-        n = write(insockfd, "added OK", 8*sizeof(char));
+	return new std::string("added OK");
     } else {
-        n = write(insockfd, "\nCommand not understood", 23);
+      return new std::string("Command not understood");
     }
-    
-    if (n < 0) perror("ERROR writing to socket");
-    close(insockfd);
-      
-    bzero(buffer, BUFFERSIZE);
-    delete input;
-    return;
-}
-
-std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc)
-{
-    return nullptr;
 }
