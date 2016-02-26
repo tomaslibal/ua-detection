@@ -88,8 +88,8 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
         double p = nbc.classify(input.at(2), input.at(1));
 
         pstrs << p;
-        std::string str = pstrs.str();
-	p_str = new std::string(str);
+        
+	p_str = new std::string(pstrs.str());
 	return p_str;
     // If token[0] == "eval" then:
     // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
@@ -154,9 +154,8 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
 	 * because this was not previously made for a multi-class classification.
 	 */
         pstrs << "UA is in " << input.at(1) << ":" << result << std::endl;
-        
-        std::string str = pstrs.str();
-	p_str = new std::string(str);
+                
+	p_str = new std::string(pstrs.str());
 	        
         delete categories;
 	
