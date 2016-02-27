@@ -20,6 +20,8 @@
 #include "common/src/ProgramConfig.h"
 #include "common/src/FileLog.h"
 
+#define BUFFERSIZE 2048
+
 /*
  * Prints the error message and exits the program with the implementation
  * dependent EXIT_FAILURE exit code.
@@ -125,7 +127,7 @@ int main(int argc, char** argv) {
         error("ERROR connecting");
     }
 
-    char buffer[256];
+    char buffer[BUFFERSIZE];
 
     n = write(sockfd,command.data(),command.length());
 
@@ -134,8 +136,8 @@ int main(int argc, char** argv) {
         error("ERROR writing to socket");
     }
 
-    bzero(buffer,256);
-    n = read(sockfd,buffer,255);
+    bzero(buffer,BUFFERSIZE);
+    n = read(sockfd,buffer,BUFFERSIZE);
 
     if (n < 0) {
         logger.log("ERROR reading from socket");
