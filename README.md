@@ -44,6 +44,10 @@ bot:0.00210765
 blackberry:0.000911062
 ```
 
+### Learning model
+
+Let *x* be new input, and let *d* be all previously classified data in *N* different classes. This program then calculates *N* probabilities *p_i=(x|d_n)* where *d_n* are all datapoints in the given class.
+
 ### Build the project from source
 
 Currently no binaries are distributed. Here's a manual how to build it from the source code.
