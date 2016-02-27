@@ -31,6 +31,7 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
     FileLog logger;
     logger.setPath(std::string("eval.") + std::to_string(insockfd) + std::string(".log.txt"));
     logger.log("Got a request");
+    
     /**
      * 
      */
@@ -86,6 +87,7 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
 std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc)
 {
     std::string* p_str = nullptr;
+    std::string aux;
     
     std::ostringstream pstrs;
     
@@ -137,33 +139,16 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
         }     
         
         /*
-	 * Now results are in order by the highest probability descending
+	 * Now results are in order by the highest probability descending. Print them with true/false flags
+	 * signifying if the value exceeded the threshold or not.
 	 * 
-	 */
+	 */	
 	for (auto& item: results) {
-	    pstrs << item.second << ":" << item.first << std::endl;
+	    aux = item.first > threshold ? "true" : "false";
+	    
+	    pstrs << item.second << ":" << item.first << "," << aux << std::endl;
 	}
-                
-        // If the given category (output->at(1)) has highest probability, then
-        // is_in_category(UA, category) = maybe
-        // If is_in_category == maybe and p(category|UA) > threshold then is_in_category = true
-        std::string result;
-	double percentile = get_percentile(p_category, results);
-        
-        if (percentile > 60.0 || has_highest_prob) {
-	  result = "maybe";
-	}
-	
-        if (p_category > threshold) {
-	    result = "true";
-	}	
-        
-        /*
-	 * Temporarily disable this evaluation as the multiple labels change has broken this
-	 * because this was not previously made for a multi-class classification.
-	 */
-        pstrs << "UA is in " << input.at(1) << ":" << result << std::endl;
-                
+
 	p_str = new std::string(pstrs.str());
 	        
         delete categories;
