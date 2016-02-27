@@ -29,6 +29,21 @@ class the input may belong.
 
 In the figure above you can see a sample result of evaluating a user-agent string constrained to top 10 labels. Features 3-10 were evaluated extremely unlikely. This data set had 17 features in total and only two features evaluated positively as expected for the given input.
 
+The scores for each of the first 10 classes which are shown in the figure, were as follows:
+
+```
+android:43.3779
+mobile:6.62649
+windows:0.0973025
+macos:0.0525497
+linux:0.0281889
+opera:0.0221725
+ipad:0.0079283
+unknown:0.00355648
+bot:0.00210765
+blackberry:0.000911062
+```
+
 ### Build the project from source
 
 Currently no binaries are distributed. Here's a manual how to build it from the source code.
