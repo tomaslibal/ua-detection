@@ -1,6 +1,7 @@
 #include "sockets.h"
 #include "utils.h"
 #include "protocol.h"
+#include "../../common/src/FileLog.h"
 
 #include <iostream>
 #include <sstream>
@@ -26,6 +27,10 @@ int create_socket_inet_stream() {
  * 
  */
 void evaluate_incoming_request(int insockfd, function< void () >& exit_callback, unique_lock< mutex >& signal_exit, NaiveBayessClassifier& nbc) {
+  
+    FileLog logger;
+    logger.setPath(std::string("eval.") + std::to_string(insockfd) + std::string(".log.txt"));
+    logger.log("Got a request");
     /**
      * 
      */
@@ -57,12 +62,16 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
         exit_callback();
         return;
     }
+    
+    logger.log(std::string("Request was: ") + std::string(buffer));
 
     std::vector<std::string>* input = process_message(buffer);
     
     std::string* output = classify_data(*input, nbc);
     
-    n = write(insockfd, output->data(), output->length());
+    logger.log(std::string("Output was: " + *output));
+    
+    n = write(insockfd, output->data(), output->length() * sizeof(char));
     
     delete output;
     
