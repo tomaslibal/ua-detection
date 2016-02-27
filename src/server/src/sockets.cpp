@@ -115,28 +115,14 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
 	std::map<double, std::string, std::greater<double>> results;
         
         double threshold = 0.75;
-        double highest_prob = 0;
-        double p_category = 0;
         bool has_highest_prob = false;
         
         for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
             std::string category = *it;
             double p = nbc.classify(input.at(2), category);
-        
-            if (p > highest_prob) {
-                highest_prob = p;
-                
-                if (category == input.at(1)) {
-                    has_highest_prob = true;
-                    p_category = p;
-                } else {
-                    has_highest_prob = false;
-                }
-            }
-            
-            //pstrs << category << ":" << p << std::endl;
+
 	    results.insert(std::pair<double, std::string>(p, category));
-        }     
+        }
         
         /*
 	 * Now results are in order by the highest probability descending. Print them with true/false flags
