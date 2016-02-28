@@ -1,20 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
 project (uadet2 CXX)
 
-file(GLOB ALL_SRC
-    "src/main.cpp"
-    "src/common/src/*.h"
-    "src/common/src/*.cpp"
-    "src/NaiveBayessClassifier/src/*.h"
-    "src/NaiveBayessClassifier/src/*.cpp"
-    "src/NgramBuilder/src/*.h"
-    "src/NgramBuilder/src/*.cpp"
-    "src/FileInputReader/src/*.h"
-    "src/FileInputReader/src/*.cpp"
-    "src/UATokenizer/src/*.h"
-    "src/UATokenizer/src/*.cpp"
-)
-
 file(GLOB CLIENT_SRC
     "src/client.cpp"
     "src/common/src/*.h"
@@ -37,10 +23,6 @@ file(GLOB SERVER_SRC
     "src/UATokenizer/src/*.h"
     "src/UATokenizer/src/*.cpp"
 )
-
-add_executable(uadet2 ${ALL_SRC})
-set_property(TARGET uadet2 PROPERTY CXX_STANDARD 11)
-set_property(TARGET uadet2 PROPERTY CXX_STANDARD_REQUIRED ON)
 
 add_executable(uadet2d ${SERVER_SRC})
 add_executable(uadet2cli ${CLIENT_SRC})
