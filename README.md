@@ -48,6 +48,25 @@ blackberry:0.000911062
 
 Let *x* be new input, and let *d* be all previously classified data in *N* different classes. This program then calculates *N* probabilities *p_i=(x|d_n)* where *d_n* are all datapoints in the given class.
 
+The algorithm for classification is similar to this.
+
+```
+    classify(String userAgent, String category)
+        Array<String> ngrams = getNgramsFromUserAgentString(userAgent)
+        double probability = 0
+        double category_freq = getCategoryFreq(category)
+        
+        for (String ngram in ngrams)
+            p_ngram = getGlobalNgramProbability(ngram)
+            p_ngram_in_category = getNgramProbability(ngram, category)
+            if (p_ngram_in_category > 0)
+                probability += log(p_ngram_in_category / p_ngram)
+        
+        return exp( probability + log( category_freq ) )
+```
+
+This algorithm can be found in [double NaiveBayessClassifier::classify()](/src/NaiveBayessClassifier/src/NaiveBayessClassifier.cpp).
+
 ### Build the project from source
 
 Currently no binaries are distributed. Here's a manual how to build it from the source code.
