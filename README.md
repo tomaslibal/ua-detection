@@ -32,6 +32,8 @@ In the figure above you can see a sample result of evaluating a user-agent strin
 The scores for each of the first 10 classes which are shown in the figure, were as follows:
 
 ```
+Mozilla/5.0 (Linux; Android 5.1; XT1526 Build/LPI23.29-18-S.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile
+
 android:43.3779
 mobile:6.62649
 windows:0.0973025
