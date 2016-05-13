@@ -55,3 +55,6 @@ add_subdirectory(src/UATokenizer/test)
 
 # Common Tests
 add_subdirectory(src/common/test)
+
+# Network Tests
+add_subdirectory(src/Network/test)
