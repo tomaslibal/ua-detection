@@ -6,6 +6,7 @@ file(GLOB CLIENT_SRC
     "src/common/src/*.h"
     "src/common/src/*.cpp"
     "src/FileInputReader/src/*"
+    "src/Network/src/*"
 )
 
 file(GLOB SERVER_SRC    
