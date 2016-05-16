@@ -28,8 +28,22 @@
  *
  */
 int main(int argc, char** argv) {
-    int sockfd, portno, n;
+    /*
+     * File descriptor for the TCP open_connection
+     * 
+     */
+    int sockfd;
+    
+    /*
+     * Port number of the host machine to which the client is connecting
+     * 
+     */
+    int portno;
 
+    /*
+     * The client program receives a command from the user which is read into this string
+     * 
+     */
     std::string command;
 
     /*
@@ -47,7 +61,14 @@ int main(int argc, char** argv) {
     struct hostent *server = nullptr;
     
     /*
-     * Initialize the file logger 
+     * Delegate class to handle opening the TCP open_connection
+     * 
+     */
+    Network network;
+    
+    /*
+     * Initialize the file logger by setting the output log path to the current working directory
+     * 
      */
     FileLog logger;  
     logger.setPath("./uadet2.client.log.txt");
@@ -63,11 +84,13 @@ int main(int argc, char** argv) {
 
     confCtrl.update(conf);
 
-    //    
-    std::string argc_as_string = std::to_string(argc);
-    logger.log("Got " + argc_as_string + " arguments");
+    logger.log("Got " + std::to_string(argc) + " arguments");
     
-    // uadet2cli hostname portno command
+    /*
+     * When argc == 4 the we assume this order of arguments:
+     * 
+     * uadet2cli hostname portno command
+     */
     if (argc == 4) {
         command = std::string(argv[3]);
         portno = atoi(argv[2]);
@@ -77,13 +100,20 @@ int main(int argc, char** argv) {
         logger.log(std::string(argv[2]));
         logger.log(command);
     } else if (argc == 2) {
-    // uadet2cli command
+      /*
+       * Otherwise the assumed order of arguments is this:
+       * 
+       * uadet2cli command
+       */
         command = std::string(argv[1]);
         portno = conf.portno;
         server = gethostbyname(conf.hostname.c_str());
         
         logger.log(command);
     } else {
+      /*
+       * If argc != 4 && argc != 2 then throw an error and exit the program
+       */
         logger.log("Invalid call without required arguments");
         
         std::cerr << "Usage: " << std::endl << "    " << argv[0] << " [<hostname> <port>] <command>" << std::endl;
@@ -93,8 +123,6 @@ int main(int argc, char** argv) {
         exit(EXIT_SUCCESS);
     }
     
-    Network network;
-    
     sockfd = network.open_connection(server);
     
     if (sockfd < 0) 
@@ -103,15 +131,24 @@ int main(int argc, char** argv) {
         error("ERROR opening socket");
     }
 
+    /*
+     * Buffer for passing messages via TCP
+     */
     char buffer[BUFFERSIZE];
 
-    n = write(sockfd,command.data(),command.length());
+    /*
+     * Send over the command supplied by the user
+     */
+    int n = write(sockfd,command.data(),command.length());
 
     if (n < 0) {
         logger.log("ERROR writing to socket");
         error("ERROR writing to socket");
     }
 
+    /*
+     * Clear the buffer and read the response into the same buffer
+     */
     bzero(buffer,BUFFERSIZE);
     n = read(sockfd,buffer,BUFFERSIZE);
 
@@ -125,9 +162,7 @@ int main(int argc, char** argv) {
     std::cout << buffer << std::endl;
 
     logger.log("Exiting from main");
-    
-    //delete server;
-    
+        
     return 0;
 }
 
