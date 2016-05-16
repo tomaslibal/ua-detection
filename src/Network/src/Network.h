@@ -11,6 +11,8 @@ class Network {
  private:
   int sockfd;
   int portno;
+  struct sockaddr_in serv_addr;
+  struct hostent *server;
 };
 
 #endif
