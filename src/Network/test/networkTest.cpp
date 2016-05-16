@@ -25,7 +25,9 @@ void networkTest::tearDown() {
 
 void networkTest::testPortNoSetAndGet()
 {
-
+  network->set_port_no(42);
+  
+  CPPUNIT_ASSERT(network->get_port_no() == 42);
 }
 
 
