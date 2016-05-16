@@ -20,6 +20,7 @@
 #include "common/src/ProgramConfig.h"
 #include "common/src/FileLog.h"
 #include "common/src/uadet2.h"
+#include "Network/src/Network.h"
 
 #define BUFFERSIZE 2048
 
@@ -28,7 +29,6 @@
  */
 int main(int argc, char** argv) {
     int sockfd, portno, n;
-    struct sockaddr_in serv_addr;
 
     std::string command;
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
      *     #define h_addr h_addr_list[0] // address for backward compatibility
      * };
      */
-    struct hostent *server;
+    struct hostent *server = nullptr;
     
     /*
      * Initialize the file logger 
@@ -92,30 +92,15 @@ int main(int argc, char** argv) {
         std::cerr << "    " << "uadet2cli localhost 10128 'eval mobile Mozilla/5.0 Linux Android'" << std::endl;
         exit(EXIT_SUCCESS);
     }
-
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    
+    Network network;
+    
+    sockfd = network.open_connection(server);
+    
     if (sockfd < 0) 
     {
         logger.log("ERROR opening socket");
         error("ERROR opening socket");
-    }
-
-    if (server == NULL)
-    {
-        logger.log("ERROR, no such host");
-        error("ERROR, no such host");
-    }
-
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    bcopy((char *)server->h_addr,
-          (char *)&serv_addr.sin_addr.s_addr,
-          server->h_length);
-    serv_addr.sin_port = htons(portno);
-
-    if (::connect(sockfd,(const sockaddr*) &serv_addr,sizeof(serv_addr)) < 0) {        
-        logger.log("ERROR connecting");
-        error("ERROR connecting");
     }
 
     char buffer[BUFFERSIZE];
@@ -140,6 +125,9 @@ int main(int argc, char** argv) {
     std::cout << buffer << std::endl;
 
     logger.log("Exiting from main");
+    
+    //delete server;
+    
     return 0;
 }
 
