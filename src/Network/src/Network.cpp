@@ -1,4 +1,5 @@
 #include "Network.h"
+#include "../../common/src/uadet2.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>

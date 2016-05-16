@@ -3,6 +3,7 @@ file(GLOB network
     "./*"
     "../src/*"
     "../../common/src/FileLog.*"
+    "../../common/src/uadet2.*"
 )
 add_executable(network ${network})
 TARGET_LINK_LIBRARIES(network cppunit)
