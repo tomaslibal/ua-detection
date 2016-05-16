@@ -7,6 +7,8 @@
 
 #include "networkTest.h"
 
+#include "../../common/src/FileLog.h"
+
 CPPUNIT_TEST_SUITE_REGISTRATION(networkTest);
 
 networkTest::networkTest() {
@@ -28,6 +30,17 @@ void networkTest::testPortNoSetAndGet()
   network->set_port_no(42);
   
   CPPUNIT_ASSERT(network->get_port_no() == 42);
+}
+
+void networkTest::testFileLoggerSetAndGet()
+{
+  CPPUNIT_ASSERT(network->get_file_log() == nullptr);
+  
+  FileLog fileLog;
+  
+  network->set_file_log(&fileLog);
+  
+  CPPUNIT_ASSERT(network->get_file_log() == &fileLog);
 }
 
 

@@ -16,6 +16,7 @@ class networkTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(networkTest);
 
     CPPUNIT_TEST(testPortNoSetAndGet);
+    CPPUNIT_TEST(testFileLoggerSetAndGet);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -28,6 +29,7 @@ public:
 private:
     Network* network;
     void testPortNoSetAndGet();
+    void testFileLoggerSetAndGet();
 };
 
 #endif	/* NETWORKTEST_H */

@@ -56,3 +56,14 @@ int Network::open_connection(struct hostent *host)
     
   return sockfd;
 }
+
+FileLog* Network::get_file_log()
+{
+  return fileLog;
+}
+
+void Network::set_file_log(FileLog* fileLog)
+{
+  this->fileLog = fileLog;
+}
+
