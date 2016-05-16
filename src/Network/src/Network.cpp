@@ -30,19 +30,17 @@ int Network::open_connection(struct hostent *host)
 {
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   
-/*  if (sockfd < 0) 
+  if (sockfd < 0) 
   {
-    logger.log("ERROR opening socket");
-    error("ERROR opening socket");
+    log("ERROR opening socket");
+    //error("ERROR opening socket");
   }
 
   if (server == NULL)
   {
-    logger.log("ERROR, no such host");
-    error("ERROR, no such host");
+    log("ERROR, no such host");
+    //error("ERROR, no such host");
   }
-  
-  */
 
   bzero((char *) serv_addr, sizeof(serv_addr));
   serv_addr->sin_family = AF_INET;
@@ -50,8 +48,8 @@ int Network::open_connection(struct hostent *host)
   serv_addr->sin_port = htons(portno);
 
   if (::connect(sockfd,(const sockaddr*) serv_addr,sizeof(serv_addr)) < 0) {        
- //   logger.log("ERROR connecting");
- //   error("ERROR connecting");
+    log("ERROR connecting");
+    // error("ERROR connecting");
   }
     
   return sockfd;
