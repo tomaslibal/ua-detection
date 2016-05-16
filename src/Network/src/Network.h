@@ -1,6 +1,7 @@
 #ifndef _NETWORK_H_
 #define _NETWORK_H_
 
+#include <iostream>
 #include "../../common/src/FileLog.h"
 
 class Network {
@@ -24,6 +25,8 @@ class Network {
   int portno;
   struct sockaddr_in *serv_addr;
   struct hostent *server;
+  
+  void log(const std::string& msg);
 };
 
 #endif

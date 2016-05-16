@@ -67,3 +67,11 @@ void Network::set_file_log(FileLog* fileLog)
   this->fileLog = fileLog;
 }
 
+void Network::log(const std::string& msg)
+{
+  if (fileLog) {
+    fileLog->log(msg);
+  }
+}
+
+
