@@ -44,5 +44,11 @@ private:
 
 void strsplit(const std::string& str, char delimiter, std::vector<std::string>& tokens);
 
+/*
+ * Prints the error message and exits the program with the implementation
+ * dependent EXIT_FAILURE exit code.
+ */
+void error(const char *msg);
+
 #endif	/* UADET2_H */
 

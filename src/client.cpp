@@ -19,18 +19,9 @@
 
 #include "common/src/ProgramConfig.h"
 #include "common/src/FileLog.h"
+#include "common/src/uadet2.h"
 
 #define BUFFERSIZE 2048
-
-/*
- * Prints the error message and exits the program with the implementation
- * dependent EXIT_FAILURE exit code.
- */
-void error(const char *msg)
-{
-    perror(msg);
-    exit(EXIT_FAILURE);
-}
 
 /*
  *
