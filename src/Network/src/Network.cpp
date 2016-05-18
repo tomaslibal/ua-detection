@@ -33,7 +33,7 @@ int Network::get_port_no()
   return portno;
 }
 
-int Network::open_connection(struct hostent *host)
+int Network::addr_connect(struct hostent *host)
 {
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   

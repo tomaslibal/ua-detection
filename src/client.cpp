@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
         exit(EXIT_SUCCESS);
     }
     
-    sockfd = network.open_connection(server);
+    sockfd = network.addr_connect(server);
     
     if (sockfd < 0) 
     {
