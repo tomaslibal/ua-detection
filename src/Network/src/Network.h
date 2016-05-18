@@ -21,7 +21,6 @@ class Network {
   int  open_connection(struct hostent *host);
  private:
   FileLog *fileLog = nullptr;
-  //struct sockaddr_in *serv_addr = nullptr;
   int sockfd;
   int portno = 10128;
   

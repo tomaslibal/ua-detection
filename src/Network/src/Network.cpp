@@ -52,8 +52,6 @@ int Network::open_connection(struct hostent *host)
   }
   
   sockaddr_in serv_addr; 
-  //serv_addr = new sockaddr_in();
-  //serv_addr->sin_addr = new in_addr();
 
   bzero((char *) &serv_addr, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
@@ -65,8 +63,6 @@ int Network::open_connection(struct hostent *host)
     log(errmsg);
     error(errmsg.c_str());
   }
-    
-  //delete serv_addr;
     
   return sockfd;
 }
