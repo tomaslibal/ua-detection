@@ -23,6 +23,7 @@ file(GLOB SERVER_SRC
     "src/FileInputReader/src/*.cpp"
     "src/UATokenizer/src/*.h"
     "src/UATokenizer/src/*.cpp"
+    "src/Network/src/*"
 )
 
 add_executable(uadet2d ${SERVER_SRC})
