@@ -18,7 +18,7 @@
 
 #define h_addr h_addr_list[0] // address for backward compatibility
 
-int create_socket_inet_stream() {
+int _create_socket_inet_stream() {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         perror("ERROR Opening Socket");
@@ -78,11 +78,11 @@ int Network::addr_connect(struct hostent *host)
   return sockfd;
 }
 
-int Network::addr_listen(struct hostent* host)
+int Network::addr_listen()
 {
   int sockfd;
   
-  sockfd = create_socket_inet_stream();
+  sockfd = _create_socket_inet_stream();
   
   if (sockfd < 0) {
     error("Creating a socket failed");
@@ -114,6 +114,10 @@ int Network::addr_listen(struct hostent* host)
   if (result < 0) {
       error("binding failed");
   }
+  
+  log("Binding to the socket successful");
+  std::cout << "binding to the socket successful on port " << portno << std::endl;
+    
   
   return sockfd;
 }

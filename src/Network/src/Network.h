@@ -23,7 +23,7 @@ class Network {
   /**
    * binds to a port and listens for incoming connections
    */
-  int addr_listen(struct hostent *host);
+  int addr_listen();
  private:
   FileLog *fileLog = nullptr;
   int sockfd;
