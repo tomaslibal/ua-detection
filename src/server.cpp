@@ -28,6 +28,7 @@
 #include "common/src/uadet2.h"
 #include "common/src/ProgramConfig.h"
 #include "common/src/FileLog.h"
+#include "Network/src/Network.h"
 
 using std::function;
 using std::cout;
@@ -69,16 +70,8 @@ int main(int argc, char** argv) {
     logger.log("Config file read and updated");
 
     char buffer[256];
-    /*
-     * Get a new Internet socket
-     */
-    sockfd = create_socket_inet_stream();
-
-    if (sockfd < 0) {
-        error("Creating a socket failed");
-        logger.log("Creating a socket failed");
-    }
-
+    Network network;
+    
     /*
      * catch the ctrl+c interrupt signal
      */
@@ -152,33 +145,11 @@ int main(int argc, char** argv) {
      * Start the network server:
      */
     
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-    portno = conf.portno;
+    network.set_port_no(conf.portno);
+    
+    sockfd = network.addr_listen();
     
     logger.log("Using port number " + std::to_string(portno));
-    
-    serv_addr.sin_family = AF_INET;
-    // host address: INADDR_ANY = 0.0.0.0?
-    // this should be read from the config as well
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(portno);
-    
-    int retries = 12;
-    int result = -1;
-    int wait = 3;
-    
-    while (retries > 0 && (result = ::bind(sockfd, (sockaddr *) &serv_addr, sizeof(serv_addr))) < 0) {
-        retries--;
-        cerr << "error binding, retrying in " << wait << "s..." << endl;
-        std::this_thread::sleep_for(std::chrono::seconds(wait));
-    }
-    
-    if (result < 0) {
-        error("binding failed");
-    }
-    
-    logger.log("Binding to the socket successful");
-    cout << "binding to the socket successful on port " << portno << endl;
     
     int backlogsize = 5;
     /*
