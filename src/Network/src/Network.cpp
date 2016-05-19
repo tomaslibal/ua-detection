@@ -4,16 +4,27 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-
+#include <thread>
 #include <cstring>
+#include <sstream>
+#include <chrono>
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <unistd.h>
-#include <sstream>
+
 
 #define h_addr h_addr_list[0] // address for backward compatibility
+
+int create_socket_inet_stream() {
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        perror("ERROR Opening Socket");
+    }
+    return sockfd;
+}
 
 Network::Network()
 {
@@ -66,6 +77,47 @@ int Network::addr_connect(struct hostent *host)
     
   return sockfd;
 }
+
+int Network::addr_listen(struct hostent* host)
+{
+  int sockfd;
+  
+  sockfd = create_socket_inet_stream();
+  
+  if (sockfd < 0) {
+    error("Creating a socket failed");
+    log("Creating a socket failed");
+  }
+  
+  sockaddr_in serv_addr;
+  
+  bzero((char *) &serv_addr, sizeof(serv_addr));
+  
+  log("Using port number " + std::to_string(portno));
+  
+  serv_addr.sin_family = AF_INET;
+  // host address: INADDR_ANY = 0.0.0.0?
+  // this should be read from the config as well
+  serv_addr.sin_addr.s_addr = INADDR_ANY;
+  serv_addr.sin_port = htons(portno);
+  
+  int retries = 12;
+  int result = -1;
+  int wait = 3;
+  
+  while (retries > 0 && (result = ::bind(sockfd, (sockaddr *) &serv_addr, sizeof(serv_addr))) < 0) {
+      retries--;
+      std::cerr << "error binding, retrying in " << wait << "s..." << std::endl;
+      std::this_thread::sleep_for(std::chrono::seconds(wait));
+  }
+  
+  if (result < 0) {
+      error("binding failed");
+  }
+  
+  return sockfd;
+}
+
 
 FileLog* Network::get_file_log()
 {

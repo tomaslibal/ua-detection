@@ -19,6 +19,11 @@ class Network {
    * opens tcp connection, return the socket file descriptor
    */
   int  addr_connect(struct hostent *host);
+  
+  /**
+   * binds to a port and listens for incoming connections
+   */
+  int addr_listen(struct hostent *host);
  private:
   FileLog *fileLog = nullptr;
   int sockfd;
