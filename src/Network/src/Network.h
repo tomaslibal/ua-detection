@@ -28,6 +28,7 @@ class Network {
   FileLog *fileLog = nullptr;
   int sockfd;
   int portno = 10128;
+  int backlogsize = 5;
   
   void log(const std::string& msg);
   int create_socket_inet_stream();

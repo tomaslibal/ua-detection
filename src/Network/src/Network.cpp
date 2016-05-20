@@ -118,11 +118,10 @@ int Network::addr_listen()
   log("Binding to the socket successful");
   std::cout << "binding to the socket successful on port " << portno << std::endl;
     
-  int backlogsize = 5;
   /*
     * Accept incoming connections
     */
-  int ls = listen(sockfd,backlogsize);
+  int ls = listen(sockfd, backlogsize);
 
   if (ls < 0) {
       error("cannot accept connection");
