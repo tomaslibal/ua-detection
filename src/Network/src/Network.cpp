@@ -18,20 +18,20 @@
 
 #define h_addr h_addr_list[0] // address for backward compatibility
 
-int _create_socket_inet_stream() {
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        perror("ERROR Opening Socket");
-    }
-    return sockfd;
-}
-
 Network::Network()
 {
 }
 
 Network::~Network()
 {
+}
+
+int Network::create_socket_inet_stream() {
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        perror("ERROR Opening Socket");
+    }
+    return sockfd;
 }
 
 void Network::set_port_no(int portno)
@@ -82,7 +82,7 @@ int Network::addr_listen()
 {
   int sockfd;
   
-  sockfd = _create_socket_inet_stream();
+  sockfd = create_socket_inet_stream();
   
   if (sockfd < 0) {
     error("Creating a socket failed");

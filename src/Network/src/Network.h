@@ -30,6 +30,7 @@ class Network {
   int portno = 10128;
   
   void log(const std::string& msg);
+  int create_socket_inet_stream();
 };
 
 #endif
