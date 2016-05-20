@@ -9,10 +9,24 @@ class Network {
   Network();
   virtual ~Network();
 
+  /**
+   * sets the portno field
+   */
   void set_port_no(int portno);
+  
+  /**
+   * returns the portno field
+   */
   int  get_port_no();
   
+  /**
+   * sets the FileLog logger
+   */
   void set_file_log(FileLog *fileLog);
+  
+  /**
+   * returns the FileLog logger used by this class
+   */
   FileLog* get_file_log();
   
   /**
@@ -25,13 +39,35 @@ class Network {
    */
   int addr_listen();
  private:
-  FileLog *fileLog = nullptr;
-  int sockfd;
-  int portno = 10128;
-  int backlogsize = 5;
+    /**
+     * file backed logger
+     */ 
+    FileLog *fileLog = nullptr;
+    
+    /**
+     * field that holds the socket fd
+     */
+    int sockfd;
+    
+    /**
+     * port number that will be used when creating tcp connections
+     */
+    int portno = 10128;
+    
+    /**
+     * backlog size of connections queued to be processed
+     */
+    int backlogsize = 5;
   
-  void log(const std::string& msg);
-  int create_socket_inet_stream();
+    /**
+     * logs the string message using the class' logger
+     */
+    void log(const std::string& msg);
+    
+    /**
+     * creates a new socket and returns the socket fd
+     */
+    int create_socket_inet_stream();
 };
 
 #endif
