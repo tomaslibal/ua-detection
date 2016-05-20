@@ -151,16 +151,6 @@ int main(int argc, char** argv) {
     
     logger.log("Using port number " + std::to_string(portno));
     
-    int backlogsize = 5;
-    /*
-     * Accept incoming connections
-     */
-    int ls = listen(sockfd,backlogsize);
-
-    if (ls < 0) {
-	error("cannot accept connection");
-    }
-    
     logger.log("Now listening to incoming connections");
 
     mutex signal_exit;
