@@ -47,7 +47,7 @@ class Network {
     /**
      * field that holds the socket fd
      */
-    int sockfd;
+    int sockfd = -1;
     
     /**
      * port number that will be used when creating tcp connections
