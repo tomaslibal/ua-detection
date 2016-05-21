@@ -4,7 +4,7 @@
 
 Client::Client()
 {
-    
+    logger.setPath("./uadet2.client.log.txt");
 }
 
 Client::~Client()
