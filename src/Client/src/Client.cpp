@@ -5,6 +5,7 @@
 Client::Client()
 {
     logger.setPath("./uadet2.client.log.txt");
+    log("Initializing Client");
 }
 
 Client::~Client()
