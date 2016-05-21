@@ -6,6 +6,13 @@
 
 #include <string>
 
+/*
+ * Client encapsulates data and methods for reading the stdin (command), 
+ * including the options arguments and the config file, opening the 
+ * connection to the server and sending and receiving the data from
+ * the uadet2 server.
+ * 
+ */
 class Client
 {
 public:
