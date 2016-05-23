@@ -51,3 +51,21 @@ void uaTokenizerTest::testStaticTokenizeSkipsLeadingSeparatorsOrWhitespace() {
     CPPUNIT_ASSERT_MESSAGE("Tokens[0]=complementary", "complementary" == tokens[0]);
 }
 
+void uaTokenizerTest::testStaticTokenizeBreaksUpUserAgentIntoTokens()
+{
+    std::vector<std::string> tokens;
+    std::string sentence = "Mozilla/5.0 (X11; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0";
+    tok->tokenize(sentence, &tokens);
+    
+    CPPUNIT_ASSERT_MESSAGE("expected Tokens.size()=7, actual=" + std::to_string(tokens.size()), 8 == tokens.size());
+    CPPUNIT_ASSERT_MESSAGE("", "Mozilla/5.0" == tokens[0]);
+    CPPUNIT_ASSERT_MESSAGE("", "X11" == tokens[1]);
+    CPPUNIT_ASSERT_MESSAGE("", "Linux" == tokens[2]);
+    CPPUNIT_ASSERT_MESSAGE("", "x86_64" == tokens[3]);
+    CPPUNIT_ASSERT_MESSAGE("", "rv" == tokens[4]);
+    CPPUNIT_ASSERT_MESSAGE("", "44.0" == tokens[5]);
+    CPPUNIT_ASSERT_MESSAGE("", "Gecko/20100101" == tokens[6]);
+    CPPUNIT_ASSERT_MESSAGE("", "Firefox/44.0" == tokens[7]);
+}
+
+
