@@ -17,7 +17,7 @@ using std::vector;
 UATokenizer::UATokenizer() {    
 }
 
-UATokenizer::UATokenizer(const string uas) {
+UATokenizer::UATokenizer(const string& uas) {
     this->uas = uas;
 }
 
@@ -132,7 +132,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
     
 }
 
-void UATokenizer::tokenize(std::vector<std::string>* tokens) {
+void UATokenizer::tokenize(vector<string>* tokens) {
     if (uas.empty()) {
         return;
     }
