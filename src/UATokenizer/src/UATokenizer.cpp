@@ -11,12 +11,13 @@
 #include <iostream>
 #include <sstream>
 
-using namespace std; 
+using std::string;
+using std::vector;
 
 UATokenizer::UATokenizer() {    
 }
 
-UATokenizer::UATokenizer(string uas) {
+UATokenizer::UATokenizer(const string uas) {
     this->uas = uas;
 }
 
@@ -26,6 +27,18 @@ UATokenizer::UATokenizer(const UATokenizer& orig) {
 
 UATokenizer::~UATokenizer() {
 }
+
+void UATokenizer::set_uas(const string& sentence)
+{
+    uas = sentence;
+}
+
+string UATokenizer::get_uas()
+{
+    return uas;
+}
+
+
 
 /*
  * Returns true if character ch is in array
@@ -68,7 +81,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
      * the sentence, until a separator character is encountered. Then the buffer
      * is cleared and starts anew.
      */
-    ostringstream os;
+    std::ostringstream os;
 
     /*
      * This is a character by character consumption loop of the sentence
@@ -90,7 +103,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
                 try {                    
                     tokens->push_back(s);                    
                 } catch (...) {
-                    cout << "Exception while adding a token " << s;
+                    std::cout << "Exception while adding a token " << s;
                 }
                 // Clear the token
                 os.str(string());

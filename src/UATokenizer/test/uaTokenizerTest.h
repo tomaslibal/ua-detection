@@ -19,6 +19,7 @@ class uaTokenizerTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST(testStaticTokenizeSkipsLeadingSeparatorsOrWhitespace);
     CPPUNIT_TEST(testStaticTokenizeBreaksUpUserAgentIntoTokens);
     CPPUNIT_TEST(testStaticTokenizeForShortUserAgentString);
+    CPPUNIT_TEST(testSetAndGetUserAgentString);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -34,6 +35,8 @@ private:
     void testStaticTokenizeSkipsLeadingSeparatorsOrWhitespace();
     void testStaticTokenizeBreaksUpUserAgentIntoTokens();
     void testStaticTokenizeForShortUserAgentString();
+    
+    void testSetAndGetUserAgentString();
 };
 
 #endif	/* UATOKENIZERTEST_H */

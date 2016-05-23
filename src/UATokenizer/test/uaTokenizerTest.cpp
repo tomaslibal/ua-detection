@@ -78,4 +78,16 @@ void uaTokenizerTest::testStaticTokenizeForShortUserAgentString()
     CPPUNIT_ASSERT_MESSAGE("", "Java/1.7.0_71" == tokens[0]);
 }
 
+void uaTokenizerTest::testSetAndGetUserAgentString()
+{
+    std::string uas = "Mozilla/5.0 Test";
+    
+    CPPUNIT_ASSERT_MESSAGE("uas is null on init", "" == tok->get_uas());
+    
+    tok->set_uas(uas);
+    
+    CPPUNIT_ASSERT_MESSAGE("uas has been set", uas == tok->get_uas());
+}
+
+
 
