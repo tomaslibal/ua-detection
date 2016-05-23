@@ -68,4 +68,14 @@ void uaTokenizerTest::testStaticTokenizeBreaksUpUserAgentIntoTokens()
     CPPUNIT_ASSERT_MESSAGE("", "Firefox/44.0" == tokens[7]);
 }
 
+void uaTokenizerTest::testStaticTokenizeForShortUserAgentString()
+{
+    std::vector<std::string> tokens;
+    std::string sentence = "Java/1.7.0_71";
+    tok->tokenize(sentence, &tokens);
+    
+    CPPUNIT_ASSERT_MESSAGE("expected Tokens.size()=1, actual=" + std::to_string(tokens.size()), 1 == tokens.size());
+    CPPUNIT_ASSERT_MESSAGE("", "Java/1.7.0_71" == tokens[0]);
+}
+
 
