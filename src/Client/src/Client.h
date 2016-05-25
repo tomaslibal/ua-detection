@@ -3,6 +3,7 @@
 
 #include "../../common/src/ProgramConfig.h"
 #include "../../common/src/FileLog.h"
+#include "../../Network/src/Network.h"
 
 #include <string>
 
@@ -22,10 +23,41 @@ public:
     void set_config_object(ProgramConfigObject& config);
     ProgramConfigObject get_config_object();
     void process_arguments(char** argv, int argc);
+    void start();
 private:
+    /*
+     * The client program receives a command from the user which is read into this string
+     * 
+     */
     std::string command = "";
+    
+    std::string configFilePath = std::string("src/common/config/client.txt");
+    
     ProgramConfigObject config;
+    
     FileLog logger;
+    
+    /*
+     * Delegate class to handle opening the TCP open_connection
+     * 
+     */
+    Network network;
+    
+    int portno;
+    
+    /*
+     * Host's information is stored in this struct.
+     * 
+     * struct hostent {
+     *     char    *h_name;     // official name of the host
+     *     char    **h_aliases; // alias list
+     *     int     h_addrtype;  // host address type?
+     *     int     h_length;    // length of the address
+     *     char    **h_addr_list; // list of addresses from the name server
+     *     #define h_addr h_addr_list[0] // address for backward compatibility
+     * };
+     */
+    struct hostent *server = nullptr;
     
     void log(const std::string msg);
 };
