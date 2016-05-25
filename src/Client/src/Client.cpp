@@ -128,6 +128,8 @@ void Client::start()
     log("Received response from the server");
     log(std::string(buffer));
     std::cout << buffer << std::endl;
+    
+    close(sockfd);
 
     log("Exiting from main");
 }
