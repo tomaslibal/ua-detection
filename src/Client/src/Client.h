@@ -43,8 +43,6 @@ private:
      */
     Network network;
     
-    int portno;
-    
     /*
      * Host's information is stored in this struct.
      * 
