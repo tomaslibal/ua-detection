@@ -21,6 +21,7 @@
 #include "common/src/FileLog.h"
 #include "common/src/uadet2.h"
 #include "Network/src/Network.h"
+#include "Client/src/Client.h"
 
 #define BUFFERSIZE 2048
 
@@ -89,6 +90,7 @@ int main(int argc, char** argv) {
     ProgramConfig confCtrl(configFile);
 
     confCtrl.update(conf);
+    mainClient.set_config_object(conf);
 
     logger.log("Got " + std::to_string(argc) + " arguments");
     
@@ -128,6 +130,7 @@ int main(int argc, char** argv) {
         std::cerr << "    " << "uadet2cli localhost 10128 'eval mobile Mozilla/5.0 Linux Android'" << std::endl;
         exit(EXIT_SUCCESS);
     }
+    mainClient.process_arguments(argv, argc);
     
     sockfd = network.addr_connect(server);
     
