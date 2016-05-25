@@ -64,12 +64,30 @@ int Network::addr_connect(struct hostent *host)
 
     sockaddr_in serv_addr;
 
+    /*
+     * Clear the data
+     */
     bzero((char *) &serv_addr, sizeof(serv_addr));
+    
+    /*
+     * Set Internet Address Family 
+     */
     serv_addr.sin_family = AF_INET;
+    
+    /*
+     * Set Server IP address
+     */
     bcopy((char *)host->h_addr_list[0], (char *)&serv_addr.sin_addr.s_addr, host->h_length);
+    
+    /*
+     * Set server port number
+     */
     serv_addr.sin_port = htons(portno);
 
-    if (::connect(sockfd,(const sockaddr*) &serv_addr,sizeof(serv_addr)) < 0) {
+    /*
+     * Establish the connection
+     */
+    if (::connect(sockfd, (const sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) {
         std::string errmsg = "ERROR connecting";
         log(errmsg);
         error(errmsg.c_str());
