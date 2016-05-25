@@ -11,8 +11,7 @@ file(GLOB CLIENT_SRC
 )
 
 file(GLOB SERVER_SRC    
-    "src/server/src/*.h"
-    "src/server/src/*.cpp"
+    "src/Server/src/*"
     "src/server.cpp"
     "src/common/src/*.h"
     "src/common/src/*.cpp"

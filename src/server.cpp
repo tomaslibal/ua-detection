@@ -20,8 +20,8 @@
 #include <fstream>
 #include <sstream>
 
-#include "server/src/utils.h"
-#include "server/src/sockets.h"
+#include "Server/src/utils.h"
+#include "Server/src/sockets.h"
 
 #include "FileInputReader/src/FileInputReader.h"
 #include "NaiveBayessClassifier/src/NaiveBayessClassifier.h"
