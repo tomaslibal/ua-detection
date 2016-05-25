@@ -86,6 +86,8 @@ void Client::process_arguments(char** argv, int argc)
 
 void Client::start()
 {    
+    network.set_port_no(config.portno);
+    
     int sockfd = network.addr_connect(server);
     
     if (sockfd < 0) 
