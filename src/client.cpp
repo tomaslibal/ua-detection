@@ -28,6 +28,12 @@
  *
  */
 int main(int argc, char** argv) {
+    
+    /*
+     * 
+     */
+    Client mainClient;
+    
     /*
      * File descriptor for the TCP open_connection
      * 
