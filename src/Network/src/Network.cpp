@@ -115,7 +115,7 @@ int Network::addr_listen()
 
     serv_addr.sin_family = AF_INET;
     // host address: INADDR_ANY
-    // The socket will packets for all network interfaces of the host machine
+    // The socket will receive packets for all network interfaces of the host machine on the given port number
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(portno);
 
