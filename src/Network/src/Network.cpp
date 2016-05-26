@@ -114,8 +114,8 @@ int Network::addr_listen()
     log("Using port number " + std::to_string(portno));
 
     serv_addr.sin_family = AF_INET;
-    // host address: INADDR_ANY = 0.0.0.0?
-    // this should be read from the config as well
+    // host address: INADDR_ANY
+    // The socket will packets for all network interfaces of the host machine
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(portno);
 
