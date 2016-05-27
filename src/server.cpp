@@ -41,8 +41,14 @@ int main(int argc, char** argv) {
         exit(signum);
     });
     
+    /*
+     * Reads the data file and trains the Naive Bayess Classifier
+     */
     server.learn();
     
+    /*
+     * Starts accepting TCP connection and replies with responses to the client requests
+     */
     server.start();
     
     return 0;
