@@ -24,13 +24,6 @@ int main(int argc, char** argv) {
      */
     Server server;
     
-    FileLog logger;
-    
-    server.set_logger(logger);
-    
-    logger.log("Initializing Server");
-
-    
     /*
      * catch the ctrl+c interrupt signal
      */

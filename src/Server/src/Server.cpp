@@ -17,6 +17,8 @@ Server::Server()
     ProgramConfig confCtrl(configFilePath);
 
     confCtrl.update(config);
+    
+    log("Initializing Server");
 }
 
 Server::~Server()
