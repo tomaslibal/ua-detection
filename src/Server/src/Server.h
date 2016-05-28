@@ -25,7 +25,7 @@ private:
     Network network;
     NaiveBayessClassifier nb;
     
-    const std::string configFilePath = "src/common/config/server.txt";
+    const std::string configFilePath = "config/server.txt";
     
     void create_thread();
     void log(const std::string& msg);

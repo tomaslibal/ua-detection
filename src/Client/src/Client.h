@@ -31,7 +31,7 @@ private:
      */
     std::string command = "";
     
-    std::string configFilePath = std::string("src/common/config/client.txt");
+    std::string configFilePath = "config/client.txt";
     
     ProgramConfigObject config;
     
