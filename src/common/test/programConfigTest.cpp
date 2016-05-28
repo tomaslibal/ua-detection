@@ -30,7 +30,7 @@ void programConfigTest::testProgramConfigObjectWithParams() {
     CPPUNIT_ASSERT(confObj.hostname == std::string("foo"));
     CPPUNIT_ASSERT(confObj.datafile == std::string("bar"));
 
-    pconf->path = "../../common/config/server.txt";
+    pconf->path = "../../../config/server.txt";
     pconf->update(confObj);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("port no. is set to 10128", 10128, confObj.portno);
