@@ -27,8 +27,8 @@
 struct Ngram {
     int len;
     std::string tokens[128];
-    std::string* toString();
-    std::string* toString(int num);
+    std::string toString();
+    std::string toString(int num);
     bool equals(const Ngram& other);
 };
 

@@ -10,32 +10,33 @@
 #include "NgramBuilder.h"
 #include "../../UATokenizer/src/UATokenizer.h"
 
-using namespace std;
+using std::string;
+using std::vector;
 
-string* Ngram::toString() {
-    string* str = new string();
+string Ngram::toString() {
+    string str = "";
     for(int i = 0; i < len; i++) {
         
-        str->append(tokens[i]);
+        str.append(tokens[i]);
         
         if (i < (len-1)) {
-            str->append(" ");
+            str.append(" ");
         }
     }
     return str;
 }
 
-string* Ngram::toString(int num) {
+string Ngram::toString(int num) {
     
     assert(len >= num);
     
-    string* str = new string();
+    string str = "";
     for(int i = 0; i < num; i++) {
         
-        str->append(tokens[i]);
+        str.append(tokens[i]);
         
         if (i < (len-1)) {
-            str->append(" ");
+            str.append(" ");
         }
     }
     return str;
