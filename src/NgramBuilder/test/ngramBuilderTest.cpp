@@ -24,6 +24,30 @@ void ngramBuilderTest::tearDown() {
     delete ngBuilder;
 }
 
+void ngramBuilderTest::testLevelDefaultsToThree()
+{
+    CPPUNIT_ASSERT(ngBuilder->get_level() == 3);
+}
+
+void ngramBuilderTest::testSetAndGetLevel()
+{
+    ngBuilder->set_level(5);
+    
+    CPPUNIT_ASSERT(ngBuilder->get_level() == 5);
+    
+    ngBuilder->set_level(1);
+    
+    CPPUNIT_ASSERT(ngBuilder->get_level() == 1);
+}
+
+void ngramBuilderTest::testCannotSetNegativeLevel()
+{
+    ngBuilder->set_level(-1);
+    
+    CPPUNIT_ASSERT(ngBuilder->get_level() == 3);
+}
+
+
 void ngramBuilderTest::testFromTokenListBuildsNgrams() {
     
 }

@@ -16,6 +16,9 @@ class ngramBuilderTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(ngramBuilderTest);
 
     CPPUNIT_TEST(testFromTokenListBuildsNgrams);
+    CPPUNIT_TEST(testLevelDefaultsToThree);
+    CPPUNIT_TEST(testSetAndGetLevel);
+    CPPUNIT_TEST(testCannotSetNegativeLevel);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -27,6 +30,9 @@ public:
 
 private:
     NgramBuilder* ngBuilder;
+    void testLevelDefaultsToThree();
+    void testSetAndGetLevel();
+    void testCannotSetNegativeLevel();
     void testFromTokenListBuildsNgrams();
 };
 

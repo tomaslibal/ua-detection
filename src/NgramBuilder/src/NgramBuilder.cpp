@@ -99,3 +99,16 @@ int NgramBuilder::fromUserAgentString(string &sentence, vector<Ngram> *ngrams) {
     return this->fromTokenList(uaTokens, ngrams);
 }
 
+void NgramBuilder::set_level(const int level)
+{
+    if (level > 0) {
+        this->level = level;
+    }
+}
+
+int NgramBuilder::get_level()
+{
+    return level;
+}
+
+
