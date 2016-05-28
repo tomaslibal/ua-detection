@@ -3,8 +3,7 @@ project (uadet2 CXX)
 
 file(GLOB CLIENT_SRC
     "src/client.cpp"
-    "src/common/src/*.h"
-    "src/common/src/*.cpp"
+    "src/common/src/*"
     "src/FileInputReader/src/*"
     "src/Network/src/*"
     "src/Client/src/*"
@@ -13,16 +12,11 @@ file(GLOB CLIENT_SRC
 file(GLOB SERVER_SRC    
     "src/Server/src/*"
     "src/server.cpp"
-    "src/common/src/*.h"
-    "src/common/src/*.cpp"
-    "src/NaiveBayessClassifier/src/*.h"
-    "src/NaiveBayessClassifier/src/*.cpp"
-    "src/NgramBuilder/src/*.h"
-    "src/NgramBuilder/src/*.cpp"
-    "src/FileInputReader/src/*.h"
-    "src/FileInputReader/src/*.cpp"
-    "src/UATokenizer/src/*.h"
-    "src/UATokenizer/src/*.cpp"
+    "src/common/src/*"
+    "src/NaiveBayessClassifier/src/*"
+    "src/NgramBuilder/src/*"
+    "src/FileInputReader/src/*"
+    "src/UATokenizer/src/*"
     "src/Network/src/*"
 )
 
