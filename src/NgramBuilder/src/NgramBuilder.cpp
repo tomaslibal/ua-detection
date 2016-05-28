@@ -107,15 +107,6 @@ int NgramBuilder::fromTokenList(vector<std::string> &tokens, vector<Ngram> *ngra
     return slider;
 }
 
-int NgramBuilder::fromUserAgentString(string &sentence, vector<Ngram> *ngrams) {    
-    UATokenizer tok;
-    vector<string> uaTokens;
-    
-    tok.tokenize(sentence, &uaTokens);
-    
-    return this->fromTokenList(uaTokens, ngrams);
-}
-
 void NgramBuilder::set_level(const int level)
 {
     if (level > 0) {

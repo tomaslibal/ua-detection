@@ -43,7 +43,6 @@ public:
     virtual ~NgramBuilder();
     
     int fromTokenList(std::vector<std::string> &tokens, std::vector<Ngram> *ngrams);
-    int fromUserAgentString(std::string &sentence, std::vector<Ngram> *ngrams);
     void print(Ngram& ng);
     
     void set_level(const int level);

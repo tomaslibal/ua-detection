@@ -10,7 +10,7 @@
 
 #include "NaiveBayessClassifier.h"
 #include "../../UATokenizer/src/UATokenizer.h"
-#include "../../NgramBuilder/src/NgramBuilder.h"
+#include "../../NgramBuilder/src/UaNgramBuilder.h"
 
 using namespace std;
 
@@ -62,9 +62,10 @@ void NaiveBayessClassifier::add_data(string &data, string &category) {
     // tokenize the data into ngrams
     vector<Ngram> ngrams;
     
-    NgramBuilder ngBuilder;
+    UaNgramBuilder uaNgramBuilder;
     
-    ngBuilder.fromUserAgentString(data, &ngrams);
+    uaNgramBuilder.fromUserAgentString(data, &ngrams);
+ 
 //    
     int numNgrams = ngrams.size();
     for(int i = 0; i < numNgrams; i++) {
@@ -170,7 +171,7 @@ bool NaiveBayessClassifier::is_in_vocabulary(std::string &word) {
 
 double NaiveBayessClassifier::classify(std::string &data, std::string &category) {
     vector<Ngram> ngrams;
-    NgramBuilder nb;
+    UaNgramBuilder nb;
     nb.fromUserAgentString(data, &ngrams);
     
     double p_cat = prob_category(category);
