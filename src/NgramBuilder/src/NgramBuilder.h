@@ -11,6 +11,19 @@
 #include <vector>
 #include <string>
 
+/*
+ * Ngram of a variable N length:
+ * 
+ * Suppose a 3-gram: Lazy, Lazy Fox, Lazy Fox Jumps. This data structure would capture it as follows:
+ * 
+ * Ngram n ...
+ * n.len == 3
+ * n.tokens[0] == "Lazy"
+ * n.tokens[1] == "Lazy Fox"
+ * n.tokens[2] == "Lazy Fox Jumps"
+ * n.tokens[3-127] undefined
+ * 
+ */
 struct Ngram {
     int len;
     std::string tokens[128];
@@ -18,6 +31,10 @@ struct Ngram {
     std::string* toString(int num);
 };
 
+/*
+ * NgramBuilder takes a string and produces a list of Ngrams.
+ * 
+ */
 class NgramBuilder {
 public:
     NgramBuilder();
