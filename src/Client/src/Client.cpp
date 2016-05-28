@@ -14,11 +14,11 @@
 
 Client::Client()
 {
-    logger.setPath("./uadet2.client.log.txt");
-    log("Initializing Client");
-    
     ProgramConfig confCtrl(configFilePath);
     confCtrl.update(config);
+    
+    logger.setPath(config.logfile);
+    log("Client initialized");
 }
 
 Client::~Client()
@@ -44,6 +44,9 @@ ProgramConfigObject Client::get_config_object()
 
 void Client::process_arguments(char** argv, int argc)
 {
+    log("Processing program arguments");
+    log("Got " + std::to_string(argc) + " arguments");
+    
     /*
      * When argc == 4 the we assume this order of arguments:
      * 
