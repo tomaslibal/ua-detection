@@ -134,6 +134,16 @@ To run all tests and print the output to STDOUT execute the next commands:
     cmake .
     make
     ctest .
+    
+### Config
+
+By default the client and server programs look for config files in the `config/` directory (named `client.txt` and `server.txt` respectivelly). 
+The amount of the settings that are possible to configure is quite limited for now and mainly include these options:
+
+- port number (`port=10128`)
+- hostname (`hostname=localhost`)
+- log file names (`logfile=server.log.txt`)
+- data input file name (`datafile=data_in.txt`, only server)
 
 ### Disclaimers
 
