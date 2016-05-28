@@ -71,9 +71,7 @@ void NaiveBayessClassifier::add_data(string &data, string &category) {
         int ngramLen = ngrams[i].len;
         for(int j = 1; j <= ngramLen; j++) {
             string n = ngrams[i].toString(j);
-            //string n = *np;
             add_word(n, category);
-            //delete np;
         }
     }    
 }
@@ -101,12 +99,10 @@ double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
     int ngramLen = ngram.len;
     for(int i = 1; i <= ngramLen; i++) {
         string s = ngram.toString(i);
-        //string s = *sp;
         auto search = vocabulary.find(s);
         if (search != vocabulary.end()) {
             freq += search->second;
         }
-        //delete sp;
     }
     
     int all_freq = 0;
@@ -142,9 +138,7 @@ double NaiveBayessClassifier::prob_category_ngram(std::string& category, Ngram& 
     int ngramLen = ngram.len;
     for(int i = 1; i <= ngramLen; i++) {
         string s = ngram.toString(i);
-        //string s = *sp;
         ngram_freq_in_cat += freq_category_word(category, s);
-        //delete sp;
     }
     
     auto search = category_vocabularies.find(category);
@@ -187,10 +181,8 @@ double NaiveBayessClassifier::classify(std::string &data, std::string &category)
         
         string ns = ngrams[i].toString(ngrams[i].len);
         if (ns.length() < 3) {
-            //delete ns;
             continue;
         }
-        //delete ns;
         
         double p_word_cat = prob_category_ngram(category, ngrams[i]);
         
