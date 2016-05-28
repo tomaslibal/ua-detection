@@ -1,9 +1,0 @@
-Dependencies for the python py-mgr subproject. If a version is listed, it is the
-recommended latest version which has been tested.
-
-Dependencies:
-------------
-
-* python 2.7
-* postgres 9.4
-* psycopg2 (https://github.com/psycopg/psycopg2)
