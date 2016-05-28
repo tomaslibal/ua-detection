@@ -41,6 +41,22 @@ string* Ngram::toString(int num) {
     return str;
 }
 
+bool Ngram::equals(const Ngram& other)
+{
+    if (len != other.len) {
+        return false;
+    }
+    
+    for(int i = 0; i < len; i++) {
+        if (tokens[i].compare(other.tokens[i]) != 0) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+
 NgramBuilder::NgramBuilder() {
 }
 
