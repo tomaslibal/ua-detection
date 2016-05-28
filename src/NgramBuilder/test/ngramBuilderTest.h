@@ -34,6 +34,8 @@ private:
     void testSetAndGetLevel();
     void testCannotSetNegativeLevel();
     void testFromTokenListBuildsNgrams();
+    
+    bool ngramMatcher(Ngram& expected, Ngram& actual);
 };
 
 #endif	/* NGRAMBUILDERTEST_H */
