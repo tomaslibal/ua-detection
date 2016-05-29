@@ -20,6 +20,7 @@ public:
     void set_config(const ProgramConfigObject& config);
     void learn();
     void start();
+    void stop();
 private:
     FileLog logger;
     ProgramConfigObject config;

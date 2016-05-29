@@ -26,7 +26,7 @@ int create_socket_inet_stream() {
 /**
  * 
  */
-void evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc) {
+void evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc, std::atomic<int> & nIncomingMsg) {
   
     FileLog logger;
     logger.setPath(std::string("eval.") + std::to_string(insockfd) + std::string(".log.txt"));

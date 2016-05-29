@@ -21,6 +21,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <atomic>
 
 #include "../../NaiveBayessClassifier/src/NaiveBayessClassifier.h"
 
@@ -37,7 +38,7 @@ int create_socket_inet_stream();
  * 
  * @return void
  */
-void evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc);
+void evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc, std::atomic<int> & nIncomingMsg);
 
 /**
  * Classifies the given data using NaiveBayessClassifier

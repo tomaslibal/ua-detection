@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     /*
      * catch the ctrl+c interrupt signal
      */
-    signal(SIGINT, [] (int signum) {        
+    signal(SIGINT, [] (int signum) {
         if (Server::sockfd >= 0) {
             close(Server::sockfd);
         }

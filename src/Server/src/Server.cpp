@@ -3,6 +3,7 @@
 #include "sockets.h"
 
 #include <functional>
+#include <utility>
 #include <thread>
 #include <chrono>
 #include <mutex>
@@ -135,8 +136,8 @@ void Server::start()
      * Worker is started as a new thread, it processes the incoming request
      * in a detached state so it should not block other requests.
      */
-    std::function<void (int)> worker2 = [nbl](int in_sockfd) {
-        evaluate_incoming_request(in_sockfd, *nbl);
+    std::function<void (int, std::atomic<int> &)> worker2 = [nbl](int in_sockfd, std::atomic<int> & nIncomingReq) {
+        evaluate_incoming_request(in_sockfd, *nbl, nIncomingReq);
     };
     
     while(1) {
@@ -151,11 +152,19 @@ void Server::start()
         
         log("Incoming connection...Creating a new thread to handle it");
  
-        std::thread a_thread (worker2, in_sockfd);
+        std::thread a_thread (worker2, in_sockfd, std::ref(nIncomingMsg));
         a_thread.detach();
+        log("Connection #" + std::to_string(nIncomingMsg++) + ", thread created");
     }
 
     close(sockfd);
 }
+
+void Server::stop()
+{
+    log("Server stopping...");
+    log("Num connections was " + std::to_string(nIncomingMsg));
+}
+
 
 int Server::sockfd = -1;
