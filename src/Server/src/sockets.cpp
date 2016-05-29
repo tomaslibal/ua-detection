@@ -26,7 +26,7 @@ int create_socket_inet_stream() {
 /**
  * 
  */
-void evaluate_incoming_request(int insockfd, function< void () >& exit_callback, unique_lock< mutex >& signal_exit, NaiveBayessClassifier& nbc) {
+void evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc) {
   
     FileLog logger;
     logger.setPath(std::string("eval.") + std::to_string(insockfd) + std::string(".log.txt"));
@@ -56,13 +56,6 @@ void evaluate_incoming_request(int insockfd, function< void () >& exit_callback,
     n = read(insockfd,buffer,BUFFERSIZE);
 
     if (n < 0) perror("ERROR reading from socket");
-    
-    if (strcmp(buffer, "exit\n") == 0) {
-        signal_exit.try_lock();
-        close(insockfd);
-        exit_callback();
-        return;
-    }
     
     logger.log(std::string("Request was: ") + std::string(buffer));
 

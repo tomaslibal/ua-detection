@@ -132,23 +132,15 @@ void Server::start()
     std::mutex signal_exit;
     std::unique_lock<std::mutex> lck (signal_exit);
     lck.unlock();
-    
-    std::function<void ()> exitCallback = []() {
-        std::cout << "exiting now..." << std::endl;
-        if (Server::sockfd >= 0) {
-            close(Server::sockfd);
-        }
-        exit(EXIT_SUCCESS);
-    };
-    
+        
     NaiveBayessClassifier* nbl = &nb;
     
     /* 
      * Worker is started as a new thread, it processes the incoming request
      * in a detached state so it should not block other requests.
      */
-    std::function<void (int)> worker2 = [&exitCallback, &lck, nbl](int in_sockfd) {
-        evaluate_incoming_request(in_sockfd, exitCallback, lck, *nbl);
+    std::function<void (int)> worker2 = [nbl](int in_sockfd) {
+        evaluate_incoming_request(in_sockfd, *nbl);
     };
     
     while(1) {

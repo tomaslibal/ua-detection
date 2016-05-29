@@ -20,7 +20,7 @@
 int main(int argc, char** argv) {
     
     /*
-     * Server module
+     * Server module resource handler
      */
     Server server;
     

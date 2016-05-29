@@ -2,6 +2,7 @@
 #define _SERVER_H_
 
 #include <string>
+#include <atomic>
 
 #include "../../common/src/FileLog.h"
 #include "../../common/src/ProgramConfig.h"
@@ -24,6 +25,8 @@ private:
     ProgramConfigObject config;
     Network network;
     NaiveBayessClassifier nb;
+    
+    std::atomic<int> nIncomingMsg{0};
     
     const std::string configFilePath = "config/server.txt";
     

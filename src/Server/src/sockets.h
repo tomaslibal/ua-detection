@@ -37,7 +37,7 @@ int create_socket_inet_stream();
  * 
  * @return void
  */
-void evaluate_incoming_request(int insockfd, std::function<void ()>& exit_callback, std::unique_lock<std::mutex>& signal_exit, NaiveBayessClassifier& nbc);
+void evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc);
 
 /**
  * Classifies the given data using NaiveBayessClassifier
