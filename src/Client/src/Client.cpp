@@ -26,7 +26,7 @@ Client::~Client()
 
 }
 
-void Client::log(const std::string msg)
+void Client::log(std::string const& msg)
 {
     logger.log(msg);
 }

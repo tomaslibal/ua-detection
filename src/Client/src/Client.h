@@ -31,7 +31,7 @@ private:
      */
     std::string command = "";
     
-    std::string configFilePath = "config/client.txt";
+    std::string const configFilePath = "config/client.txt";
     
     ProgramConfigObject config;
     
@@ -57,7 +57,7 @@ private:
      */
     struct hostent *server = nullptr;
     
-    void log(const std::string msg);
+    void log(std::string const& msg);
 };
 
 #endif /* _CLIENT_H_ */

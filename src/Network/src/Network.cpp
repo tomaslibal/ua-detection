@@ -46,7 +46,7 @@ int Network::get_port_no()
 
 int Network::addr_connect(struct hostent *host)
 {
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
     {

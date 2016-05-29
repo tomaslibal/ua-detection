@@ -37,8 +37,8 @@ struct ProgramConfigObject {
 class ProgramConfig {
 public:
     ProgramConfig();
-    ProgramConfig(const std::string& configFilePath);
-    ProgramConfig(const ProgramConfig& orig);
+    ProgramConfig(std::string const& configFilePath);
+    ProgramConfig(ProgramConfig const& orig);
     virtual ~ProgramConfig();
     /*
      * Reads the config file and sets the read values into the config object

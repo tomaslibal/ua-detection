@@ -7,11 +7,11 @@ class FileLog
 {
 public:
     FileLog();
-    FileLog(const FileLog& orig);
+    FileLog(FileLog const& orig);
     virtual ~FileLog();
 
-    void setPath(const std::string& path);
-    void log(const std::string& msg);
+    void setPath(std::string const& path);
+    void log(std::string const& msg);
 private:
     std::string path = "./uadet2.log.txt";
 };
