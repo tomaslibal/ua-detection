@@ -128,12 +128,8 @@ void Server::start()
     logger.log("Using port number " + std::to_string(config.portno));
     
     logger.log("Now listening to incoming connections");
-    
-    std::mutex signal_exit;
-    std::unique_lock<std::mutex> lck (signal_exit);
-    lck.unlock();
         
-    NaiveBayessClassifier* nbl = &nb;
+    NaiveBayessClassifier * nbl = &nb;
     
     /* 
      * Worker is started as a new thread, it processes the incoming request
