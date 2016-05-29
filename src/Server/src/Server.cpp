@@ -141,15 +141,6 @@ void Server::start()
     
     while(1) {
         /*
-         * worker2 calls wait_and_accept (in sockets.h) which may lock the unique
-         * lock 'lck' if it receives a signal to exit. This lock will interrupt
-         * this while loop.
-         */
-        if (lck) {
-            std::cout << "mutex locked, must exit" << std::endl;
-            break;
-        }
-        /*
          * waits until an incoming connection is made
          */
         log("Waiting for a connection");
