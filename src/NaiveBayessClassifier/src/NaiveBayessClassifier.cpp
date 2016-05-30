@@ -10,7 +10,7 @@
 
 #include "NaiveBayessClassifier.h"
 #include "../../UATokenizer/src/UATokenizer.h"
-#include "../../NgramBuilder/src/UaNgramBuilder.h"
+
 
 using namespace std;
 
@@ -59,11 +59,8 @@ void NaiveBayessClassifier::add_data(string &data, string &category) {
     // increase the frequency of this type by 1
     this->inc_priors_freq(category);
     
-    // tokenize the data into ngrams
+    // tokenize the data (user-agent string) into ngrams
     vector<Ngram> ngrams;
-    
-    UaNgramBuilder uaNgramBuilder;
-    
     uaNgramBuilder.fromUserAgentString(data, &ngrams);
  
 //    
