@@ -1,5 +1,5 @@
 # ProgramConfig Test
-file(GLOB f5
+file(GLOB programConfigTest
     "./programConfigTest.h"
     "./programConfigTest.cpp"
     "./programConfigTestRunner.cpp"
@@ -7,17 +7,17 @@ file(GLOB f5
     "../src/ProgramConfig.cpp"
     "../../FileInputReader/src/*"
 )
-add_executable(f5 ${f5})
-TARGET_LINK_LIBRARIES(f5 cppunit)
-set_target_properties(f5 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(ProgramConfig ${PROJECT_SOURCE_DIR}/dist/tests/f5)
+add_executable(programConfigTest ${programConfigTest})
+TARGET_LINK_LIBRARIES(programConfigTest cppunit)
+set_target_properties(programConfigTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
+add_test(ProgramConfig ${PROJECT_SOURCE_DIR}/dist/tests/programConfigTest)
 
-file(GLOB f6
+file(GLOB fileLogTest
     "./fileLogTest.*"
     "./fileLogTestRunner.cpp"
     "../src/FileLog.*"
 )
-add_executable(f6 ${f6})
-TARGET_LINK_LIBRARIES(f6 cppunit)
-set_target_properties(f6 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(FileLog ${PROJECT_SOURCE_DIR}/dist/tests/f6)
+add_executable(fileLogTest ${fileLogTest})
+TARGET_LINK_LIBRARIES(fileLogTest cppunit)
+set_target_properties(fileLogTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
+add_test(FileLog ${PROJECT_SOURCE_DIR}/dist/tests/fileLogTest)
