@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "../../Network/src/Network.h"
+
 
 #define BUFFERSIZE 2048
 
@@ -90,7 +92,10 @@ void Client::process_arguments(char** argv, int argc)
 
 void Client::start()
 {    
-    network.set_port_no(config.portno);
+    NetworkConfig networkConfig(config.portno, config.hostname);
+    Network network(networkConfig);
+    
+    //network.set_port_no(config.portno);
     
     int sockfd = network.addr_connect(server);
     

@@ -41,7 +41,7 @@ private:
      * Delegate class to handle opening the TCP open_connection
      * 
      */
-    Network network;
+    //Network network;
     
     /*
      * Host's information is stored in this struct.

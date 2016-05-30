@@ -115,6 +115,8 @@ void Server::start()
     /*
      * Start the network server:
      */
+    NetworkConfig networkConfig(config.portno, config.hostname);
+    Network network(networkConfig);
     
     sockaddr_in serv_addr, cli_addr;
     char buffer[256];
@@ -122,7 +124,7 @@ void Server::start()
     socklen_t clilen;
     clilen = sizeof(cli_addr);
     
-    network.set_port_no(config.portno);
+    //network.set_port_no(config.portno);
     
     sockfd = network.addr_listen();
     

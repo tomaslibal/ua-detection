@@ -18,7 +18,8 @@ networkTest::~networkTest() {
 }
 
 void networkTest::setUp() {
-    network = new Network();
+    NetworkConfig networkConfig(10128, "localhost");
+    network = new Network(networkConfig);
 }
 
 void networkTest::tearDown() {
@@ -27,20 +28,30 @@ void networkTest::tearDown() {
 
 void networkTest::testPortNoSetAndGet()
 {
-  network->set_port_no(42);
+    NetworkConfig networkConfig(42, "localhost");
+    Network n(networkConfig);
   
-  CPPUNIT_ASSERT(network->get_port_no() == 42);
+    CPPUNIT_ASSERT_MESSAGE(std::to_string(n.get_port_no()), n.get_port_no() == 42);
 }
+
+void networkTest::testHostnameSetAndGet()
+{
+    NetworkConfig networkConfig(42, "example.com");
+    Network n(networkConfig);
+  
+    CPPUNIT_ASSERT_MESSAGE(n.get_hostname(), n.get_hostname().compare("example.com") == 0);
+}
+
 
 void networkTest::testFileLoggerSetAndGet()
 {
-  CPPUNIT_ASSERT(network->get_file_log() == nullptr);
+    CPPUNIT_ASSERT(network->get_file_log() == nullptr);
   
-  FileLog fileLog;
+    FileLog fileLog;
   
-  network->set_file_log(&fileLog);
+    network->set_file_log(&fileLog);
   
-  CPPUNIT_ASSERT(network->get_file_log() == &fileLog);
+    CPPUNIT_ASSERT(network->get_file_log() == &fileLog);
 }
 
 

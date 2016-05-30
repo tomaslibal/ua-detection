@@ -2,11 +2,20 @@
 #define _NETWORK_H_
 
 #include <iostream>
+#include <string>
 #include "../../common/src/FileLog.h"
+
+struct NetworkConfig {
+    int const portno;
+    int const backlogsize;
+    std::string const hostname;
+    
+    NetworkConfig(int const portno = 10128, std::string const hostname = std::string("localhost"), int const backlogsize = 5) : portno(portno), hostname(hostname), backlogsize(backlogsize) {};
+};
 
 class Network {
 public:
-    Network();
+    Network(NetworkConfig const& netConfig);
     virtual ~Network();
 
     /**
@@ -18,6 +27,11 @@ public:
      * returns the portno field
      */
     int  get_port_no();
+    
+    /**
+     * returns the hostname record
+     */
+    std::string get_hostname();
 
     /**
      * sets the FileLog logger
@@ -39,15 +53,16 @@ public:
      */
     int addr_listen();
 private:
+    
+    /*
+     * 
+     */
+    NetworkConfig const& netConfig;
+    
     /**
      * file backed logger
      */
     FileLog *fileLog = nullptr;
-
-    /**
-     * field that holds the socket fd
-     */
-    int sockfd = -1;
 
     /**
      * port number that will be used when creating tcp connections

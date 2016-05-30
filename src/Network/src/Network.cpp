@@ -18,8 +18,9 @@
 
 #define h_addr h_addr_list[0] // address for backward compatibility
 
-Network::Network()
+Network::Network(NetworkConfig const& netConfig) : netConfig(netConfig)
 {
+    
 }
 
 Network::~Network()
@@ -34,14 +35,9 @@ int Network::create_socket_inet_stream() {
     return sockfd;
 }
 
-void Network::set_port_no(int portno)
-{
-    this->portno = portno;
-}
-
 int Network::get_port_no()
 {
-    return portno;
+    return netConfig.portno;
 }
 
 int Network::addr_connect(struct hostent *host)
@@ -82,7 +78,7 @@ int Network::addr_connect(struct hostent *host)
     /*
      * Set server port number
      */
-    serv_addr.sin_port = htons(portno);
+    serv_addr.sin_port = htons(netConfig.portno);
 
     /*
      * Establish the connection
@@ -117,7 +113,7 @@ int Network::addr_listen()
     // host address: INADDR_ANY
     // The socket will receive packets for all network interfaces of the host machine on the given port number
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(portno);
+    serv_addr.sin_port = htons(netConfig.portno);
 
     int retries = 12;
     int result = -1;
@@ -139,7 +135,7 @@ int Network::addr_listen()
     /*
       * Accept incoming connections
       */
-    int ls = listen(sockfd, backlogsize);
+    int ls = listen(sockfd, netConfig.backlogsize);
 
     if (ls < 0) {
         error("cannot accept connection");
@@ -166,5 +162,11 @@ void Network::log(const std::string& msg)
         fileLog->log(msg);
     }
 }
+
+std::string Network::get_hostname()
+{
+    return netConfig.hostname;
+}
+
 
 
