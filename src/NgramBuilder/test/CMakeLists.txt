@@ -1,7 +1,7 @@
 # NgramBuilder
 file(GLOB ngram
     "./ngramBuilder*"
-    "../src/ngramBuilder*"
+    "../src/NgramBuilder*"
 )
 add_executable(ngram ${ngram})
 TARGET_LINK_LIBRARIES(ngram cppunit)
