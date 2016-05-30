@@ -11,6 +11,8 @@
 #include <iostream>
 #include <csignal>
 
+#include <unistd.h>
+
 #include "common/src/FileLog.h"
 #include "Server/src/Server.h"
 

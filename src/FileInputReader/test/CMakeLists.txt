@@ -1,8 +1,8 @@
-file(GLOB f1
+file(GLOB fileInputReaderTest
     "./*"
     "../src/*"
 )
-add_executable(f1 ${f1})
-TARGET_LINK_LIBRARIES(f1 cppunit)
-set_target_properties(f1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(FileInputReader ${PROJECT_SOURCE_DIR}/dist/tests/f1)
+add_executable(fileInputReaderTest ${fileInputReaderTest})
+TARGET_LINK_LIBRARIES(fileInputReaderTest cppunit)
+set_target_properties(fileInputReaderTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
+add_test(FileInputReader ${PROJECT_SOURCE_DIR}/dist/tests/fileInputReaderTest)

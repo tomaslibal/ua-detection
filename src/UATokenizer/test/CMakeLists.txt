@@ -1,9 +1,9 @@
 # UATokenizer
-file(GLOB f4
+file(GLOB uaTokenizerTest
     "./*"
     "../src/*"
 )
-add_executable(f4 ${f4})
-TARGET_LINK_LIBRARIES(f4 cppunit)
-set_target_properties(f4 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(UATokenizer ${PROJECT_SOURCE_DIR}/dist/tests/f4)
+add_executable(uaTokenizerTest ${uaTokenizerTest})
+TARGET_LINK_LIBRARIES(uaTokenizerTest cppunit)
+set_target_properties(uaTokenizerTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
+add_test(UATokenizer ${PROJECT_SOURCE_DIR}/dist/tests/uaTokenizerTest)

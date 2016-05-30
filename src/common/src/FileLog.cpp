@@ -1,5 +1,6 @@
 #include "FileLog.h"
 
+#include <iostream>
 #include <fstream>
 #include <ctime>
 #include <string>
@@ -24,8 +25,22 @@ void FileLog::setPath(std::string const& path)
     this->path = path;
 }
 
+void FileLog::setDebug(bool is_debug)
+{
+    debug = is_debug;
+}
+
+bool FileLog::getDebug()
+{
+    return debug;
+}
+
 void FileLog::log(std::string const& msg)
 {
+    if (debug) {
+        std::cout << msg << std::endl;
+    }
+    
     std::ofstream ofile(path, std::fstream::app);
 
     if (!ofile.good()) {

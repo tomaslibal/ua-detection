@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "../../NgramBuilder/src/NgramBuilder.h"
+#include "../../NgramBuilder/src/UaNgramBuilder.h"
 
 class NaiveBayessClassifier {
 public:
@@ -59,6 +59,11 @@ private:
      * increments a frequency of a prior (key) by one
      */
     void inc_priors_freq(std::string &key);
+    
+    /*
+     * Tokenizes user-agent string and builds the ngrams from the tokens
+     */
+    UaNgramBuilder uaNgramBuilder;
 
 };
 

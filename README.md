@@ -67,7 +67,7 @@ The algorithm for classification is similar to this.
         return exp( probability + log( category_freq ) )
 ```
 
-This algorithm can be found in [double NaiveBayessClassifier::classify()](/src/NaiveBayessClassifier/src/NaiveBayessClassifier.cpp).
+This algorithm can be found in [double NaiveBayessClassifier::classify()](/src/NaiveBayessClassifier/src/NaiveBayessClassifier.cpp#L177).
 
 ### Build the project from source
 

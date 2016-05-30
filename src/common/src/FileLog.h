@@ -12,8 +12,13 @@ public:
 
     void setPath(std::string const& path);
     void log(std::string const& msg);
+
+    void setDebug(bool is_debug);
+    bool getDebug();
+
 private:
     std::string path = "./uadet2.log.txt";
+    bool debug = false;
 };
 
 #endif /* FILELOG_H */
