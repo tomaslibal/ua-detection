@@ -24,7 +24,6 @@ public:
 private:
     FileLog logger;
     ProgramConfigObject config;
-    //Network network;
     NaiveBayessClassifier nb;
     
     std::atomic<int> nIncomingMsg{0};
