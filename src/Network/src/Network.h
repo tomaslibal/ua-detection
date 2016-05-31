@@ -28,6 +28,11 @@ public:
      */
     int  get_port_no();
     
+    /*
+     * Returns the maximum number of waiting incoming TCP connections
+     */
+    int get_backlogsize() const;
+    
     /**
      * returns the hostname record
      */
@@ -63,16 +68,6 @@ private:
      * file backed logger
      */
     FileLog *fileLog = nullptr;
-
-    /**
-     * port number that will be used when creating tcp connections
-     */
-    int portno = 10128;
-
-    /**
-     * backlog size of connections queued to be processed
-     */
-    int backlogsize = 5;
 
     /**
      * logs the string message using the class' logger

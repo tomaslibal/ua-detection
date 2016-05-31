@@ -27,6 +27,12 @@ Network::~Network()
 {
 }
 
+int Network::get_backlogsize() const
+{
+    return netConfig.backlogsize;
+}
+
+
 int Network::create_socket_inet_stream() const
 {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -108,7 +114,7 @@ int Network::addr_listen() const
 
     bzero((char *) &serv_addr, sizeof(serv_addr));
 
-    log("Using port number " + std::to_string(portno));
+    log("Using port number " + std::to_string(netConfig.portno));
 
     serv_addr.sin_family = AF_INET;
     // host address: INADDR_ANY
@@ -131,7 +137,7 @@ int Network::addr_listen() const
     }
 
     log("Binding to the socket successful");
-    std::cout << "binding to the socket successful on port " << portno << std::endl;
+    std::cout << "binding to the socket successful on port " << netConfig.portno << std::endl;
 
     /*
       * Accept incoming connections
