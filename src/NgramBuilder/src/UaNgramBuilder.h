@@ -10,7 +10,7 @@ class UaNgramBuilder : public NgramBuilder
 {
 public:
     UaNgramBuilder() : NgramBuilder() {};
-    int fromUserAgentString(std::string &sentence, std::vector<Ngram> *ngrams);
+    int fromUserAgentString(std::string const& sentence, std::vector<Ngram> *ngrams);
 private:
     
 };

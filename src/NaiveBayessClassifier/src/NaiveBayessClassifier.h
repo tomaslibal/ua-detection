@@ -18,17 +18,17 @@ public:
     NaiveBayessClassifier();
     virtual ~NaiveBayessClassifier();
     
-    void add_word(std::string &word, std::string &category);
-    void add_data(std::string &data, std::string &category);
+    void add_word(std::string const& word, std::string const& category);
+    void add_data(std::string const& data, std::string const& category);
     
-    double classify(std::string &data, std::string &category);
+    double classify(std::string const& data, std::string const& category);
     
-    double prob_category(std::string &category);
+    double prob_category(std::string const& category);
     double prob_ngram(Ngram &ngram);
-    double prob_category_ngram(std::string &category, Ngram &ngram);
-    int freq_category_word(std::string &category, std::string &word);
+    double prob_category_ngram(std::string const& category, Ngram &ngram);
+    int freq_category_word(std::string const& category, std::string const& word);
     
-    bool is_in_vocabulary(std::string &word);
+    bool is_in_vocabulary(std::string const& word);
     void stats();
     
     std::vector<std::string>* get_categories();
@@ -58,7 +58,7 @@ private:
     /*
      * increments a frequency of a prior (key) by one
      */
-    void inc_priors_freq(std::string &key);
+    void inc_priors_freq(std::string const& key);
     
     /*
      * Tokenizes user-agent string and builds the ngrams from the tokens

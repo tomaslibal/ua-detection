@@ -27,7 +27,7 @@ NaiveBayessClassifier::~NaiveBayessClassifier() {
 
 }
 
-void NaiveBayessClassifier::inc_priors_freq(string &key) {
+void NaiveBayessClassifier::inc_priors_freq(string const& key) {
     auto search = priors_freq.find(key);
     if (search != priors_freq.end()) {
         search->second++;
@@ -36,7 +36,7 @@ void NaiveBayessClassifier::inc_priors_freq(string &key) {
     }
 }
 
-void NaiveBayessClassifier::add_word(string &word, string &category) {
+void NaiveBayessClassifier::add_word(string const& word, string const& category) {
     // global vocabulary
     auto voc_search = vocabulary.find(word);
     if (voc_search != vocabulary.end()) {
@@ -60,7 +60,7 @@ void NaiveBayessClassifier::add_word(string &word, string &category) {
     } 
 }
 
-void NaiveBayessClassifier::add_data(string &data, string &category) {
+void NaiveBayessClassifier::add_data(string const& data, string const& category) {
     // increase the frequency of this type by 1
     this->inc_priors_freq(category);
     
@@ -79,7 +79,7 @@ void NaiveBayessClassifier::add_data(string &data, string &category) {
     }    
 }
 
-double NaiveBayessClassifier::prob_category(std::string& category) {
+double NaiveBayessClassifier::prob_category(std::string const& category) {
     int freq_cat = 0;
     auto search = priors_freq.find(category);
     if (search != priors_freq.end()) {
@@ -121,7 +121,7 @@ double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
     }
 }
 
-int NaiveBayessClassifier::freq_category_word(std::string &category, std::string &word) {
+int NaiveBayessClassifier::freq_category_word(std::string const& category, std::string const& word) {
     auto search = category_vocabularies.find(category);
     if (search != category_vocabularies.end()) {
         auto cat_search = search->second.find(word);
@@ -133,7 +133,7 @@ int NaiveBayessClassifier::freq_category_word(std::string &category, std::string
     return 0;
 }
 
-double NaiveBayessClassifier::prob_category_ngram(std::string& category, Ngram& ngram) {
+double NaiveBayessClassifier::prob_category_ngram(std::string const& category, Ngram& ngram) {
     
     int ngram_freq_in_cat = 0;
     int ngrams_freq_total_in_cat = 0;
@@ -155,13 +155,13 @@ double NaiveBayessClassifier::prob_category_ngram(std::string& category, Ngram& 
     }
     
     if (ngrams_freq_total_in_cat > 0) {
-        return double(ngram_freq_in_cat)/double(ngrams_freq_total_in_cat);
+        return double(ngram_freq_in_cat) / double(ngrams_freq_total_in_cat);
     } else {
         return 0;
     }
 }
 
-bool NaiveBayessClassifier::is_in_vocabulary(std::string &word) {
+bool NaiveBayessClassifier::is_in_vocabulary(std::string const& word) {
     auto search = vocabulary.find(word);
     if (search != vocabulary.end()) {
         return true;
@@ -171,7 +171,7 @@ bool NaiveBayessClassifier::is_in_vocabulary(std::string &word) {
 }
 
 
-double NaiveBayessClassifier::classify(std::string &data, std::string &category) {
+double NaiveBayessClassifier::classify(std::string const& data, std::string const& category) {
     vector<Ngram> ngrams;
     UaNgramBuilder nb;
     nb.fromUserAgentString(data, &ngrams);
