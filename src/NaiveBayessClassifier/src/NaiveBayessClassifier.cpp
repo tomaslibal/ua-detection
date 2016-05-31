@@ -11,8 +11,13 @@
 #include "NaiveBayessClassifier.h"
 #include "../../UATokenizer/src/UATokenizer.h"
 
+using std::cout;
+using std::endl;
+using std::string;
+using std::vector;
+using std::map;
+using std::pair;
 
-using namespace std;
 
 NaiveBayessClassifier::NaiveBayessClassifier() {
     
