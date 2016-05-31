@@ -27,7 +27,8 @@ Network::~Network()
 {
 }
 
-int Network::create_socket_inet_stream() {
+int Network::create_socket_inet_stream() const
+{
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         perror("ERROR Opening Socket");
@@ -92,7 +93,7 @@ int Network::addr_connect(struct hostent *host)
     return sockfd;
 }
 
-int Network::addr_listen()
+int Network::addr_listen() const
 {
     int sockfd;
 
@@ -156,7 +157,7 @@ void Network::set_file_log(FileLog* fileLog)
     this->fileLog = fileLog;
 }
 
-void Network::log(const std::string& msg)
+void Network::log(std::string const& msg) const
 {
     if (fileLog) {
         fileLog->log(msg);

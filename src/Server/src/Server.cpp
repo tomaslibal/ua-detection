@@ -115,8 +115,8 @@ void Server::start()
     /*
      * Start the network server:
      */
-    NetworkConfig networkConfig(config.portno, config.hostname);
-    Network network(networkConfig);
+    NetworkConfig const networkConfig(config.portno, config.hostname);
+    Network const network(networkConfig);
     
     sockaddr_in serv_addr, cli_addr;
     char buffer[256];

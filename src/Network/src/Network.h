@@ -51,7 +51,7 @@ public:
     /**
      * binds to a port and listens for incoming connections
      */
-    int addr_listen();
+    int addr_listen() const;
 private:
     
     /*
@@ -77,12 +77,12 @@ private:
     /**
      * logs the string message using the class' logger
      */
-    void log(const std::string& msg);
+    void log(std::string const& msg) const;
 
     /**
      * creates a new socket and returns the socket fd
      */
-    int create_socket_inet_stream();
+    int create_socket_inet_stream() const;
 };
 
 #endif
