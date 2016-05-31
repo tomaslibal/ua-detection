@@ -92,8 +92,8 @@ void Client::process_arguments(char** argv, int argc)
 
 void Client::start()
 {    
-    NetworkConfig networkConfig(config.portno, config.hostname);
-    Network network(networkConfig);
+    NetworkConfig const networkConfig(config.portno, config.hostname);
+    Network const network(networkConfig);
     
     //network.set_port_no(config.portno);
     

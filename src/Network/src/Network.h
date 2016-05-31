@@ -19,14 +19,9 @@ public:
     virtual ~Network();
 
     /**
-     * sets the portno field
-     */
-    void set_port_no(int portno);
-
-    /**
      * returns the portno field
      */
-    int  get_port_no();
+    int  get_port_no() const;
     
     /*
      * Returns the maximum number of waiting incoming TCP connections
@@ -36,7 +31,7 @@ public:
     /**
      * returns the hostname record
      */
-    std::string get_hostname();
+    std::string get_hostname() const;
 
     /**
      * sets the FileLog logger
@@ -46,12 +41,12 @@ public:
     /**
      * returns the FileLog logger used by this class
      */
-    FileLog* get_file_log();
+    FileLog* get_file_log() const;
 
     /**
      * opens tcp connection, return the socket file descriptor
      */
-    int  addr_connect(struct hostent *host);
+    int  addr_connect(struct hostent *host) const;
 
     /**
      * binds to a port and listens for incoming connections

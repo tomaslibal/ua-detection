@@ -36,13 +36,7 @@ private:
     ProgramConfigObject config;
     
     FileLog logger;
-    
-    /*
-     * Delegate class to handle opening the TCP open_connection
-     * 
-     */
-    //Network network;
-    
+        
     /*
      * Host's information is stored in this struct.
      * 

@@ -42,12 +42,12 @@ int Network::create_socket_inet_stream() const
     return sockfd;
 }
 
-int Network::get_port_no()
+int Network::get_port_no() const
 {
     return netConfig.portno;
 }
 
-int Network::addr_connect(struct hostent *host)
+int Network::addr_connect(struct hostent *host) const
 {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -153,7 +153,7 @@ int Network::addr_listen() const
 }
 
 
-FileLog* Network::get_file_log()
+FileLog* Network::get_file_log() const
 {
     return fileLog;
 }
@@ -170,7 +170,7 @@ void Network::log(std::string const& msg) const
     }
 }
 
-std::string Network::get_hostname()
+std::string Network::get_hostname() const
 {
     return netConfig.hostname;
 }
