@@ -17,7 +17,7 @@
 
 Client::Client()
 {
-    ProgramConfig confCtrl(configFilePath);
+    ProgramConfig confCtrl(defaultConfigPath);
     confCtrl.update(config);
     
     logger.setPath(config.logfile);

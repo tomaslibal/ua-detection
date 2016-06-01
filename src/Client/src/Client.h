@@ -31,7 +31,7 @@ private:
      */
     std::string command = "";
     
-    std::string const configFilePath = "config/client.txt";
+    std::string const defaultConfigPath = "config/client.txt";
     
     ProgramConfigObject config;
     
