@@ -16,7 +16,7 @@ public:
     FileInputReader();
     virtual ~FileInputReader();
     
-    void readLines(std::string filename, std::function<void (std::string)>& f);
+    void readLines(std::string const& filename, std::function<void (std::string)>& f);
 private:
 
 };
