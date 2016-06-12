@@ -50,7 +50,7 @@ void Server::learn()
      * The function then calls NaiveBayesClassifier.add_data to add the new 
      * user agent string with its category(ies) to the memory.
      */
-    std::function<void (std::string)> add_line = [nbl](std::string line) {
+    std::function<void (std::string const&)> add_line = [nbl](std::string const& line) {
         std::string category, uas;
         std::string::size_type n = line.find('\t');
         std::vector<std::string> categories;

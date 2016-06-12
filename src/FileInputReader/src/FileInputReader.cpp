@@ -22,7 +22,7 @@ FileInputReader::FileInputReader() {
 FileInputReader::~FileInputReader() {
 }
 
-void FileInputReader::readLines(string const& filename, function<void (string)>& f) {
+void FileInputReader::readLines(string const& filename, function<void (string const&)>& f) {
     ifstream infile(filename);
     
     if (!infile.good()) {

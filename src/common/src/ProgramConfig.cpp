@@ -35,7 +35,7 @@ ProgramConfig::~ProgramConfig() {
 void ProgramConfig::update(ProgramConfigObject& confObj)
 {
 
-    std::function<void (std::string)> onReadLine = [&confObj](std::string line) {
+    std::function<void (std::string const&)> onReadLine = [&confObj](std::string const& line) {
         std::string* p_str;
         if (line.find("hostname") != std::string::npos) {
             p_str = get_value(line, "hostname");

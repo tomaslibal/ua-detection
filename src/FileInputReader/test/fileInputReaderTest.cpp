@@ -30,7 +30,7 @@ void fileInputReaderTest::tearDown() {
 void fileInputReaderTest::testReadLinesReadsAllLinesInTheFile() {
     int numLinesRead = 0;
     
-    std::function<void (std::string)> test_callback = [&numLinesRead](std::string line) {
+    std::function<void (std::string const&)> test_callback = [&numLinesRead](std::string const& line) {
         numLinesRead++;
     };
     
@@ -42,7 +42,7 @@ void fileInputReaderTest::testReadLinesReadsAllLinesInTheFile() {
 void fileInputReaderTest::testReadLinesPassesInTheLinesAsStrings() {
     std::vector<std::string> lines;
     
-    std::function<void (std::string)> test_callback = [&lines](std::string line) {
+    std::function<void (std::string const&)> test_callback = [&lines](std::string const& line) {
         lines.push_back(line);
     };
     
@@ -65,7 +65,7 @@ void fileInputReaderTest::testReadLinesPassesInTheLinesAsStrings() {
 void fileInputReaderTest::testReadLinesWontExecuteTheCallbackIfFileNotFound() {
     std::string nonExistingFile = "bar.txt";
     
-    std::function<void (std::string)> test_callback = [](std::string line) {        
+    std::function<void (std::string const&)> test_callback = [](std::string const& line) {        
         CPPUNIT_FAIL("The callback should not be invoked when the file cannot be found");
     };
     
