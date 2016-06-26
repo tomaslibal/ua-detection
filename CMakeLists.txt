@@ -54,3 +54,6 @@ add_subdirectory(src/common/test)
 
 # Network Tests
 add_subdirectory(src/Network/test)
+
+# Client Tests
+add_subdirectory(src/Client/test)
