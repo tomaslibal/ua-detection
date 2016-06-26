@@ -108,7 +108,6 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
 	std::map<double, std::string, std::greater<double>> results;
         
         double threshold = 0.61 * 100;
-        bool has_highest_prob = false;
         
         for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
             std::string category = *it;
