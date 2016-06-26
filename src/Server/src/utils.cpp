@@ -30,3 +30,8 @@ double get_percentile(double value, std::map<double, std::string, std::greater<d
     
     return std::round( num_smaller_or_equal_values / size );
 }
+
+double sigm(double const x)
+{
+    return 1 / (1 + exp(-x));
+}

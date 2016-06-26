@@ -29,5 +29,16 @@ void error(std::string msg);
  */
 double get_percentile(double value, std::map<double, std::string, std::greater<double>>& population);
 
+
+/**
+ * Sigmoid activation function
+ * 
+ *     y = 1/(1+exp(-x))
+ * 
+ * @param double x
+ * @return double [0-1]
+ */
+double sigm(double const x);
+
 #endif /* SERVER_H */
 

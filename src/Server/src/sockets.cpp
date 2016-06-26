@@ -107,14 +107,19 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
 	 */
 	std::map<double, std::string, std::greater<double>> results;
         
-        double threshold = 0.75;
+        double threshold = 0.61 * 100;
         bool has_highest_prob = false;
         
         for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
             std::string category = *it;
             double p = nbc.classify(input.at(2), category);
+            /*
+             * Use the activation function to produce the likelyhood of the user-agent 
+             * being in the given class.
+             */
+            double pct = sigm(p) * 100;
 
-	    results.insert(std::pair<double, std::string>(p, category));
+            results.insert(std::pair<double, std::string>(pct, category));
         }
         
         /*
@@ -125,7 +130,7 @@ std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifie
 	for (auto& item: results) {
 	    aux = item.first > threshold ? "true" : "false";
 	    
-	    pstrs << item.second << ":" << item.first << "," << aux << std::endl;
+	    pstrs << item.second << ":" << item.first << "%," << aux << std::endl;
 	}
 
 	p_str = new std::string(pstrs.str());
