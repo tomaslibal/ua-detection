@@ -1,6 +1,9 @@
 file(GLOB clientTest
     "./*"
     "../src/*"
+    "../../Network/src/*"
+    "../../FileInputReader/src/*"
+    "../../common/src/*"    
 )
 add_executable(clientTest ${clientTest})
 TARGET_LINK_LIBRARIES(clientTest cppunit)
