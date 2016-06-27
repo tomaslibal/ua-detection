@@ -1,6 +1,8 @@
 #include "Server.h"
 #include "../../common/src/uadet2.h"
-#include "sockets.h"
+#include "../../common/src/FileLog.h"
+#include "./protocol.h"
+#include "./utils.h"
 
 #include <functional>
 #include <utility>
@@ -12,6 +14,10 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <cassert>
+#include <iostream>
+
+#define BUFFERSIZE 512
 
 Server::Server()
 {
@@ -138,7 +144,7 @@ void Server::start()
      * Worker is started as a new thread, it processes the incoming request
      * in a detached state so it should not block other requests.
      */
-    std::function<void (int, std::atomic<int> &)> worker2 = [nbl](int in_sockfd, std::atomic<int> & nIncomingReq) {
+    std::function<void (int, std::atomic<int> &)> worker2 = [nbl, this](int in_sockfd, std::atomic<int> & nIncomingReq) {
         evaluate_incoming_request(in_sockfd, *nbl, nIncomingReq);
     };
     
@@ -166,6 +172,141 @@ void Server::stop()
 {
     log("Server stopping...");
     log("Num connections was " + std::to_string(nIncomingMsg));
+}
+
+int Server::create_socket_inet_stream() {
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        perror("ERROR Opening Socket");
+    }
+    return sockfd;
+}
+
+
+
+/**
+ * 
+ */
+void Server::evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc, std::atomic<int> & nIncomingMsg) {
+  
+    FileLog logger;
+    logger.setPath(std::string("eval.") + std::to_string(insockfd) + std::string(".log.txt"));
+    logger.log("Got a request");
+    
+    /**
+     * 
+     */
+    socklen_t clilen;
+    /**
+     * Input buffer. The incoming connection data is read into it.
+     */
+    char buffer[BUFFERSIZE];
+    /**
+     * 
+     */
+    int n;
+
+    /**
+     * Check that we have a valid socket descriptor
+     */
+    assert(insockfd >= 0);
+
+    std::cout << "Connection established (" << insockfd << ")" << std::endl;
+
+    bzero(buffer,BUFFERSIZE);
+    n = read(insockfd,buffer,BUFFERSIZE);
+
+    if (n < 0) perror("ERROR reading from socket");
+    
+    logger.log(std::string("Request was: ") + std::string(buffer));
+
+    std::vector<std::string>* input = process_message(buffer);
+    
+    std::string* output = classify_data(*input, nbc);
+    
+    logger.log(std::string("Output was: " + *output));
+    
+    n = write(insockfd, output->data(), output->length() * sizeof(char));
+    
+    delete output;
+    
+    if (n < 0) perror("ERROR writing to socket");
+    close(insockfd);
+      
+    bzero(buffer, BUFFERSIZE);
+    delete input;
+    return;
+}
+
+std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc)
+{
+    std::string* p_str = nullptr;
+    std::string aux;
+    
+    std::ostringstream pstrs;
+    
+    /*
+     * If token[0] == "eval_one" then evaluate the given user-agent (token[2]) using
+     * the naive bayess classifier for the specified category (token[1])
+     */
+    if (input.at(0) == "eval_one") {
+        double p = nbc.classify(input.at(2), input.at(1));
+
+        pstrs << p;
+        
+    p_str = new std::string(pstrs.str());
+    return p_str;
+    // If token[0] == "eval" then:
+    // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
+    // was the most probable or not
+    } else if (input.at(0) == "eval") {
+        std::vector<std::string>* categories = nbc.get_categories();
+    
+    /*
+     * Keeps evalution results for each category:
+     *     cateogory, eval_result
+     */
+    std::map<double, std::string, std::greater<double>> results;
+        
+        double threshold = 0.61 * 100;
+        
+        for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
+            std::string category = *it;
+            double p = nbc.classify(input.at(2), category);
+            /*
+             * Use the activation function to produce the likelyhood of the user-agent 
+             * being in the given class.
+             */
+            double pct = sigm(p) * 100;
+
+            results.insert(std::pair<double, std::string>(pct, category));
+        }
+        
+        /*
+     * Now results are in order by the highest probability descending. Print them with true/false flags
+     * signifying if the value exceeded the threshold or not.
+     * 
+     */ 
+    for (auto& item: results) {
+        aux = item.first > threshold ? "true" : "false";
+        
+        pstrs << item.second << ":" << item.first << "%," << aux << std::endl;
+    }
+
+    p_str = new std::string(pstrs.str());
+            
+        delete categories;
+    
+    return p_str;
+    } else if (input.at(0) == "add") {
+        std::string category = input.at(1);
+        std::string ua_agent = input.at(2);
+        
+        nbc.add_data(ua_agent, category);
+    return new std::string("added OK");
+    } else {
+      return new std::string("Command not understood");
+    }
 }
 
 
