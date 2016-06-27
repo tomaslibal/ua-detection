@@ -242,9 +242,9 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
 {
     std::string* p_str = nullptr;
     std::string aux;
-    
+
     std::ostringstream pstrs;
-    
+
     /*
      * If token[0] == "eval_one" then evaluate the given user-agent (token[2]) using
      * the naive bayess classifier for the specified category (token[1])
@@ -253,20 +253,20 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
         double p = nbc.classify(input.at(2), input.at(1));
 
         pstrs << p;
-        
-    p_str = new std::string(pstrs.str());
-    return p_str;
+
+        p_str = new std::string(pstrs.str());
+        return p_str;
     // If token[0] == "eval" then:
     // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
     // was the most probable or not
     } else if (input.at(0) == "eval") {
         std::vector<std::string>* categories = nbc.get_categories();
     
-    /*
-     * Keeps evalution results for each category:
-     *     cateogory, eval_result
-     */
-    std::map<double, std::string, std::greater<double>> results;
+        /*
+         * Keeps evalution results for each category:
+         *     cateogory, eval_result
+         */
+        std::map<double, std::string, std::greater<double>> results;
         
         double threshold = 0.61 * 100;
         
@@ -283,29 +283,29 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
         }
         
         /*
-     * Now results are in order by the highest probability descending. Print them with true/false flags
-     * signifying if the value exceeded the threshold or not.
-     * 
-     */ 
-    for (auto& item: results) {
-        aux = item.first > threshold ? "true" : "false";
-        
-        pstrs << item.second << ":" << item.first << "%," << aux << std::endl;
-    }
+         * Now results are in order by the highest probability descending. Print them with true/false flags
+         * signifying if the value exceeded the threshold or not.
+         * 
+         */ 
+        for (auto& item: results) {
+            aux = item.first > threshold ? "true" : "false";
+            
+            pstrs << item.second << ":" << item.first << "%," << aux << std::endl;
+        }
 
-    p_str = new std::string(pstrs.str());
+        p_str = new std::string(pstrs.str());
             
         delete categories;
     
-    return p_str;
+        return p_str;
     } else if (input.at(0) == "add") {
         std::string category = input.at(1);
         std::string ua_agent = input.at(2);
         
         nbc.add_data(ua_agent, category);
-    return new std::string("added OK");
+        return new std::string("added OK");
     } else {
-      return new std::string("Command not understood");
+        return new std::string("Command not understood");
     }
 }
 
