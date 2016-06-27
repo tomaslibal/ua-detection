@@ -202,7 +202,7 @@ void Server::evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc,
      */
     assert(insockfd >= 0);
 
-    std::cout << "Connection established (" << insockfd << ")" << std::endl;
+    logger.log("Connection established (" + std::to_string(insockfd) + ")");
 
     bzero(buffer,BUFFERSIZE);
     n = read(insockfd,buffer,BUFFERSIZE);
