@@ -24,8 +24,6 @@ public:
     void learn();
     void start();
     void stop();
-    
-    int create_socket_inet_stream();
 
     /**
      * Reads the incoming socket connection and parses it using protocol::process_message().

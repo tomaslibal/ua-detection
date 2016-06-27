@@ -174,15 +174,6 @@ void Server::stop()
     log("Num connections was " + std::to_string(nIncomingMsg));
 }
 
-int Server::create_socket_inet_stream() {
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        perror("ERROR Opening Socket");
-    }
-    return sockfd;
-}
-
-
 
 /**
  * 
