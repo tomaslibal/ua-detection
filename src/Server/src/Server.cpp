@@ -30,7 +30,7 @@ Server::Server()
 
 Server::~Server()
 {
-
+    log("*********** Server destroy");
 }
 
 void Server::learn()
