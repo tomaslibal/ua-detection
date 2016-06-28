@@ -25,7 +25,7 @@ Server::Server()
 
     confCtrl.update(config);
     
-    log("Initializing Server");
+    log("*********** Initializing Server");
 }
 
 Server::~Server()
