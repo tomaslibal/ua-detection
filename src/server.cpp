@@ -16,6 +16,8 @@
 #include "common/src/FileLog.h"
 #include "Server/src/Server.h"
 
+static Server* serverModulePtr = nullptr;
+
 /*
  * 
  */
@@ -25,6 +27,7 @@ int main(int argc, char** argv) {
      * Server module resource handler
      */
     Server server;
+    serverModulePtr = &server;
     
     /*
      * catch the ctrl+c interrupt signal
@@ -32,6 +35,10 @@ int main(int argc, char** argv) {
     signal(SIGINT, [] (int signum) {
         if (Server::sockfd >= 0) {
             close(Server::sockfd);
+        }
+        if (serverModulePtr != nullptr) {
+            serverModulePtr->stop();
+            serverModulePtr->~Server();
         }
         exit(signum);
     });
