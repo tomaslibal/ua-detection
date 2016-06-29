@@ -25,6 +25,7 @@ Server::Server()
 
     confCtrl.update(config);
     
+    logger.setPath(config.logfile);
     log("*********** Initializing Server");
 }
 
