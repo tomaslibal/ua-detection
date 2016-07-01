@@ -33,9 +33,6 @@ int main(int argc, char** argv) {
      * catch the ctrl+c interrupt signal
      */
     signal(SIGINT, [] (int signum) {
-        if (Server::sockfd >= 0) {
-            close(Server::sockfd);
-        }
         if (serverModulePtr != nullptr) {
             serverModulePtr->stop();
             serverModulePtr->~Server();

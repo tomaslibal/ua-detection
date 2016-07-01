@@ -17,7 +17,7 @@ public:
     Server();
     virtual ~Server();
     
-    static int sockfd;
+    int sockfd;
     
     void set_logger(FileLog const& logger);
     void set_config(ProgramConfigObject const& config);

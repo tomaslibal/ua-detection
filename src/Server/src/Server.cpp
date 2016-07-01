@@ -27,6 +27,8 @@ Server::Server()
     
     logger.setPath(config.logfile);
     log("*********** Initializing Server");
+    
+    sockfd = -1;
 }
 
 Server::~Server()
@@ -171,6 +173,8 @@ void Server::start()
 
 void Server::stop()
 {
+    close(sockfd);
+    
     log("Server stopping...");
     log("Num connections was " + std::to_string(nIncomingMsg));
 }
@@ -300,6 +304,3 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
         return new std::string("Command not understood");
     }
 }
-
-
-int Server::sockfd = -1;
