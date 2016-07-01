@@ -95,14 +95,11 @@ void Client::start()
     NetworkConfig const networkConfig(config.portno, config.hostname);
     Network const network(networkConfig);
     
-    //network.set_port_no(config.portno);
-    
     int sockfd = network.addr_connect(server);
     
     if (sockfd < 0) 
     {
         log("ERROR opening socket");
-        //error("ERROR opening socket");
         return;
     }
 
@@ -118,7 +115,6 @@ void Client::start()
 
     if (n < 0) {
         log("ERROR writing to socket");
-        //error("ERROR writing to socket");
         return;
     }
 
@@ -130,7 +126,6 @@ void Client::start()
 
     if (n < 0) {
         log("ERROR reading from socket");
-       // error("ERROR reading from socket");
         return;
     }
     
