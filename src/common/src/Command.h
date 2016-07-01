@@ -24,6 +24,8 @@ enum class CommandSource { Server, Client };
 class Command
 {
 public:
+    class Builder;
+    
     Command(CommandSource const commandSource, std::string const& name, std::string const& data) : commandSource(commandSource), name(name), data(data) {};
     virtual ~Command();
     
@@ -36,16 +38,14 @@ private:
     std::string const data;
 };
 
-class CommandBuilder
+class Command::Builder
 {
 public:
-    CommandBuilder();
-    virtual ~CommandBuilder();
+    Builder();
     
-    CommandBuilder* start();
-    CommandBuilder* withCommandSource(CommandSource const& commandSource);
-    CommandBuilder* withName(std::string const& name);
-    CommandBuilder* withData(std::string const& data);
+    Builder& withCommandSource(CommandSource const& commandSource);
+    Builder& withName(std::string const& name);
+    Builder& withData(std::string const& data);
     Command build();
     
 private:

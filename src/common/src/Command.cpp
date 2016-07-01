@@ -24,43 +24,33 @@ std::string Command::getData()
 
 
 
-CommandBuilder::CommandBuilder()
-{
-    
-}
-
-CommandBuilder::~CommandBuilder()
+Command::Builder::Builder()
 {
 
 }
 
-CommandBuilder* CommandBuilder::start()
-{
-    return this;
-}
-
-CommandBuilder* CommandBuilder::withCommandSource(CommandSource const& commandSource)
+Command::Builder& Command::Builder::withCommandSource(CommandSource const& commandSource)
 {
     this->commandSource = commandSource;
     
-    return this;
+    return *this;
 }
 
-CommandBuilder* CommandBuilder::withName(std::string const& name)
+Command::Builder& Command::Builder::withName(std::string const& name)
 {
     this->name = name;
     
-    return this;
+    return *this;
 }
 
-CommandBuilder* CommandBuilder::withData(std::string const& data)
+Command::Builder& Command::Builder::withData(std::string const& data)
 {
     this->data = data;
     
-    return this;
+    return *this;
 }
 
-Command CommandBuilder::build()
+Command Command::Builder::build()
 {
     return Command(commandSource, name, data);
 }
