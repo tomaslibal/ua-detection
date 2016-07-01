@@ -27,6 +27,9 @@ public:
     Command(CommandSource const commandSource, std::string const& name, std::string const& data) : commandSource(commandSource), name(name), data(data) {};
     virtual ~Command();
     
+    CommandSource getCommandSource();
+    std::string getName();
+    std::string getData();
 private:
     CommandSource const commandSource;
     std::string const name;
@@ -39,10 +42,16 @@ public:
     CommandBuilder();
     virtual ~CommandBuilder();
     
-    void withCommandSource(CommandSource const commandSource);
-    void withName(std::string const& name);
-    void withData(std::string const& data);
+    CommandBuilder* start();
+    CommandBuilder* withCommandSource(CommandSource const& commandSource);
+    CommandBuilder* withName(std::string const& name);
+    CommandBuilder* withData(std::string const& data);
     Command build();
+    
+private:
+    CommandSource commandSource;
+    std::string name;
+    std::string data;
 };
 
 #endif /* COMMAND_H */
