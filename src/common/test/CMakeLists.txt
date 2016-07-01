@@ -21,3 +21,12 @@ add_executable(fileLogTest ${fileLogTest})
 TARGET_LINK_LIBRARIES(fileLogTest cppunit)
 set_target_properties(fileLogTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
 add_test(FileLog ${PROJECT_SOURCE_DIR}/dist/tests/fileLogTest)
+
+file(GLOB commandTest
+    "./commandTest*"
+    "../src/Command.*"
+)
+add_executable(commandTest ${commandTest})
+TARGET_LINK_LIBRARIES(commandTest cppunit)
+set_target_properties(commandTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
+add_test(CommandTest ${PROJECT_SOURCE_DIR}/dist/tests/commandTest)
