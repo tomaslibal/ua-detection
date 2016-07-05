@@ -27,7 +27,7 @@ class the input may belong.
 
 ![Sample result](/doc/ua_eval_test.png)
 
-In the figure above you can see a sample result of evaluating a user-agent string constrained to top 10 labels. Features 3-10 were evaluated extremely unlikely. This data set had 17 features in total and only two features evaluated positively as expected for the given input.
+In the figure above you can see a sample result of evaluating a user-agent string constrained to the top 10 labels. Features 3-10 were evaluated extremely unlikely. This data set had 17 features in total and only two features evaluated positively as expected for the given input.
 
 The scores for each of the first 10 classes which are shown in the figure, were as follows:
 
