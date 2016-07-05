@@ -22,6 +22,22 @@ std::string Command::getData()
     return data;
 }
 
+std::string Command::toString()
+{
+    std::string source = "";
+    
+    if (commandSource == CommandSource::Client) {
+        source = "client";
+    }
+    
+    if (commandSource == CommandSource::Server) {
+        source = "server";
+    }
+    
+    return source + ":" + name + " " + data;
+}
+
+
 
 
 Command::Builder::Builder()

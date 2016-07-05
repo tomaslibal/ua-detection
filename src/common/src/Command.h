@@ -32,6 +32,8 @@ public:
     CommandSource getCommandSource();
     std::string getName();
     std::string getData();
+    
+    std::string toString();
 private:
     CommandSource const commandSource;
     std::string const name;

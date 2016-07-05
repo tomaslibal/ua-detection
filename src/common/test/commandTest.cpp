@@ -8,6 +8,7 @@
 #include "commandTest.h"
 
 #include <iostream>
+#include <string>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(commandTest);
 
@@ -40,6 +41,19 @@ void commandTest::testBuilder()
     CPPUNIT_ASSERT(cmd.getCommandSource() == CommandSource::Client);
     CPPUNIT_ASSERT(cmd.getName().compare("eval") == 0);
     CPPUNIT_ASSERT(cmd.getData().compare("Mozilla/5.0 (Linux; Android 6; en) Firefox/45.0") == 0);
+}
+
+void commandTest::testToString()
+{
+    std::string expectedString = "client:eval Mozilla/5.0 (Linux; Android 6; en) Firefox/45.0";
+    
+    Command cmd = Command::Builder()
+        .withCommandSource(CommandSource::Client)
+        .withName("eval")
+        .withData("Mozilla/5.0 (Linux; Android 6; en) Firefox/45.0")
+        .build();
+        
+    CPPUNIT_ASSERT(cmd.toString().compare(expectedString) == 0);
 }
 
 
