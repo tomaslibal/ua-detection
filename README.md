@@ -4,7 +4,7 @@
 
 This is an experimental repository for device detection on the World Wide
 Web. I'm mostly interested in device detection for the user agents connecting
-to web servers through the HTTP requests.
+to web servers through the HTTP(S) requests.
 
 There are two end goals that I would like achieve:
 
