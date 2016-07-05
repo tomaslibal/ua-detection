@@ -43,7 +43,7 @@ void commandTest::testBuilder()
     CPPUNIT_ASSERT(cmd.getData().compare("Mozilla/5.0 (Linux; Android 6; en) Firefox/45.0") == 0);
 }
 
-void commandTest::testToString()
+void commandTest::testToStringClient()
 {
     std::string expectedString = "client:eval Mozilla/5.0 (Linux; Android 6; en) Firefox/45.0";
     
@@ -55,5 +55,19 @@ void commandTest::testToString()
         
     CPPUNIT_ASSERT(cmd.toString().compare(expectedString) == 0);
 }
+
+void commandTest::testToStringServer()
+{
+    std::string expectedString = "server:response class1:0.99 class2:0.91 class3:0.01";
+    
+    Command cmd = Command::Builder()
+        .withCommandSource(CommandSource::Server)
+        .withName("response")
+        .withData("class1:0.99 class2:0.91 class3:0.01")
+        .build();
+        
+    CPPUNIT_ASSERT(cmd.toString().compare(expectedString) == 0);
+}
+
 
 

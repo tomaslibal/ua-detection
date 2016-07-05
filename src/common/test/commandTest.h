@@ -16,7 +16,8 @@ class commandTest: public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(commandTest);
 
     CPPUNIT_TEST(testBuilder);
-    CPPUNIT_TEST(testToString);
+    CPPUNIT_TEST(testToStringClient);
+    CPPUNIT_TEST(testToStringServer);
     
     CPPUNIT_TEST_SUITE_END();
 
@@ -28,7 +29,8 @@ public:
 
 private:
     void testBuilder();
-    void testToString();
+    void testToStringClient();
+    void testToStringServer();
 };
 
 #endif	/* COMMANDTEST_H */
