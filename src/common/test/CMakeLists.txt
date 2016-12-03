@@ -38,4 +38,4 @@ file(GLOB uadet2commonTest
 add_executable(uadet2commonTest ${uadet2commonTest})
 TARGET_LINK_LIBRARIES(uadet2commonTest cppunit)
 set_target_properties(uadet2commonTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/dist/tests)
-add_test(CommandTest ${PROJECT_SOURCE_DIR}/dist/tests/uadet2commonTest)
+add_test(uadet2commonTest ${PROJECT_SOURCE_DIR}/dist/tests/uadet2commonTest)
