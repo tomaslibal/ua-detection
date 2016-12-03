@@ -15,7 +15,7 @@
 class uadet2Test: public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(uadet2Test);
 
-    CPPUNIT_TEST(testFoo);
+    CPPUNIT_TEST(test3dimVecLowValues);
     
     CPPUNIT_TEST_SUITE_END();
 
@@ -26,7 +26,8 @@ public:
     void tearDown();
 
 private:
-    void testFoo();
+    bool compareDouble3decimalPrecision(double x, double y);
+    void test3dimVecLowValues();
 };
 
 #endif	/* uadet2Test_H */
