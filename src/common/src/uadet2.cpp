@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -56,4 +58,23 @@ void error(const char *msg)
 {
     perror(msg);
     exit(EXIT_FAILURE);
+}
+
+std::vector<double> softmax(std::vector<double>& z)
+{
+    double zmax = *std::max_element(z.begin(), z.end());
+    int zsize = z.size();
+    for (int i = 0; i < zsize; i++) {
+        z[i] = exp(z[i] - zmax);
+    }
+    double sum = 0.0;
+    for (double val : z) {
+        sum += val;
+    }   
+    std::vector<double> result = {};
+    for (double val : z) {
+        result.push_back(val / sum);
+    }
+
+    return result;
 }

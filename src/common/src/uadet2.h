@@ -50,5 +50,11 @@ void strsplit(const std::string& str, char delimiter, std::vector<std::string>& 
  */
 void error(const char *msg);
 
+/*
+ *
+ *
+ */
+std::vector<double> softmax(std::vector<double>& z);
+
 #endif	/* UADET2_H */
 
