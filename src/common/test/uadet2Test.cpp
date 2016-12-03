@@ -41,6 +41,16 @@ void uadet2Test::test3dimVecLowValues()
     CPPUNIT_ASSERT(compareDouble3decimalPrecision(sm[2], 0.665) == true);
 }
 
+void uadet2Test::test3dimVecHigherValues()
+{
+    std::vector<double> z = { 100.0, 50.0, 10.0 };
+    std::vector<double> sm = softmax(z);
+
+    CPPUNIT_ASSERT(compareDouble3decimalPrecision(sm[0], 1.) == true);
+    CPPUNIT_ASSERT(compareDouble3decimalPrecision(sm[1], 0.) == true);
+    CPPUNIT_ASSERT(compareDouble3decimalPrecision(sm[2], 0.) == true);
+}
+
 bool uadet2Test::compareDouble3decimalPrecision(double x, double y)
 {
     return trunc(1000. * x) == trunc(1000. * y);
