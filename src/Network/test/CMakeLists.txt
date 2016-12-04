@@ -1,4 +1,4 @@
-# NgramBuilder
+# Network class
 file(GLOB network
     "./*"
     "../src/*"
