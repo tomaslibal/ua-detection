@@ -57,3 +57,6 @@ add_subdirectory(src/Network/test)
 
 # Client Tests
 add_subdirectory(src/Client/test)
+
+# Server class Tests
+add_subdirectory(src/Server/test)
