@@ -277,18 +277,31 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
 
             results.insert(std::pair<double, std::string>(pct, category));
         }
-        
-        /*
-         * Now results are in order by the highest probability descending. Print them with true/false flags
-         * signifying if the value exceeded the threshold or not.
-         * 
-         */ 
+
+        /* get softmax values */
+        std::vector<double> non_normalized;
+        std::vector<std::string> labels;
+
         for (auto& item: results) {
-            aux = item.first > threshold ? "true" : "false";
-            
-            pstrs << item.second << ":" << item.first << "%," << aux << std::endl;
+	    non_normalized.push_back(item.first);        
+            labels.push_back(item.second);
         }
 
+        std::vector<double> normalized = softmax(non_normalized);
+        
+        /*
+         * Now print the normalized values together with their respective labels
+         * 
+         */ 	
+	assert(normalized.size() == labels.size());
+	
+	for (size_t i = 0; i < normalized.size(); ++i) {
+	    pstrs << labels[i] << ":" << normalized[i] << std::endl;
+	}
+
+        /* 
+         * convert to the output stream into a string
+         */
         p_str = new std::string(pstrs.str());
             
         delete categories;
