@@ -33,5 +33,11 @@ void serverTest::testJsonOutput()
 
    std::string* actual = svr->json_output(values, labels);
 
+   std::string expected = "{}";
+
+   CPPUNIT_ASSERT(actual != nullptr);
+
+   CPPUNIT_ASSERT(expected.compare(*actual) == 0);
+
    delete actual;
 }

@@ -320,5 +320,11 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
 
 std::string*  Server::json_output(std::vector<double>& values, std::vector<std::string>& labels)
 {
-    return nullptr;
+    std::ostringstream json;
+
+    json << "{"; 
+ 
+    json << "}";
+  
+    return new std::string(json.str());
 }
