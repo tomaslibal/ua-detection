@@ -291,18 +291,10 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
         
         /*
          * Now print the normalized values together with their respective labels
+         * from the buffer.
          * 
          */ 	
-	assert(normalized.size() == labels.size());
-	
-	for (size_t i = 0; i < normalized.size(); ++i) {
-	    pstrs << labels[i] << ":" << normalized[i] << std::endl;
-	}
-
-        /* 
-         * convert to the output stream into a string
-         */
-        p_str = new std::string(pstrs.str());
+	p_str = json_output(normalized, labels);	
             
         delete categories;
     
