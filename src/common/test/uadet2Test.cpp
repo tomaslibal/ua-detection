@@ -51,6 +51,16 @@ void uadet2Test::test3dimVecHigherValues()
     CPPUNIT_ASSERT(compareDouble3decimalPrecision(sm[2], 0.) == true);
 }
 
+void uadet2Test::testLogisticSomeVals()
+{
+    std::vector<double> z = { 0.0, 1.0, 10.0 };
+    std::vector<double> l = logistic(z);
+
+    CPPUNIT_ASSERT(compareDouble3decimalPrecision(l[0], 0.500) == true);
+    CPPUNIT_ASSERT(compareDouble3decimalPrecision(l[1], 0.731) == true);
+    CPPUNIT_ASSERT(compareDouble3decimalPrecision(l[2], 0.999) == true);
+}
+
 bool uadet2Test::compareDouble3decimalPrecision(double x, double y)
 {
     return trunc(1000. * x) == trunc(1000. * y);

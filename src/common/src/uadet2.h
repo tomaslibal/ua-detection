@@ -56,5 +56,11 @@ void error(const char *msg);
  */
 std::vector<double> softmax(std::vector<double>& z);
 
+
+/*
+ * Logistic function f(x) maps x to [0, 1] with f(0) = 0.5
+ */
+std::vector<double> logistic(std::vector<double>& z);
+
 #endif	/* UADET2_H */
 

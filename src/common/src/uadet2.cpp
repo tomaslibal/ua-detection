@@ -78,3 +78,12 @@ std::vector<double> softmax(std::vector<double>& z)
 
     return result;
 }
+
+std::vector<double> logistic(std::vector<double>& z)
+{
+    std::vector<double> result = {};
+    for (double val : z) {
+        result.push_back(1. / (1. + exp(-val)));
+    }
+    return result;
+}

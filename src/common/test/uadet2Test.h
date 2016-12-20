@@ -17,6 +17,7 @@ class uadet2Test: public CPPUNIT_NS::TestFixture {
 
     CPPUNIT_TEST(test3dimVecLowValues);
     CPPUNIT_TEST(test3dimVecHigherValues);
+    CPPUNIT_TEST(testLogisticSomeVals);
     
     CPPUNIT_TEST_SUITE_END();
 
@@ -30,6 +31,7 @@ private:
     bool compareDouble3decimalPrecision(double x, double y);
     void test3dimVecLowValues();
     void test3dimVecHigherValues();
+    void testLogisticSomeVals();
 };
 
 #endif	/* uadet2Test_H */
