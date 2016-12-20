@@ -16,6 +16,7 @@ class serverTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(serverTest);
 
     CPPUNIT_TEST(testJsonOutput);
+    CPPUNIT_TEST(testJsonOutputWithKeyValuePairs);
   
     CPPUNIT_TEST_SUITE_END();
 
@@ -28,6 +29,7 @@ public:
 private:
     Server* svr;
     void testJsonOutput();
+    void testJsonOutputWithKeyValuePairs();
 };
 
 #endif	/* serverTest_H */

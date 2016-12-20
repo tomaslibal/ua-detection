@@ -322,7 +322,21 @@ std::string*  Server::json_output(std::vector<double>& values, std::vector<std::
 {
     std::ostringstream json;
 
-    json << "{"; 
+    json << "{\n"; 
+
+    assert(values.size() == labels.size());
+
+    int size = values.size();
+
+    for (size_t i = 0; i < size; ++i) {
+        json << "    \"" << labels[i] << "\": " << std::fixed << values[i];
+        // if not the last key-value pair, add a trailing comma
+        if (i < (size - 1)) {
+            json << ",";
+        }
+
+        json << std::endl;
+    }
  
     json << "}";
   
