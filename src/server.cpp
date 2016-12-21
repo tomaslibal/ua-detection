@@ -5,7 +5,6 @@
  * Created on January 5, 2016, 8:08 PM
  */
  
- // Todo - add a flag which will not start the background service, like --no-tcp
 
 #include <cstdlib>
 #include <iostream>
