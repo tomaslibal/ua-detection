@@ -25,26 +25,35 @@ There are two end goals that I would like achieve:
 learning method to learn from data and makes predictions about new data as to which
 class the input may belong.
 
-![Sample result](/doc/ua_eval_test.png)
+The output is a `json` document with softmax values (classes with values that are 0 are omitted in the output).
 
-In the figure above you can see a sample result of evaluating a user-agent string constrained to the top 10 labels. Features 3-10 were evaluated extremely unlikely. This data set had 17 features in total and only two features evaluated positively as expected for the given input.
+![Sample result](/doc/sample_uadet.png)
 
-The scores for each of the first 10 classes which are shown in the figure, were as follows:
+In the figure above you can see a sample result of evaluating a user-agent string constrained to the non zero results. This data set had 23 features in total and only three features evaluated with probabilities higher than zero for the given input.
+
 
 ```
 Mozilla/5.0 (Linux; Android 5.1; XT1526 Build/LPI23.29-18-S.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile
 
-android:43.3779
-mobile:6.62649
-windows:0.0973025
-macos:0.0525497
-linux:0.0281889
-opera:0.0221725
-ipad:0.0079283
-unknown:0.00355648
-bot:0.00210765
-blackberry:0.000911062
+{
+    "android": 0.900142,
+    "mobile": 0.099804,
+    "windowsphone": 0.000054
+}
+
 ```
+
+### Usage
+
+*default usage:*
+
+    $1 dist/uadet2d # start this process in one shell and keep it running
+    $2 dist/uadet2cli "eval desktop Mozilla/5.0 (Linux..."
+
+Prints to stdout the output of classification of the given user agent string 
+against all known categories present in the data file.
+
+[See a Manual: basic usage of uadet2](doc/uadet.md)
 
 ### Learning model
 
@@ -94,23 +103,12 @@ This outputs the background service (`uadet2d`) and the client CLI program (`uad
 
 There is no installation as of now.
 
-### Usage
 
-*default usage:*
-
-    $1 dist/uadet2d # start this process in one shell and keep it running
-    $2 dist/uadet2cli "eval desktop Mozilla/5.0 (Linux..."
-
-Prints to stdout the output of classification of the given user agent string 
-against all known categories present in the data file.
-
-[See a Manual: basic usage of uadet2](doc/uadet.md)
-
-### Data
+## Data
 
 Data file is consumed by the background service which will read it and train a model on it. Currently the data format is plain text with columns separated by a tab character.
 
-#### Data format
+### Data format
 
 The program can work with ascii (8-bit) encoded data of the following format:
 
