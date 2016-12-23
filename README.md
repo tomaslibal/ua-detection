@@ -106,7 +106,7 @@ There is no installation as of now.
 
 ## Data
 
-Data file is consumed by the background service which will read it and train a model on it. Currently the data format is plain text with columns separated by a tab character.
+Data file is consumed by the background service which will read it and train the model on it. Currently the data format is plain text with columns separated by a tab character.
 
 ### Data format
 
