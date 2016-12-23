@@ -149,6 +149,8 @@ Header fields can be easily set to an arbitrary value and it is up to the agent 
 
 The supervised learning method used by `uadet2` relies on having labelled data as its input. Firstly, the labels need to be assigned to each data point which means that either the user-agent string is obtained from the agent itself and categorized, or some other expert assigns a label to the user-agent string. The latter brings the possibility of mislabelling the string and lowering the ability of the program to successfully predict the class on new data.
 
+Then the method itself has its own limitations in what it can learn from the data and how successful it can be in predicting the class of the input string.
+
 ### Disclaimers
 
 There is no warranty for this free software. All mentioned trademarks are property
