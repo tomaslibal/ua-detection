@@ -50,6 +50,8 @@ public:
      *
      */
     std::string* json_output(std::vector<double>& values, std::vector<std::string>& labels);
+
+    std::string* plaintext_output(std::vector<double>& values, std::vector<std::string>& labels);
 private:
     FileLog logger;
     ProgramConfigObject config;

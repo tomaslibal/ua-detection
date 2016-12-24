@@ -250,7 +250,16 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
 
         pstrs << p;
 
-        p_str = new std::string(pstrs.str());
+        std::vector<double> results;
+        results.push_back(p);
+        std::vector<std::string> labels;
+        labels.push_back(input.at(1));
+
+        if (config.outputType == OutputType::json) {
+            p_str = json_output(results, labels);
+        } else {
+            p_str = new std::string(pstrs.str());
+        }
         return p_str;
     // If token[0] == "eval" then:
     // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
@@ -331,4 +340,9 @@ std::string*  Server::json_output(std::vector<double>& values, std::vector<std::
     json << "}";
   
     return new std::string(json.str());
+}
+
+std::string* Server::plaintext_output(std::vector<double>& values, std::vector<std::string>& labels)
+{
+    return nullptr;
 }
