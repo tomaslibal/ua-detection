@@ -47,3 +47,13 @@ void programConfigTest::testCanSetOutputType()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("outputType is set to plaintext", static_cast<int>(OutputType::plaintext), static_cast<int>(confObj.outputType));   
 }
+
+void programConfigTest::testCanSetLogfile()
+{
+    ProgramConfigObject confObj(0, "foo", "bar", "logfile");
+
+    pconf->path = "./server.config.txt";
+    pconf->update(confObj);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("outputType is set to plaintext", std::string("uadet2.server.log.txt"), confObj.logfile);  
+}

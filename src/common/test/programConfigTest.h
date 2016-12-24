@@ -17,6 +17,7 @@ class programConfigTest : public CPPUNIT_NS::TestFixture {
 
     CPPUNIT_TEST(testProgramConfigObjectWithParams);
     CPPUNIT_TEST(testCanSetOutputType);
+    CPPUNIT_TEST(testCanSetLogfile);
     
     CPPUNIT_TEST_SUITE_END();
 
@@ -30,6 +31,7 @@ private:
     ProgramConfig* pconf;   
     void testProgramConfigObjectWithParams();
     void testCanSetOutputType();
+    void testCanSetLogfile();
 };
 
 #endif	/* PROGRAMCONFIGTEST_H */
