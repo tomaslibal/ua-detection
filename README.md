@@ -142,6 +142,7 @@ The amount of the settings that are possible to configure is quite limited for n
 - hostname (`hostname=localhost`)
 - log file names (`logfile=server.log.txt`)
 - data input file name (`datafile=data_in.txt`, only server)
+- output type ("json" or "plaintext")
 
 ### Limitations
 
