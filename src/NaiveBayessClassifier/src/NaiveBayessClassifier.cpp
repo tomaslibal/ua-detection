@@ -173,8 +173,8 @@ bool NaiveBayessClassifier::is_in_vocabulary(std::string const& word) {
 
 double NaiveBayessClassifier::classify(std::string const& data, std::string const& category) {
     vector<Ngram> ngrams;
-    UaNgramBuilder nb;
-    nb.fromUserAgentString(data, &ngrams);
+    
+    uaNgramBuilder.fromUserAgentString(data, &ngrams);
     
     double p_cat = prob_category(category);
     double log_posterior = 0;
