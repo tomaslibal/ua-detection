@@ -301,8 +301,11 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
          * from the buffer.
          * 
          */ 	
-	p_str = json_output(normalized, labels);	
-            
+        if (config.outputType == OutputType::json) {
+            p_str = json_output(normalized, labels);	    	
+        } else {
+            p_str = plaintext_output(normalized, labels);
+        }    
         delete categories;
     
         return p_str;
