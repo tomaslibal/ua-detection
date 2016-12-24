@@ -258,7 +258,7 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
         if (config.outputType == OutputType::json) {
             p_str = json_output(results, labels);
         } else {
-            p_str = new std::string(pstrs.str());
+            p_str = plaintext_output(results, labels);
         }
         return p_str;
     // If token[0] == "eval" then:
