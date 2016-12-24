@@ -13,6 +13,8 @@
 
 #include "ProgramConfig.h"
 
+#include <cstring>
+
 std::string* get_value(const std::string& config_line, const std::string& parameter)
 {
     std::string* str = new std::string(config_line.substr(config_line.find(parameter) + 1 + parameter.size()));
@@ -55,6 +57,14 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
 	    p_str = get_value(line, "logfile");
             confObj.logfile = *p_str;
             delete p_str;
+        }
+        if (line.find("output") != std::string::npos) {
+            p_str = get_value(line, "output");
+            if (std::strcmp(p_str->c_str(), "json") == 0) {
+                confObj.outputType = OutputType::json;
+            } else {
+                confObj.outputType = OutputType::plaintext;
+            }
         }
     };
 

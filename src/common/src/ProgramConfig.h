@@ -16,7 +16,7 @@
 
 #include "../../FileInputReader/src/FileInputReader.h"
 
-enum class OutputType { json };
+enum class OutputType { json, plaintext };
 
 struct ProgramConfigObject {
     int portno;

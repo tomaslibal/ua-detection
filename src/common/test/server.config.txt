@@ -2,3 +2,4 @@ hostname=localhost
 port=10128
 datafile=data_in.txt
 logfile=uadet2.server.log.txt
+output=plaintext

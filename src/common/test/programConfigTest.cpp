@@ -37,3 +37,13 @@ void programConfigTest::testProgramConfigObjectWithParams() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("hostname is set to localhost", std::string("localhost"), confObj.hostname);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("datafile is set to data_in.txt", std::string("data_in.txt"), confObj.datafile);
 }
+
+void programConfigTest::testCanSetOutputType()
+{
+    ProgramConfigObject confObj(0, "foo", "bar", "logfile", OutputType::json);
+
+    pconf->path = "./server.config.txt";
+    pconf->update(confObj);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("outputType is set to plaintext", static_cast<int>(OutputType::plaintext), static_cast<int>(confObj.outputType));   
+}
