@@ -264,8 +264,6 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
          */
         std::map<double, std::string, std::greater<double>> results;
         
-        double threshold = 0.61 * 100;
-        
         for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
             std::string category = *it;
             double p = nbc.classify(input.at(2), category);
