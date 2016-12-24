@@ -16,19 +16,23 @@
 
 #include "../../FileInputReader/src/FileInputReader.h"
 
+enum class OutputType { json };
+
 struct ProgramConfigObject {
     int portno;
     std::string hostname;
     std::string datafile;
     std::string logfile;
+    OutputType outputType;
 
     ProgramConfigObject(
         int portno=10128, 
         std::string hostname="localhost", 
         std::string datafile="common/config/server.txt", 
-        std::string logfile="log.txt"
+        std::string logfile="log.txt",
+        OutputType outputType = OutputType::json
     )
-        : portno(portno), hostname(hostname), datafile(datafile), logfile(logfile)
+        : portno(portno), hostname(hostname), datafile(datafile), logfile(logfile), outputType(outputType)
     {
         
     }
