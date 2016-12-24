@@ -62,3 +62,6 @@ CMakeFiles
 cmake_install.cmake
 Testing
 CTestTestfile.cmake
+
+# ignore text files in test directories
+src/*/test/*.txt
