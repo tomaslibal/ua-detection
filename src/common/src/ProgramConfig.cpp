@@ -34,7 +34,6 @@ ProgramConfig::~ProgramConfig() {
 
 void ProgramConfig::update(ProgramConfigObject& confObj)
 {
-
     std::function<void (std::string const&)> onReadLine = [&confObj](std::string const& line) {
         std::string* p_str;
         if (line.find("hostname") != std::string::npos) {
@@ -52,11 +51,11 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
             confObj.datafile = *p_str;
             delete p_str;
         }
-		if (line.find("logfile") != std::string::npos) {
-			p_str = get_value(line, "logfile");
-			confObj.logfile = *p_str;
-			delete p_str;
-		}
+        if (line.find("logfile") != std::string::npos) {
+	    p_str = get_value(line, "logfile");
+            confObj.logfile = *p_str;
+            delete p_str;
+        }
     };
 
     r.readLines(path, onReadLine);
