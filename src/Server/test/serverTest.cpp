@@ -58,3 +58,19 @@ void serverTest::testJsonOutputWithKeyValuePairs()
 
     delete actual;
 }
+
+void serverTest::testPlaintextOutput()
+{
+    std::vector<std::string> labels = { "foo", "bar" };
+    std::vector<double> values = { 42.0, 1337.123 };
+
+    std::string* actual = svr->plaintext_output(values, labels);
+
+    std::string expected = "foo:42.000000\nbar:1337.123000\n";
+
+    CPPUNIT_ASSERT(actual != nullptr);
+
+    CPPUNIT_ASSERT(expected.compare(*actual) == 0);
+
+    delete actual;
+}

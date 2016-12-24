@@ -344,5 +344,15 @@ std::string*  Server::json_output(std::vector<double>& values, std::vector<std::
 
 std::string* Server::plaintext_output(std::vector<double>& values, std::vector<std::string>& labels)
 {
-    return nullptr;
+    std::ostringstream output;
+
+    assert(values.size() == labels.size());
+
+    int size = values.size();
+
+    for (size_t i = 0; i < size; ++i) {
+        output << labels[i] << ":" << std::fixed << values[i] << std::endl;
+    }
+ 
+    return new std::string(output.str());
 }
