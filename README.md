@@ -21,11 +21,45 @@ There are two end goals that I would like achieve:
    
 ### ua-detection
 
-`uadet2` is an implementation of a classification program that uses supervised
-learning method to learn from data and makes predictions about new data as to which
-class the input may belong.
+`uadet2` is an implementation of a generative model using the naive bayess classifier
+to answer the two questions from above.
 
-The output is a `json` document with softmax values (classes with values that are 0 are omitted in the output).
+There were a few reasons that favored the use of a generative model:
+
+- to learning process is simpler for the generative model which will do with counting and averaging
+- each class conditional density is estimated separately so it is possible to add classes without retraining the whole model
+
+A major disadvantage of the nb classifier is its independence assumption. This is 
+believed to invalid for the user-agent strings since it is possible to have the keyword
+`linux` in both `desktop` and `mobile` classes (the agents running on Android OS often 
+include the word linux in their user agents as well as ordinary agents running on desktop
+version of Linux OS).
+
+To overcome this issue, `uadet2` tokenizes the input into n-grams and use that data
+in the training of the classifier.
+
+### Architecture
+
+This is a server-client program. The server implementation is also accompanied 
+by a sample client implementation. Hence, the makefile has two targets: the server
+`uadet2d` and the client `uadet2cli`.
+
+### Usage
+
+*default usage:*
+
+    $1 dist/uadet2d # start this process in one shell and keep it running
+    $2 dist/uadet2cli "eval desktop Mozilla/5.0 (Linux..."
+
+Prints to stdout the output of classification of the given user agent string 
+against all known categories present in the data file.
+
+[See a Manual: basic usage of uadet2](doc/uadet.md)
+
+
+### Classification
+
+The output from the server is a `json` document with softmax values (classes with values that are 0 are omitted in the output).
 
 ![Sample result](/doc/sample_uadet.png)
 
@@ -42,18 +76,6 @@ Mozilla/5.0 (Linux; Android 5.1; XT1526 Build/LPI23.29-18-S.2) AppleWebKit/537.3
 }
 
 ```
-
-### Usage
-
-*default usage:*
-
-    $1 dist/uadet2d # start this process in one shell and keep it running
-    $2 dist/uadet2cli "eval desktop Mozilla/5.0 (Linux..."
-
-Prints to stdout the output of classification of the given user agent string 
-against all known categories present in the data file.
-
-[See a Manual: basic usage of uadet2](doc/uadet.md)
 
 ### Learning model
 
