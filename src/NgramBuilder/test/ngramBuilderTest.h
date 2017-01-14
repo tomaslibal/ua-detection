@@ -19,6 +19,7 @@ class ngramBuilderTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST(testLevelDefaultsToThree);
     CPPUNIT_TEST(testSetAndGetLevel);
     CPPUNIT_TEST(testCannotSetNegativeLevel);
+    CPPUNIT_TEST(testSetDynamicFlag);
     CPPUNIT_TEST(testZeroLevelMeansMaxPossibleNgram);
 
     CPPUNIT_TEST_SUITE_END();
@@ -35,6 +36,7 @@ private:
     void testSetAndGetLevel();
     void testCannotSetNegativeLevel();
     void testFromTokenListBuildsNgrams();
+    void testSetDynamicFlag();
     void testZeroLevelMeansMaxPossibleNgram();
     
     bool ngramMatcher(Ngram& expected, Ngram& actual);
