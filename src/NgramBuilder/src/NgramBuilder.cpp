@@ -83,6 +83,14 @@ int NgramBuilder::fromTokenList(vector<std::string> &tokens, vector<Ngram> *ngra
      * [1] 'bar','baz','qux'
      * [2] 'baz','qux','lux'
      */
+    
+    /*
+     * If the dynamic flag is set, we'll progresively build ngrams where n = tokens.size() down to 1
+     */
+    if (dynamic == true) {
+        this->level = size;
+    }
+    
     for(; slider < size; slider++) {
         /* 
          * The number of remaining tokens must be greater than this->level,
@@ -102,6 +110,14 @@ int NgramBuilder::fromTokenList(vector<std::string> &tokens, vector<Ngram> *ngra
         }
         
         ngrams->push_back(n);
+        
+        /*
+         * If the dynamic flag is set, here is where we decrease the level number so that
+         * after each loop iteration the level is 1 less than in the previous iteration.
+         */
+        if (dynamic == true) {
+            this->level -= 1;
+        }
     }
     
     return slider;
@@ -118,5 +134,17 @@ int NgramBuilder::get_level()
 {
     return level;
 }
+
+bool NgramBuilder::is_dynamic()
+{
+    return dynamic;
+}
+
+void NgramBuilder::set_dynamic(const bool is_dynamic)
+{
+    dynamic = is_dynamic;
+}
+
+
 
 

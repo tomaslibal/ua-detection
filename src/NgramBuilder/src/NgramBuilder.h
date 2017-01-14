@@ -47,8 +47,18 @@ public:
     
     void set_level(const int level);
     int get_level();
+    void set_dynamic(const bool is_dynamic);
+    bool is_dynamic();
 private:
     int level = 3;
+    /*
+     * If dynamic set to true, when building ngrams from the tokens the ngrams will have
+     * length [tokens.size(),...,1] progressively.
+     * 
+     * So if the tokens.size() = 5, the first ngram will be a 5-gram, the next one will be
+     * a 4-gram, and so on down to the 1-gram for the last token in the tokens vector.
+     */
+    bool dynamic = false;
 };
 
 #endif	/* NGRAMBUILDER_H */

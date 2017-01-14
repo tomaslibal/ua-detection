@@ -86,6 +86,31 @@ void ngramBuilderTest::testFromTokenListBuildsNgrams()
     
 }
 
+void ngramBuilderTest::testZeroLevelMeansMaxPossibleNgram()
+{
+    std::vector<Ngram> ngrams;
+    
+    std::vector<std::string> tokens;
+    tokens.push_back("Mozilla/5.0");
+    tokens.push_back("X11");
+    tokens.push_back("Linux");
+    tokens.push_back("x86_64");
+    tokens.push_back("Firefox/60.0");
+    
+    CPPUNIT_ASSERT_EQUAL(false, ngBuilder->is_dynamic());
+    
+    ngBuilder->set_dynamic(true);
+        
+    CPPUNIT_ASSERT_EQUAL(true, ngBuilder->is_dynamic());
+    
+    ngBuilder->fromTokenList(tokens, &ngrams);
+    
+    // There should be 5 ngrams, 1 of length 5, 1 of length 4, 1 of length 3, 1 of length 2 and 1 of length 1
+    CPPUNIT_ASSERT_EQUAL(5, (int) ngrams.size());
+    
+}
+
+
 bool ngramBuilderTest::ngramMatcher(Ngram& expected, Ngram& actual)
 {
     return expected.equals(actual);
