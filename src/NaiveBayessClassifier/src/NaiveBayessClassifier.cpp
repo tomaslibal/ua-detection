@@ -20,7 +20,7 @@ using std::pair;
 
 
 NaiveBayessClassifier::NaiveBayessClassifier() {
-    
+    uaNgramBuilder.set_dynamic(true);
 }
 
 NaiveBayessClassifier::~NaiveBayessClassifier() {
@@ -56,7 +56,7 @@ void NaiveBayessClassifier::add_word(string const& word, string const& category)
     } else {
         map<string, int> newRecord;
         newRecord.insert(pair<string, int>(word, 1));
-        category_vocabularies.insert(pair<string, map<string, int>>(category, newRecord));        
+        category_vocabularies.insert(pair<string, map<string, int>>(category, newRecord));
     } 
 }
 
