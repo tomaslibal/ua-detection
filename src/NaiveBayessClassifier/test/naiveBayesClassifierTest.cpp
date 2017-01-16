@@ -67,4 +67,24 @@ void naiveBayesClassifierTest::testIncProbForNgram()
     CPPUNIT_ASSERT_MESSAGE("probability should have decreased", p2 < p);
 }
 
+void naiveBayesClassifierTest::testNgramPriorGoesUpIfMoreFrequent()
+{
+    Ngram n1;
+    n1.tokens[0] = "lazy";
+    n1.tokens[1] = "red";
+    n1.tokens[2] = "jumps";
+    n1.len = 3;
+    
+    nbc->add_data("speedy spike", "foo");
+    
+    double p = nbc->prob_ngram(n1);
+    
+    nbc->add_data("lazy red jumps over and over", "bar");
+    
+    double p2 = nbc->prob_ngram(n1);
+    
+    CPPUNIT_ASSERT_MESSAGE("probability should have increased", p2 > p);
+}
+
+
 
