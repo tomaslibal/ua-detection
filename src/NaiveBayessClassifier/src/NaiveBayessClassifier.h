@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include "../../NgramBuilder/src/UaNgramBuilder.h"
+#include "./NBCCache.h"
 
 class NaiveBayessClassifier {
 public:
@@ -33,6 +34,7 @@ public:
     
     std::vector<std::string>* get_categories();
 private:
+    NBCCache cache;
     /*
      * prior for categories (frequencies):
      *     cat1 = 42,

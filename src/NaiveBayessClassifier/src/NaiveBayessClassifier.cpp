@@ -80,14 +80,20 @@ void NaiveBayessClassifier::add_data(string const& data, string const& category)
 }
 
 double NaiveBayessClassifier::prob_category(std::string const& category) {
-    int freq_cat = 0;
+    int freq_cat = 0;    
     auto search = priors_freq.find(category);
     if (search != priors_freq.end()) {
         freq_cat = search->second;
     }
     int freq_all = 0;
-    for(map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
-        freq_all += it->second;
+    
+    if (!cache.in_int_cache("all_freq_categories")) {
+        for(map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
+            freq_all += it->second;
+        }
+        cache.insert_int_cache("all_freq_categories", freq_all);
+    } else {
+        freq_all = cache.get_int_cache("all_freq_categories");
     }
     
     if (freq_all > 0) {
@@ -110,9 +116,14 @@ double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
     
     int all_freq = 0;
     
-    for(map<string, int>::iterator it = vocabulary.begin(); it != vocabulary.end(); ++it) {
-        all_freq += it->second;
-    }
+    if (!cache.in_int_cache("all_freq_ngrams")) {
+        for(map<string, int>::iterator it = vocabulary.begin(); it != vocabulary.end(); ++it) {
+            all_freq += it->second;
+        }
+        cache.insert_int_cache("all_freq_ngrams", all_freq);
+    } else {
+        all_freq = cache.get_int_cache("all_freq_ngrams");
+    }    
     
     if (all_freq > 0) {
         return double(freq)/double(all_freq);
