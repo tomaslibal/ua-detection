@@ -155,18 +155,33 @@ double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
 }
 
 int NaiveBayessClassifier::freq_category_word(std::string const& category, std::string const& word) {
+    std::string key = "0123freq" + category + word;
+    
+    if (cache.in_int_cache(key)) {
+        return cache.get_int_cache(key);
+    }
+    
     auto search = category_vocabularies.find(category);
     if (search != category_vocabularies.end()) {
         auto cat_search = search->second.find(word);
         if (cat_search != search->second.end()) {
+            cache.insert_int_cache(key, cat_search->second);
             return cat_search->second;
         }
     }
     
+    cache.insert_int_cache(key, 0);
     return 0;
 }
 
 double NaiveBayessClassifier::prob_category_ngram(std::string const& category, Ngram& ngram) {
+    
+    std::string ngramString = ngram.toString();
+    std::string key = "0123freqcatngram" + category + ngramString; 
+    
+    if (cache.in_dbl_cache(key)) {
+        return cache.get_dbl_cache(key);
+    }
     
     int ngram_freq_in_cat = 0;
     int ngrams_freq_total_in_cat = 0;
@@ -187,11 +202,13 @@ double NaiveBayessClassifier::prob_category_ngram(std::string const& category, N
         }
     }
     
+    double p = 0;
     if (ngrams_freq_total_in_cat > 0) {
-        return double(ngram_freq_in_cat) / double(ngrams_freq_total_in_cat);
-    } else {
-        return 0;
+        p = double(ngram_freq_in_cat) / double(ngrams_freq_total_in_cat);
     }
+    
+    cache.insert_dbl_cache(key, p);
+    return p;
 }
 
 bool NaiveBayessClassifier::is_in_vocabulary(std::string const& word) {
