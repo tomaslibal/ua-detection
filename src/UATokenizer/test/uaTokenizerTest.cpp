@@ -10,6 +10,9 @@
 #include <string>
 #include <vector>
 
+#include <iostream>
+#include <ctime>
+
 CPPUNIT_TEST_SUITE_REGISTRATION(uaTokenizerTest);
 
 uaTokenizerTest::uaTokenizerTest() {
@@ -87,6 +90,25 @@ void uaTokenizerTest::testSetAndGetUserAgentString()
     tok->set_uas(uas);
     
     CPPUNIT_ASSERT_MESSAGE("uas has been set", uas == tok->get_uas());
+}
+
+void uaTokenizerTest::testSpeedAndPrintMetrics()
+{
+    std::string uas = "Mozilla/5.0 (Linux; Android 4.4.4; SM-J110H Build/XYZ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.1000.10 Mobile Safari/537.36";
+    std::vector<std::string> tokens;
+    
+    std::clock_t t = std::clock();
+    int max = 100000;
+    for (int i = 0; i < max; i++) {
+        tok->tokenize(uas, &tokens);
+    }
+    t = std::clock() - t;
+    
+    double elapsed = ((double) t) / CLOCKS_PER_SEC;
+    long total_chr = uas.length() * max;
+    long total_s = total_chr * sizeof(char);
+    std::cout << std::endl << max << " iterations, t=" << elapsed << "s" << std::endl;
+    std::cout << "avg " << (total_s / elapsed / 1024) << " kB/s" << std::endl;
 }
 
 
