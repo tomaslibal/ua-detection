@@ -16,6 +16,7 @@ class naiveBayesClassifierTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(naiveBayesClassifierTest);
 
     CPPUNIT_TEST(testIncPriorsFreqIncreasesFrequencyByOne);
+    CPPUNIT_TEST(testIncProbForNgram);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -27,7 +28,8 @@ public:
 
 private:
     NaiveBayessClassifier* nbc;
-    void testIncPriorsFreqIncreasesFrequencyByOne();    
+    void testIncPriorsFreqIncreasesFrequencyByOne();
+    void testIncProbForNgram();
 };
 
 #endif	/* NAIVEBAYESCLASSIFIERTEST_H */

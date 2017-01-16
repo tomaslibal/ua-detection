@@ -48,3 +48,23 @@ void naiveBayesClassifierTest::testIncPriorsFreqIncreasesFrequencyByOne() {
     CPPUNIT_ASSERT_MESSAGE("Probability should be 1/2 = 1", p == 0.5);
 }
 
+void naiveBayesClassifierTest::testIncProbForNgram()
+{
+    Ngram n1;
+    n1.tokens[0] = "lazy";
+    n1.tokens[1] = "red";
+    n1.tokens[2] = "jumps";
+    n1.len = 3;    
+    
+    nbc->add_data("lazy red pelican", "foo");
+    
+    double p = nbc->prob_ngram(n1);
+    
+    nbc->add_data("jumpy jerry jumps up", "bar");
+    
+    double p2 = nbc->prob_ngram(n1);
+    
+    CPPUNIT_ASSERT_MESSAGE("probability should have decreased", p2 < p);
+}
+
+
