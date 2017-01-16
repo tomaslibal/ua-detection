@@ -30,6 +30,7 @@ struct Ngram {
     std::string toString();
     std::string toString(int num);
     bool equals(const Ngram& other);
+    unsigned int hash();
 };
 
 /*

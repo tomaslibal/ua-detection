@@ -120,6 +120,25 @@ void ngramBuilderTest::testZeroLevelMeansMaxPossibleNgram()
     
 }
 
+void ngramBuilderTest::testNgramHash()
+{
+    Ngram n1;    
+    n1.tokens[0] = "lazy";
+    n1.tokens[1] = "fox";
+    n1.len = 2;
+    
+    Ngram n2;
+    n2.tokens[0] = "lazy";
+    n2.tokens[1] = "fox";
+    n2.tokens[2] = "jumped";
+    n2.len = 3;
+    
+    CPPUNIT_ASSERT(n1.hash() > 0);
+    
+    CPPUNIT_ASSERT(n1.hash() != n2.hash());
+}
+
+
 
 bool ngramBuilderTest::ngramMatcher(Ngram& expected, Ngram& actual)
 {

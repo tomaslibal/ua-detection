@@ -6,6 +6,7 @@
  */
 
 #include <cassert>
+#include <functional>
 
 #include "NgramBuilder.h"
 #include "../../UATokenizer/src/UATokenizer.h"
@@ -56,6 +57,13 @@ bool Ngram::equals(const Ngram& other)
     
     return true;
 }
+
+unsigned int Ngram::hash()
+{
+    std::string strVal = toString();
+    return std::hash<std::string>{}(strVal);
+}
+
 
 
 NgramBuilder::NgramBuilder() {
