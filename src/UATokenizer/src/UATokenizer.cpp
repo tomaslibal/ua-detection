@@ -67,9 +67,9 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
      */
     const char sep[] = { ' ', '(', ')', '<', '>', '@', ',', ';', ':', '"', '[', ']', '?', '=', '{', '}', '\0' };
 
-    tokens->resize(0);
+    tokens->clear();
     
-    if (sentence.length() == 0) {    
+    if (sentence.length() == 0) {
         return;
     }
     
