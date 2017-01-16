@@ -7,6 +7,8 @@
 
 #include "naiveBayesClassifierTest.h"
 
+#include <iostream>
+
 using namespace std;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(naiveBayesClassifierTest);

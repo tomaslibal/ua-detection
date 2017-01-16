@@ -76,7 +76,10 @@ void NaiveBayessClassifier::add_data(string const& data, string const& category)
             string n = ngrams[i].toString(j);
             add_word(n, category);
         }
-    }    
+    }
+    
+    cache.int_cache.clear();
+    cache.dbl_cache.clear();
 }
 
 double NaiveBayessClassifier::prob_category(std::string const& category) {
