@@ -8,13 +8,14 @@
 #include "UATokenizer.h"
 
 #include <cstring>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 
 using std::string;
 using std::vector;
 
-UATokenizer::UATokenizer() {    
+UATokenizer::UATokenizer() {
 }
 
 UATokenizer::UATokenizer(const string& uas) {
@@ -53,6 +54,64 @@ bool UATokenizer::in_array(const char* array, char ch) {
 }
 
 /*
+ * From my gist https://gist.github.com/tomaslibal/5124095
+ */
+bool UATokenizer::in_arrayb(const char* array, char ch)
+{
+    int a = 0;                                                // start of the search array
+    int b = strlen(array);                                     // end of the search array
+    int m = 0;                                                // the middle value
+    int prev;                                                 // remembers the previous middle value
+    while(true) {
+        prev = m;                                             // prev gets the old middle value
+        m = floor((a+b)/2);                                   // m gets a new middle value
+        if(prev == m) { break; }                              // reached the end, break out of the loop
+        if(array[m] == ch) { return true; }                  // found the lookup, return the index position
+        // On the next line, for processing.js the comparison method will be "if(stack[m] > lookup)". The following is for processing in java:
+        else if(array[m] > ch) {             // the lookup cannot be in the right hand side part of the array
+            b = m - 1;                                        // so bound the end of the array at m: <a, m>
+        }else {                                               // otherwise the lookup cannot be in the left hand side part of the array
+            a = m + 1;                                        // so bound the search array from the left at m: <m, b>
+        }
+    }
+    return false; // not found
+}
+
+bool UATokenizer::is_separator(char ch)
+{
+    if (ch == 32) { // blank space
+        return true;
+    }
+    if (ch == 34) { // double quote
+        return true;
+    }
+    if (ch < 32 || ch > 125) {
+        return false;
+    }
+    if (ch == 40 || // (
+        ch == 41 || // )
+        ch == 44 || // ,
+        ch == 58 || // :
+        ch == 59 || // ;
+        ch == 60 || // <
+        ch == 61 || // =
+        ch == 62 || // >
+        ch == 63 || // ?
+        ch == 64 || // @
+        ch == 91 || // [
+        ch == 93 || // ]
+        ch == 123 || // {
+        ch == 125 // }
+    ) {
+        return true;
+    }
+    
+    return false;
+}
+
+
+
+/*
  * Splits a string sentence into a vector of string tokens
  */
 void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
@@ -65,7 +124,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
      * assumption is (somewhat) eliminated by using n-grams instead of a bag of 
      * words.
      */
-    const char sep[] = { ' ', '(', ')', '<', '>', '@', ',', ';', ':', '"', '[', ']', '?', '=', '{', '}', '\0' };
+    const char sep[] = { ' ', '"', '(', ')', ',', ':', ';', '<', '=', '>', '?', '@', '[', ']', '{', '}', '\0' };
 
     tokens->clear();
     
@@ -93,7 +152,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
          * Test if the current character is a separator and if so, push the
          * buffer into the vector of tokens as a new token.
          */
-        if (in_array(sep, c)) {
+        if (is_separator(c)) {
             string s = os.str();
             /*
              * Don't create a token if the buffer is empty. E.g. if the sentence

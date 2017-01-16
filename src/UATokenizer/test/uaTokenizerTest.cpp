@@ -111,5 +111,11 @@ void uaTokenizerTest::testSpeedAndPrintMetrics()
     std::cout << "avg " << (total_s / elapsed / 1024) << " kB/s" << std::endl;
 }
 
+void uaTokenizerTest::testInArrayBinarySearch()
+{
+    
+}
+
+
 
 
