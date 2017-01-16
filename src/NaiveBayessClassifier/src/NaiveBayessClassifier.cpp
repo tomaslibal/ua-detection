@@ -230,12 +230,13 @@ double NaiveBayessClassifier::classify(std::string const& data, std::string cons
     double log_posterior = 0;
     
     for(int i = 0; i < ngrams.size(); i++) {
-        double p_word = prob_ngram(ngrams[i]);
-        
         string ns = ngrams[i].toString(ngrams[i].len);
+        // discard words 2 chars or shorter
         if (ns.length() < 3) {
             continue;
         }
+        
+        double p_word = prob_ngram(ngrams[i]);
         
         double p_word_cat = prob_category_ngram(category, ngrams[i]);
         
