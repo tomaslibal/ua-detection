@@ -83,7 +83,13 @@ void NaiveBayessClassifier::add_data(string const& data, string const& category)
 }
 
 double NaiveBayessClassifier::prob_category(std::string const& category) {
-    int freq_cat = 0;    
+    int freq_cat = 0;
+    std::string category_key = "0123cat" + category;
+    
+    if (cache.in_dbl_cache(category_key)) {
+        return cache.get_dbl_cache(category_key);
+    }
+    
     auto search = priors_freq.find(category);
     if (search != priors_freq.end()) {
         freq_cat = search->second;
@@ -99,23 +105,33 @@ double NaiveBayessClassifier::prob_category(std::string const& category) {
         freq_all = cache.get_int_cache("all_freq_categories");
     }
     
+    double p = 0;
+    
     if (freq_all > 0) {
-        return double(freq_cat)/double(freq_all);
-    } else {
-        return 0;
+        p = double(freq_cat)/double(freq_all);
     }
+    
+    cache.insert_dbl_cache(category_key, p);
+    return p;
 }
 
 double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
     int freq = 0;
     int ngramLen = ngram.len;
+    std::string ngramString = ngram.toString();
+    std::string ngram_key = "0123ngram" + ngramString;
+    
+    if (cache.in_dbl_cache(ngram_key)) {
+        return cache.get_dbl_cache(ngram_key);
+    }
+    
     for(int i = 1; i <= ngramLen; i++) {
         string s = ngram.toString(i);
         auto search = vocabulary.find(s);
         if (search != vocabulary.end()) {
             freq += search->second;
         }
-    }
+    }  
     
     int all_freq = 0;
     
@@ -128,11 +144,14 @@ double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
         all_freq = cache.get_int_cache("all_freq_ngrams");
     }    
     
+    double p = 0;
+    
     if (all_freq > 0) {
-        return double(freq)/double(all_freq);
-    } else {
-        return 0;
+        p = double(freq)/double(all_freq);
     }
+    
+    cache.insert_dbl_cache(ngram_key, p);
+    return p;
 }
 
 int NaiveBayessClassifier::freq_category_word(std::string const& category, std::string const& word) {
