@@ -33,6 +33,17 @@ struct Ngram {
     unsigned int hash();
 };
 
+struct NgramSimple {
+    int len;
+    std::string sentence;
+    int starts[16];
+    int lens[16];
+    std::string toString();
+    std::string toString(int num);
+    bool equals (NgramSimple const& other);
+    unsigned int hash();
+};
+
 /*
  * NgramBuilder takes a string and produces a list of Ngrams.
  * 
@@ -45,6 +56,8 @@ public:
     
     int fromTokenList(std::vector<std::string> &tokens, std::vector<Ngram> *ngrams);
     void print(Ngram& ng);
+    
+    int fromTokenList(std::vector<std::string> const& tokens, std::vector<NgramSimple> *ngrams);
     
     void set_level(const int level);
     int get_level();

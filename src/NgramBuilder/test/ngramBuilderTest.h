@@ -22,6 +22,7 @@ class ngramBuilderTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST(testSetDynamicFlag);
     CPPUNIT_TEST(testZeroLevelMeansMaxPossibleNgram);
     CPPUNIT_TEST(testNgramHash);
+    CPPUNIT_TEST(testNgramSimple);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -40,8 +41,10 @@ private:
     void testSetDynamicFlag();
     void testZeroLevelMeansMaxPossibleNgram();
     void testNgramHash();
+    void testNgramSimple();
     
     bool ngramMatcher(Ngram& expected, Ngram& actual);
+    bool ngramSimpleMatcher(NgramSimple& expected, const NgramSimple& actual);
 };
 
 #endif	/* NGRAMBUILDERTEST_H */

@@ -9,7 +9,7 @@
 
 #include <string>
 #include <vector>
-
+#include <iostream>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ngramBuilderTest);
 
@@ -86,6 +86,38 @@ void ngramBuilderTest::testFromTokenListBuildsNgrams()
     
 }
 
+void ngramBuilderTest::testNgramSimple()
+{
+    std::vector<NgramSimple> ngrams;
+    
+    std::vector<std::string> tokens;
+    tokens.push_back("Mozilla/5.0");
+    tokens.push_back("X11");
+    tokens.push_back("Linux");
+    tokens.push_back("x86_64");
+    
+    ngBuilder->fromTokenList(tokens, &ngrams);
+    
+    CPPUNIT_ASSERT(ngrams.size() == 2);
+    
+    NgramSimple exp1;
+    exp1.len = 3;
+    exp1.sentence = "Mozilla/5.0 X11 Linux ";
+    exp1.starts[0] = 0, exp1.starts[1] = 12; exp1.starts[2] = 16;
+    exp1.lens[0] = 11; exp1.lens[1]= 3; exp1.lens[2] = 5;
+    
+    CPPUNIT_ASSERT(ngramSimpleMatcher(exp1, ngrams.at(0)) == true);
+    
+    CPPUNIT_ASSERT_EQUAL(exp1.starts[0], ((NgramSimple) ngrams.at(0)).starts[0]);
+    CPPUNIT_ASSERT_EQUAL(exp1.starts[1], ((NgramSimple) ngrams.at(0)).starts[1]);
+    CPPUNIT_ASSERT_EQUAL(exp1.starts[2], ((NgramSimple) ngrams.at(0)).starts[2]);
+    
+    CPPUNIT_ASSERT_EQUAL(exp1.lens[0], ((NgramSimple) ngrams.at(0)).lens[0]);
+    CPPUNIT_ASSERT_EQUAL(exp1.lens[1], ((NgramSimple) ngrams.at(0)).lens[1]);
+    CPPUNIT_ASSERT_EQUAL(exp1.lens[2], ((NgramSimple) ngrams.at(0)).lens[2]);
+}
+
+
 void ngramBuilderTest::testSetDynamicFlag()
 {
     CPPUNIT_ASSERT_EQUAL(false, ngBuilder->is_dynamic());
@@ -144,5 +176,11 @@ bool ngramBuilderTest::ngramMatcher(Ngram& expected, Ngram& actual)
 {
     return expected.equals(actual);
 }
+
+bool ngramBuilderTest::ngramSimpleMatcher(NgramSimple & expected, NgramSimple const& actual)
+{
+    return expected.equals(actual);
+}
+
 
 

@@ -64,6 +64,35 @@ unsigned int Ngram::hash()
     return std::hash<std::string>{}(strVal);
 }
 
+string NgramSimple::toString()
+{
+    return sentence;
+}
+
+string NgramSimple::toString(int num)
+{
+    assert(len >= num);
+    
+    assert(num > 0);
+    
+    int start = starts[num-1];
+    int len = lens[num-1];
+    
+    return sentence.substr(start, len);
+}
+
+
+bool NgramSimple::equals(const NgramSimple& other)
+{
+    return sentence.compare(other.sentence) == 0;
+}
+
+unsigned int NgramSimple::hash()
+{
+    return std::hash<std::string>{} (sentence);
+}
+
+
 
 
 NgramBuilder::NgramBuilder() {
@@ -74,6 +103,54 @@ NgramBuilder::NgramBuilder(const NgramBuilder& orig) {
 }
 
 NgramBuilder::~NgramBuilder() {
+}
+
+int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSimple >* ngrams)
+{
+    int size = tokens.size();
+    /*
+     * Offset of the first token to be taken into a new n-gram. Keeps increasing
+     * by one with each finished n-gram.
+     */
+    int slider = 0;
+
+    /*
+     * Suppose tokens = 'foo', 'bar', 'baz', 'qux', 'lux'
+     * and we're building a 3-grams. Then the 3-grams will be
+     * [0] 'foo','bar','baz'
+     * [1] 'bar','baz','qux'
+     * [2] 'baz','qux','lux'
+     */
+        
+    for(; slider < size; slider++) {
+        /* 
+         * The number of remaining tokens must be greater than this->level,
+         * otherwise this would not be a valid N-gram of length N. Hence, if it
+         * is not the case, we break out from the loop.
+         */
+        int rem = size - (slider+this->level);
+        if (rem < 0) {
+            break;
+        }
+
+        NgramSimple n;
+        n.len = level;
+        
+        string sentence;
+
+        for(int j = 0; j < this->level; j++) {
+            string token = tokens.at(slider + j);
+            n.starts[j] = sentence.size();
+            n.lens[j] = token.size();
+            sentence.append(token);
+            sentence.append(" ");
+        }
+        n.sentence = sentence;
+        
+        ngrams->push_back(n);        
+    }
+    
+    return slider;
 }
 
 int NgramBuilder::fromTokenList(vector<std::string> &tokens, vector<Ngram> *ngrams) {
