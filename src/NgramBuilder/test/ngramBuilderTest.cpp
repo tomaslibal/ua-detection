@@ -183,6 +183,50 @@ void ngramBuilderTest::testNgramVsNgramSimplePerf()
     std::cout << "New: " << elapsedSimple << "s\n";
 }
 
+void ngramBuilderTest::testNgramVsNgramSimplePerfToString()
+{
+    int max = 100000;
+    
+    std::vector<std::string> tokens;
+    tokens.push_back("Mozilla/5.0");
+    tokens.push_back("X11");
+    tokens.push_back("Linux");
+    tokens.push_back("Android");
+    tokens.push_back("5.0.0");
+    tokens.push_back("EN");
+    tokens.push_back("Compatible");
+    tokens.push_back("Firefox/50.0");
+    
+    std::vector<Ngram> ngram;
+    std::vector<NgramSimple> ngramSimple;
+        
+    ngBuilder->fromTokenList(tokens, &ngram);
+    ngBuilder->fromTokenList(tokens, &ngramSimple);
+        
+    std::clock_t t = std::clock();
+    for (int i = 0; i < max; i++) {
+        for (int j = 1; j < 3; j++) {
+            (ngram.at(0)).toString(j);
+        }
+    }
+    t = std::clock() - t;
+    
+    double elapsed = ((double) t) / CLOCKS_PER_SEC;
+    
+    t = std::clock();
+    for (int i = 0; i < max; i++) {
+        for (int j = 1; j < 3; j++) {
+            (ngramSimple.at(0)).toString(j);
+        }
+    }
+    t = std::clock() - t;
+    
+    double elapsedSimple = ((double) t) / CLOCKS_PER_SEC;
+    
+    std::cout << "\n****PERFORMANCE2\n" << "Old: " << elapsed << "s\n";
+    std::cout << "New: " << elapsedSimple << "s\n";
+}
+
 
 void ngramBuilderTest::testSetDynamicFlag()
 {

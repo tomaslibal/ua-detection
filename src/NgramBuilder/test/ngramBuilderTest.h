@@ -25,6 +25,7 @@ class ngramBuilderTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST(testNgramSimple);
     CPPUNIT_TEST(testNgramSimpleToString);
     CPPUNIT_TEST(testNgramVsNgramSimplePerf);
+    CPPUNIT_TEST(testNgramVsNgramSimplePerfToString);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -46,6 +47,7 @@ private:
     void testNgramSimple();
     void testNgramSimpleToString();
     void testNgramVsNgramSimplePerf();
+    void testNgramVsNgramSimplePerfToString();
     
     bool ngramMatcher(Ngram& expected, Ngram& actual);
     bool ngramSimpleMatcher(NgramSimple& expected, const NgramSimple& actual);
