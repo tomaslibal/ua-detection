@@ -65,7 +65,7 @@ void NaiveBayessClassifier::add_data(string const& data, string const& category)
     this->inc_priors_freq(category);
     
     // tokenize the data (user-agent string) into ngrams
-    vector<Ngram> ngrams;
+    vector<NgramSimple> ngrams;
     uaNgramBuilder.fromUserAgentString(data, &ngrams);
  
 //    
@@ -115,7 +115,7 @@ double NaiveBayessClassifier::prob_category(std::string const& category) {
     return p;
 }
 
-double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
+double NaiveBayessClassifier::prob_ngram(NgramSimple& ngram) {
     int freq = 0;
     int ngramLen = ngram.len;
     std::string ngramString = ngram.toString();
@@ -174,7 +174,7 @@ int NaiveBayessClassifier::freq_category_word(std::string const& category, std::
     return 0;
 }
 
-double NaiveBayessClassifier::prob_category_ngram(std::string const& category, Ngram& ngram) {
+double NaiveBayessClassifier::prob_category_ngram(std::string const& category, NgramSimple& ngram) {
     
     std::string ngramString = ngram.toString();
     std::string key = "0123freqcatngram" + category + ngramString; 
@@ -222,7 +222,7 @@ bool NaiveBayessClassifier::is_in_vocabulary(std::string const& word) {
 
 
 double NaiveBayessClassifier::classify(std::string const& data, std::string const& category) {
-    vector<Ngram> ngrams;
+    vector<NgramSimple> ngrams;
     
     uaNgramBuilder.fromUserAgentString(data, &ngrams);
     
