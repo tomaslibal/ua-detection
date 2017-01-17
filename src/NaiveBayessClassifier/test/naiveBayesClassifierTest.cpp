@@ -50,11 +50,11 @@ void naiveBayesClassifierTest::testIncPriorsFreqIncreasesFrequencyByOne() {
 
 void naiveBayesClassifierTest::testIncProbForNgram()
 {
-    NgramSimple n1;
-    n1.sentence = "lazy red jumps ";
-    n1.starts[0] = 0; n1.starts[1] = 5; n1.starts[2] = 9;
-    n1.lens[0] = 4; n1.lens[1] = 3; n1.lens[2] = 5;    
-    n1.len = 3;
+    Ngram n1;
+    n1.tokens[0] = "lazy";
+    n1.tokens[1] = "red";
+    n1.tokens[2] = "jumps";
+    n1.len = 3;    
     
     nbc->add_data("lazy red pelican", "foo");
     
@@ -69,10 +69,10 @@ void naiveBayesClassifierTest::testIncProbForNgram()
 
 void naiveBayesClassifierTest::testNgramPriorGoesUpIfMoreFrequent()
 {
-    NgramSimple n1;
-    n1.sentence = "lazy red jumps ";
-    n1.starts[0] = 0; n1.starts[1] = 5; n1.starts[2] = 9;
-    n1.lens[0] = 4; n1.lens[1] = 3; n1.lens[2] = 5;    
+    Ngram n1;
+    n1.tokens[0] = "lazy";
+    n1.tokens[1] = "red";
+    n1.tokens[2] = "jumps";
     n1.len = 3;
     
     nbc->add_data("speedy spike", "foo");
