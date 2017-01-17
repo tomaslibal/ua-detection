@@ -7,6 +7,7 @@
 
 #include <cassert>
 #include <functional>
+#include <exception>
 
 #include "NgramBuilder.h"
 #include "../../UATokenizer/src/UATokenizer.h"
@@ -75,10 +76,14 @@ string NgramSimple::toString(int num)
     
     assert(num > 0);
     
-    int start = starts[num-1];
-    int len = lens[num-1];
+    int start = starts[0];
+    int len = 0;
     
-    return sentence.substr(start, len);
+    for (int i = 0; i <= num-1; i++) {
+        len += lens[i];
+    }
+    
+    return sentence.substr(start, len + num);
 }
 
 
@@ -121,7 +126,11 @@ int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSim
      * [1] 'bar','baz','qux'
      * [2] 'baz','qux','lux'
      */
-        
+    
+    if (level > 16) {
+        throw NgramSimpleLengthExceededException("NgramSimple supports max len 16, was " + std::to_string(level));
+    }
+
     for(; slider < size; slider++) {
         /* 
          * The number of remaining tokens must be greater than this->level,

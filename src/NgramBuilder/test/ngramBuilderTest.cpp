@@ -117,6 +117,33 @@ void ngramBuilderTest::testNgramSimple()
     CPPUNIT_ASSERT_EQUAL(exp1.lens[2], ((NgramSimple) ngrams.at(0)).lens[2]);
 }
 
+void ngramBuilderTest::testNgramSimpleToString()
+{
+    std::string expected = "Mozilla/5.0 X11 Linux ";
+    std::string expected2 = "Mozilla/5.0 ";
+    std::string expected3 = "Mozilla/5.0 X11 ";
+    
+    std::vector<NgramSimple> ngrams;
+    
+    std::vector<std::string> tokens;
+    tokens.push_back("Mozilla/5.0");
+    tokens.push_back("X11");
+    tokens.push_back("Linux");
+    
+    ngBuilder->fromTokenList(tokens, &ngrams);
+    
+    NgramSimple result = ngrams.at(0);
+    
+    CPPUNIT_ASSERT(expected.compare(result.toString()) == 0);
+    
+    CPPUNIT_ASSERT(expected2.compare(result.toString(1)) == 0);
+    
+    CPPUNIT_ASSERT(expected3.compare(result.toString(2)) == 0);
+    
+    CPPUNIT_ASSERT(expected.compare(result.toString(3)) == 0);
+}
+
+
 
 void ngramBuilderTest::testSetDynamicFlag()
 {

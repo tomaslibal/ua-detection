@@ -23,6 +23,7 @@ class ngramBuilderTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST(testZeroLevelMeansMaxPossibleNgram);
     CPPUNIT_TEST(testNgramHash);
     CPPUNIT_TEST(testNgramSimple);
+    CPPUNIT_TEST(testNgramSimpleToString);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -42,6 +43,7 @@ private:
     void testZeroLevelMeansMaxPossibleNgram();
     void testNgramHash();
     void testNgramSimple();
+    void testNgramSimpleToString();
     
     bool ngramMatcher(Ngram& expected, Ngram& actual);
     bool ngramSimpleMatcher(NgramSimple& expected, const NgramSimple& actual);

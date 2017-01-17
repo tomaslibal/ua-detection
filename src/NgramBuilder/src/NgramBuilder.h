@@ -44,6 +44,15 @@ struct NgramSimple {
     unsigned int hash();
 };
 
+class NgramSimpleLengthExceededException: virtual public std::exception{
+public:
+    NgramSimpleLengthExceededException(std::string m="Max length of NgramSimple exceeded!") : msg(m) {}
+    ~NgramSimpleLengthExceededException() throw() {}
+    const char* what() const throw() { return msg.c_str(); }
+private:
+    std::string msg;
+};
+
 /*
  * NgramBuilder takes a string and produces a list of Ngrams.
  * 
