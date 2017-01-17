@@ -156,7 +156,7 @@ int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSim
         }
         n.sentence = sentence;
         
-        ngrams->push_back(n);        
+        ngrams->push_back(n);
     }
     
     return slider;
