@@ -10,7 +10,7 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include "../../NgramBuilder/src/UaNgramBuilder.h"
 #include "./NBCCache.h"
 
@@ -43,7 +43,7 @@ private:
      *     catN =  y
      */
 //    ChainedHashTable<int> priors_freq;
-    std::map<std::string, int> priors_freq;
+    std::unordered_map<std::string, int> priors_freq;
     
     /*
      * vocabulary of all seen words with their freqeuencies
@@ -52,10 +52,10 @@ private:
      *     ...
      *     wordN =  9211
      */
-    std::map<std::string, int> vocabulary;
+    std::unordered_map<std::string, int> vocabulary;
     
     // make category_vocabularies a map<string, map<string, int>> ...
-    std::map<std::string, std::map<std::string, int>> category_vocabularies;
+    std::unordered_map<std::string, std::unordered_map<std::string, int>> category_vocabularies;
     
     /*
      * increments a frequency of a prior (key) by one

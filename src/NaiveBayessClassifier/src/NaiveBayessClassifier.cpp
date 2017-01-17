@@ -15,7 +15,7 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
-using std::map;
+using std::unordered_map;
 using std::pair;
 
 
@@ -54,9 +54,9 @@ void NaiveBayessClassifier::add_word(string const& word, string const& category)
             search->second.insert(pair<string, int>(word, 1));
         }
     } else {
-        map<string, int> newRecord;
+        unordered_map<string, int> newRecord;
         newRecord.insert(pair<string, int>(word, 1));
-        category_vocabularies.insert(pair<string, map<string, int>>(category, newRecord));
+        category_vocabularies.insert(pair<string, unordered_map<string, int>>(category, newRecord));
     } 
 }
 
@@ -97,7 +97,7 @@ double NaiveBayessClassifier::prob_category(std::string const& category) {
     int freq_all = 0;
     
     if (!cache.in_int_cache("all_freq_categories")) {
-        for(map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
+        for(unordered_map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
             freq_all += it->second;
         }
         cache.insert_int_cache("all_freq_categories", freq_all);
@@ -136,7 +136,7 @@ double NaiveBayessClassifier::prob_ngram(Ngram& ngram) {
     int all_freq = 0;
     
     if (!cache.in_int_cache("all_freq_ngrams")) {
-        for(map<string, int>::iterator it = vocabulary.begin(); it != vocabulary.end(); ++it) {
+        for(unordered_map<string, int>::iterator it = vocabulary.begin(); it != vocabulary.end(); ++it) {
             all_freq += it->second;
         }
         cache.insert_int_cache("all_freq_ngrams", all_freq);
@@ -195,9 +195,9 @@ double NaiveBayessClassifier::prob_category_ngram(std::string const& category, N
     auto search = category_vocabularies.find(category);
     if (search != category_vocabularies.end()) {
         // iterator over the map<string ,int> and sum the int values
-        map<string, int> cat = search->second;
+        unordered_map<string, int> cat = search->second;
 
-        for(map<string, int>::iterator iterator = cat.begin(); iterator != cat.end(); ++iterator) {
+        for(unordered_map<string, int>::iterator iterator = cat.begin(); iterator != cat.end(); ++iterator) {
             ngrams_freq_total_in_cat += iterator->second;
         }
     }
@@ -256,7 +256,7 @@ void NaiveBayessClassifier::stats() {
 vector<string>* NaiveBayessClassifier::get_categories() {
     vector<string>* cat = new vector<string>();
     
-    for(map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
+    for(unordered_map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
         cat->push_back(it->first);
     }
     
