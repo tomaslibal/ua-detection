@@ -130,6 +130,17 @@ int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSim
     if (level > 16) {
         throw NgramSimpleLengthExceededException("NgramSimple supports max len 16, was " + std::to_string(level));
     }
+    
+    /*
+     * If the dynamic flag is set, we'll progresively build ngrams where n = tokens.size() down to 1
+     */
+    if (dynamic == true) {
+        if (size > 16) {
+            this->level = 16;
+        } else {
+            this->level = size;
+        }
+    }
 
     for(; slider < size; slider++) {
         /* 
@@ -157,6 +168,14 @@ int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSim
         n.sentence = sentence;
         
         ngrams->push_back(n);
+        
+         /*
+         * If the dynamic flag is set, here is where we decrease the level number so that
+         * after each loop iteration the level is 1 less than in the previous iteration.
+         */
+        if (dynamic == true) {
+            this->level -= 1;
+        }
     }
     
     return slider;
