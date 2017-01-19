@@ -35,6 +35,8 @@ private:
     bool in_array(const char* array, char ch);
     bool in_arrayb(const char* array, char ch);
     bool is_separator(char ch);
+    
+    enum class States { Building_token, Close_token }; 
 
 };
 

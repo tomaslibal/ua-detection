@@ -8,9 +8,6 @@
 #include "UATokenizer.h"
 
 #include <cstring>
-#include <cmath>
-#include <iostream>
-#include <sstream>
 
 using std::string;
 using std::vector;
@@ -39,78 +36,6 @@ string UATokenizer::get_uas()
     return uas;
 }
 
-
-
-/*
- * Returns true if character ch is in array
- */
-bool UATokenizer::in_array(const char* array, char ch) {
-    int i = 0;
-    int len = strlen(array);
-    for (; i < len; i++) {
-        if (array[i] == ch) return true;
-    }
-    return false;
-}
-
-/*
- * From my gist https://gist.github.com/tomaslibal/5124095
- */
-bool UATokenizer::in_arrayb(const char* array, char ch)
-{
-    int a = 0;                                                // start of the search array
-    int b = strlen(array);                                     // end of the search array
-    int m = 0;                                                // the middle value
-    int prev;                                                 // remembers the previous middle value
-    while(true) {
-        prev = m;                                             // prev gets the old middle value
-        m = floor((a+b)/2);                                   // m gets a new middle value
-        if(prev == m) { break; }                              // reached the end, break out of the loop
-        if(array[m] == ch) { return true; }                  // found the lookup, return the index position
-        // On the next line, for processing.js the comparison method will be "if(stack[m] > lookup)". The following is for processing in java:
-        else if(array[m] > ch) {             // the lookup cannot be in the right hand side part of the array
-            b = m - 1;                                        // so bound the end of the array at m: <a, m>
-        }else {                                               // otherwise the lookup cannot be in the left hand side part of the array
-            a = m + 1;                                        // so bound the search array from the left at m: <m, b>
-        }
-    }
-    return false; // not found
-}
-
-bool UATokenizer::is_separator(char ch)
-{
-    if (ch == 32) { // blank space
-        return true;
-    }
-    if (ch == 34) { // double quote
-        return true;
-    }
-    if (ch < 32 || ch > 125) {
-        return false;
-    }
-    if (ch == 40 || // (
-        ch == 41 || // )
-        ch == 44 || // ,
-        ch == 58 || // :
-        ch == 59 || // ;
-        ch == 60 || // <
-        ch == 61 || // =
-        ch == 62 || // >
-        ch == 63 || // ?
-        ch == 64 || // @
-        ch == 91 || // [
-        ch == 93 || // ]
-        ch == 123 || // {
-        ch == 125 // }
-    ) {
-        return true;
-    }
-    
-    return false;
-}
-
-
-
 /*
  * Splits a string sentence into a vector of string tokens
  */
@@ -124,7 +49,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
      * assumption is (somewhat) eliminated by using n-grams instead of a bag of 
      * words.
      */
-    const char sep[] = { ' ', '"', '(', ')', ',', ':', ';', '<', '=', '>', '?', '@', '[', ']', '{', '}', '\0' };
+    //const char sep[] = { ' ', '"', '(', ')', ',', ':', ';', '<', '=', '>', '?', '@', '[', ']', '{', '}', '\0' };
 
     tokens->clear();
     
@@ -132,52 +57,60 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
         return;
     }
     
-    char c;
-    int i = 0;
-    int maxi = sentence.length();
-    /*
-     * This string stream grows character by character as they are read from
-     * the sentence, until a separator character is encountered. Then the buffer
-     * is cleared and starts anew.
+    char * chr = new char [sentence.length()+1];
+    std::strcpy (chr, sentence.c_str());
+    
+    char * tok = new char [128]();
+    short int i = 0;
+    
+    States state;
+    
+    /* 
+     * set the starting state
      */
-    std::ostringstream os;
+    if (*chr != ' ') {
+        state = States::Building_token;
+    } else {
+        state = States::Close_token;
+    }
+    
+    /*
+     * consume the character array by sequences of bytes where we either:
+     * 
+     *  - append to the token
+     *  - finish the token creation and push it to the stack
+     */
+    while (*chr != '\0') {
+        switch (state) {
+            case States::Building_token:
+                do {
+                    tok[i] = *chr;
+                    i++;
+                    
+                    if (*chr++ == ' ') {
+                        state = States::Close_token;
+                        break;
+                    }
+                } while (*chr != '\0');
+                break;
 
-    /*
-     * This is a character by character consumption loop of the sentence
-     */
-    while (i < maxi) {
-        c = sentence.at(i);
-        
-        /*
-         * Test if the current character is a separator and if so, push the
-         * buffer into the vector of tokens as a new token.
-         */
-        if (is_separator(c)) {
-            string s = os.str();
-            /*
-             * Don't create a token if the buffer is empty. E.g. if the sentence
-             * starts with a separator.
-             */
-            if (s.length() > 0) { 
-                try {                    
-                    tokens->push_back(s);                    
-                } catch (...) {
-                    std::cout << "Exception while adding a token " << s;
+            case States::Close_token:
+                if (i > 0) {
+                    tok[i-1] = 0; // fix this issue with the extra whitespace
+                    tokens->push_back(tok);
+                    memset(tok, 0, 128);
+                    i = 0;
                 }
-                // Clear the token
-                os.str(string());
-            }
-        } else {
-            /*
-             * The character c was not in a separator, so add it to the buffer
-             * to build up a token.
-             */
-            os << c;
+                
+                do {
+                    if (*chr != ' ') {
+                        state = States::Building_token;
+                        break;
+                    }
+                } while(*chr++ == ' ');
+                state = States::Building_token;
+                break;
         }
-        /*
-         * Move by one character forward 
-         */
-        i++;
     }
 
     /*
@@ -185,9 +118,12 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
      * not been pushed to the vector as a new token so we do it now, but only
      * if its length is greater than 0.
      */
-    if (os.str().length() > 0) {
-        tokens->push_back(os.str());
+    if (i > 0) {
+      tokens->push_back(tok);
     }
+    
+    //delete[] chr;
+    //delete[] tok;
     
 }
 
