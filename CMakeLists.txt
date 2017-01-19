@@ -29,7 +29,7 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-pthread -lpthread")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/dist)
-set(CMAKE_CXX_FLAGS "-std=c++11 -g")
+set(CMAKE_CXX_FLAGS "-std=c++11 -g -pg")
 set(CMAKE_BUILD_TYPE Debug)
 
 # 
