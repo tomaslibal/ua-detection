@@ -50,66 +50,58 @@ void uaNgramBuilderTest::testCannotSetNegativeLevel()
 
 void uaNgramBuilderTest::testFromTokenListBuildsNgrams() 
 {
-    std::vector<Ngram> ngrams;
+    std::vector<NgramSimple> ngrams;
     std::string sentence = "Mozilla/5.0 (X11; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0";
     
     uaNgramBuilder->fromUserAgentString(sentence, &ngrams);
     
     /*
-     * There are 8 tokens, so 6 ngrams of length 3 can be created. The last two tokens don't have enough tokens ahead to be able to form a 3-gram.
+     * There are 7 tokens, so 5 ngrams of length 3 can be created. The last two tokens don't have enough tokens ahead to be able to form a 3-gram.
      */
-    CPPUNIT_ASSERT(ngrams.size() == 6);
+    CPPUNIT_ASSERT(ngrams.size() == 5);
     
-    Ngram exp1;
+    NgramSimple exp1;
     exp1.len = 3;
-    exp1.tokens[0] = "Mozilla/5.0";
-    exp1.tokens[1] = "X11";
-    exp1.tokens[2] = "Linux";
+    exp1.sentence = "Mozilla/5.0 (X11; Linux";
+    exp1.starts[0] = 0; exp1.starts[1] = 12; exp1.starts[2] = 18;
+    exp1.lens[0] = 11; exp1.lens[1] = 5; exp1.lens[2] = 5;
     
-    CPPUNIT_ASSERT(ngramMatcher(exp1, ngrams[0]) == true);
+    CPPUNIT_ASSERT(ngramSimpleMatcher(exp1, ngrams[0]) == true);
     
-    Ngram exp2;
+    NgramSimple exp2;
     exp2.len = 3;
-    exp2.tokens[0] = "X11";
-    exp2.tokens[1] = "Linux";
-    exp2.tokens[2] = "x86_64";
+    exp2.sentence = "(X11; Linux x86_64;";
+    exp2.starts[0] = 0; exp2.starts[1] = 6; exp2.starts[2] = 12;
+    exp2.lens[0] = 5; exp2.lens[1] = 5; exp2.lens[2] = 7;
     
-    CPPUNIT_ASSERT(ngramMatcher(exp2, ngrams[1]) == true);
+    CPPUNIT_ASSERT(ngramSimpleMatcher(exp2, ngrams[1]) == true);
     
-    Ngram exp3;
+    NgramSimple exp3;
     exp3.len = 3;
-    exp3.tokens[0] = "Linux";
-    exp3.tokens[1] = "x86_64";
-    exp3.tokens[2] = "rv";
+    exp3.sentence = "Linux x86_64; rv:44.0)";
+    exp3.starts[0] = 0; exp3.starts[1] = 6; exp3.starts[2] = 14;
+    exp3.lens[0] = 5; exp3.lens[1] = 7; exp3.lens[2] = 8;
     
-    CPPUNIT_ASSERT(ngramMatcher(exp3, ngrams[2]) == true);
+    CPPUNIT_ASSERT(ngramSimpleMatcher(exp3, ngrams[2]) == true);
     
-    Ngram exp4;
+    NgramSimple exp4;
     exp4.len = 3;
-    exp4.tokens[0] = "x86_64";
-    exp4.tokens[1] = "rv";
-    exp4.tokens[2] = "44.0";
+    exp4.sentence = "x86_64; rv:44.0) Gecko/20100101";
+    exp4.starts[0] = 0; exp4.starts[1] = 8; exp4.starts[2] = 17;
+    exp4.lens[0] = 7; exp4.lens[1] = 8; exp4.lens[2] = 14;
     
-    CPPUNIT_ASSERT(ngramMatcher(exp4, ngrams[3]) == true);
+    CPPUNIT_ASSERT(ngramSimpleMatcher(exp4, ngrams[3]) == true);
     
-    Ngram exp5;
+    NgramSimple exp5;
     exp5.len = 3;
-    exp5.tokens[0] = "rv";
-    exp5.tokens[1] = "44.0";
-    exp5.tokens[2] = "Gecko/20100101";
+    exp5.sentence = "rv:44.0) Gecko/20100101 Firefox/44.0";
+    exp5.starts[0] = 0; exp5.starts[1] = 9; exp5.starts[2] = 24;
+    exp5.lens[0] = 8; exp5.lens[1] = 14; exp5.lens[2] = 12;
     
-    CPPUNIT_ASSERT(ngramMatcher(exp5, ngrams[4]) == true);
-    
-    Ngram exp6;
-    exp6.len = 3;
-    exp6.tokens[0] = "44.0";
-    exp6.tokens[1] = "Gecko/20100101";
-    exp6.tokens[2] = "Firefox/44.0";
-    
-    CPPUNIT_ASSERT(ngramMatcher(exp6, ngrams[5]) == true);
+    CPPUNIT_ASSERT(ngramSimpleMatcher(exp5, ngrams[4]) == true);
 }
 
-bool uaNgramBuilderTest::ngramMatcher(Ngram& expected, Ngram& actual)
+bool uaNgramBuilderTest::ngramSimpleMatcher(NgramSimple & expected, NgramSimple const& actual)
 {
     return expected.equals(actual);
 }

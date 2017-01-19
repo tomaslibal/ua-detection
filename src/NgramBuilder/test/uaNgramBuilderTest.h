@@ -35,7 +35,7 @@ private:
     void testCannotSetNegativeLevel();
     void testFromTokenListBuildsNgrams();
     
-    bool ngramMatcher(Ngram& expected, Ngram& actual);
+    bool ngramSimpleMatcher(NgramSimple& expected, const NgramSimple& actual);
 };
 
 #endif	/* UANGRAMBUILDERTEST_H */

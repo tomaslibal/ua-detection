@@ -12,27 +12,9 @@
 #include <string>
 
 /*
- * Ngram of a variable N length:
- * 
- * Suppose a 3-gram: Lazy, Lazy Fox, Lazy Fox Jumps. This data structure would capture it as follows:
- * 
- * Ngram n ...
- * n.len == 3
- * n.tokens[0] == "Lazy"
- * n.tokens[1] == "Lazy Fox"
- * n.tokens[2] == "Lazy Fox Jumps"
- * n.tokens[3-127] undefined
- * 
+ * n-gram representation
+ * n <= 16
  */
-struct Ngram {
-    int len;
-    std::string tokens[128];
-    std::string toString();
-    std::string toString(int num);
-    bool equals(const Ngram& other);
-    unsigned int hash();
-};
-
 struct NgramSimple {
     int len;
     std::string sentence;
@@ -63,8 +45,7 @@ public:
     NgramBuilder(const NgramBuilder &o);
     virtual ~NgramBuilder();
     
-    int fromTokenList(std::vector<std::string> &tokens, std::vector<Ngram> *ngrams);
-    void print(Ngram& ng);
+    //void print(NgramSimple& ng);
     
     int fromTokenList(std::vector<std::string> const& tokens, std::vector<NgramSimple> *ngrams);
     

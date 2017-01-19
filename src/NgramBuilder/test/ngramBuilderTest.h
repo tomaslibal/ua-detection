@@ -15,17 +15,16 @@
 class ngramBuilderTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(ngramBuilderTest);
 
-    CPPUNIT_TEST(testFromTokenListBuildsNgrams);
     CPPUNIT_TEST(testLevelDefaultsToThree);
     CPPUNIT_TEST(testSetAndGetLevel);
     CPPUNIT_TEST(testCannotSetNegativeLevel);
     CPPUNIT_TEST(testSetDynamicFlag);
     CPPUNIT_TEST(testZeroLevelMeansMaxPossibleNgram);
     CPPUNIT_TEST(testNgramHash);
-    CPPUNIT_TEST(testNgramSimple);
+    CPPUNIT_TEST(testFromTokenListBuildsNgrams);
     CPPUNIT_TEST(testNgramSimpleToString);
-    CPPUNIT_TEST(testNgramVsNgramSimplePerf);
-    CPPUNIT_TEST(testNgramVsNgramSimplePerfToString);
+    /*CPPUNIT_TEST(testNgramVsNgramSimplePerf);*/
+    /*CPPUNIT_TEST(testNgramVsNgramSimplePerfToString);*/
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -40,16 +39,14 @@ private:
     void testLevelDefaultsToThree();
     void testSetAndGetLevel();
     void testCannotSetNegativeLevel();
-    void testFromTokenListBuildsNgrams();
     void testSetDynamicFlag();
     void testZeroLevelMeansMaxPossibleNgram();
     void testNgramHash();
-    void testNgramSimple();
+    void testFromTokenListBuildsNgrams();
     void testNgramSimpleToString();
-    void testNgramVsNgramSimplePerf();
-    void testNgramVsNgramSimplePerfToString();
+    //void testNgramVsNgramSimplePerf();
+    //void testNgramVsNgramSimplePerfToString();
     
-    bool ngramMatcher(Ngram& expected, Ngram& actual);
     bool ngramSimpleMatcher(NgramSimple& expected, const NgramSimple& actual);
 };
 

@@ -119,7 +119,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
      * if its length is greater than 0.
      */
     if (i > 0) {
-      tokens->push_back(tok);
+        tokens->push_back(tok);
     }
     
     //delete[] chr;
