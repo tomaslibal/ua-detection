@@ -41,12 +41,14 @@ void NaiveBayessClassifier::inc_priors_freq(string const& key) {
 }
 
 void NaiveBayessClassifier::add_word(string const& word, string const& category) {
+    pair<string, int> newPair(word, 1);
+    
     // global vocabulary
     auto voc_search = vocabulary.find(word);
     if (voc_search != vocabulary.end()) {
         voc_search->second++;
     } else {
-        vocabulary.insert(pair<string, int>(word, 1));
+        vocabulary.insert(newPair);
     }
     // category's vocabulary:
     auto search = category_vocabularies.find(category);
@@ -55,12 +57,12 @@ void NaiveBayessClassifier::add_word(string const& word, string const& category)
         if (word_search != search->second.end()) {
             word_search->second++;
         } else {
-            search->second.insert(pair<string, int>(word, 1));
+            search->second.insert(newPair);
         }
     } else {
         unordered_map<string, int> newRecord;
         newRecord.reserve(INIT_MAP_SIZE);
-        newRecord.insert(pair<string, int>(word, 1));
+        newRecord.insert(newPair);
         category_vocabularies.insert(pair<string, unordered_map<string, int>>(category, newRecord));
     } 
 }
@@ -73,12 +75,9 @@ void NaiveBayessClassifier::add_data(string const& data, string const& category)
     vector<NgramSimple> ngrams;
     uaNgramBuilder.fromUserAgentString(data, &ngrams);
  
-//    
-    int numNgrams = ngrams.size();
-    for(int i = 0; i < numNgrams; i++) {
-        int ngramLen = ngrams[i].len;
-        for(int j = 1; j <= ngramLen; j++) {
-            string n = ngrams[i].toString(j);
+    for (auto & ngram: ngrams) {
+        for(int j = 1; j <= ngram.len; j++) {
+            string n = ngram.toString(j);
             add_word(n, category);
         }
     }
