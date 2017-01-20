@@ -18,9 +18,13 @@ using std::vector;
 using std::unordered_map;
 using std::pair;
 
+#define INIT_MAP_SIZE 128000
 
 NaiveBayessClassifier::NaiveBayessClassifier() {
     uaNgramBuilder.set_dynamic(true);
+    priors_freq.reserve(INIT_MAP_SIZE);
+    vocabulary.reserve(INIT_MAP_SIZE);
+    category_vocabularies.reserve(INIT_MAP_SIZE);
 }
 
 NaiveBayessClassifier::~NaiveBayessClassifier() {
