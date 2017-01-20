@@ -20,7 +20,6 @@ class uaTokenizerTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST(testStaticTokenizeBreaksUpUserAgentIntoTokens);
     CPPUNIT_TEST(testStaticTokenizeForShortUserAgentString);
     CPPUNIT_TEST(testSetAndGetUserAgentString);
-    CPPUNIT_TEST(testInArrayBinarySearch);
     CPPUNIT_TEST(testSpeedAndPrintMetrics);
 
     CPPUNIT_TEST_SUITE_END();
@@ -39,8 +38,6 @@ private:
     void testStaticTokenizeForShortUserAgentString();    
     
     void testSetAndGetUserAgentString();
-    
-    void testInArrayBinarySearch();
     
     void testSpeedAndPrintMetrics();
 };

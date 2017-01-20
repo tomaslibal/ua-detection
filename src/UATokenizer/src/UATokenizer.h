@@ -30,13 +30,12 @@ public:
     std::string get_uas();
     
     void tokenize(const std::string &sentence, std::vector<std::string> *tokens);
+    void tokenize(const std::string &sentence, char** tokens, int * num);
     void tokenize(std::vector<std::string>* tokens);
 private:
-    bool in_array(const char* array, char ch);
-    bool in_arrayb(const char* array, char ch);
-    bool is_separator(char ch);
-    
-    enum class States { Building_token, Close_token }; 
+    enum class States { Building_token, Close_token };
+    char mem[2048];
+    char token[128];
 
 };
 

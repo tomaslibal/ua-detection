@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <ctime>
+#include <cstdlib>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(uaTokenizerTest);
 
@@ -94,12 +95,14 @@ void uaTokenizerTest::testSetAndGetUserAgentString()
 void uaTokenizerTest::testSpeedAndPrintMetrics()
 {
     std::string uas = "Mozilla/5.0 (Linux; Android 4.4.4; SM-J110H Build/XYZ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.1000.10 Mobile Safari/537.36";
-    std::vector<std::string> tokens;
+    //std::vector<std::string> tokens;
+    char** tokens = (char**)malloc(sizeof(char*)*128);
+    int num;
     
     std::clock_t t = std::clock();
     int max = 100000;
     for (int i = 0; i < max; i++) {
-        tok->tokenize(uas, &tokens);
+        tok->tokenize(uas, tokens, &num);
     }
     t = std::clock() - t;
     
@@ -108,11 +111,6 @@ void uaTokenizerTest::testSpeedAndPrintMetrics()
     long total_s = total_chr * sizeof(char);
     std::cout << std::endl << max << " iterations, t=" << elapsed << "s" << std::endl;
     std::cout << "avg " << (total_s / elapsed / 1024) << " kB/s" << std::endl;
-}
-
-void uaTokenizerTest::testInArrayBinarySearch()
-{
-    
 }
 
 
