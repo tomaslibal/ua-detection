@@ -81,10 +81,15 @@ void NaiveBayessClassifier::add_data(string const& data, string const& category)
             add_word(n, category);
         }
     }
-    
+   
+}
+
+void NaiveBayessClassifier::clear_cache()
+{
     cache.int_cache.clear();
     cache.dbl_cache.clear();
 }
+
 
 double NaiveBayessClassifier::prob_category(std::string const& category) {
     int freq_cat = 0;
@@ -189,7 +194,7 @@ double NaiveBayessClassifier::prob_category_ngram(std::string const& category, N
     
     int ngram_freq_in_cat = 0;
     int ngrams_freq_total_in_cat = 0;
-    
+        
     int ngramLen = ngram.len;
     for(int i = 1; i <= ngramLen; i++) {
         string s = ngram.toString(i);

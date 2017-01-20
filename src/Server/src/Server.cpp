@@ -79,6 +79,8 @@ void Server::learn()
         }
     };
     
+    nbl->clear_cache();
+    
     /*
      * FileInputReader for reading in the data file, and passing each file line
      * to the previous lambda.

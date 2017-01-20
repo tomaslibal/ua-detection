@@ -31,6 +31,7 @@ public:
     
     bool is_in_vocabulary(std::string const& word);
     void stats();
+    void clear_cache();
     
     std::vector<std::string>* get_categories();
 private:

@@ -133,7 +133,7 @@ int NgramBuilder::fromTokenList(char** tokens, const int numTokens, vector< Ngra
     for (int i = 0; i < numTokens; i++) {
         delete[] tokens[i];
     }
-    delete[] tokens;
+    //delete[] tokens;
     tokens = nullptr;
     
     return slider;
