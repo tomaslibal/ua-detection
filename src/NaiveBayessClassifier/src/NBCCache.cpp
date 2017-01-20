@@ -1,8 +1,12 @@
 #include "NBCCache.h"
 
+#define INIT_MAP_SIZE 64000
+
 NBCCache::NBCCache()
 {
-
+    timestamps.reserve(INIT_MAP_SIZE);
+    int_cache.reserve(INIT_MAP_SIZE);
+    dbl_cache.reserve(INIT_MAP_SIZE);
 }
 
 NBCCache::~NBCCache()

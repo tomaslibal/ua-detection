@@ -1,7 +1,7 @@
 #ifndef NBCCACHE_H
 #define NBCCACHE_H
 
-#include <map>
+#include <unordered_map>
 #include <string>
 
 class NBCCache {
@@ -15,9 +15,9 @@ public:
      * For each key this map holds the timestamp of the cache insertion. This
      * assumes that all keys accros different cache types are unique.
      */
-    std::map<std::string, int> timestamps;
-    std::map<std::string, int> int_cache;
-    std::map<std::string, double> dbl_cache;
+    std::unordered_map<std::string, int> timestamps;
+    std::unordered_map<std::string, int> int_cache;
+    std::unordered_map<std::string, double> dbl_cache;
     
     bool in_int_cache(std::string const& key);
     bool in_dbl_cache(std::string const& key);
