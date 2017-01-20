@@ -123,7 +123,8 @@ void UATokenizer::tokenize(const string& sentence, char** tokens, int* num)
      */
     if (i > 0) {
         tokens[n] = new char[i+1]();
-                    strcpy(tokens[n],tok); 
+        strcpy(tokens[n],tok); 
+        n++;
         //tokens->push_back(tok);
     }
     
@@ -146,6 +147,7 @@ void UATokenizer::tokenize(const string &sentence, vector<string> *tokens) {
     //const char sep[] = { ' ', '"', '(', ')', ',', ':', ';', '<', '=', '>', '?', '@', '[', ']', '{', '}', '\0' };
 
     tokens->clear();
+    tokens->reserve(32);
     
     if (sentence.length() == 0) {
         return;
