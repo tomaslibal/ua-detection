@@ -3,9 +3,10 @@
 
 int UaNgramBuilder::fromUserAgentString(std::string const& sentence, std::vector< NgramSimple >* ngrams)
 {
-    std::vector<std::string> uaTokens;
+    char** uaTokens = (char**)malloc(sizeof(char*)*128);
+    int num = 0;
     
-    tok.tokenize(sentence, &uaTokens);
+    tok.tokenize(sentence, uaTokens, &num);
     
-    return this->fromTokenList(uaTokens, ngrams);
+    return this->fromTokenList(uaTokens, num, ngrams);
 }

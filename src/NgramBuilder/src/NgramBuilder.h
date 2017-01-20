@@ -46,8 +46,8 @@ public:
     virtual ~NgramBuilder();
     
     //void print(NgramSimple& ng);
-    
-    int fromTokenList(std::vector<std::string> const& tokens, std::vector<NgramSimple> *ngrams);
+
+    int fromTokenList(char** tokens, const int numTokens, std::vector<NgramSimple> *ngrams);
     
     void set_level(const int level);
     int get_level();

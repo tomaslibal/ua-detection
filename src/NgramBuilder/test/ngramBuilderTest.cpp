@@ -8,6 +8,7 @@
 #include "ngramBuilderTest.h"
 
 #include <string>
+#include <cstring>
 #include <vector>
 #include <iostream>
 #include <ctime>
@@ -55,13 +56,19 @@ void ngramBuilderTest::testFromTokenListBuildsNgrams()
 {
     std::vector<NgramSimple> ngrams;
     
-    std::vector<std::string> tokens;
-    tokens.push_back("Mozilla/5.0");
-    tokens.push_back("X11");
-    tokens.push_back("Linux");
-    tokens.push_back("x86_64");
+    char** tokens = (char**)malloc(sizeof(char*)*4);
+    const int num = 4;
+
+    tokens[0] = (char*)malloc(sizeof(char)*12);
+    strcpy(tokens[0], "Mozilla/5.0");
+    tokens[1] = (char*)malloc(sizeof(char)*4);
+    strcpy(tokens[1], "X11");
+    tokens[2] = (char*)malloc(sizeof(char)*6);
+    strcpy(tokens[2], "Linux");
+    tokens[3] = (char*)malloc(sizeof(char)*7);
+    strcpy(tokens[3], "x86_64");
     
-    ngBuilder->fromTokenList(tokens, &ngrams);
+    ngBuilder->fromTokenList(tokens, num, &ngrams);
     
     CPPUNIT_ASSERT(ngrams.size() == 2);
     
@@ -90,12 +97,17 @@ void ngramBuilderTest::testNgramSimpleToString()
     
     std::vector<NgramSimple> ngrams;
     
-    std::vector<std::string> tokens;
-    tokens.push_back("Mozilla/5.0");
-    tokens.push_back("X11");
-    tokens.push_back("Linux");
+    char** tokens = (char**)malloc(sizeof(char*)*3);
+    const int num = 3;
+
+    tokens[0] = (char*)malloc(sizeof(char)*12);
+    strcpy(tokens[0], "Mozilla/5.0");
+    tokens[1] = (char*)malloc(sizeof(char)*4);
+    strcpy(tokens[1], "X11");
+    tokens[2] = (char*)malloc(sizeof(char)*6);
+    strcpy(tokens[2], "Linux");
     
-    ngBuilder->fromTokenList(tokens, &ngrams);
+    ngBuilder->fromTokenList(tokens, num, &ngrams);
     
     NgramSimple result = ngrams.at(0);
     
@@ -165,16 +177,22 @@ void ngramBuilderTest::testZeroLevelMeansMaxPossibleNgram()
 {
     std::vector<NgramSimple> ngrams;
     
-    std::vector<std::string> tokens;
-    tokens.push_back("Mozilla/5.0");
-    tokens.push_back("X11");
-    tokens.push_back("Linux");
-    tokens.push_back("x86_64");
-    tokens.push_back("Firefox/60.0");
-    
+    char** tokens = (char**)malloc(sizeof(char*)*5);
+    const int num = 5;
+
+    tokens[0] = (char*)malloc(sizeof(char)*12);
+    strcpy(tokens[0], "Mozilla/5.0");
+    tokens[1] = (char*)malloc(sizeof(char)*4);
+    strcpy(tokens[1], "X11");
+    tokens[2] = (char*)malloc(sizeof(char)*6);
+    strcpy(tokens[2], "Linux");
+    tokens[3] = (char*)malloc(sizeof(char)*7);
+    strcpy(tokens[3], "x86_64");
+    tokens[4] = (char*)malloc(sizeof(char)*13);
+    strcpy(tokens[4], "Firefox/60.0");
     
     ngBuilder->set_dynamic(true);
-    ngBuilder->fromTokenList(tokens, &ngrams);
+    ngBuilder->fromTokenList(tokens, num, &ngrams);
     
     // There should be 5 ngrams, 1 of length 5, 1 of length 4, 1 of length 3, 1 of length 2 and 1 of length 1
     CPPUNIT_ASSERT_EQUAL(5, (int) ngrams.size());

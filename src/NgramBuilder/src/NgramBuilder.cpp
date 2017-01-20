@@ -60,9 +60,8 @@ NgramBuilder::NgramBuilder(const NgramBuilder& orig) {
 NgramBuilder::~NgramBuilder() {
 }
 
-int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSimple >* ngrams)
+int NgramBuilder::fromTokenList(char** tokens, const int numTokens, vector< NgramSimple >* ngrams)
 {
-    int size = tokens.size();
     /*
      * Offset of the first token to be taken into a new n-gram. Keeps increasing
      * by one with each finished n-gram.
@@ -85,20 +84,20 @@ int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSim
      * If the dynamic flag is set, we'll progresively build ngrams where n = tokens.size() down to 1
      */
     if (dynamic == true) {
-        if (size > 16) {
+        if (numTokens > 16) {
             this->level = 16;
         } else {
-            this->level = size;
+            this->level = numTokens;
         }
     }
 
-    for(; slider < size; slider++) {
+    for(; slider < numTokens; slider++) {
         /* 
          * The number of remaining tokens must be greater than this->level,
          * otherwise this would not be a valid N-gram of length N. Hence, if it
          * is not the case, we break out from the loop.
          */
-        int rem = size - (slider+this->level);
+        int rem = numTokens - (slider+this->level);
         if (rem < 0) {
             break;
         }
@@ -109,7 +108,7 @@ int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSim
         string sentence;
 
         for(int j = 0; j < this->level; j++) {
-            string token = tokens.at(slider + j);
+            string token = tokens[slider + j];
             n.starts[j] = sentence.size();
             n.lens[j] = token.size();
             sentence.append(token);
@@ -130,6 +129,12 @@ int NgramBuilder::fromTokenList(const vector< string >& tokens, vector< NgramSim
             this->level -= 1;
         }
     }
+    
+    for (int i = 0; i < numTokens; i++) {
+        delete[] tokens[i];
+    }
+    delete[] tokens;
+    tokens = nullptr;
     
     return slider;
 }
