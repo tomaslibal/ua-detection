@@ -15,10 +15,9 @@
 
 #include <cstring>
 
-std::string* get_value(const std::string& config_line, const std::string& parameter)
+std::string get_value(const std::string& config_line, const std::string& parameter)
 {
-    std::string* str = new std::string(config_line.substr(config_line.find(parameter) + 1 + parameter.size()));
-    return str;
+    return std::string(config_line.substr(config_line.find(parameter) + 1 + parameter.size()));
 }
 
 ProgramConfig::ProgramConfig() {
@@ -37,30 +36,21 @@ ProgramConfig::~ProgramConfig() {
 void ProgramConfig::update(ProgramConfigObject& confObj)
 {
     std::function<void (std::string const&)> onReadLine = [&confObj](std::string const& line) {
-        std::string* p_str;
         if (line.find("hostname") != std::string::npos) {
-            p_str = get_value(line, "hostname");
-            confObj.hostname = *p_str;
-            delete p_str;
+            confObj.hostname = get_value(line, "hostname");
         }
         if (line.find("port") != std::string::npos) {
-            p_str = get_value(line, "port");
-            confObj.portno = std::stoi(p_str->c_str());
-            delete p_str;
+            confObj.portno = std::stoi(((std::string)get_value(line, "port")).c_str());
         }
         if (line.find("datafile") != std::string::npos) {
-            p_str = get_value(line, "datafile");
-            confObj.datafile = *p_str;
-            delete p_str;
+            confObj.datafile = get_value(line, "datafile");
         }
         if (line.find("logfile") != std::string::npos) {
-	    p_str = get_value(line, "logfile");
-            confObj.logfile = *p_str;
-            delete p_str;
+            confObj.logfile = get_value(line, "logfile");
         }
         if (line.find("output") != std::string::npos) {
-            p_str = get_value(line, "output");
-            if (std::strcmp(p_str->c_str(), "json") == 0) {
+            std::string val = get_value(line, "output");
+            if (val == "json") {
                 confObj.outputType = OutputType::json;
             } else {
                 confObj.outputType = OutputType::plaintext;
