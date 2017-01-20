@@ -120,45 +120,6 @@ void ngramBuilderTest::testNgramSimpleToString()
     CPPUNIT_ASSERT(expected.compare(result.toString(3)) == 0);
 }
 
-/*void ngramBuilderTest::testNgramVsNgramSimplePerf()
-{
-    int max = 100000;
-    
-    std::vector<std::string> tokens;
-    tokens.push_back("Mozilla/5.0");
-    tokens.push_back("X11");
-    tokens.push_back("Linux");
-    tokens.push_back("Android");
-    tokens.push_back("5.0.0");
-    tokens.push_back("EN");
-    tokens.push_back("Compatible");
-    tokens.push_back("Firefox/50.0");
-    
-    std::vector<Ngram> ngram;
-    std::vector<NgramSimple> ngramSimple;
-    
-    std::clock_t t = std::clock();
-    for (int i = 0; i < max; i++) {
-        ngram.clear();
-        ngBuilder->fromTokenList(tokens, &ngram);
-    }
-    t = std::clock() - t;
-    
-    double elapsed = ((double) t) / CLOCKS_PER_SEC;
-    
-    t = std::clock();
-    for (int i = 0; i < max; i++) {
-        ngram.clear();
-        ngBuilder->fromTokenList(tokens, &ngramSimple);
-    }
-    t = std::clock() - t;
-    
-    double elapsedSimple = ((double) t) / CLOCKS_PER_SEC;
-    
-    std::cout << "\n****PERFORMANCE\n" << "Old: " << elapsed << "s\n";
-    std::cout << "New: " << elapsedSimple << "s\n";
-}*/
-
 void ngramBuilderTest::testSetDynamicFlag()
 {
     CPPUNIT_ASSERT_EQUAL(false, ngBuilder->is_dynamic());
