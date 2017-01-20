@@ -59,6 +59,7 @@ void NaiveBayessClassifier::add_word(string const& word, string const& category)
         }
     } else {
         unordered_map<string, int> newRecord;
+        newRecord.reserve(INIT_MAP_SIZE);
         newRecord.insert(pair<string, int>(word, 1));
         category_vocabularies.insert(pair<string, unordered_map<string, int>>(category, newRecord));
     } 
