@@ -35,6 +35,7 @@ void naiveBayesClassifierTest::testIncPriorsFreqIncreasesFrequencyByOne() {
     
     string test_data = "foo bar";
     nbc->add_data(test_data, cat);
+    nbc->clear_cache();
     
     p = nbc->prob_category(cat);
     
@@ -42,6 +43,7 @@ void naiveBayesClassifierTest::testIncPriorsFreqIncreasesFrequencyByOne() {
     
     string cat2 = "mobile";
     nbc->add_data(test_data, cat2);
+    nbc->clear_cache();
     
     p = nbc->prob_category(cat2);
     
@@ -57,10 +59,12 @@ void naiveBayesClassifierTest::testIncProbForNgram()
     n1.len = 3;
     
     nbc->add_data("lazy red pelican", "foo");
+    nbc->clear_cache();
     
     double p = nbc->prob_ngram(n1);
     
     nbc->add_data("jumpy jerry jumps up", "bar");
+    nbc->clear_cache();
     
     double p2 = nbc->prob_ngram(n1);
     
@@ -76,10 +80,12 @@ void naiveBayesClassifierTest::testNgramPriorGoesUpIfMoreFrequent()
     n1.len = 3;
     
     nbc->add_data("speedy spike", "foo");
+    nbc->clear_cache();
     
     double p = nbc->prob_ngram(n1);
     
     nbc->add_data("lazy red jumps over and over", "bar");
+    nbc->clear_cache();
     
     double p2 = nbc->prob_ngram(n1);
     
