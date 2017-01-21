@@ -24,7 +24,8 @@ NaiveBayessClassifier::NaiveBayessClassifier() {
     uaNgramBuilder.set_dynamic(true);
     priors_freq.reserve(INIT_MAP_SIZE);
     vocabulary.reserve(INIT_MAP_SIZE);
-    category_vocabularies.reserve(INIT_MAP_SIZE);
+    cat_vocabulary.reserve(INIT_MAP_SIZE);
+    cat_vocabulary_freq.reserve(INIT_MAP_SIZE);
 }
 
 NaiveBayessClassifier::~NaiveBayessClassifier() {
@@ -36,7 +37,7 @@ void NaiveBayessClassifier::inc_priors_freq(string const& key) {
     if (search != priors_freq.end()) {
         search->second++;
     } else {
-        priors_freq.insert(pair<string, int>(key, 1));
+        priors_freq.emplace(key, 1);
     }
 }
 
@@ -49,20 +50,15 @@ void NaiveBayessClassifier::add_word(string const& word, string const& category)
         vocabulary.emplace<>(word, 1);
     }
     // category's vocabulary:
-    auto search = category_vocabularies.find(category);
-    if (search != category_vocabularies.end()) {
-        auto word_search = search->second.find(word);
-        if (word_search != search->second.end()) {
-            word_search->second++;
-        } else {
-            search->second.emplace(word, 1);
-        }
+    std::string cat_and_word = category + word;
+    auto search = cat_vocabulary.find(cat_and_word);
+    if (search != cat_vocabulary.end()) {
+        search->second++;
+        cat_vocabulary_freq[category]++;
     } else {
-        unordered_map<string, int> newRecord;
-        newRecord.reserve(INIT_MAP_SIZE);
-        newRecord.emplace(word, 1);
-        category_vocabularies.emplace(category, newRecord);
-    } 
+        cat_vocabulary.emplace<>(cat_and_word, 1);
+        cat_vocabulary_freq.emplace<>(category, 1);
+    }
 }
 
 void NaiveBayessClassifier::add_data(string const& data, string const& category) {
@@ -104,8 +100,8 @@ double NaiveBayessClassifier::prob_category(std::string const& category) {
     int freq_all = 0;
     
     if (!cache.in_int_cache("all_freq_categories")) {
-        for(unordered_map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
-            freq_all += it->second;
+        for (auto& pair: priors_freq) {
+            freq_all += pair.second;
         }
         cache.insert_int_cache("all_freq_categories", freq_all);
     } else {
@@ -143,8 +139,8 @@ double NaiveBayessClassifier::prob_ngram(NgramSimple& ngram) {
     int all_freq = 0;
     
     if (!cache.in_int_cache("all_freq_ngrams")) {
-        for(unordered_map<string, int>::iterator it = vocabulary.begin(); it != vocabulary.end(); ++it) {
-            all_freq += it->second;
+        for (auto& pair: vocabulary) {
+            all_freq += pair.second;
         }
         cache.insert_int_cache("all_freq_ngrams", all_freq);
     } else {
@@ -162,19 +158,17 @@ double NaiveBayessClassifier::prob_ngram(NgramSimple& ngram) {
 }
 
 int NaiveBayessClassifier::freq_category_word(std::string const& category, std::string const& word) {
-    std::string key = "0123freq" + category + word;
+    std::string key = "0123catword" + category + word;
     
     if (cache.in_int_cache(key)) {
         return cache.get_int_cache(key);
     }
     
-    auto search = category_vocabularies.find(category);
-    if (search != category_vocabularies.end()) {
-        auto cat_search = search->second.find(word);
-        if (cat_search != search->second.end()) {
-            cache.insert_int_cache(key, cat_search->second);
-            return cat_search->second;
-        }
+    std::string cat_and_word = category + word;
+    auto search = cat_vocabulary.find(cat_and_word);
+    if (search != cat_vocabulary.end()) {
+        cache.insert_int_cache(key, search->second);
+        return search->second;
     }
     
     cache.insert_int_cache(key, 0);
@@ -199,14 +193,11 @@ double NaiveBayessClassifier::prob_category_ngram(std::string const& category, N
         ngram_freq_in_cat += freq_category_word(category, s);
     }
     
-    auto search = category_vocabularies.find(category);
-    if (search != category_vocabularies.end()) {
-        // iterator over the map<string ,int> and sum the int values
-        unordered_map<string, int> cat = search->second;
-
-        for(unordered_map<string, int>::iterator iterator = cat.begin(); iterator != cat.end(); ++iterator) {
-            ngrams_freq_total_in_cat += iterator->second;
-        }
+    auto search = cat_vocabulary_freq.find(category);
+    if (search != cat_vocabulary_freq.end()) {
+        ngrams_freq_total_in_cat = search->second;
+    } else {
+        ngrams_freq_total_in_cat = 0;
     }
     
     double p = 0;
@@ -236,7 +227,7 @@ double NaiveBayessClassifier::classify(std::string const& data, std::string cons
     double p_cat = prob_category(category);
     double log_posterior = 0;
     
-    for(int i = 0; i < ngrams.size(); i++) {
+    for(unsigned int i = 0; i < ngrams.size(); i++) {
         string ns = ngrams[i].toString(ngrams[i].len);
         // discard words 2 chars or shorter
         if (ns.length() < 3) {

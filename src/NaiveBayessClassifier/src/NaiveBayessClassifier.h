@@ -54,9 +54,17 @@ private:
      *     wordN =  9211
      */
     std::unordered_map<std::string, int> vocabulary;
-    
-    // make category_vocabularies a map<string, map<string, int>> ...
-    std::unordered_map<std::string, std::unordered_map<std::string, int>> category_vocabularies;
+
+    /*
+     * Let c = "mobile" be the category and w1 = "Android", w2 = "EN" and w3 = "EN" be the words in this category,
+     * then the "mobile" category vocabulary will be "mobile_Android"=1, "mobile_EN"=2.
+     */
+    std::unordered_map<std::string, int> cat_vocabulary;
+    /*
+     * this auxiliary map keeps the number of occurences of words in the vocabulary for each given category,
+     * so for the example above in cat_vocabulary, the size for "mobile" will be 3.
+     */
+    std::unordered_map<std::string, int> cat_vocabulary_freq;
     
     /*
      * increments a frequency of a prior (key) by one
