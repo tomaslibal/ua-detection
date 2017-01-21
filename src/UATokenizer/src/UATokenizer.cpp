@@ -125,7 +125,6 @@ void UATokenizer::tokenize(const string& sentence, char** tokens, int* num)
         tokens[n] = new char[i+1]();
         strcpy(tokens[n],tok); 
         n++;
-        //tokens->push_back(tok);
     }
     
     *num = n;

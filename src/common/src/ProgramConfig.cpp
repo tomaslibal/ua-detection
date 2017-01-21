@@ -40,7 +40,7 @@ void ProgramConfig::update(ProgramConfigObject& confObj)
             confObj.hostname = get_value(line, "hostname");
         }
         if (line.find("port") != std::string::npos) {
-            confObj.portno = std::stoi(((std::string)get_value(line, "port")).c_str());
+            confObj.portno = std::stoi(get_value(line, "port"));
         }
         if (line.find("datafile") != std::string::npos) {
             confObj.datafile = get_value(line, "datafile");
