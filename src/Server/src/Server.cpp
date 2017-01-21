@@ -215,13 +215,11 @@ void Server::evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc,
 
     std::vector<std::string>* input = process_message(buffer);
     
-    std::string* output = classify_data(*input, nbc);
+    std::string output = classify_data(*input, nbc);
     
-    logger.log(std::string("Output was: " + *output));
+    logger.log(std::string("Output was: " + output));
     
-    n = write(insockfd, output->data(), output->length() * sizeof(char));
-    
-    delete output;
+    n = write(insockfd, output.data(), output.length() * sizeof(char));
     
     if (n < 0) perror("ERROR writing to socket");
     close(insockfd);
@@ -231,9 +229,8 @@ void Server::evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc,
     return;
 }
 
-std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc)
+std::string Server::classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc)
 {
-    std::string* p_str = nullptr;
     std::string aux;
 
     std::ostringstream pstrs;
@@ -253,11 +250,11 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
         labels.push_back(input.at(1));
 
         if (config.outputType == OutputType::json) {
-            p_str = json_output(results, labels);
+            aux = json_output(results, labels);
         } else {
-            p_str = plaintext_output(results, labels);
+            aux = plaintext_output(results, labels);
         }
-        return p_str;
+        return aux;
     // If token[0] == "eval" then:
     // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
     // was the most probable or not
@@ -299,24 +296,24 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
          * 
          */
         if (config.outputType == OutputType::json) {
-            p_str = json_output(normalized, labels);
+            aux = json_output(normalized, labels);
         } else {
-            p_str = plaintext_output(normalized, labels);
+            aux = plaintext_output(normalized, labels);
         }
     
-        return p_str;
+        return aux;
     } else if (input.at(0) == "add") {
         std::string category = input.at(1);
         std::string ua_agent = input.at(2);
         
         nbc.add_data(ua_agent, category);
-        return new std::string("added OK");
+        return std::string("added OK");
     } else {
-        return new std::string("Command not understood");
+        return std::string("Command not understood");
     }
 }
 
-std::string*  Server::json_output(std::vector<double>& values, std::vector<std::string>& labels)
+std::string Server::json_output(std::vector<double>& values, std::vector<std::string>& labels)
 {
     std::ostringstream json;
 
@@ -338,10 +335,10 @@ std::string*  Server::json_output(std::vector<double>& values, std::vector<std::
  
     json << "}";
   
-    return new std::string(json.str());
+    return std::string(json.str());
 }
 
-std::string* Server::plaintext_output(std::vector<double>& values, std::vector<std::string>& labels)
+std::string Server::plaintext_output(std::vector<double>& values, std::vector<std::string>& labels)
 {
     std::ostringstream output;
 
@@ -353,5 +350,5 @@ std::string* Server::plaintext_output(std::vector<double>& values, std::vector<s
         output << labels[i] << ":" << std::fixed << values[i] << std::endl;
     }
  
-    return new std::string(output.str());
+    return std::string(output.str());
 }

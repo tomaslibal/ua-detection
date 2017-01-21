@@ -40,16 +40,16 @@ public:
      * Classifies the given data using NaiveBayessClassifier
      * 
      */
-    std::string* classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc);
+    std::string classify_data(std::vector<std::string>& input, NaiveBayessClassifier& nbc);
 
     /**
      * Prints two vectors of doubles and strings (<0.42, 1.337, ...>, <"mobile", "desktop", ...>)
      * as a json string.
      *
      */
-    std::string* json_output(std::vector<double>& values, std::vector<std::string>& labels);
+    std::string json_output(std::vector<double>& values, std::vector<std::string>& labels);
 
-    std::string* plaintext_output(std::vector<double>& values, std::vector<std::string>& labels);
+    std::string plaintext_output(std::vector<double>& values, std::vector<std::string>& labels);
 private:
     FileLog logger;
     ProgramConfigObject config;
