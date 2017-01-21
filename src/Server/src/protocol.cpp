@@ -5,7 +5,11 @@
 #include <sstream>
 #include <iostream>
 
-using namespace std;
+using std::string;
+using std::vector;
+using std::stringstream;
+using std::cout;
+using std::endl;
 
 /*
  * Tokenizes the given message of chars by splitting it into tokens.
@@ -16,7 +20,7 @@ vector<string>* tok(const char* msg) {
     string str = string(msg);
     vector<string>* tokens = new vector<string>;
     stringstream buffer;
-    for(int i = 0; i < str.length(); i++) {
+    for(unsigned int i = 0; i < str.length(); i++) {
         c = str.at(i);
         if (c == s) {
             tokens->push_back(buffer.str());
@@ -46,7 +50,7 @@ vector<string>* process_message(const char* msg) {
     string what = "";
     string data = "";
     
-    for(int i = 0; i < tokens->size(); i++) {
+    for(unsigned int i = 0; i < tokens->size(); i++) {
         if (operation == "") {
             operation = tokens->at(i);
         } else if (what == "") {
