@@ -129,8 +129,7 @@ void Server::start()
     NetworkConfig const networkConfig(config.portno, config.hostname);
     Network const network(networkConfig);
     
-    sockaddr_in serv_addr, cli_addr;
-    char buffer[256];
+    sockaddr_in cli_addr;
     
     socklen_t clilen;
     clilen = sizeof(cli_addr);
@@ -191,10 +190,6 @@ void Server::evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc,
     logger.setPath(std::string("eval.") + std::to_string(insockfd) + std::string(".log.txt"));
     logger.log("Got a request");
     
-    /**
-     * 
-     */
-    socklen_t clilen;
     /**
      * Input buffer. The incoming connection data is read into it.
      */
@@ -330,7 +325,7 @@ std::string*  Server::json_output(std::vector<double>& values, std::vector<std::
 
     assert(values.size() == labels.size());
 
-    int size = values.size();
+    unsigned int size = values.size();
 
     for (size_t i = 0; i < size; ++i) {
         json << "    \"" << labels[i] << "\": " << std::fixed << values[i];
@@ -353,7 +348,7 @@ std::string* Server::plaintext_output(std::vector<double>& values, std::vector<s
 
     assert(values.size() == labels.size());
 
-    int size = values.size();
+    unsigned int size = values.size();
 
     for (size_t i = 0; i < size; ++i) {
         output << labels[i] << ":" << std::fixed << values[i] << std::endl;
