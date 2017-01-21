@@ -262,7 +262,7 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
     // Evaluate the UA (output->at(2)) against all classes and decides if the given class 'mobile' (output->at(1))
     // was the most probable or not
     } else if (input.at(0) == "eval") {
-        std::vector<std::string>* categories = nbc.get_categories();
+        std::vector<std::string> categories = nbc.get_categories();
     
         /*
          * Keeps evalution results for each category:
@@ -270,7 +270,7 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
          */
         std::map<double, std::string, std::greater<double>> results;
         
-        for (std::vector<std::string>::iterator it = categories->begin(); it != categories->end(); ++it) {
+        for (std::vector<std::string>::iterator it = categories.begin(); it != categories.end(); ++it) {
             std::string category = *it;
             double p = nbc.classify(input.at(2), category);
             /*
@@ -287,7 +287,7 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
         std::vector<std::string> labels;
 
         for (auto& item: results) {
-	    non_normalized.push_back(item.first);        
+	    non_normalized.push_back(item.first);
             labels.push_back(item.second);
         }
 
@@ -297,13 +297,12 @@ std::string* Server::classify_data(std::vector<std::string>& input, NaiveBayessC
          * Now print the normalized values together with their respective labels
          * from the buffer.
          * 
-         */ 	
+         */
         if (config.outputType == OutputType::json) {
-            p_str = json_output(normalized, labels);	    	
+            p_str = json_output(normalized, labels);
         } else {
             p_str = plaintext_output(normalized, labels);
-        }    
-        delete categories;
+        }
     
         return p_str;
     } else if (input.at(0) == "add") {

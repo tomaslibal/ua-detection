@@ -242,10 +242,10 @@ void NaiveBayessClassifier::stats() {
 }
 
 vector<string> NaiveBayessClassifier::get_categories() {
-    vector<string>* cat = new vector<string>();
+    vector<string> cat;
     
     for(unordered_map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {
-        cat->push_back(it->first);
+        cat.push_back(it->first);
     }
     
     return cat;
