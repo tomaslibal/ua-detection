@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+
 #include "../../NgramBuilder/src/UaNgramBuilder.h"
 #include "./NBCCache.h"
 
@@ -77,7 +78,6 @@ private:
      * Tokenizes user-agent string and builds the ngrams from the tokens
      */
     UaNgramBuilder uaNgramBuilder;
-
 };
 
 #endif	/* NAIVEBAYESSCLASSIFIER_H */
