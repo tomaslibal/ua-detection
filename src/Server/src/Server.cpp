@@ -213,9 +213,9 @@ void Server::evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc,
     
     logger.log(std::string("Request was: ") + std::string(buffer));
 
-    std::vector<std::string>* input = process_message(buffer);
+    std::vector<std::string> input = process_message(buffer);
     
-    std::string output = classify_data(*input, nbc);
+    std::string output = classify_data(input, nbc);
     
     logger.log(std::string("Output was: " + output));
     
@@ -225,7 +225,6 @@ void Server::evaluate_incoming_request(int insockfd, NaiveBayessClassifier& nbc,
     close(insockfd);
       
     bzero(buffer, BUFFERSIZE);
-    delete input;
     return;
 }
 

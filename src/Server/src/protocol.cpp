@@ -14,16 +14,16 @@ using std::endl;
 /*
  * Tokenizes the given message of chars by splitting it into tokens.
  */
-vector<string>* tok(const char* msg) {
+vector<string> tok(const char* msg) {
     const char s = ' ';
     char c;
     string str = string(msg);
-    vector<string>* tokens = new vector<string>;
+    vector<string> tokens;
     stringstream buffer;
     for(unsigned int i = 0; i < str.length(); i++) {
         c = str.at(i);
         if (c == s) {
-            tokens->push_back(buffer.str());
+            tokens.push_back(buffer.str());
             buffer.str("");
         } else {
             buffer << c;
@@ -31,7 +31,7 @@ vector<string>* tok(const char* msg) {
     }
     
     if (buffer.str().length() > 0) {
-        tokens->push_back(buffer.str());
+        tokens.push_back(buffer.str());
     }
     
     return tokens;
@@ -41,35 +41,33 @@ vector<string>* tok(const char* msg) {
  * Takes an incoming message of chars and acts on it, based on the contents
  * of the message.
  */
-vector<string>* process_message(const char* msg) {
+vector<string> process_message(const char* msg) {
     cout << "I got: " << msg << endl;
     
-    vector<string>* tokens = tok(msg);
+    vector<string> tokens = tok(msg);
     
     string operation = "";
     string what = "";
     string data = "";
     
-    for(unsigned int i = 0; i < tokens->size(); i++) {
+    for(unsigned int i = 0; i < tokens.size(); i++) {
         if (operation == "") {
-            operation = tokens->at(i);
+            operation = tokens.at(i);
         } else if (what == "") {
-            what = tokens->at(i);
+            what = tokens.at(i);
         } else {
-            data += tokens->at(i) + " ";
+            data += tokens.at(i) + " ";
         }
     }
-    
-    delete tokens;
     
     cout << "op: " << operation << endl;
     cout << "what: " << what << endl;
     cout << "data: " << data << endl;
     
-    vector<string>* output = new vector<string>;
-    output->push_back(operation);
-    output->push_back(what);
-    output->push_back(data);
+    vector<string> output;
+    output.push_back(operation);
+    output.push_back(what);
+    output.push_back(data);
 
     return output;
 }
