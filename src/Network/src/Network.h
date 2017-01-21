@@ -7,8 +7,8 @@
 
 struct NetworkConfig {
     int const portno;
-    int const backlogsize;
     std::string const hostname;
+    int const backlogsize;
     
     NetworkConfig(int const portno = 10128, std::string const hostname = std::string("localhost"), int const backlogsize = 5) : portno(portno), hostname(hostname), backlogsize(backlogsize) {};
 };
