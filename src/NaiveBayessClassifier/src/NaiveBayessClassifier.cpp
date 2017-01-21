@@ -54,11 +54,11 @@ void NaiveBayessClassifier::add_word(string const& word, string const& category)
     auto search = cat_vocabulary.find(cat_and_word);
     if (search != cat_vocabulary.end()) {
         search->second++;
-        cat_vocabulary_freq[category]++;
     } else {
         cat_vocabulary.emplace<>(cat_and_word, 1);
-        cat_vocabulary_freq.emplace<>(category, 1);
     }
+    
+    cat_vocabulary_freq[category]++;
 }
 
 void NaiveBayessClassifier::add_data(string const& data, string const& category) {

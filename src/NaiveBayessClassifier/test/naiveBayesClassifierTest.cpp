@@ -92,5 +92,34 @@ void naiveBayesClassifierTest::testNgramPriorGoesUpIfMoreFrequent()
     CPPUNIT_ASSERT_MESSAGE("probability should have increased", p2 > p);
 }
 
+void naiveBayesClassifierTest::testNgramProbInCategory()
+{
+    NgramSimple n1;
+    n1.sentence = "lazy red jumps ";
+    n1.starts[0] = 0; n1.starts[1] = 5; n1.starts[2] = 9;
+    n1.lens[0] = 4; n1.lens[1] = 3; n1.lens[2] = 5;    
+    n1.len = 3;
+    
+    nbc->add_data("lazy red jumps", "foo");
+    nbc->add_data("red jumps over a fence", "bar");
+    nbc->clear_cache();
+    
+    auto p1 = nbc->prob_category_ngram("foo", n1);
+    auto p2 = nbc->prob_category_ngram("bar", n1);
+    
+    CPPUNIT_ASSERT_MESSAGE("p1 > p2", p1 > p2);
+    
+    nbc->add_data("minky binky finky", "foo");
+    nbc->clear_cache();
+    
+    auto p3 = nbc->prob_category_ngram("foo", n1);
+    
+    std::cout << "p1=" << std::to_string(p1) << "\n";
+    std::cout << "p2=" << std::to_string(p2) << "\n";
+    std::cout << "p3=" << std::to_string(p3) << "\n";
+    
+    CPPUNIT_ASSERT_MESSAGE("p1 > p3", p1 > p3);
+}
+
 
 
