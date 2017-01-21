@@ -241,7 +241,7 @@ void NaiveBayessClassifier::stats() {
     cout << "Words (ngrams) in vocabulary: " << vocabulary.size() << endl;
 }
 
-vector<string>* NaiveBayessClassifier::get_categories() {
+vector<string> NaiveBayessClassifier::get_categories() {
     vector<string>* cat = new vector<string>();
     
     for(unordered_map<string, int>::iterator it = priors_freq.begin(); it != priors_freq.end(); ++it) {

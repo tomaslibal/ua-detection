@@ -32,7 +32,7 @@ public:
     void stats();
     void clear_cache();
     
-    std::vector<std::string>* get_categories();
+    std::vector<std::string> get_categories();
 private:
     NBCCache cache;
     /*
@@ -60,8 +60,11 @@ private:
      */
     std::unordered_map<std::string, int> cat_vocabulary;
     /*
-     * this auxiliary map keeps the number of occurences of words in the vocabulary for each given category,
-     * so for the example above in cat_vocabulary, the size for "mobile" will be 3.
+     * this auxiliary map keeps the number of occurences of all words in 
+     * the vocabulary for each given category, so for the example, where
+     * one word occured twice and another word occured once and these
+     * were the only words in the category, the frequency of all words
+     * for this category will be 3.
      */
     std::unordered_map<std::string, int> cat_vocabulary_freq;
     
