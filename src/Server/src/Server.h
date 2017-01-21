@@ -27,12 +27,10 @@ public:
 
     /**
      * Reads the incoming socket connection and parses it using protocol::process_message().
-     * 
-     * @param sockaddr_in* cli_addr seems unused; delete this
+     *
      * @param int insockfd socket descriptor of the incoming request
-     * @param std::function<void ()>& exit_callback is a callable object that is called if function exits early; rename to early_exit_callback
-     * @param std::unique_lock<std::mutex>& signal_exit is used to signal to the main thread that the user wishes to terminate the server program; remove this functionality
      * @param NaiveBayessClassifier& nbc is an instance of learned NaiveBayessClassifier
+     * @param std::atomic<int>& nIncomingMsg atomic integer clock to count the number of incoming messages
      * 
      * @return void
      */
