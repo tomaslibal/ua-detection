@@ -41,14 +41,12 @@ void NaiveBayessClassifier::inc_priors_freq(string const& key) {
 }
 
 void NaiveBayessClassifier::add_word(string const& word, string const& category) {
-    pair<string, int> newPair(word, 1);
-    
     // global vocabulary
     auto voc_search = vocabulary.find(word);
     if (voc_search != vocabulary.end()) {
         voc_search->second++;
     } else {
-        vocabulary.insert(newPair);
+        vocabulary.emplace<>(word, 1);
     }
     // category's vocabulary:
     auto search = category_vocabularies.find(category);
@@ -57,13 +55,13 @@ void NaiveBayessClassifier::add_word(string const& word, string const& category)
         if (word_search != search->second.end()) {
             word_search->second++;
         } else {
-            search->second.insert(newPair);
+            search->second.emplace(word, 1);
         }
     } else {
         unordered_map<string, int> newRecord;
         newRecord.reserve(INIT_MAP_SIZE);
-        newRecord.insert(newPair);
-        category_vocabularies.insert(pair<string, unordered_map<string, int>>(category, newRecord));
+        newRecord.emplace(word, 1);
+        category_vocabularies.emplace(category, newRecord);
     } 
 }
 
