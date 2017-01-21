@@ -209,16 +209,6 @@ double NaiveBayessClassifier::prob_category_ngram(std::string const& category, N
     return p;
 }
 
-bool NaiveBayessClassifier::is_in_vocabulary(std::string const& word) {
-    auto search = vocabulary.find(word);
-    if (search != vocabulary.end()) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
 double NaiveBayessClassifier::classify(std::string const& data, std::string const& category) {
     vector<NgramSimple> ngrams;
     

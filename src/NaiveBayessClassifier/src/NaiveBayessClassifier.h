@@ -29,7 +29,6 @@ public:
     double prob_category_ngram(std::string const& category, NgramSimple &ngram);
     int freq_category_word(std::string const& category, std::string const& word);
     
-    bool is_in_vocabulary(std::string const& word);
     void stats();
     void clear_cache();
     
