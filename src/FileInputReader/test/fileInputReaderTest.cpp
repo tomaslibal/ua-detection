@@ -48,7 +48,7 @@ void fileInputReaderTest::testReadLinesPassesInTheLinesAsStrings() {
     
     reader->readLines("../../FileInputReader/test/resources/test.txt", test_callback);
     
-    for(int i = 0; i < lines.size(); i++) {
+    for(unsigned int i = 0; i < lines.size(); i++) {
         if (i == 0) {
             CPPUNIT_ASSERT_MESSAGE("The first line should read 'foo,1'", "foo,1" == lines[i]);
         }
