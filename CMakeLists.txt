@@ -32,6 +32,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/dist)
 set(CMAKE_CXX_FLAGS "-std=c++11 -g -O3 -Wall")
 set(CMAKE_BUILD_TYPE Debug)
 
+if (NOT DISABLE_TESTS)
 # 
 # TESTS
 #
@@ -60,3 +61,5 @@ add_subdirectory(src/Client/test)
 
 # Server class Tests
 add_subdirectory(src/Server/test)
+
+endif()
