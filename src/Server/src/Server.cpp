@@ -51,6 +51,8 @@ void Server::learn()
     log("Using datafile: " + dataFile);
    
     NaiveBayessClassifier* nbl = &nb;
+
+    int numUas = 0;
     
     /* 
      * A lambda function that takes a string line. It expects the line to have
@@ -59,7 +61,7 @@ void Server::learn()
      * The function then calls NaiveBayesClassifier.add_data to add the new 
      * user agent string with its category(ies) to the memory.
      */
-    std::function<void (std::string const&)> add_line = [nbl](std::string const& line) {
+    std::function<void (std::string const&)> add_line = [nbl,&numUas](std::string const& line) {
         std::string category, uas;
         std::string::size_type n = line.find('\t');
         std::vector<std::string> categories;
@@ -76,6 +78,7 @@ void Server::learn()
             } else {
                 nbl->add_data(uas, category);
             }
+            numUas++;
         }
     };
     
@@ -92,11 +95,13 @@ void Server::learn()
     reader.readLines(dataFile, add_line);
     
     log("Finish: reading the datafile");
+    log("Found " + std::to_string(numUas) + " valid user-agent strings");
     
     /*
      * Prints summary of number of categories and n-grams that have been read.
      */
     nb.stats();
+    std::cout << "# uas: " << std::to_string(numUas) << std::endl;
 }
 
  
