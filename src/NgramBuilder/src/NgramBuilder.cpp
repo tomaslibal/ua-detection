@@ -76,16 +76,16 @@ int NgramBuilder::fromTokenList(char** tokens, const int numTokens, vector< Ngra
      * [2] 'baz','qux','lux'
      */
     
-    if (level > 16) {
-        throw NgramSimpleLengthExceededException("NgramSimple supports max len 16, was " + std::to_string(level));
+    if (level > NGRAM_MAX_SIZE) {
+        throw NgramSimpleLengthExceededException("NgramSimple supports max len NGRAM_MAX_SIZE, was " + std::to_string(level));
     }
     
     /*
      * If the dynamic flag is set, we'll progresively build ngrams where n = tokens.size() down to 1
      */
     if (dynamic == true) {
-        if (numTokens > 16) {
-            this->level = 16;
+        if (numTokens > NGRAM_MAX_SIZE) {
+            this->level = NGRAM_MAX_SIZE;
         } else {
             this->level = numTokens;
         }
@@ -108,9 +108,10 @@ int NgramBuilder::fromTokenList(char** tokens, const int numTokens, vector< Ngra
         string sentence;
 
         for(int j = 0; j < this->level; j++) {
+            if ((slider + j) >= numTokens) { break; }
             string token = tokens[slider + j];
             n.starts[j] = sentence.size();
-            n.lens[j] = token.size();
+            n.lens[j] = token.size();            
             sentence.append(token);
             
             if (j < (this->level)-1) {

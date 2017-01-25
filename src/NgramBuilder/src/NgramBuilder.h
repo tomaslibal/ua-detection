@@ -11,6 +11,8 @@
 #include <vector>
 #include <string>
 
+#define NGRAM_MAX_SIZE 32
+
 /*
  * n-gram representation
  * n <= 16
@@ -18,8 +20,8 @@
 struct NgramSimple {
     int len;
     std::string sentence;
-    int starts[16];
-    int lens[16];
+    int starts[NGRAM_MAX_SIZE];
+    int lens[NGRAM_MAX_SIZE];
     std::string toString();
     std::string toString(int num);
     bool equals (NgramSimple const& other);
