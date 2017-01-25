@@ -9,7 +9,7 @@
 
 #include <cstring>
 
-#define MAXLEN 2048
+#define MAXLEN 4086
 
 using std::string;
 using std::vector;
@@ -97,6 +97,7 @@ void UATokenizer::tokenize(const string& sentence, char** tokens, int* num)
             case States::Close_token:
                 if (i > 0) {
                     tok[i-1] = 0; // fix this issue with the extra whitespace
+                    
                     tokens[n] = new char[i+1]();
                     strcpy(tokens[n],tok); 
                     n++;
