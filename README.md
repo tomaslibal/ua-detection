@@ -182,7 +182,7 @@ of their owners. I hope that this repository or its part will be of use to someo
 [Full license](https://github.com/tomaslibal/ua-detection/blob/master/LICENSE)
 
 ---
-
+- January 2017: improved the performance and created a Docker container
 - February 2016: added basic multiclass features
 - December 2015: ported to a C++ version
 - March 2015: wrote and added a probability based algorithm
