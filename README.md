@@ -48,7 +48,7 @@ by a sample client implementation. Hence, the makefile has two targets: the serv
 
 #### Docker 
 
-Docker image is available as `uadet/uadet2` and the unstable tag is `latest`. After starting the docker image you can send the socket queries to <container_ip>:10128. If you want the docker image to bind on the host's port 10128 then use `--net host` when issuing the command to run the image.
+Docker image is available as `uadet/uadet2` and the unstable tag is `latest`. After starting the docker image you can send the socket queries to `<container_ip>:10128`. If you want the docker image to bind on the host's port 10128 then use `--net host` when issuing the command to run the image.
 
 ```bash
 $ docker pull uadet/uadet2:latest
