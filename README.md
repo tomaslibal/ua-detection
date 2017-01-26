@@ -1,6 +1,12 @@
 ## Device detection
 
-### Introduction
+
+* [Introduction](#intro)
+* [The machine learning model](#model)
+* [The application](#application)
+* [Usage](#usage)
+
+### <a name="intro"/> Introduction
 
 This is an experimental repository for device detection on the World Wide
 Web. I'm mostly interested in device detection for the user agents connecting
@@ -19,7 +25,7 @@ There are two end goals that I would like achieve:
    This detection should tell what device(s) likely belong to the supplied user-agent
    string.
    
-### ua-detection
+### <a name="model"/> The machine learning model in ua-detection
 
 `uadet2` is an implementation of a generative model using the naive bayess classifier
 to answer the two questions from above.
@@ -38,37 +44,7 @@ version of Linux OS include the same).
 To overcome this issue, `uadet2` tokenizes the input into n-grams and use that data
 in the training of the classifier.
 
-### Architecture
-
-This is a server-client program. The server implementation is also accompanied 
-by a sample client implementation. Hence, the makefile has two targets: the server
-`uadet2d` and the client `uadet2cli`.
-
-### Usage
-
-#### Docker 
-
-Docker image is available as `uadet/uadet2` and the unstable tag is `latest`. After starting the docker image you can send the socket queries to `<container_ip>:10128`. If you want the docker image to bind on the host's port 10128 then use `--net host` when issuing the command to run the image.
-
-```bash
-$ docker pull uadet/uadet2:latest
-$ docker run --net host uadet/uadet2:latest
-```
-
-#### From source
-
-*default usage:*
-
-    $1 dist/uadet2d # start this process in one shell and keep it running
-    $2 dist/uadet2cli "eval desktop Mozilla/5.0 (Linux..."
-
-Prints to stdout the output of classification of the given user agent string 
-against all known categories present in the data file.
-
-[See a Manual: basic usage of uadet2](doc/uadet.md)
-
-
-### Classification
+#### <a name="classification"/> Classification
 
 The output from the server is a `json` document with softmax values (classes with values that are 0 are omitted in the output).
 
@@ -88,7 +64,7 @@ Mozilla/5.0 (Linux; Android 5.1; XT1526 Build/LPI23.29-18-S.2) AppleWebKit/537.3
 
 ```
 
-### Learning model
+#### Learning model
 
 Let *x* be new input, and let *d* be all previously classified data in *N* different classes. This program then calculates *N* probabilities *p_i=(x|d_n)* where *d_n* are all datapoints in the given class.
 
@@ -111,11 +87,50 @@ The algorithm for classification is similar to this.
 
 This algorithm can be found in [double NaiveBayessClassifier::classify()](/src/NaiveBayessClassifier/src/NaiveBayessClassifier.cpp#L177).
 
-### Build the project from source
+### <a name="application"/> The application
+
+This is a server-client program. The server implementation is also accompanied 
+by a sample client implementation. Hence, the makefile has two targets: the server
+`uadet2d` and the client `uadet2cli`.
+
+#### Config
+
+By default the client and server programs look for config files in the `config/` directory (named `client.txt` and `server.txt` respectivelly). 
+The amount of the settings that are possible to configure is quite limited for now and mainly include these options:
+
+- port number (`port=10128`)
+- hostname (`hostname=localhost`)
+- log file names (`logfile=server.log.txt`)
+- data input file name (`datafile=data_in.txt`, only server)
+- output type ("json" or "plaintext")
+
+
+### <a name="usage"/> Usage
+
+#### Docker 
+
+Docker image is available as `uadet/uadet2` and the unstable tag is `latest`. After starting the docker image you can send the socket queries to `<container_ip>:10128`. If you want the docker image to bind on the host's port 10128 then use `--net host` when issuing the command to run the image.
+
+```bash
+$ docker pull uadet/uadet2:latest
+$ docker run --net host uadet/uadet2:latest
+```
+
+#### Build from the source
+
+*default usage:*
+
+    $1 dist/uadet2d # start this process in one shell and keep it running
+    $2 dist/uadet2cli "eval desktop Mozilla/5.0 (Linux..."
+
+Prints to stdout the output of classification of the given user agent string 
+against all known categories present in the data file.
+
+[See a Manual: basic usage of uadet2](doc/uadet.md)
 
 Currently no binaries are distributed. Here's a manual how to build it from the source code.
 
-#### Dependencies
+##### Dependencies
 
 Most *nix systems should have these tools available.
 
@@ -125,7 +140,7 @@ Most *nix systems should have these tools available.
 - [CppUnit for tests] `yum install cppunit cppunit-devel`
 - [CTest 2.6+ for tests]
 
-#### Build process
+##### Build process
 
 In the root of the repository execute the following commands
 
@@ -137,11 +152,11 @@ This outputs the background service (`uadet2d`) and the client CLI program (`uad
 There is no installation as of now.
 
 
-## Data
+### Data
 
 Data file is consumed by the background service which will read it and train the model on it. Currently the data format is plain text with columns separated by a tab character.
 
-### Data format
+#### Data format
 
 The program can work with ascii (8-bit) encoded data of the following format:
 
@@ -166,16 +181,6 @@ To run all tests and print the output to STDOUT execute the next commands:
     make
     ctest .
     
-### Config
-
-By default the client and server programs look for config files in the `config/` directory (named `client.txt` and `server.txt` respectivelly). 
-The amount of the settings that are possible to configure is quite limited for now and mainly include these options:
-
-- port number (`port=10128`)
-- hostname (`hostname=localhost`)
-- log file names (`logfile=server.log.txt`)
-- data input file name (`datafile=data_in.txt`, only server)
-- output type ("json" or "plaintext")
 
 ### Limitations
 
