@@ -5,6 +5,7 @@
 * [The machine learning model](#model)
 * [The application](#application)
 * [Usage](#usage)
+* [Data](#data)
 
 ### <a name="intro"/> Introduction
 
@@ -152,9 +153,13 @@ This outputs the background service (`uadet2d`) and the client CLI program (`uad
 There is no installation as of now.
 
 
-### Data
+### <a name="data"/> Data
 
-Data file is consumed by the background service which will read it and train the model on it. Currently the data format is plain text with columns separated by a tab character.
+The server reads labelled data and trains the classifier. Currently, no saving 
+or loading of the model is implemented. Also, please note, that this 
+repository does not distribute the training set (other than an example file).
+
+The data format is plain text with columns separated by a tab character.
 
 #### Data format
 
