@@ -108,6 +108,8 @@ The amount of the settings that are possible to configure is quite limited for n
 
 ### <a name="usage"/> Usage
 
+There's an online demo application at [blog.libal.eu/posts/uadet2](https://blog.libal.eu/posts/uadet2).
+
 #### Docker 
 
 Docker image is available as `uadet/uadet2` and the unstable tag is `latest`. After starting the docker image you can send the socket queries to `<container_ip>:10128`. If you want the docker image to bind on the host's port 10128 then use `--net host` when issuing the command to run the image.
