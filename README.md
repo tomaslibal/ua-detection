@@ -33,11 +33,11 @@ to answer the two questions from above.
 
 There were a few reasons that favored the use of a generative model:
 
-- to learning process is simpler for the generative model which will do with counting and averaging
+- the learning process is simpler for the generative model which will do with counting and averaging
 - each class conditional density is estimated separately so it is possible to add classes without retraining the whole model
 
 A major disadvantage of the nb classifier is its independence assumption. This independence
-is believed to invalid for the user-agent strings since it is possible to have the same keyword,
+is believed to be invalid for the user-agent strings since it is possible to have the same keyword,
 like `linux` in both `desktop` and `mobile` classes (the agents running on Android OS often 
 include the word linux in their user agents as well as ordinary agents running on desktop
 version of Linux OS include the same).
