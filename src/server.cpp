@@ -4,13 +4,8 @@
  *
  * Created on January 5, 2016, 8:08 PM
  */
- 
 
-#include <cstdlib>
-#include <iostream>
 #include <csignal>
-
-#include <unistd.h>
 
 #include "Server/src/Server.h"
 
