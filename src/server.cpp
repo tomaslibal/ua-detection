@@ -12,7 +12,6 @@
 
 #include <unistd.h>
 
-#include "common/src/FileLog.h"
 #include "Server/src/Server.h"
 
 static Server* serverModulePtr = nullptr;
