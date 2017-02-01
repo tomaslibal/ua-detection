@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     serverModulePtr = &server;
     
     /*
-     * catch the ctrl+c interrupt signal
+     * catch the interrupt signal
      */
     signal(SIGINT, [] (int signum) {
         if (serverModulePtr != nullptr) {
