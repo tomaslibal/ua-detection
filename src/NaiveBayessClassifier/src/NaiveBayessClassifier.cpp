@@ -43,7 +43,7 @@ void NaiveBayessClassifier::inc_priors_freq(string const& key) {
 
 void NaiveBayessClassifier::add_word(string const& word, string const& category) {
     
-    if (MIN_WLEN > word.size()) {
+    if (MIN_WLEN > word.length()) {
         return;
     }
     
@@ -225,7 +225,7 @@ double NaiveBayessClassifier::classify(std::string const& data, std::string cons
     for(unsigned int i = 0; i < ngrams.size(); i++) {
         string ns = ngrams[i].toString(ngrams[i].len);
         // discard words 2 chars or shorter
-        if (ns.length() < 3) {
+        if (ns.length() < MIN_WLEN) {
             continue;
         }
         
