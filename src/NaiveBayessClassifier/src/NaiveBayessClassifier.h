@@ -78,6 +78,8 @@ private:
      * Tokenizes user-agent string and builds the ngrams from the tokens
      */
     UaNgramBuilder uaNgramBuilder;
+    
+    unsigned int const MIN_WLEN = 3;
 };
 
 #endif	/* NAIVEBAYESSCLASSIFIER_H */

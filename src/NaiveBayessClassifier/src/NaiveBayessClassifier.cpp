@@ -42,6 +42,11 @@ void NaiveBayessClassifier::inc_priors_freq(string const& key) {
 }
 
 void NaiveBayessClassifier::add_word(string const& word, string const& category) {
+    
+    if (MIN_WLEN > word.size()) {
+        return;
+    }
+    
     // global vocabulary
     auto voc_search = vocabulary.find(word);
     if (voc_search != vocabulary.end()) {
