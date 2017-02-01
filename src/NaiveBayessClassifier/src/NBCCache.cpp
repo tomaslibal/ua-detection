@@ -44,9 +44,20 @@ bool NBCCache::in_dbl_cache(const std::string& key)
 
 void NBCCache::insert_int_cache(const std::string& key, int val)
 {
-    int_cache.emplace<>( std::pair<std::string, int>(key, val) );
+    auto result = int_cache.emplace<>( std::pair<std::string, int>(key, val) );
     timestamps.emplace<>( std::pair<std::string, unsigned int>(std::string("int") + key, (unsigned int) std::time(nullptr)) );
+    
+    if (result.second != true) {
+        update_int_cache(key, val);
+    }
 }
+
+void NBCCache::update_int_cache(const std::string& key, int val)
+{
+    int_cache[key] = val;
+    timestamps[std::string("int") + key] = (unsigned int) std::time(nullptr);
+}
+
 
 void NBCCache::insert_dbl_cache(const std::string& key, double val)
 {

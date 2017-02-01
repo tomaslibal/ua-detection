@@ -21,6 +21,7 @@ class NBCCacheTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST(testHitsDoubleCacheIfPresent);
     CPPUNIT_TEST(testMissesIntCacheIfPresentButStale);
     CPPUNIT_TEST(testHitsIntCacheIfPresentAndNotStale);
+    CPPUNIT_TEST(testUpdatingIntCacheRefreshesTheValidity);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -38,6 +39,7 @@ private:
     void testHitsDoubleCacheIfPresent();
     void testMissesIntCacheIfPresentButStale();
     void testHitsIntCacheIfPresentAndNotStale();
+    void testUpdatingIntCacheRefreshesTheValidity();
 };
 
 #endif	/* NBCCACHETEST_H */

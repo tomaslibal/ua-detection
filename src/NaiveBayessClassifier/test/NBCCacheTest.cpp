@@ -86,5 +86,18 @@ void NBCCacheTest::testHitsIntCacheIfPresentAndNotStale()
     CPPUNIT_ASSERT_EQUAL(true, result);
 }
 
+void NBCCacheTest::testUpdatingIntCacheRefreshesTheValidity()
+{
+unsigned int now = (unsigned int) std::time(nullptr);
+    nbcc->insert_int_cache("foo", 42);
+    nbcc->timestamps["intfoo"] = now - 3601; // make the item expired
+    
+    nbcc->insert_int_cache("foo", 43);
+    
+    bool result = nbcc->in_int_cache("foo");
+    
+    CPPUNIT_ASSERT_EQUAL(true, result);
+}
+
 
 

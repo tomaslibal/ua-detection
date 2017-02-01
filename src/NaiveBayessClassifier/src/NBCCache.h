@@ -28,6 +28,8 @@ public:
     void insert_int_cache(std::string const& key, int val);
     void insert_dbl_cache(std::string const& key, double val);
     
+    void update_int_cache(std::string const& key, int val);
+    
     int get_int_cache(std::string const& key);
     double get_dbl_cache(std::string const& key);
 };
