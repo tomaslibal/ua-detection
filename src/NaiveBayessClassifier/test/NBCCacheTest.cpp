@@ -6,6 +6,7 @@
  */
 
 #include "NBCCacheTest.h"
+#include <ctime>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(NBCCacheTest);
 
@@ -62,5 +63,28 @@ void NBCCacheTest::testHitsDoubleCacheIfPresent()
     
     CPPUNIT_ASSERT_EQUAL(42.0, result);
 }
+
+void NBCCacheTest::testMissesIntCacheIfPresentButStale()
+{
+    unsigned int now = (unsigned int) std::time(nullptr);
+    nbcc->insert_int_cache("foo", 42);
+    nbcc->timestamps["intfoo"] = now - 3601; // make the item expired
+    
+    bool result = nbcc->in_int_cache("foo");
+    
+    CPPUNIT_ASSERT_EQUAL(false, result);
+}
+
+void NBCCacheTest::testHitsIntCacheIfPresentAndNotStale()
+{
+    unsigned int now = (unsigned int) std::time(nullptr);
+    nbcc->insert_int_cache("foo", 42);
+    nbcc->timestamps["intfoo"] = now - 3599; // item's validity ok
+    
+    bool result = nbcc->in_int_cache("foo");
+    
+    CPPUNIT_ASSERT_EQUAL(true, result);
+}
+
 
 

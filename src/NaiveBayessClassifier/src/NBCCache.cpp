@@ -1,3 +1,5 @@
+#include <ctime>
+
 #include "NBCCache.h"
 
 #define INIT_MAP_SIZE 64000
@@ -18,6 +20,12 @@ bool NBCCache::in_int_cache(const std::string& key)
 {
     auto it = int_cache.find(key);
     if (it != int_cache.end()) {
+        // check if item's validity has expired
+        unsigned int t = (unsigned int) std::time(nullptr);
+        std::string t_key = std::string("int") + key;
+        if (timestamps[t_key] < (t - expiry)) {
+            return false;
+        }
         return true;
     } else {
         return false;
@@ -36,7 +44,8 @@ bool NBCCache::in_dbl_cache(const std::string& key)
 
 void NBCCache::insert_int_cache(const std::string& key, int val)
 {
-    int_cache.insert( std::pair<std::string, int>(key, val) );
+    int_cache.emplace<>( std::pair<std::string, int>(key, val) );
+    timestamps.emplace<>( std::pair<std::string, unsigned int>(std::string("int") + key, (unsigned int) std::time(nullptr)) );
 }
 
 void NBCCache::insert_dbl_cache(const std::string& key, double val)
