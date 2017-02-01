@@ -8,6 +8,7 @@
 #ifndef UATOKENIZER_H
 #define	UATOKENIZER_H
 
+#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -29,13 +30,9 @@ public:
     void set_uas(const std::string &sentence);
     std::string get_uas();
     
-    void tokenize(const std::string &sentence, std::vector<std::string> *tokens);
     void tokenize(const std::string &sentence, char** tokens, int * num);
-    void tokenize(std::vector<std::string>* tokens);
 private:
     enum class States { Building_token, Close_token };
-    char mem[2048];
-    char token[128];
 
 };
 

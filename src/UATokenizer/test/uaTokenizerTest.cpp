@@ -32,7 +32,7 @@ void uaTokenizerTest::tearDown() {
 }
 
 void uaTokenizerTest::testStaticTokenizeBreaksUpSentenceIntoTokens() {
-    char** tokens = (char**)malloc(sizeof(char*)*128);
+    char** tokens = (char**) malloc(sizeof(char*)*128);
     int num = 0;
     
     std::string sentence = "Subtracting equation (53) from equation (52) gives 8";
@@ -47,10 +47,17 @@ void uaTokenizerTest::testStaticTokenizeBreaksUpSentenceIntoTokens() {
     CPPUNIT_ASSERT_MESSAGE("Tokens[5]=(52)", "(52)" == std::string(tokens[5]));
     CPPUNIT_ASSERT_MESSAGE("Tokens[6]=gives", "gives" == std::string(tokens[6]));
     CPPUNIT_ASSERT_MESSAGE("Tokens[7]=8", "8" == std::string(tokens[7]));
+    
+    for(int i = 0; i < num; i++) {
+        free(tokens[i]);
+    }
+    
+    free(tokens);
+    tokens = nullptr;
 }
 
 void uaTokenizerTest::testStaticTokenizeSkipsLeadingSeparatorsOrWhitespace() {
-    char** tokens = (char**)malloc(sizeof(char*)*128);
+    char** tokens = (char**) malloc(sizeof(char*) * 128);
     int num = 0;
     
     std::string sentence = "  (complementary function of the differential equation";
@@ -58,6 +65,13 @@ void uaTokenizerTest::testStaticTokenizeSkipsLeadingSeparatorsOrWhitespace() {
     
     CPPUNIT_ASSERT_MESSAGE("Tokens.size()=6", 6 == num);
     CPPUNIT_ASSERT_MESSAGE("Tokens[0]=(complementary", "(complementary" == std::string(tokens[0]));
+    
+    for (int i = 0; i < num; i++) {
+        free(tokens[i]);
+    }
+    
+    free(tokens);
+    tokens = nullptr;
 }
 
 void uaTokenizerTest::testStaticTokenizeBreaksUpUserAgentIntoTokens()
@@ -77,7 +91,12 @@ void uaTokenizerTest::testStaticTokenizeBreaksUpUserAgentIntoTokens()
     CPPUNIT_ASSERT_MESSAGE("", "Gecko/20100101" == std::string(tokens[5]));
     CPPUNIT_ASSERT_MESSAGE("", "Firefox/44.0" == std::string(tokens[6]));
     
-    delete[] tokens;
+    for (int i = 0; i < num; i++) {
+        free(tokens[i]);
+    }
+    
+    free(tokens);
+    tokens = nullptr;
 }
 
 void uaTokenizerTest::testStaticTokenizeForShortUserAgentString()
@@ -91,7 +110,12 @@ void uaTokenizerTest::testStaticTokenizeForShortUserAgentString()
     CPPUNIT_ASSERT_MESSAGE("expected Tokens.size()=1, actual=" + std::to_string(num), 1 == num);
     CPPUNIT_ASSERT_MESSAGE("", strcmp("Java/1.7.0_71", tokens[0]) == 0);
     
-    delete[] tokens;
+    for (int i = 0; i < num; i++) {
+        free(tokens[i]);
+    }
+    
+    free(tokens);
+    tokens = nullptr;
 }
 
 void uaTokenizerTest::testSetAndGetUserAgentString()
@@ -109,7 +133,7 @@ void uaTokenizerTest::testSpeedAndPrintMetrics()
 {
     std::string uas = "Mozilla/5.0 (Linux; Android 4.4.4; SM-J110H Build/XYZ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.1000.10 Mobile Safari/537.36";
     //std::vector<std::string> tokens;
-    char** tokens = (char**)malloc(sizeof(char*)*128);
+    char** tokens = new char*[128];
     int num = 0;
     
     std::clock_t t = std::clock();
@@ -125,7 +149,12 @@ void uaTokenizerTest::testSpeedAndPrintMetrics()
     std::cout << std::endl << max << " iterations, t=" << elapsed << "s" << std::endl;
     std::cout << "avg " << (total_s / elapsed / 1024) << " kB/s" << std::endl;
     
-    delete[] tokens;
+    for (int i = 0; i < num; i++) {
+        free(tokens[i]);
+    }
+    
+    free(tokens);
+    tokens = nullptr;
 }
 
 
