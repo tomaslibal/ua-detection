@@ -42,7 +42,7 @@ like `linux` in both `desktop` and `mobile` classes (the agents running on Andro
 include the word linux in their user agents as well as ordinary agents running on desktop
 version of Linux OS include the same).
 
-To overcome this issue, `uadet2` tokenizes the input into n-grams and use that data
+To overcome this issue, `uadet2` tokenizes the input into n-grams and use that data instead of single tokens
 in the training of the classifier.
 
 #### <a name="classification"/> Classification
