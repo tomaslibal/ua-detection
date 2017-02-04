@@ -6,6 +6,7 @@
  */
 
 #include <csignal>
+#include <iostream>
 
 #include "Server/src/Server.h"
 
@@ -26,6 +27,7 @@ int main(int argc, char** argv) {
      * catch the interrupt signal
      */
     signal(SIGINT, [] (int signum) {
+        std::cout << "Received the SIGINT, exiting now..." << std::endl;
         if (serverModulePtr != nullptr) {
             serverModulePtr->stop();
             serverModulePtr->~Server();
