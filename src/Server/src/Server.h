@@ -1,5 +1,4 @@
-#ifndef _SERVER_H_
-#define _SERVER_H_
+#pragma once 
 
 #include <string>
 #include <atomic>
@@ -72,5 +71,3 @@ private:
      */
     void log(std::string const& msg);
 };
-
-#endif /* _SERVER_H_ */
