@@ -5,8 +5,7 @@
  * Created on November 22, 2015, 7:10 PM
  */
 
-#ifndef NAIVEBAYESSCLASSIFIER_H
-#define	NAIVEBAYESSCLASSIFIER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -81,6 +80,4 @@ private:
     
     unsigned int const MIN_WLEN = 3;
 };
-
-#endif	/* NAIVEBAYESSCLASSIFIER_H */
 
