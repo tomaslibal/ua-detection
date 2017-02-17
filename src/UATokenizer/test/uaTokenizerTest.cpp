@@ -118,17 +118,6 @@ void uaTokenizerTest::testStaticTokenizeForShortUserAgentString()
     tokens = nullptr;
 }
 
-void uaTokenizerTest::testSetAndGetUserAgentString()
-{
-    std::string uas = "Mozilla/5.0 Test";
-    
-    CPPUNIT_ASSERT_MESSAGE("uas is null on init", "" == tok->get_uas());
-    
-    tok->set_uas(uas);
-    
-    CPPUNIT_ASSERT_MESSAGE("uas has been set", uas == tok->get_uas());
-}
-
 void uaTokenizerTest::testSpeedAndPrintMetrics()
 {
     std::string uas = "Mozilla/5.0 (Linux; Android 4.4.4; SM-J110H Build/XYZ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.1000.10 Mobile Safari/537.36";

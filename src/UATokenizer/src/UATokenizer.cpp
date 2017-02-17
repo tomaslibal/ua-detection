@@ -28,16 +28,6 @@ UATokenizer::UATokenizer(const UATokenizer& orig) {
 UATokenizer::~UATokenizer() {
 }
 
-void UATokenizer::set_uas(const string& sentence)
-{
-    uas = sentence;
-}
-
-string UATokenizer::get_uas()
-{
-    return uas;
-}
-
 void UATokenizer::tokenize(const string& sentence, char** tokens, int* num)
 {
     *num = 0;

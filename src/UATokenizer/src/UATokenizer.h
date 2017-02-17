@@ -26,10 +26,6 @@ public:
     
     virtual ~UATokenizer();
     
-    std::string uas = "";
-    void set_uas(const std::string &sentence);
-    std::string get_uas();
-    
     void tokenize(const std::string &sentence, char** tokens, int * num);
 private:
     enum class States { Building_token, Close_token };
