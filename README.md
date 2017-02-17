@@ -139,7 +139,7 @@ Most *nix systems should have these tools available.
 
 - CMake 2.6+
 - GNU Make utility
-- C++11 Compiler with support for `pragma`
+- C++11 Compiler with support for `#pragma once` support
 - [CppUnit for tests] `yum install cppunit cppunit-devel`
 - [CTest 2.6+ for tests]
 
