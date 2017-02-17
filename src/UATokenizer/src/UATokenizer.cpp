@@ -17,12 +17,7 @@ using std::vector;
 UATokenizer::UATokenizer() {
 }
 
-UATokenizer::UATokenizer(const string& uas) {
-    this->uas = uas;
-}
-
 UATokenizer::UATokenizer(const UATokenizer& orig) {
-    this->uas = orig.uas;
 }
 
 UATokenizer::~UATokenizer() {

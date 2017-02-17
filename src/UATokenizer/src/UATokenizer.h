@@ -21,7 +21,6 @@
 class UATokenizer {
 public:
     UATokenizer();
-    UATokenizer(const std::string& uas);
     UATokenizer(const UATokenizer &orig);
     
     virtual ~UATokenizer();
